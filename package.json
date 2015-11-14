@@ -1,0 +1,23 @@
+{
+  "name": "ds-common",
+  "version": "0.0.1",
+  "description": "NodeJS version of DSCommon, originally developed by DelightSoft LLC on Java/Play framework.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delightsoft/DSCommon3.git"
+  },
+  "keywords": [
+    "dscommon",
+    "delight",
+    "soft"
+  ],
+  "author": "Alexey Zorkaltsev (alexey@zorkaltsev.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/delightsoft/DSCommon3/issues"
+  },
+  "homepage": "https://github.com/delightsoft/DSCommon3#readme"
+}
