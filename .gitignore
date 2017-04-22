@@ -1,0 +1,11 @@
+.sass-cache
+.git
+.svn
+.idea
+.iml
+.ipr
+lib-gulp
+generated
+node_modules
+docs
+coverage
