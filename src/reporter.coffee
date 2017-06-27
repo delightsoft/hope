@@ -2,7 +2,7 @@ i18n = require './i18n'
 
 {err: {tooManyArgs, invalidArg, isResult}} = require './utils'
 
-Result = require './Result'
+Result = require './result'
 
 class Reporter
 
