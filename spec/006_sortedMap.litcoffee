@@ -93,19 +93,17 @@ sortedMap из списка или массива делает map (object):
 
 Значение иожет быть только или объект или массив
 
-      check "wrong value", ->
+      for wrongValue in [undefined, null, false, 12, '', {}, []]
 
-        for wrongValue in [undefined, null, false, 12, '', {}, []]
+        do (wrongValue) -> check "invalid argument 'value': #{jasmine.pp wrongValue}", ->
 
-          do (wrongValue) -> check "invalid argument 'value': #{jasmine.pp wrongValue}", ->
+          sortedMap (result = new Result), wrongValue
 
-            sortedMap (result = new Result), wrongValue
+          expect(result.isError).toBe true
 
-            expect(result.isError).toBe true
-
-            expect(result.messages).sameStructure [
-              {type: 'error', code: 'dsc.invalidValue', value: wrongValue}
-            ]
+          expect(result.messages).sameStructure [
+            {type: 'error', code: 'dsc.invalidValue', value: wrongValue}
+          ]
 
 Значение может быть обработано только один раз
 

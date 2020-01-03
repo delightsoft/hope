@@ -49,16 +49,16 @@ unless gutil.env.compilespec
   # tasks.push task('run-specs').jasmine('./spec', debug: true, filter: specsFilter, coverage: !!gutil.env.cover, includeStackTrace: !!gutil.env.stack, stackFilter: require('./src/utils/_lightStack')).watch(["./src/**/*.+(coffee|litcoffee|js)", "./src-gulp/**/*.+(coffee|litcoffee|js)"])
   tasks.push task('run-specs').jasmine('./spec', debug: true, coverage: !!gutil.env.cover, includeStackTrace: !!gutil.env.stack, stackFilter: require('./src/utils/_lightStack')).watch(["./src/**/*.+(coffee|litcoffee|js)", "./src-gulp/**/*.+(coffee|litcoffee|js)"])
 
-#  do (name = 'docco', src = "./spec/**/*.litcoffee", dest = './docs') ->
-#
-#    tasks.push name
-#    gulp.task name, ->
-#
-#      gulp.watch src, [name]
-#
-#      gulp.src src
-#      .pipe (require 'gulp-docco')()
-#      .pipe gulp.dest dest # gulp.task name, ->
+do (name = 'docco', src = "./spec/**/*.litcoffee", dest = './docs') ->
+
+   tasks.push name
+   gulp.task name, ->
+
+     gulp.watch src, [name]
+
+     gulp.src src
+     .pipe (require 'gulp-docco')()
+     .pipe gulp.dest dest # gulp.task name, ->
 
 # ----------------------------
 # Run

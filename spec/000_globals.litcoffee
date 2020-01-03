@@ -1,5 +1,4 @@
 Код DSCommon везде расчитывает, что:
-- Доступна библиотек ramda - R....
 - Глобальные Promise реализованны библиотекой bluebird
 
     {Result, compareStructures, utils: {err: {isResult}}} = require '../src'
