@@ -116,7 +116,7 @@ processStates = (result, doc, fields, actions) ->
 
                   return # result.context
 
-                sortedMap.finish result, state.transitions, res unless result.isError
+                sortedMap.finish result, state.transitions unless result.isError
 
             return # result.context
 

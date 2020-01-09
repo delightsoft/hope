@@ -44,7 +44,6 @@ compile = (result, collection) ->
 
     return
 
-
   list = if (isFlat = collection.hasOwnProperty('$$flat')) then collection.$$flat.$$list else collection.$$list
 
   item = undefined
