@@ -1,3 +1,6 @@
+
+# TODO: заменить на Object.assign
+
 extend = (dest) ->
 
   for i in [1...arguments.length] by 1
