@@ -4,12 +4,22 @@
   "description": "",
   "main": "./lib/dscommon.js",
   "scripts": {
-    "build": "nodemon -e coffee -d 250ms coffee --transpile --output lib/ src/"
+    "test": "nodemon -e coffee,js,json -d 250ms src/config/index.coffee",
+    "build": "nodemon -e coffee,litcoffee,js,json -d 250ms \"coffee src --transpile --output lib/src/\"",
+    "build:spec": "nodemon -e coffee,litcoffee,js,json -d 250ms -w spec coffee spec --compile --output lib/spec/",
+    "go": "node scripts/compile.js",
+    "go2": "nodemon -e coffee,litcoffee,js,json -i lib/ scripts/compile.js"
   },
   "author": "Alexey Zorkaltsev (alexey@zorkaltsev.com)",
   "license": "ISC",
   "devDependencies": {
-    "coffeescript": "^2.5.1"
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.9.6",
+    "coffeescript": "^2.5.1",
+    "jasmine": "^3.5.0",
+    "chokidar": "^3.4.0"
   },
-  "dependencies": {}
+  "dependencies": {
+  }
 }

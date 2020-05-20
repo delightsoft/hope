@@ -9,3 +9,4 @@ generated
 node_modules
 docs
 coverage
+spec-lib
