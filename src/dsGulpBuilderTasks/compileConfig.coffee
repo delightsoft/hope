@@ -59,9 +59,6 @@ module.exports = (DSGulpBuilder) ->
 
       class ReporterImpl extends Reporter
 
-        constructore: ->
-          super
-
         _print: (type, msg) ->
 
           # TODO: Add messages limit

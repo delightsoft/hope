@@ -1,6 +1,8 @@
+const debounce = require('lodash/debounce')
 const path = require('path');
 const {spawn: realSpawn} = require('child_process');
 const chokidar = require('chokidar');
+const chalk = require('chalk');
 
 const blockProcessTimer = setTimeout(function () {
 }, (1 << 32) - 1);
@@ -11,12 +13,12 @@ class Task {
     this.run = run;
     this.lastRun = null;
     this.working = false;
+    this._updateTime = null;
     if (this.watch = watch) {
-      watch(() => {
-        // console.info(30, arguments)
+      watch(debounce(() => {
         this.updateTime = Date.now();
         startOver();
-      });
+      }, 250, {maxWait: 30 * 1000}));
     }
   }
 
@@ -24,17 +26,15 @@ class Task {
     if (this.working) return;
     this.working = true;
     const startTime = Date.now();
-    console.info(`${this.name}: started`);
+    console.info(`${this.name}: ${chalk.blue(`started`)}`);
     const prevUpdateTime = this.updateTime;
     const res = this.run();
     res.then(() => {
-      console.info(32, prevUpdateTime !== this.upateTime)
-      console.info(`${this.name}: completed in ${Math.round((Date.now() - startTime) / 10) / 100} sec`);
+      console.info(`${this.name}: ${chalk.green(`completed in ${Math.round((Date.now() - startTime) / 10) / 100} sec`)}`);
       this.lastRun = Date.now();
-      console.info(33, prevUpdateTime !== this.upateTime)
-      if (prevUpdateTime !== this.upateTime) this.upateTime = this.lastRun; // there was a watch event while task was running
+      if (prevUpdateTime !== this.updateTime) this.updateTime = this.lastRun; // there was a watch event while task was running
     }, (err) => {
-      console.info(`${this.name}: failed: ${err.message}`);
+      console.info(`${this.name}: ${chalk.red(`failed:`)} ${err.message}`);
     }).finally(() => {
       this.working = false;
     });
@@ -76,7 +76,6 @@ function startOver() {
       // console.error(err);
     })
     .then(() => {
-      console.info(88, restartTasks)
       if (restartTasks) startOver();
     });
 }
@@ -109,17 +108,19 @@ function serial(tasks) {
 
 function _serial(tasks, resolve, reject) {
   if (!Array.isArray(tasks)) throw new Error(`Invalid argument 'tasks': %{tasks}`);
+  let prevLastRun = null;
   const task = tasks.find((t, i) => {
     if (!t) return; // empty
     if (t.lastRun === null) return true; // it's first time
-    if (i > 0 && t.lastRun < tasks[i - 1].lastRun) return true; // previous task result was updated
-    console.info(115, t.updateTime - t.lastRun, this.name)
+    if (i > 0) {
+      prevLastRun = tasks[i - 1].lastRun;
+      if (i > 0 && t.lastRun < prevLastRun) return true; // previous task result was updated
+    }
     if (typeof t.updateTime === 'number' && t.updateTime >= t.lastRun) return true; // there was a signal from 'watch' to run this task again
   });
   if (task) {
-    task._run().then(
+    task._run(prevLastRun).then(
       () => {
-        console.info(120, restartTasks)
         if (restartTasks) { resolve(); return; }
         _serial(tasks, resolve, reject);
       },

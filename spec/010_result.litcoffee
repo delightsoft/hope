@@ -204,7 +204,7 @@ result переносился pathFunc исходного Result'а.  Если �
 
         prop = 'propA'
 
-        [oldContext, localResult.pathFunc] = [localResult.pathFunc, subPathFunc = (path) -> (Result.prop prop, oldContext) path]
+        [oldContext, localResult.pathFunc] = [localResult.pathFunc, subPathFunc = ((path) -> (Result.prop prop, oldContext) path)]
 
         localResult.error 'test.fieldError'
 

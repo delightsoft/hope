@@ -270,7 +270,7 @@ takeString = (result, value) ->
   if typeof value == 'string'
 
     return value
-    
+
   result.error 'dsc.invalidValue', value: value; return # takeString =
 
 takeStringOrArrayOfStrings = (result, value) ->
@@ -283,9 +283,7 @@ takeStringOrArrayOfStrings = (result, value) ->
 
     ok = true
 
-    (ok = false; break) for s in value when typeof s != 'string'
-
-    return value if ok
+    return value unless value.some s -> typeof s != 'string'
 
   result.error 'dsc.invalidValue', value: value; return # takeStringOrArrayOfStrings =
 
@@ -301,7 +299,7 @@ takeEnum = (result, value) ->
 takeFields = (result, value) ->
 
   sortedMap result, value
-  
+
   # TODO: Add fields processing
 
 # присваиваем значение в res, если оно есть.  а если значения нет - добавляем ошибку
