@@ -42,7 +42,8 @@ class Task {
   }
 }
 
-const tasks = serial([
+const tasks = parallel([
+// const tasks = serial([
   new Task({
     name: 'compile src',
     run() {
@@ -85,6 +86,30 @@ startOver();
 //   clearTimeout(blockProcessTimer);
 // });
 
+function parallel(tasks) {
+  return {
+    lastRun: null,
+    working: false,
+    _run(prevLastRun) {
+      if (this.working) return;
+      this.working = true;
+      const promises = tasks.reduce((acc, t) => {
+        if (!t) return acc; // empty
+        if (t.lastRun === null) acc.push(t._run()); // it's first time
+        else if (prevLastRun !== null && t.lastRun < prevLastRun) acc.push(t._run()); // previous task result was updated
+        else if (typeof t.updateTime === 'number' && t.updateTime >= t.lastRun) acc.push(t._run()); // there was a signal from 'watch' to run this task again
+        return acc;
+      }, []);
+      return awaitAll(promises)
+        .then(() => {
+          this.lastRun = Date.now();
+        })
+        .finally(() => {
+          this.working = false;
+        });
+    }
+  };
+}
 
 function serial(tasks) {
   return {
@@ -121,7 +146,10 @@ function _serial(tasks, resolve, reject) {
   if (task) {
     task._run(prevLastRun).then(
       () => {
-        if (restartTasks) { resolve(); return; }
+        if (restartTasks) {
+          resolve();
+          return;
+        }
         _serial(tasks, resolve, reject);
       },
       (err) => {
@@ -141,5 +169,33 @@ function spawn(command, args, options) {
     p.on('exit', () => {
       p.exitCode !== 0 ? reject(new Error(`exitCode: ${p.exitCode}`)) : resolve(p);
     });
+  });
+}
+
+function awaitAll(promises) {
+  if (!Array.isArray(promises)) throw new Error(`Invalid argument 'promises': ${promises}`);
+  let left = 0, isErr, err;
+  return new Promise((resolve, reject) => {
+    const res = promises.map((v, i) => {
+      if (typeof v === 'object' && v !== null && typeof v.then === 'function') {
+        left++;
+        v.then(
+          (data) => {
+            res[i] = data;
+            if (--left === 0) isErr ? reject(err) : resolve(res);
+          },
+          (_err) => {
+            if (--left === 0) reject(isErr ? err : _err);
+            else if (!isErr) {
+              isErr = true;
+              err = _err;
+            }
+          }
+        );
+      } else {
+        return v;
+      }
+    });
+    if (left === 0) resolve();
   });
 }

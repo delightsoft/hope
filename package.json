@@ -7,6 +7,7 @@
     "test": "nodemon -e coffee,js,json -d 250ms src/config/index.coffee",
     "build": "nodemon -e coffee,litcoffee,js,json -d 250ms \"coffee src --transpile --output lib/src/\"",
     "build:spec": "nodemon -e coffee,litcoffee,js,json -d 250ms -w spec coffee spec --compile --output lib/spec/",
+    "go3": "node scripts/test.js",
     "go": "node scripts/compile.js",
     "go2": "nodemon -e coffee,litcoffee,js,json -i lib/ scripts/compile.js"
   },
