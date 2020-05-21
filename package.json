@@ -4,12 +4,7 @@
   "description": "",
   "main": "./lib/dscommon.js",
   "scripts": {
-    "test": "nodemon -e coffee,js,json -d 250ms src/config/index.coffee",
-    "build": "nodemon -e coffee,litcoffee,js,json -d 250ms \"coffee src --transpile --output lib/src/\"",
-    "build:spec": "nodemon -e coffee,litcoffee,js,json -d 250ms -w spec coffee spec --compile --output lib/spec/",
-    "go3": "node scripts/test.js",
-    "go": "node scripts/compile.js",
-    "go2": "nodemon -e coffee,litcoffee,js,json -i lib/ scripts/compile.js"
+    "build": "node scripts/build.js"
   },
   "author": "Alexey Zorkaltsev (alexey@zorkaltsev.com)",
   "license": "ISC",
@@ -20,7 +15,8 @@
     "chokidar": "^3.4.0",
     "coffeescript": "^2.5.1",
     "debounce": "^1.2.0",
-    "jasmine": "^3.5.0"
+    "jasmine": "^3.5.0",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
     "chalk": "^4.0.0"
