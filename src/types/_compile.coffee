@@ -283,7 +283,7 @@ takeStringOrArrayOfStrings = (result, value) ->
 
     ok = true
 
-    return value unless value.some s -> typeof s != 'string'
+    return value unless value.some (s) -> typeof s != 'string'
 
   result.error 'dsc.invalidValue', value: value; return # takeStringOrArrayOfStrings =
 

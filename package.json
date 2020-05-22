@@ -14,11 +14,14 @@
     "@babel/preset-env": "^7.9.6",
     "chokidar": "^3.4.0",
     "coffeescript": "^2.5.1",
+    "copy": "^0.3.2",
     "debounce": "^1.2.0",
     "jasmine": "^3.5.0",
-    "rimraf": "^3.0.2"
+    "moment": "^2.26.0",
+    "rimraf": "^3.0.2",
+    "chalk": "^4.0.0",
+    "docco": "^0.8.0"
   },
   "dependencies": {
-    "chalk": "^4.0.0"
   }
 }

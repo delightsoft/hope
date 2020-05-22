@@ -1,12 +1,6 @@
-.sass-cache
-.git
-.svn
 .idea
-.iml
-.ipr
-lib-gulp
-generated
+*.iml
 node_modules
 docs
 coverage
-spec-lib
+temp

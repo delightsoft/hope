@@ -4,6 +4,7 @@ const path = require('path');
 const {spawn: realSpawn} = require('child_process');
 const chokidar = require('chokidar');
 const chalk = require('chalk');
+const copy = promisify(require('copy'));
 const rimraf = promisify(require('rimraf'));
 
 const blockProcessTimer = setTimeout(() => {
@@ -47,7 +48,7 @@ class Task {
     }
     res.then(() => {
       console.info(`${this.name}: ${chalk.green(`completed in ${Math.round((Date.now() - startTime) / 10) / 100} sec`)}`);
-      if (prevUpdateTime === this.updateTime) this.lastRun = Date.now(); // there was NO a watch event while task was running
+      if (!restartTasks && prevUpdateTime === this.updateTime) this.lastRun = Date.now(); // there was NO a watch event while task was running
     }, (err) => {
       console.info(`${this.name}: ${chalk.red(`failed:`)} ${err.message}`);
     }).finally(() => {
@@ -57,55 +58,88 @@ class Task {
   }
 }
 
-// const tasks = parallel([
-// // const tasks = serial([
-//   new Task({
-//     name: 'compile src',
-//     run() {
-//       return spawn('node', ['node_modules/coffeescript/bin/coffee', '--transpile', '--output', path.join(process.cwd(), 'lib/src/'), path.join(process.cwd(), 'src/')]);
-//     },
-//     watch(cb) {
-//       chokidar.watch(path.join(process.cwd(), 'src/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
-//     },
-//   }),
-//   new Task({
-//     name: 'compile spec',
-//     run() {
-//       return spawn('node', ['node_modules/coffeescript/bin/coffee', '--compile', '--output', path.join(process.cwd(), 'lib/spec/'), path.join(process.cwd(), 'spec/')]);
-//     },
-//     watch(cb) {
-//       chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
-//     },
-//   }),
-// ]);
-
 const tasks =
   serial([
-    new Task({
-      name: 'clean',
-      run() {
-        return rimraf(path.join(process.cwd(), 'lib/'));
-      },
-    }),
     parallel([
       new Task({
-        name: 'compile src',
+        name: `clean 'lib'`,
         run() {
-          return spawn('node', ['node_modules/coffeescript/bin/coffee', '--transpile', '--output', path.join(process.cwd(), 'lib/src/'), path.join(process.cwd(), 'src/')]);
-        },
-        watch(cb) {
-          chokidar.watch(path.join(process.cwd(), 'src/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+          return rimraf(path.join(process.cwd(), 'lib/'));
         },
       }),
       new Task({
-        name: 'compile spec',
+        name: `clean 'temp'`,
         run() {
-          return spawn('node', ['node_modules/coffeescript/bin/coffee', '--compile', '--output', path.join(process.cwd(), 'lib/spec/'), path.join(process.cwd(), 'spec/')]);
-        },
-        watch(cb) {
-          chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+          return rimraf(path.join(process.cwd(), 'temp/'));
         },
       }),
+      new Task({
+        name: `clean 'docs'`,
+        run() {
+          return rimraf(path.join(process.cwd(), 'html/'));
+        },
+      }),
+    ]),
+    parallel([
+      serial([
+        parallel([
+          serial([
+            new Task({
+              name: `compile 'src/' to 'lib/'`,
+              run() {
+                return spawn('node', ['node_modules/coffeescript/bin/coffee', '--transpile', '--output', path.join(process.cwd(), 'lib/'), path.join(process.cwd(), 'src/')]);
+              },
+              watch(cb) {
+                chokidar.watch(path.join(process.cwd(), 'src/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+              },
+            }),
+            new Task({
+              name: `copy 'lib/' to 'temp/src/'`,
+              run() {
+                return copy(path.join(process.cwd(), 'lib/**/*'), path.join(process.cwd(), 'temp/src/'));
+              },
+            }),
+          ]),
+          new Task({
+            name: `compile 'spec/' to 'temp/spec/'`,
+            run() {
+              return spawn('node', ['node_modules/coffeescript/bin/coffee', '--compile', '--output', path.join(process.cwd(), 'temp/spec/'), path.join(process.cwd(), 'spec/')]);
+            },
+            watch(cb) {
+              chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+            },
+          }),
+          new Task({
+            name: `copy 'samples/' to 'temp/samples/'`,
+            run() {
+              return copy(path.join(process.cwd(), 'samples/**/*'), path.join(process.cwd(), 'temp/samples/'));
+            },
+            watch(cb) {
+              chokidar.watch(path.join(process.cwd(), 'spec/**/*'), {ignoreInitial: true}).on('all', cb);
+            },
+          }),
+        ]),
+        new Task({
+          name: `jasmine 'temp/spec/'`,
+          run() {
+            return spawn('node', ['node_modules/jasmine/bin/jasmine.js', path.join(process.cwd(), 'temp/spec/**/*.js')]);
+          },
+          watch(cb) {
+            chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+          },
+        }),
+      ]),
+      /*
+            new Task({
+              name: `docco 'spec/' to 'html/'`,
+              run() {
+                return spawn('node', ['node_modules/docco/bin/docco', '--transpile', '--output', path.join(process.cwd(), 'lib/'), path.join(process.cwd(), 'src/')]);
+              },
+              watch(cb) {
+                chokidar.watch(path.join(process.cwd(), 'src/!**!/!*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+              },
+            }),
+      */
     ]),
   ]);
 
@@ -138,25 +172,27 @@ function parallel(tasks) {
     _run(prevLastRun) {
       if (this.working) return;
       this.working = true;
-      const promises = tasks.reduce((acc, t) => {
-        if (!t) return acc; // empty
-        if ((t.lastRun === null) || // it's first time
-          (prevLastRun !== null && t.lastRun < prevLastRun) || // previous task result was updated
-          (typeof t.updateTime === 'number' && t.updateTime >= t.lastRun)) { // there was a signal from 'watch' to run this task again
-          const prevUpdateTime = t.updateTime;
-          acc.push(t._run(prevLastRun).then(() => {
-            if (prevUpdateTime === t.updateTime) t.lastRun = Date.now(); // there was NO a watch event while task was running
-          }));
-        }
-        return acc;
-      }, []);
-      return awaitAll(promises)
-        .then(() => {
-          this.lastRun = Date.now();
-        })
-        .finally(() => {
-          this.working = false;
-        });
+      try {
+        const prevUpdateTime = this.updateTime;
+        const promises = tasks.reduce((acc, t) => {
+          if (!t) return acc; // empty
+          if ((t.lastRun === null) || // it's first time
+            (prevLastRun !== null && t.lastRun < prevLastRun) || // previous task result was updated
+            (typeof t.updateTime === 'number' && t.updateTime >= t.lastRun)) { // there was a signal from 'watch' to run this task again
+            acc.push(t._run(prevLastRun));
+          }
+          return acc;
+        }, []);
+        return awaitAll(promises)
+          .then(() => {
+            if (!restartTasks && prevUpdateTime === this.updateTime) this.lastRun = Date.now(); // there was NO a watch event while task was running
+          })
+          .finally(() => {
+            this.working = false;
+          });
+      } catch (err) {
+        console.error(err)
+      }
     }
   };
   tasks.forEach(v => {
@@ -172,11 +208,12 @@ function serial(tasks) {
     _run() {
       if (this.working) return;
       this.working = true;
+      const prevUpdateTime = this.updateTime
       return (new Promise((resolve, reject) => {
         return _serial(tasks, resolve, reject)
       }))
         .then(() => {
-          this.lastRun = Date.now();
+          if (!restartTasks && prevUpdateTime === this.updateTime) this.lastRun = Date.now(); // there was NO a watch event while task was running
         })
         .finally(() => {
           this.working = false;
@@ -197,7 +234,7 @@ function _serial(tasks, resolve, reject) {
     if (t.lastRun === null) return true; // it's first time
     if (i > 0) {
       prevLastRun = tasks[i - 1].lastRun;
-      if (i > 0 && t.lastRun < prevLastRun) return true; // previous task result was updated
+      if (t.lastRun < prevLastRun) return true; // previous task result was updated
     }
     if (typeof t.updateTime === 'number' && t.updateTime >= t.lastRun) return true; // there was a signal from 'watch' to run this task again
   });
@@ -205,7 +242,7 @@ function _serial(tasks, resolve, reject) {
     const prevUpdateTime = this.updateTime;
     task._run(prevLastRun).then(
       () => {
-        if (prevUpdateTime === this.updateTime) this.lastRun = Date.now(); // there was NO a watch event while task was running
+        if (prevUpdateTime === task.updateTime) task.lastRun = Date.now(); // there was NO a watch event while task was running
         if (restartTasks) {
           resolve();
           return;
