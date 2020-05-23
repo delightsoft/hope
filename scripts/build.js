@@ -15,7 +15,10 @@ const blockProcessTimer = setTimeout(() => {
 cmd
   .name(`node scripts/build.js`)
   .option(`-d, --dev`, `development mode`)
+  .option(`-c, --coverage`, `build coverage`)
   .parse(process.argv);
+
+const noWatch = !cmd.dev || cmd.coverage;
 
 class Task {
   constructor({name, run, watch}) {
@@ -68,7 +71,7 @@ class Task {
 const tasks =
   serial([
     parallel([
-      new Task({
+      !cmd.coverage && new Task({
         name: `clean 'lib'`,
         run() {
           return rimraf(path.join(process.cwd(), 'lib/'));
@@ -80,7 +83,7 @@ const tasks =
           return rimraf(path.join(process.cwd(), 'temp/'));
         },
       }),
-      new Task({
+      !cmd.coverage && new Task({
         name: `clean 'docco'`,
         run() {
           return rimraf(path.join(process.cwd(), 'docco/'));
@@ -96,7 +99,7 @@ const tasks =
               return spawn('node', ['node_modules/coffeescript/bin/coffee', '--transpile', '--output', path.join(process.cwd(), 'temp/src/'), path.join(process.cwd(), 'src/')]);
             },
             watch(cb) {
-              cmd.dev && chokidar.watch(path.join(process.cwd(), 'src/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+              !noWatch && chokidar.watch(path.join(process.cwd(), 'src/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
             },
           }),
           new Task({
@@ -105,7 +108,7 @@ const tasks =
               return spawn('node', ['node_modules/coffeescript/bin/coffee', '--compile', '--output', path.join(process.cwd(), 'temp/spec/'), path.join(process.cwd(), 'spec/')]);
             },
             watch(cb) {
-              cmd.dev && chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+              !noWatch && chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
             },
           }),
           new Task({
@@ -114,20 +117,26 @@ const tasks =
               return copy(path.join(process.cwd(), 'samples/**/*'), path.join(process.cwd(), 'temp/samples/'));
             },
             watch(cb) {
-              cmd.dev && chokidar.watch(path.join(process.cwd(), 'spec/**/*'), {ignoreInitial: true}).on('all', cb);
+              !noWatch && chokidar.watch(path.join(process.cwd(), 'spec/**/*'), {ignoreInitial: true}).on('all', cb);
             },
           }),
         ]),
-        new Task({
+        !cmd.coverage && new Task({
           name: `jasmine 'temp/spec/'`,
           run() {
             return spawn('node', ['node_modules/jasmine/bin/jasmine.js', path.join(process.cwd(), 'temp/spec/**/*.js')]);
           },
           watch(cb) {
-            cmd.dev && chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+            !noWatch && chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
           },
         }),
-        new Task({
+        cmd.coverage && new Task({
+          name: `code coverage of 'temp/spec/' to 'lib/Icov-report/index.html'`,
+          run() {
+            return spawn('node', ['node_modules/istanbul/lib/cli.js', 'cover', 'node_modules/jasmine/bin/jasmine.js', path.join(process.cwd(), 'temp/spec/**/*.js')]);
+          },
+        }),
+        !cmd.coverage && new Task({
           name: `copy 'temp/src/' to 'lib/'`,
           run() {
             return copy(path.join(process.cwd(), 'temp/src/**/*'), path.join(process.cwd(), 'lib/'));
@@ -151,7 +160,7 @@ const tasks =
             });
         },
         watch(cb) {
-          chokidar.watch(path.join(process.cwd(), 'spec/**/*.litcoffee'), {ignoreInitial: true}).on('all', cb);
+          !noWatch && chokidar.watch(path.join(process.cwd(), 'spec/**/*.litcoffee'), {ignoreInitial: true}).on('all', cb);
         },
       }),
     ]),
@@ -176,7 +185,7 @@ function startOver() {
 
 startOver()
   .finally(function () {
-    !cmd.dev && clearTimeout(blockProcessTimer);
+    noWatch && clearTimeout(blockProcessTimer);
   });
 
 function parallel(tasks) {
