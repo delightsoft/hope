@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>result</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="result">result</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Для работы с ошибками (error) и предупреждениями (warnings) у нас есть специальный класс Result</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, utils: {err: {_argError}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'010_result:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Объекты Result позволяют накапливать методанные по сообщениям.  Методанные включают:</p>
+<ul>
+<li>type - тип сообщения: error, warn или info</li>
+<li>code - код сообщения.  Строка включающая код сообщения, с namespace’ом</li>
+<li>args - аргументы сообщения.  Не обязательный параметр</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"simple result"</span>, <span class="hljs-function">-&gt;</span>
+
+    result = <span class="hljs-keyword">new</span> Result</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Сообщения могут быть трех типов:</p>
+<ul>
+<li>error - ошибка</li>
+<li>warn - предупреждения</li>
+<li>info - информация</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    result.error <span class="hljs-string">'test.sampleMessage'</span>
+    result.warn <span class="hljs-string">'test.sampleMessage2'</span>, a: <span class="hljs-number">12</span>
+    result.info <span class="hljs-string">'test.sampleMessage3'</span>, b: <span class="hljs-string">'test'</span>, c: <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Все сообщения, складываются в массив messages</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'test.sampleMessage'</span>}
+      {type: <span class="hljs-string">'warn'</span>, code: <span class="hljs-string">'test.sampleMessage2'</span>, a: <span class="hljs-number">12</span>}
+      {code: <span class="hljs-string">'test.sampleMessage3'</span>, b: <span class="hljs-string">'test'</span>, c: <span class="hljs-literal">false</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Несколько Result объектов, можно объединять в один</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"combine results"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Создаем головоной Result объект, и для теста добавляем туда сразу сообщение</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    result = <span class="hljs-keyword">new</span> Result
+    result.info <span class="hljs-string">'test.rootMessage'</span>
+
+    expect(result.isError).toBeFalsy()
+    expect(result.messages).sameStructure [
+      {code: <span class="hljs-string">'test.rootMessage'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Предположим, что метод вернул другой result объект, содержащий в себе в том числе ошибки</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    resultA = <span class="hljs-keyword">new</span> Result
+    resultA.error <span class="hljs-string">'test.sampleMessage'</span>
+    resultA.warn <span class="hljs-string">'test.sampleMessage2'</span>
+
+    expect(resultA.isError).toBeTruthy()
+    expect(resultA.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'test.sampleMessage'</span>}
+      {type: <span class="hljs-string">'warn'</span>, code: <span class="hljs-string">'test.sampleMessage2'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>При объединении, в головном Result добавятся все сообщения из result, который вернул метод</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    result.add resultA
+
+    expect(result.isError).toBeTruthy()
+    expect(result.messages).sameStructure [
+      {code: <span class="hljs-string">'test.rootMessage'</span>}
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'test.sampleMessage'</span>}
+      {type: <span class="hljs-string">'warn'</span>, code: <span class="hljs-string">'test.sampleMessage2'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Для единообразия объект класса Result передается как первый параметр в методы, чтобы через него методы могли сообщить найденные ошибки</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"result as first argument"</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+<span class="hljs-function">
+    <span class="hljs-title">sampleMethod</span> = <span class="hljs-params">(result, arg1)</span> -&gt;</span>
+
+      <span class="hljs-keyword">new</span> Promise (resolve, reject) -&gt;
+
+        <span class="hljs-keyword">if</span> arg1 != <span class="hljs-string">'good'</span>
+
+          result.error <span class="hljs-string">'invalidArg'</span>, arg: <span class="hljs-string">'arg1'</span>, value: arg1
+
+          reject(); <span class="hljs-keyword">return</span>
+
+        resolve()
+
+        <span class="hljs-keyword">return</span> <span class="hljs-comment"># new Promise</span>
+
+    c = <span class="hljs-number">2</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Успешный вызов</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    goodResult = <span class="hljs-keyword">new</span> Result
+
+    sampleMethod goodResult, <span class="hljs-string">'good'</span>
+    .<span class="hljs-keyword">then</span> -&gt;
+
+      expect(goodResult.isError).toBeFalsy()
+      expect(goodResult.messages).sameStructure []
+
+      done() <span class="hljs-keyword">if</span> --c == <span class="hljs-number">0</span>
+
+      <span class="hljs-keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Вызов с ошибкой в результате</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    badResult = <span class="hljs-keyword">new</span> Result
+
+    sampleMethod badResult, <span class="hljs-string">'bad'</span>
+    .<span class="hljs-keyword">then</span> (<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">return</span>), <span class="hljs-function">-&gt;</span>
+
+      expect(badResult.isError).toBeTruthy()
+      expect(badResult.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'invalidArg'</span>, arg: <span class="hljs-string">'arg1'</span>, value: <span class="hljs-string">'bad'</span>}]
+
+      done() <span class="hljs-keyword">if</span> --c == <span class="hljs-number">0</span>
+
+      <span class="hljs-keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h2 id="pathfunc">pathFunc</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Чтобы можно было сообщение привязать к конкретному элементу дерева, можно вместе с сообщением сохранять pathFunc.</p>
+<p>Для этого создаем Result объект, в которой передаем функцию, которая при необходимости возвращает текущий context</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"pathFunc"</span>, <span class="hljs-function">-&gt;</span>
+
+    field = <span class="hljs-string">'field1'</span>
+
+    result = <span class="hljs-keyword">new</span> Result (path) -&gt; (Result.prop field) path</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Добавляем ошибку когда функция pathFunc возвращает <code>{type: &#39;field&#39;, fld: &#39;field 1&#39;}</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    result.error <span class="hljs-string">'test.fieldError'</span>
+
+    field = <span class="hljs-string">'field2'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Добавляем ошибку когда функция pathFunc возвращает <code>{type: &#39;field&#39;, fld: &#39;field 2&#39;}</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    result.error <span class="hljs-string">'test.fieldError'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>И получаем список сообщений с сохраненными контекстами</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'field1'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'field2'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Контекстов может быть несколько</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    prop = <span class="hljs-string">'A'</span>
+
+    [oldContext, result.pathFunc] = [result.pathFunc, <span class="hljs-function"><span class="hljs-params">(path)</span> -&gt;</span> (Result.prop prop, oldContext) path]
+
+    result.error <span class="hljs-string">'test.fieldError'</span>
+
+    prop = <span class="hljs-string">'B'</span>
+
+    result.error <span class="hljs-string">'test.fieldError'</span>
+
+    result.pathFunc = oldContext
+
+    result.error <span class="hljs-string">'test.fieldError'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>В результате пока есть второй контекст, в результате делается список контектов</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'field1'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'field2'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'field2.A'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'field2.B'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'field2'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Для многошаговой обработки необходимо для каждого шага создавать собственный Result.  Но при этом важно чтобы в этот
+result переносился pathFunc исходного Result’а.  Если в качестве параметра для нового Result передать другой, то сообщения
+сохраняемые в новый result</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"copy result.pathFunc to localResult"</span>,  <span class="hljs-function">-&gt;</span>
+
+    field = <span class="hljs-string">'fieldA'</span>
+
+    result = <span class="hljs-keyword">new</span> Result fldPathFunc = <span class="hljs-function"><span class="hljs-params">(path)</span> -&gt;</span> (Result.prop field) path
+
+    expect(result.isError).toBe <span class="hljs-literal">false</span>
+
+    localResult = <span class="hljs-keyword">new</span> Result result
+
+    expect(localResult.pathFunc).toBe result.pathFunc
+
+    expect(localResult.isError).toBe <span class="hljs-literal">false</span>
+
+    localResult.error <span class="hljs-string">'test.fieldError'</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">false</span>
+
+    expect(localResult.isError).toBe <span class="hljs-literal">true</span>
+
+    prop = <span class="hljs-string">'propA'</span>
+
+    [oldContext, localResult.pathFunc] = [localResult.pathFunc, subPathFunc = <span class="hljs-function">(<span class="hljs-params">(path)</span> -&gt;</span> (Result.prop prop, oldContext) path)]
+
+    localResult.error <span class="hljs-string">'test.fieldError'</span>
+
+    expect(result.pathFunc).sameStructure fldPathFunc
+
+    expect(localResult.pathFunc).sameStructure subPathFunc
+
+    expect(localResult.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(localResult.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fieldA'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fieldA.propA'</span>, code: <span class="hljs-string">'test.fieldError'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Проверяем, что возвращается exception, если параметр не верен</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> errValue <span class="hljs-keyword">in</span> [<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">12</span>, <span class="hljs-string">'str'</span>, {}, []]
+
+    <span class="hljs-keyword">do</span> (errValue) -&gt; check <span class="hljs-string">"error: invalid parameter: <span class="hljs-subst">#{errValue}</span>"</span>, <span class="hljs-function">-&gt;</span>
+
+      expect(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> Result errValue).toThrow _argError <span class="hljs-string">'Invalid argument'</span>, <span class="hljs-string">'pathFuncOrResult'</span>, errValue
+
+  check <span class="hljs-string">"add path to message as parameter"</span>, <span class="hljs-function">-&gt;</span>
+
+    result = <span class="hljs-keyword">new</span> Result
+
+    expect(result.log <span class="hljs-string">'error'</span>, (Result.prop <span class="hljs-string">'propA'</span>), <span class="hljs-string">'dsc.code'</span>).sameStructure
+      type: <span class="hljs-string">'error'</span>
+      path: <span class="hljs-string">'propA'</span>
+      code: <span class="hljs-string">'dsc.code'</span>
+
+    expect(result.error (Result.prop <span class="hljs-string">'propA'</span>), <span class="hljs-string">'dsc.code'</span>).sameStructure
+      type: <span class="hljs-string">'error'</span>
+      path: <span class="hljs-string">'propA'</span>
+      code: <span class="hljs-string">'dsc.code'</span>
+
+    expect(result.info (Result.index <span class="hljs-number">20</span>, Result.prop <span class="hljs-string">'propA'</span>), <span class="hljs-string">'dsc.code'</span>, v: <span class="hljs-number">20</span>).sameStructure
+      path: <span class="hljs-string">'propA[20]'</span>
+      code: <span class="hljs-string">'dsc.code'</span>
+      v: <span class="hljs-number">20</span>
+
+    expect(result.warn (Result.item <span class="hljs-string">'D'</span>, Result.prop <span class="hljs-string">'propA'</span>), <span class="hljs-string">'dsc.code'</span>, v: <span class="hljs-number">20</span>).sameStructure
+      type: <span class="hljs-string">'warn'</span>
+      path: <span class="hljs-string">'propA[D]'</span>
+      code: <span class="hljs-string">'dsc.code'</span>
+      v: <span class="hljs-number">20</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h2 id="context">context</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Для вложенной обработки элементов, нужно иметь возможность каждый уровень обрабатывать, зная какой элемент
+обрабатывается.  Если ошибка произошла на вложенном уровне, то она будет видна и при выходе из вложенного контекста на
+уровне выше, даже если внутри вложенного контекста был сброс isResult в false.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"context: keep errors"</span>, <span class="hljs-function">-&gt;</span>
+
+    (result = <span class="hljs-keyword">new</span> Result).context (<span class="hljs-function">-&gt;</span>), <span class="hljs-function">-&gt;</span>
+
+      result.error <span class="hljs-string">'someError'</span>
+
+      expect(result.isError).toBe <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>При входе в context isError сбрасывается в false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      result.context (<span class="hljs-function">-&gt;</span>), <span class="hljs-function">-&gt;</span>
+
+        expect(result.isError).toBe <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>При выходе наличие ошибки восстанавливается</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+      result.isError = <span class="hljs-literal">false</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h2 id="empty-context">empty context</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Для вложенной обработки, когда нет реального контекста, метод result.context можно вызывать без первого параметра</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"empty context: keep errors"</span>, <span class="hljs-function">-&gt;</span>
+
+    (result = <span class="hljs-keyword">new</span> Result).context  -&gt;
+
+      result.error <span class="hljs-string">'someError'</span>
+
+      expect(result.isError).toBe <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>При входе в context isError сбрасывается в false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      result.context -&gt;
+
+        expect(result.isError).toBe <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>При выходе наличие ошибки восстанавливается</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+      result.isError = <span class="hljs-literal">false</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

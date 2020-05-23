@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Tags.Compile</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="tagscompile">Tags.Compile</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, tags: {compile: compileTags}, sortedMap, flatMap} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Тегирование нужно для работы с группами элементов.  Например, через теги можно указать в свойствах <em>doc.state.view</em> и
+<em>doc.state.update</em> группу полей.</p>
+<p>Теги назначаются на элементы (например, поля), через свойство <em>tags</em>.</p>
+<p>Теги могут быть указаны как:</p>
+<ul>
+<li>массив строчных значений</li>
+<li>строка, с названиями тегов разделенными запятыми</li>
+</ul>
+<p>Теги не могут нести в себе дополнительную информацию</p>
+<p>В результатет обработки результата работы utils.sortedMap, в него добавляется объект <em>$$tags</em>, в котором каждому
+ключу-тегу, соотвествует список элементов sortedMap</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'correct work: tags as string'</span>, <span class="hljs-function">-&gt;</span>
+
+    fields =
+      fld1: {type: <span class="hljs-string">'integer'</span>, tags: <span class="hljs-string">'user, admin'</span>}
+      fld2: {type: <span class="hljs-string">'text'</span>, tags: <span class="hljs-string">'user'</span>}
+      fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+    fields = sortedMap (result = <span class="hljs-keyword">new</span> Result), fields, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+    expect(result.messages).toEqual []
+
+    compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+    expect(result.messages).toEqual []
+
+    expect(fields.$$tags.all.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+    expect(fields.$$tags.admin.valueOf()).toEqual [<span class="hljs-number">0</span>]
+    expect(fields.$$tags.user.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
+
+  check <span class="hljs-string">'correct work: tags as lists'</span>, <span class="hljs-function">-&gt;</span>
+
+    fields =
+      fld1: {type: <span class="hljs-string">'integer'</span>, tags: [<span class="hljs-string">'user'</span>, <span class="hljs-string">'admin'</span>]}
+      fld2: {type: <span class="hljs-string">'text'</span>, tags: [<span class="hljs-string">'user'</span>]}
+      fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+    fields = sortedMap (result = <span class="hljs-keyword">new</span> Result), fields, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+    expect(result.messages).toEqual []
+
+    compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+    expect(result.messages).toEqual []
+
+    expect(fields.$$tags.all.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+    expect(fields.$$tags.admin.valueOf()).toEqual [<span class="hljs-number">0</span>]
+    expect(fields.$$tags.user.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Можно тегировать элементы в иерархической структуре, которую готовить flatMap.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'tags on subelements'</span>, <span class="hljs-function">-&gt;</span>
+
+    fields =
+      fld1: {type: <span class="hljs-string">'integer'</span>, tags: <span class="hljs-string">'user, admin'</span>}
+      fld2:
+        fields:
+          fld2a:
+            tags: <span class="hljs-string">'user'</span>
+            fields:
+              fld2a1: {tags: <span class="hljs-string">'admin'</span>}
+              fld2a2: {}
+      fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+    fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
+
+    expect(result.messages).toEqual []
+
+    compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+    expect(result.messages).toEqual []
+
+    flatMap.finish result, fields, <span class="hljs-string">'fields'</span>, skipProps: [<span class="hljs-string">'tags'</span>], validate: <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>При этом теги нормализуются методом BitArray.fixVertical()</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(fields.$$tags.admin.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+    expect(fields.$$tags.user.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Если поле tag одного из элементов содержит недопустимое значение.  Возвращается ошибка с указанием неправильного
+значения.  К какому элементу односится значение и к какому свойству элемента - указано в контексте ошибки.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> errValue <span class="hljs-keyword">in</span> [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>, <span class="hljs-number">12</span>, {}]
+
+    <span class="hljs-keyword">do</span> (errValue) -&gt; check <span class="hljs-string">"invalid value: <span class="hljs-subst">#{errValue}</span>"</span>, <span class="hljs-function">-&gt;</span>
+
+      fields =
+        fld1: {type: <span class="hljs-string">'integer'</span>, tags: <span class="hljs-string">'user, admin'</span>}
+        fld2: {type: <span class="hljs-string">'text'</span>, tags: errValue}
+        fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+      fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+      compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+      expect(result.messages).sameStructure [
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: errValue}
+      ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Если в списке tags содержится неверное значение - возвращается соотвествующее сообщение, с указанием индекса
+неправильного значения в списке</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> errValue <span class="hljs-keyword">in</span> [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>, <span class="hljs-number">12</span>, {}]
+
+    <span class="hljs-keyword">do</span> (errValue) -&gt; check <span class="hljs-string">"invalid value: <span class="hljs-subst">#{errValue}</span>"</span>, <span class="hljs-function">-&gt;</span>
+
+      fields =
+        fld1: {type: <span class="hljs-string">'integer'</span>, tags: <span class="hljs-string">'user, admin'</span>}
+        fld2: {type: <span class="hljs-string">'text'</span>, tags: [<span class="hljs-string">'user'</span>, errValue, <span class="hljs-string">'go'</span>]}
+        fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+      fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+      compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+      expect(result.messages).sameStructure [
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.invalidTagValue'</span>, value: errValue, index: <span class="hljs-number">1</span>}
+      ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Если список тего содержит повторяющиеся значени - возвращается предупреждение</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"invalid element of tags list"</span>, <span class="hljs-function">-&gt;</span>
+
+    fields =
+      fld1: {type: <span class="hljs-string">'integer'</span>, tags: [<span class="hljs-string">'user'</span>, <span class="hljs-string">'admin'</span>]}
+      fld2: {type: <span class="hljs-string">'text'</span>, tags: [<span class="hljs-string">'user'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'user'</span>]}
+      fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+    fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+    expect(result.messages).toEqual []
+
+    compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+    expect(result.isError).toBe <span class="hljs-literal">false</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.duplicatedTag'</span>, value: <span class="hljs-string">'user'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Все имена тегов должны соотвествовать соглашению об именование элементов.  Иначе ошибка.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"invalid tag name"</span>, <span class="hljs-function">-&gt;</span>
+
+    fields =
+      fld1: {type: <span class="hljs-string">'integer'</span>, tags: [<span class="hljs-string">'user'</span>, <span class="hljs-string">'Admin'</span>]}
+      fld2: {type: <span class="hljs-string">'text'</span>, tags: [<span class="hljs-string">'user'</span>, <span class="hljs-string">'A'</span>, <span class="hljs-string">'A'</span>]}
+      fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+    fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+    compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld1].tags'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'Admin'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'A'</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.duplicatedTag'</span>, value: <span class="hljs-string">'A'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Имя тега ‘all’ зарезервировано, и не может явно использоваться</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"reserved tag 'all'"</span>, <span class="hljs-function">-&gt;</span>
+
+    fields =
+      fld1: {type: <span class="hljs-string">'integer'</span>, tags: <span class="hljs-string">'user, admin, all'</span>}
+      fld2: {type: <span class="hljs-string">'text'</span>, tags: [<span class="hljs-string">'user'</span>, <span class="hljs-string">'all'</span>]}
+      fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+    fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+    compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld1].tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'all'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'all'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

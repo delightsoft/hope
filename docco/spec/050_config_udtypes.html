@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>050_config_udtypes.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>050_config_udtypes.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h2 id="типы-полей-документов-объявляемые-пользователем">Типы полей документов объявляемые пользователем</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: {_processUdtypes: processUdtypes}}
+types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span><span class="hljs-function">
+<span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hljs-function">-&gt;</span>
+
+  check <span class="hljs-string">"correct"</span>, <span class="hljs-function">-&gt;</span>
+
+    conf = $$src:
+
+      udtypes:
+
+        strBased: type: <span class="hljs-string">'string(20)'</span>
+
+        intBased: type: <span class="hljs-string">'int'</span>
+
+        currency: type: <span class="hljs-string">'intBased'</span>
+
+    processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
+
+    expect(result.messages).toEqual []
+
+    expect(conf.udtypes).sameStructure
+
+      strBased: strBased = name: <span class="hljs-string">'strBased'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>
+
+      intBased: intBased = name: <span class="hljs-string">'intBased'</span>, type: <span class="hljs-string">'integer'</span>
+
+      currency: currency = name: <span class="hljs-string">'currency'</span>, type: <span class="hljs-string">'integer'</span>, udType: <span class="hljs-string">'intBased'</span>
+
+      $$list: [strBased, intBased, currency]
+
+  check <span class="hljs-string">"cycled"</span>, <span class="hljs-function">-&gt;</span>
+
+    conf = $$src:
+
+      udtypes:
+
+        one: type: <span class="hljs-string">'two'</span>
+
+        two: type: <span class="hljs-string">'one'</span>
+
+        a: type: <span class="hljs-string">'c'</span>
+
+        b: type: <span class="hljs-string">'a'</span>
+
+        c: type: <span class="hljs-string">'b'</span>
+
+    processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'one'</span>, <span class="hljs-string">'two'</span>]}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'b'</span>]}]
+
+    expect(conf.udtypes).<span class="hljs-keyword">not</span>.toBeDefined()
+
+  check <span class="hljs-string">'dsvalue'</span>, <span class="hljs-function">-&gt;</span>
+
+    conf = $$src:
+
+      udtypes:
+
+        one: type: <span class="hljs-string">'value'</span>
+
+        two: type: <span class="hljs-string">'dsvalue'</span>
+
+    processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
+
+    expect(result.messages).toEqual []
+
+    expect(conf.udtypes).sameStructure
+
+      one: one = name: <span class="hljs-string">'one'</span>, type: <span class="hljs-string">'dsvalue'</span>
+
+      two: two = name: <span class="hljs-string">'two'</span>, type: <span class="hljs-string">'dsvalue'</span>
+
+      $$list: [one, two]
+
+  <span class="hljs-keyword">for</span> type <span class="hljs-keyword">in</span> builtInTypes
+
+    <span class="hljs-keyword">do</span> (type) -&gt; check <span class="hljs-string">"error: built-in type name: '<span class="hljs-subst">#{type}</span>'"</span>, <span class="hljs-function">-&gt;</span>
+
+      (((conf = {}).$$src = {}).udtypes = {})[type] = type: <span class="hljs-string">'int'</span>
+
+      processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
+
+      expect(result.messages).toEqual [{type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">"udtypes[<span class="hljs-subst">#{type}</span>]"</span>, code: <span class="hljs-string">'dsc.builtInTypeName'</span>}]
+
+      expect(conf.udtypes).<span class="hljs-keyword">not</span>.toBeDefined()
+
+  <span class="hljs-keyword">for</span> type <span class="hljs-keyword">in</span> reservedTypes
+
+    <span class="hljs-keyword">do</span> (type) -&gt; check <span class="hljs-string">"error: reserved type name: '<span class="hljs-subst">#{type}</span>'"</span>, <span class="hljs-function">-&gt;</span>
+
+      (((conf = {}).$$src = {}).udtypes = {})[type] = type: <span class="hljs-string">'int'</span>
+
+      processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
+
+      expect(result.messages).toEqual [{type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">"udtypes[<span class="hljs-subst">#{type}</span>]"</span>, code: <span class="hljs-string">'dsc.reservedTypeName'</span>}]
+
+      expect(conf.udtypes).<span class="hljs-keyword">not</span>.toBeDefined()</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

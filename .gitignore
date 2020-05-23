@@ -1,6 +1,5 @@
 .idea
 *.iml
 node_modules
-docs
 coverage
 temp

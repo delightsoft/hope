@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>I18n (Internationalization)</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="i18n-internationalization">I18n (Internationalization)</h1>
+<p>Общий принцип локализации, это то что коду сообщения соответствует функция, в config.i18n, которая создает сообщение.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, i18n, utils} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'015_i18n:'</span>, <span class="hljs-function">-&gt;</span>
+
+  beforeEach -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Сообщения - это flatMap</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    messages =
+
+      test:</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Сообщение test.messageA без аргументов</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        messageA: @f3 = <span class="hljs-function">-&gt;</span> <span class="hljs-string">"Message A"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Сообщение test.messageB с аргументов</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        messageB: @f4 = <span class="hljs-function"><span class="hljs-params">(args)</span> -&gt;</span> <span class="hljs-string">"Message B. Value: <span class="hljs-subst">#{args.value}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Сообщение в виде просто строки</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        messageC: @s1 = <span class="hljs-string">'Simple Message'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Или даже числа</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        messageD: @n1 = <span class="hljs-number">121</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Перед использование данных для интернационализации надо выполнить метод i18n.link</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @messages = i18n.link (@result = <span class="hljs-keyword">new</span> Result), messages</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Метод i18n.link пересобирает сообщения из иерархической структуры в плоский map.  При этом будут выданы предупреждения
+об отсуствующих частях</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"A"</span>, <span class="hljs-function">-&gt;</span>
+
+    expect(@messages).sameStructure
+      <span class="hljs-string">'test.messageA'</span>: @f3
+      <span class="hljs-string">'test.messageB'</span>: @f4
+      <span class="hljs-string">'test.messageC'</span>: @s1
+      <span class="hljs-string">'test.messageD'</span>: @n1</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Метод i18n.format форматирует сообщения            </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"B"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Если сообщение есть в локализации, получаем локализованное сообщение</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'test.messageA'</span>).toBe <span class="hljs-string">'Message A'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Если сообщение есть в локализации и содержит параметры, то получаем локализованное сообщение с параметрами</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'test.messageB'</span>, value: <span class="hljs-string">'123'</span>).toBe <span class="hljs-string">'Message B. Value: 123'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Если локализация сообщения - просто строка, то эту строку в результате и получаем</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'test.messageC'</span>).toBe <span class="hljs-string">'Simple Message'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Если локализация сообщения не функция и не строка, то получаем значение локализации в строчном виде</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'test.messageD'</span>).toBe <span class="hljs-string">'121'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Если сообщения НЕТ в локализации, то оставляем название сообщения</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'test.messageQ'</span>).toBe <span class="hljs-string">'test.messageQ'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Если сообщения НЕТ в локализации, и оно с параметрами, то оставляем название сообщения и добавляем параметр в конец
+сообщения в виде JSON.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'test.messageF'</span>, value: <span class="hljs-string">'123'</span>).toBe <span class="hljs-string">'test.messageF{"value":"123"}'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Code сообщения должен соотвествовать структуре локализации</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"C"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Есди Test с большой буквы, уже не находим вариант где test с маленькой буквы</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'Test.messageA'</span>).toBe <span class="hljs-string">'Test.messageA'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>То же для MessageA с большой буквы</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'test.MessageA'</span>).toBe <span class="hljs-string">'test.MessageA'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Если путь к сообщению содержит дополнительные шаги, то тоже не находится промежуточный вариант</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format @messages, code: <span class="hljs-string">'test.messageA.extra'</span>).toBe <span class="hljs-string">'test.messageA.extra'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Сообщение может содержать контекст, который форматируется по тем же правилам что и основное сообщение, только
+метод выбирается из config.i18n.contexts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"D"</span>, <span class="hljs-function">-&gt;</span>
+
+    expect(i18n.format @messages, path: <span class="hljs-string">'config'</span>, code: <span class="hljs-string">'test.messageA'</span>)
+    .toBe <span class="hljs-string">"config: Message A"</span>
+
+    expect(i18n.format @messages, path: <span class="hljs-string">'config'</span>, code: <span class="hljs-string">'test.messageB'</span>, value: <span class="hljs-string">'123'</span>)
+    .toBe <span class="hljs-string">"config: Message B. Value: 123"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Форматирование может вестись без i18n колекции.  Тогда форма работает так как если бы локализация всегда не была найдена</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"E"</span>, <span class="hljs-function">-&gt;</span>
+
+    expect(i18n.format <span class="hljs-literal">undefined</span>, code: <span class="hljs-string">'test.messageA'</span>).toBe <span class="hljs-string">'test.messageA'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Если сообщение есть в локализации и содержит параметры, то получаем локализованное сообщение с параметрами</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(i18n.format <span class="hljs-literal">null</span>, code: <span class="hljs-string">'test.messageB'</span>, value: <span class="hljs-number">123</span>).toBe <span class="hljs-string">'test.messageB{"value":123}'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Если сообщение содержит path, то он добавляется к сообщение без локализации</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"F"</span>, <span class="hljs-function">-&gt;</span>
+
+    expect(i18n.format <span class="hljs-literal">null</span>, path: <span class="hljs-string">'a[1]'</span>, code: <span class="hljs-string">'test.messageB'</span>, value: <span class="hljs-number">123</span>)
+    .toBe <span class="hljs-string">"a[1]: test.messageB{\"value\":123}"</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

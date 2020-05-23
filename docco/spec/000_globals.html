@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>000_globals.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>000_globals.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>Код DSCommon везде расчитывает, что:</p>
+<ul>
+<li>Глобальные Promise реализованны библиотекой bluebird</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, compareStructures, utils: {err: {isResult}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+beforeEach -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Весь код DSCommon3 ориентируется на то, что система будет работать с библиотекой bluebird.  При этом будет
+переопределен голобальный Promise.  Это сделано, по аналогии, с тем как с Promise работает sequelize.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-built_in">global</span>.Pormise = <span class="hljs-built_in">require</span> <span class="hljs-string">'bluebird'</span>
+
+  <span class="hljs-built_in">global</span>.moment  = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Для проверки что объект Result содержит определенные сообщения, делаем custom matcher</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  jasmine.addMatchers
+
+    resultContains: <span class="hljs-function"><span class="hljs-params">(util, customEqualityTesters)</span> -&gt;</span>
+
+      compare: <span class="hljs-function"><span class="hljs-params">(actual, expected)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>проверяем что actual правильного типа</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        <span class="hljs-keyword">unless</span> isResult actual
+
+          <span class="hljs-keyword">return</span> {
+
+            pass: <span class="hljs-literal">false</span>
+
+            message: <span class="hljs-string">"Expected actual value to be a Result object, but it was '<span class="hljs-subst">#{jasmine.pp actual}</span>'."</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>проверяем, что array</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        <span class="hljs-keyword">unless</span> (failed = <span class="hljs-keyword">not</span> Array.isArray expected)
+
+          failed = <span class="hljs-literal">true</span> <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> expected <span class="hljs-keyword">when</span> <span class="hljs-keyword">not</span> (<span class="hljs-keyword">typeof</span> v == <span class="hljs-string">'object'</span> &amp;&amp; v != <span class="hljs-literal">null</span>)
+
+        <span class="hljs-keyword">if</span> failed
+
+          <span class="hljs-keyword">return</span> {
+
+            pass: <span class="hljs-literal">false</span>
+
+            message: <span class="hljs-string">"Expected actual value to be an array of Result messages, but it is '<span class="hljs-subst">#{jasmine.pp expected}</span>'."</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>ишем среди полученных сообщений, чтоб было каждое ожидаемое сообщение</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        <span class="hljs-keyword">for</span> expectedMessage <span class="hljs-keyword">in</span> expected
+
+          pass = <span class="hljs-literal">false</span>
+
+          pass = <span class="hljs-literal">true</span> <span class="hljs-keyword">for</span> actualMessage <span class="hljs-keyword">in</span> actual.messages <span class="hljs-keyword">when</span> util.equals expectedMessage, actualMessage, customEqualityTesters
+
+          (missingMessages = []).push expectedMessage <span class="hljs-keyword">unless</span> pass
+
+        <span class="hljs-keyword">if</span> missingMessages <span class="hljs-comment"># compare: (actual, expected) -&gt;</span>
+
+          pass: <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>message: “Expected #{nodeJSUtil.inspect actual.messages} to has following messages #{nodeJSUtil.inspect missingMessages}”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+          message: <span class="hljs-string">"Expected <span class="hljs-subst">#{jasmine.pp actual.messages}</span> to has following messages <span class="hljs-subst">#{jasmine.pp missingMessages}</span>."</span>
+
+        <span class="hljs-keyword">else</span>
+
+          pass: <span class="hljs-literal">true</span>
+
+    sameStructure: <span class="hljs-function"><span class="hljs-params">(util, customEqualityTesters)</span> -&gt;</span>
+
+      compare: <span class="hljs-function"><span class="hljs-params">(actual, expected)</span> -&gt;</span>
+
+        compareStructures (result = <span class="hljs-keyword">new</span> Result), actual, expected
+
+        <span class="hljs-keyword">if</span> result.messages.length &gt; <span class="hljs-number">0</span>
+
+          pass: <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>message: “Diff: #{jasmine.pp result.messages}”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          message: <span class="hljs-string">"Diff: <span class="hljs-subst">#{jasmine.pp result.messages}</span>;\n Actual: '<span class="hljs-subst">#{jasmine.pp actual}</span>';\n Expected: '<span class="hljs-subst">#{jasmine.pp expected}</span>'"</span>
+
+        <span class="hljs-keyword">else</span>
+
+          pass: <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

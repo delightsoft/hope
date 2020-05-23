@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>sorted map</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="sorted-map">sorted map</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, sortedMap, utils: {checkItemName, deepClone, combineMsg, err: {isResult, invalidArg, tooManyArgs}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1 id="todo-добавить-опциональное-индексирование-элементов-для-работы-с-bitarray">TODO: Добавить опциональное индексирование элементов для работы с bitArray</h1>
+<p>Сортедмап (sortedMap) - это соглашение по работе с коллекциями элементов - списками документов, полей, значений enum и
+т.п. Полезно как иметь список значений, так и map для быстрого нахождения элемента по имени.</p>
+<p>sortedMap из списка или массива делает map (object):</p>
+<ul>
+<li>ключ - название элемента, значение - значение элемента</li>
+<li>специальный элемент - $$list, содержит список элементов</li>
+<li>все элементы приобразованны в объекты</li>
+<li>у каждого элемента есть свойство <em>name</em>, соотвествующие названию элемента</li>
+<li>и свойство <em>index</em>, содержащие индекс элемента в списке</li>
+<li>имена элементов должны быть из латинский символов и цифры, начинаться с цифры или маленькой буквы</li>
+</ul>
+<h1 id="todo-сделать-objectfreeze-после-завершения-обработки">TODO: Сделать Object.freeze после завершения обработки</h1>
+<p>Важно: sortedMap должен быть immutable, чтобы легче было отлаживать - не менять входящие данные</p>
+<p>Можно получить sortedMap из объекта</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"from map"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = sortedMap (result = <span class="hljs-keyword">new</span> Result),
+
+      doc1: {}
+
+      doc2: {}
+
+      doc3: {}
+
+    expect(result.isError).toBe <span class="hljs-literal">false</span>
+
+    expect(res).sameStructure
+
+      doc1: doc1 = {name: <span class="hljs-string">'doc1'</span>, $$src: {}}
+
+      doc2: doc2 = {name: <span class="hljs-string">'doc2'</span>, $$src: {}}
+
+      doc3: doc3 = {name: <span class="hljs-string">'doc3'</span>, $$src: {}}
+
+      $$list: [doc1, doc2, doc3]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Можно получить sortedMap из массива</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"from array"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = sortedMap (result = <span class="hljs-keyword">new</span> Result), [{name: <span class="hljs-string">'doc1'</span>}, {name: <span class="hljs-string">'doc2'</span>}, {name: <span class="hljs-string">'doc3'</span>}]
+
+    expect(result.isError).toBe <span class="hljs-literal">false</span>
+
+    expect(res).sameStructure
+
+      doc1: doc1 = {name: <span class="hljs-string">'doc1'</span>, $$src: {name: <span class="hljs-string">'doc1'</span>}}
+
+      doc2: doc2 = {name: <span class="hljs-string">'doc2'</span>, $$src: {name: <span class="hljs-string">'doc2'</span>}}
+
+      doc3: doc3 = {name: <span class="hljs-string">'doc3'</span>, $$src: {name: <span class="hljs-string">'doc3'</span>}}
+
+      $$list: [doc1, doc2, doc3]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>И из строки</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"from string"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = sortedMap (result = <span class="hljs-keyword">new</span> Result), <span class="hljs-string">'doc1, doc2, doc3'</span>, string: <span class="hljs-literal">true</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">false</span>
+
+    expect(res).sameStructure
+
+      doc1: doc1 = {name: <span class="hljs-string">'doc1'</span>}
+
+      doc2: doc2 = {name: <span class="hljs-string">'doc2'</span>}
+
+      doc3: doc3 = {name: <span class="hljs-string">'doc3'</span>}
+
+      $$list: [doc1, doc2, doc3]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Есть два параметра:</p>
+<ul>
+<li>result - объект типа Result</li>
+<li>value - значение для обработки</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"invalid argument 'result'"</span>, <span class="hljs-function">-&gt;</span>
+
+    expect(<span class="hljs-function">-&gt;</span> sortedMap()).toThrow <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Invalid argument 'result': undefined"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Значение может быть только или объект или массив</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> wrongValue <span class="hljs-keyword">in</span> [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">12</span>, <span class="hljs-string">''</span>, {}, []]
+
+    <span class="hljs-keyword">do</span> (wrongValue) -&gt; check <span class="hljs-string">"invalid argument 'value': <span class="hljs-subst">#{jasmine.pp wrongValue}</span>"</span>, <span class="hljs-function">-&gt;</span>
+
+      sortedMap (result = <span class="hljs-keyword">new</span> Result), wrongValue
+
+      expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+      expect(result.messages).sameStructure [
+        {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: wrongValue}
+      ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Значение может быть обработано только один раз</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"one time processing"</span>,  <span class="hljs-function">-&gt;</span>
+
+    res = sortedMap (result = <span class="hljs-keyword">new</span> Result), map =
+
+      doc1: {}
+
+    expect(<span class="hljs-function">-&gt;</span> sortedMap (result = <span class="hljs-keyword">new</span> Result), res).toThrow <span class="hljs-keyword">new</span> Error <span class="hljs-string">'Value was already processed by sortedMap()'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Если значения заданы в object, то значения могут содержать name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"name in the element"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = sortedMap (result = <span class="hljs-keyword">new</span> Result),
+
+      doc1: {v: <span class="hljs-number">12</span>}
+
+      doc2: {name: <span class="hljs-string">'doc2'</span>, v: <span class="hljs-number">20</span>}
+
+    expect(res).sameStructure
+
+      doc1: doc1 = {name: <span class="hljs-string">'doc1'</span>, $$src: {v: <span class="hljs-number">12</span>}}
+
+      doc2: doc2 = {name: <span class="hljs-string">'doc2'</span>, $$src: {name: <span class="hljs-string">'doc2'</span>, v: <span class="hljs-number">20</span>}}
+
+      $$list: [doc1, doc2]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Но name в значении должно совпадать с ключом</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"wrong name in the element"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = sortedMap (result = <span class="hljs-keyword">new</span> Result), set =
+
+      doc1: doc1 = {name: <span class="hljs-string">'otherName'</span>, v: <span class="hljs-number">12</span>}
+
+      doc2: {name: <span class="hljs-string">'doc2'</span>, v: <span class="hljs-number">20</span>}
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'doc1'</span>, code: <span class="hljs-string">'dsc.keyAndNameHasDifferenValues'</span>, value1: <span class="hljs-string">'doc1'</span>, value2: <span class="hljs-string">'otherName'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Значение в map может быть или объектом или true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"'true' translated to object element map"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = sortedMap (result = <span class="hljs-keyword">new</span> Result), {
+
+      doc1: {v: <span class="hljs-number">12</span>}
+
+      doc2: <span class="hljs-literal">true</span>
+
+      doc3: {}}, boolean: <span class="hljs-literal">true</span>
+
+    expect(res).sameStructure
+
+      doc1: doc1 = {name: <span class="hljs-string">'doc1'</span>, $$src: {v: <span class="hljs-number">12</span>}}
+
+      doc2: doc2 = {name: <span class="hljs-string">'doc2'</span>}
+
+      doc3: doc3 = {name: <span class="hljs-string">'doc3'</span>, $$src: {}}
+
+      $$list: [doc1, doc2, doc3]
+
+  <span class="hljs-keyword">for</span> wrongValue <span class="hljs-keyword">in</span> [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">12</span>, <span class="hljs-string">'a string'</span>, [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>]]
+
+    <span class="hljs-keyword">do</span> (wrongValue) -&gt; check <span class="hljs-string">"invalid map element: <span class="hljs-subst">#{wrongValue}</span>"</span>, <span class="hljs-function">-&gt;</span>
+
+      res = sortedMap (result = <span class="hljs-keyword">new</span> Result), map =
+
+        <span class="hljs-string">'doc1'</span>: wrongValue
+
+      expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+      expect(result.messages).sameStructure [
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'doc1'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: wrongValue}
+      ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Значения в массиве могут быть или объектом или строкой</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"'string' translated to an object in list"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = sortedMap (result = <span class="hljs-keyword">new</span> Result), [<span class="hljs-string">'doc1'</span>, <span class="hljs-string">'doc2'</span>], string: <span class="hljs-literal">true</span>
+
+    expect(res).sameStructure
+
+      doc1: doc1 = {name: <span class="hljs-string">'doc1'</span>}
+
+      doc2: doc2 = {name: <span class="hljs-string">'doc2'</span>}
+
+      $$list: [doc1, doc2]
+
+  <span class="hljs-keyword">for</span> wrongValue <span class="hljs-keyword">in</span> [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">12</span>, [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>]]
+
+    <span class="hljs-keyword">do</span> (wrongValue) -&gt; check <span class="hljs-string">"invalid list element: <span class="hljs-subst">#{wrongValue}</span>"</span>, <span class="hljs-function">-&gt;</span>
+
+      res = sortedMap (result = <span class="hljs-keyword">new</span> Result), list = [wrongValue]
+
+      expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+      expect(result.messages).sameStructure [
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[0]'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: wrongValue}
+      ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Объект в массиве обязательно должен иметь свойство name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"all list element must have 'name' prop"</span>, <span class="hljs-function">-&gt;</span>
+
+    sortedMap (result = <span class="hljs-keyword">new</span> Result), list = [{v: <span class="hljs-number">12</span>}, {name: <span class="hljs-string">'doc2'</span>, v: <span class="hljs-number">15</span>}, {v: <span class="hljs-number">20</span>}]
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[0]'</span>, code: <span class="hljs-string">'dsc.missingProp'</span>, value: <span class="hljs-string">'name'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[2]'</span>, code: <span class="hljs-string">'dsc.missingProp'</span>, value: <span class="hljs-string">'name'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>В массиве не должно быть элементов с одинаковыми имена</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"duplicated prop is not allowed in array"</span>, <span class="hljs-function">-&gt;</span>
+
+    sortedMap (result = <span class="hljs-keyword">new</span> Result), list = [{name: <span class="hljs-string">'doc1'</span>}, {name: <span class="hljs-string">'doc1'</span>}]
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[1]'</span>, code: <span class="hljs-string">'dsc.duplicatedName'</span>, value: <span class="hljs-string">'doc1'</span>}
+    ]
+
+  check <span class="hljs-string">"duplicated prop is not allowed in comma separated string"</span>, <span class="hljs-function">-&gt;</span>
+
+    sortedMap (result = <span class="hljs-keyword">new</span> Result), list = <span class="hljs-string">'doc1, doc1'</span>, string: <span class="hljs-literal">true</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[1]'</span>, code: <span class="hljs-string">'dsc.duplicatedName'</span>, value: <span class="hljs-string">'doc1'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Имена элементов могут состоять только из латинских букв и цифр, и обяхательно начанаться с маленькой буквы</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"element 'name' prop must contain letters or digits, and start from lower char"</span>, <span class="hljs-function">-&gt;</span>
+
+    sortedMap (result = <span class="hljs-keyword">new</span> Result), list = [{name: <span class="hljs-string">'BigName'</span>}, {name: <span class="hljs-string">'4inch'</span>}, {name: <span class="hljs-string">'with space'</span>}]
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[0]'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'BigName'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[1]'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'4inch'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[2]'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'with space'</span>}
+    ]
+
+    sortedMap (result = <span class="hljs-keyword">new</span> Result), value =
+      BigName: {}
+      <span class="hljs-string">'4inch'</span>: {}
+      <span class="hljs-string">'with space'</span>: {}
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'BigName'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'BigName'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'4inch'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'4inch'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'with space'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'with space'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h2 id="модификация-поведения-sortedmap">Модификация поведения sortedMap</h2>
+<p>Третий параметр в sortedMap это options, который может содержать следующие свойства</p>
+<ul>
+<li>checkName - метод проверки написания имени</li>
+<li>getValue - позволяет обрабатывать произвольное значение в map и присваевает значение в резльутат.</li>
+<li>boolean - true, если может быть true указано как значение.  Только map</li>
+<li>string - true, если можно указать как значение строку или массив строк.  Только списки</li>
+<li>index - true, добавляет в элементы свойство $$index, с порядковым номеро элемента в $$list</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"'boolean = false' option"</span>, <span class="hljs-function">-&gt;</span>
+
+    sortedMap (result = <span class="hljs-keyword">new</span> Result),  {
+      item1: <span class="hljs-literal">true</span>
+      item2: {}
+      item3: <span class="hljs-literal">true</span>}, string: <span class="hljs-literal">true</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'item1'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-literal">true</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'item3'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-literal">true</span>}
+    ]
+
+  check <span class="hljs-string">"'string = false' option: string value"</span>, <span class="hljs-function">-&gt;</span>
+
+    sortedMap (result = <span class="hljs-keyword">new</span> Result), val = <span class="hljs-string">"item1, item2, item3"</span>, boolean: <span class="hljs-literal">true</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: val}
+    ]
+
+  check <span class="hljs-string">"'string = false' option: array with a string value"</span>, <span class="hljs-function">-&gt;</span>
+
+    sortedMap (result = <span class="hljs-keyword">new</span> Result), [{name: <span class="hljs-string">'item1'</span>}, <span class="hljs-string">'item2'</span>], boolean: <span class="hljs-literal">true</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[1]'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-string">'item2'</span>}
+    ]
+
+  check <span class="hljs-string">"'getValue' option"</span>, <span class="hljs-function">-&gt;</span>
+
+    actions =
+
+      action1: f1 = <span class="hljs-function">-&gt;</span>
+
+      action2: {value: f2 = <span class="hljs-function">-&gt;</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Метод getValue возвращает true, если это поддерживаемый тип значения.  И это значение перенесено в dest - собираемый
+объект</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    res = sortedMap (result = <span class="hljs-keyword">new</span> Result), actions, getValue: <span class="hljs-function"><span class="hljs-params">(result, value, res)</span> -&gt;</span>
+
+      expect(isResult result).toBe <span class="hljs-literal">true</span>
+      expect(<span class="hljs-keyword">typeof</span> res == <span class="hljs-string">'object'</span> &amp;&amp; res != <span class="hljs-literal">null</span> &amp;&amp; !Array.isArray(res)).toBe <span class="hljs-literal">true</span>
+      expect(arguments.length &lt;= <span class="hljs-number">3</span>)
+
+      expect(value).toBe f1
+
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> f1 == <span class="hljs-string">'function'</span>
+
+          res.value = f1
+
+          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+
+      <span class="hljs-literal">false</span>
+
+    sortedMap.finish result, res, validate: <span class="hljs-literal">false</span>
+
+    expect(result.messages).toEqual []
+
+    expect(res).sameStructure
+      action1: action1 = {name: <span class="hljs-string">'action1'</span>, value: f1}
+      action2: action2 = {name: <span class="hljs-string">'action2'</span>}
+      $$list: [action1, action2]
+
+  check <span class="hljs-string">"'copyProps' option"</span>, <span class="hljs-function">-&gt;</span>
+
+    actions =
+
+      action1: f1 = <span class="hljs-function">-&gt;</span>
+
+      action2: {value: f2 = <span class="hljs-function">-&gt;</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Метод copyProps копирует свойства исходного map в результат</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    res = sortedMap (result = <span class="hljs-keyword">new</span> Result), actions,
+
+    getValue: <span class="hljs-function"><span class="hljs-params">(result, value, res)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Не копируем свойство в этом методе</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> f1 == <span class="hljs-string">'function'</span>
+
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+
+      <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

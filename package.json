@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node scripts/build.js",
     "build:dev": "node scripts/build.js --dev",
-    "build:help": "node scripts/build.js --help"
+    "build:help": "node scripts/build.js --help",
+    "go": "node scripts/test.js"
   },
   "author": "Alexey Zorkaltsev (alexey@zorkaltsev.com)",
   "license": "ISC",
@@ -23,7 +24,9 @@
     "docco": "^0.8.0",
     "jasmine": "^3.5.0",
     "moment": "^2.26.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "glob": "^7.1.6"
   },
-  "dependencies": {}
+  "dependencies": {
+  }
 }

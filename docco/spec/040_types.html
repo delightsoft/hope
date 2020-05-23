@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>040_types.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>040_types.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h2 id="типы-полей-документов">Типы полей документов</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, types: {compile: compileType}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+reservedTypes = compileType._reservedTypes
+
+focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'040_types:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Тип поля задается несколькими аттрибутами:</p>
+<ul>
+<li>type - системный тип</li>
+<li>udtype - пользовательский тип (user defined), если есть</li>
+<li>length - длина для строк</li>
+<li>enum - набор значений для enum</li>
+<li>fields - набор полей для struct[ure] или subtable</li>
+<li>nullable - поле может иметь значение null</li>
+</ul>
+<p>Тех. прием: Для отработки отдельных пунктов спецификации делаем свой метод check, который может подставлять вызов
+fit, для задачи указанной в focusOnCheck</p>
+<p>Это возможные тестовые значения, чтобы можно было их перебирать при проверке, что комплиятор пропускает только
+допустимый тип</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  testValues = [
+    valUndefined = <span class="hljs-literal">undefined</span>
+    valNull = <span class="hljs-literal">null</span>
+    valBool = <span class="hljs-literal">false</span>
+    valNum = <span class="hljs-number">12</span>
+    valEmptyArray = []
+    valEmptyMap = {}
+    valArrayOfDocTypes = [<span class="hljs-string">'Doc1'</span>, <span class="hljs-string">'Doc2'</span>]
+    valArrayOfEnumObjects = [{name: <span class="hljs-string">'Field1'</span>}, {name: <span class="hljs-string">'Field2'</span>}, {name: <span class="hljs-string">'Field3'</span>}]
+    valArrayOfFieldsDesc = [{name: <span class="hljs-string">'field1'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">10</span>}, {name: <span class="hljs-string">'field2'</span>, type: <span class="hljs-string">'int'</span>}, {name: <span class="hljs-string">'field3'</span>, type: <span class="hljs-string">'bool'</span>}]
+    valStr = <span class="hljs-string">'str'</span>
+  ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Список свойст описания полей, для перебора, с указанием примера допустимого типа</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  propDescs = [
+    {name: <span class="hljs-string">'length'</span>, correctVal: valNum}
+    {name: <span class="hljs-string">'enum'</span>, correctVal: valArrayOfEnumObjects, skipVal: [valStr, valArrayOfFieldsDesc, valArrayOfDocTypes], required: <span class="hljs-literal">true</span>}
+
+    {name: <span class="hljs-string">'precision'</span>, correctVal: valNum, required: <span class="hljs-literal">true</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>scale это не самостоятельное свойство, оно идет в паре с precision</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    {name: <span class="hljs-string">'scale'</span>, correctVal: valNum, optional: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">false</span>}
+    {name: <span class="hljs-string">'fields'</span>, correctVal: valArrayOfFieldsDesc, skipVal: [valStr, valArrayOfDocTypes, valArrayOfEnumObjects], required: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'nullable'</span>, correctVal: valBool, required: <span class="hljs-literal">false</span>}
+
+    {name: <span class="hljs-string">'refers'</span>, correctVal: valStr, required: <span class="hljs-literal">true</span>, skipVal: [valEmptyArray, valArrayOfDocTypes]}
+  ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Это список встроенных в DSCommon типов.  Атрибуты говорят какие дополнительные поля нужно (можно) указывать для
+данного типа.  А так же есть у ли у типа короткое название.</p>
+<ul>
+<li>short - короткое название</li>
+<li>notNull - для данного типа нельзя указать null: true</li>
+<li>autotypeBy - если указанный в значении атрибут присутствует в описании поля и при этом не указано свойство type,
+то type проставляется автоматически</li>
+<li>length - длина для типа string</li>
+<li>precision - длина для типа decimal</li>
+<li>scale - количество знаков после запятой для типа decimal.  Не обязательное свойство</li>
+<li>enum - список значения для типа enum</li>
+<li>fields - список полей для типов structure и subtable</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  builtInTypes = [
+
+    {name: <span class="hljs-string">'string'</span>, short: <span class="hljs-string">'str'</span>, length: <span class="hljs-literal">true</span>, nullable: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'text'</span>, nullable: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'boolean'</span>, short: <span class="hljs-string">'bool'</span>, nullable: <span class="hljs-literal">true</span>}
+
+    {name: <span class="hljs-string">'integer'</span>, short: <span class="hljs-string">'int'</span>, nullable: <span class="hljs-literal">true</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>На этом этапе поддержки long не будет. так как есть вопрос, как исползоваться long в JavaScript.  long не входит
+в JavaScript-number - так как это double</p>
+<p>{name: ‘long’, nullable: true}</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>И не будет поддержки float - пока не станет понятно зачем на это</p>
+<p>{name: ‘float’, nullable: true}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    {name: <span class="hljs-string">'double'</span>, nullable: <span class="hljs-literal">true</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>C decimal тоже пока повременим</p>
+<p>{name: ‘decimal’, precision: true, scale: true, nullable: true}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    {name: <span class="hljs-string">'time'</span>, nullable: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'date'</span>, nullable: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'dateonly'</span>, nullable: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'now'</span>}
+
+    {name: <span class="hljs-string">'json'</span>, nullable: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'blob'</span>, nullable: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'uuid'</span>, nullable: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'enum'</span>, autotypeBy: <span class="hljs-string">'enum'</span>, enum: <span class="hljs-literal">true</span>, nullable: <span class="hljs-literal">true</span>}
+
+    {name: <span class="hljs-string">'structure'</span>, autotypeBy: <span class="hljs-string">'fields'</span>, short: <span class="hljs-string">'struct'</span>, fields: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'subtable'</span>, fields: <span class="hljs-literal">true</span>}
+
+    {name: <span class="hljs-string">'refers'</span>, short: <span class="hljs-string">'ref'</span>, autotypeBy: <span class="hljs-string">'refers'</span>, refers: <span class="hljs-literal">true</span>, nullable: <span class="hljs-literal">true</span>}
+
+    <span class="hljs-comment">#{name: 'dsvalue', short: 'value', nullable: true}</span>
+  ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Для начала проверяем, что если описание поля, не содержит type, то будет ошибка</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"type is missing"</span>, <span class="hljs-function">-&gt;</span>
+
+    compileType (result = <span class="hljs-keyword">new</span> Result), {}
+
+    expect(result).resultContains [
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.missingProp'</span>, value: <span class="hljs-string">'type'</span>}
+    ]
+
+  check <span class="hljs-string">"type has invalid chars in it's name"</span>, <span class="hljs-function">-&gt;</span>
+
+    compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'[WrongType]'</span>}
+
+    expect(result).resultContains [
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.invalidTypeValue'</span>, value: <span class="hljs-string">'[WrongType]'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Формируем список тестов для каждого типа, добавляя отдельные тесты для коротких имен типов</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  tests = []
+
+  <span class="hljs-keyword">for</span> type <span class="hljs-keyword">in</span> builtInTypes</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Для коротких имен типов, сохраняем полное имя типа, чтоб знать что ожидать в результате compileType</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    type.fullname = type.name
+
+    tests.push {name: type.name, type: type}
+
+    <span class="hljs-keyword">if</span> type.hasOwnProperty <span class="hljs-string">'short'</span>
+
+      tests.push {name: type.short, type: type}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Создаем тесты для типов и их сокращенных написаний</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> test <span class="hljs-keyword">in</span> tests</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Далее, в зависимости от того, какие свойства могут быть у данного типа проверяем варианты обработки этих свойств</p>
+<h2 id="required-props">Required props</h2>
+<p>Проверяем, что свойства обязательные для типа присутствуют</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> prop <span class="hljs-keyword">in</span> propDescs <span class="hljs-keyword">when</span> prop.required &amp;&amp; test.type[prop.name]
+
+      <span class="hljs-keyword">do</span> (test, prop) -&gt; check <span class="hljs-string">"<span class="hljs-subst">#{test.name}</span>: required prop '<span class="hljs-subst">#{prop.name}</span>' missing"</span>, <span class="hljs-function">-&gt;</span>
+
+        propDesc = {type: test.type.name}
+
+        compileType (result = <span class="hljs-keyword">new</span> Result), propDesc
+
+        expect(result).resultContains [
+          {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.missingProp'</span>, name: prop.name}
+        ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h2 id="right-value">Right value</h2>
+<p>Проверяем, что если в свойстве ds-типа, указано не верный тип значения, то возвращается ошибка</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> prop <span class="hljs-keyword">in</span> propDescs <span class="hljs-keyword">when</span> test.type[prop.name]
+
+      <span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> testValues <span class="hljs-keyword">when</span> prop.correctVal != value &amp;&amp; <span class="hljs-keyword">not</span> (prop.skipVal &amp;&amp; value <span class="hljs-keyword">in</span> prop.skipVal)
+
+        <span class="hljs-keyword">do</span> (test, prop, value) -&gt; check <span class="hljs-string">"<span class="hljs-subst">#{test.name}</span>: invalid prop '<span class="hljs-subst">#{prop.name}</span>' value: <span class="hljs-subst">#{jasmine.pp value}</span>"</span>, <span class="hljs-function">-&gt;</span>
+
+          propDesc = {type: test.type.name}
+
+          propDesc[prop.name] = value
+
+          compileType (result = <span class="hljs-keyword">new</span> Result), propDesc
+
+          expect(result).resultContains (</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Для остальных случаев, правильное значение только то, которая указано в prop.correctVal</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            [{type: <span class="hljs-string">'error'</span>, path: prop.name, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: value}])</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>К свойство precision, в паре может идти свойство scale - проверяем как они работают в паре</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> prop.name == <span class="hljs-string">'precision'</span>
+
+          <span class="hljs-keyword">do</span> (test, prop, value) -&gt; check <span class="hljs-string">"<span class="hljs-subst">#{test.name}</span>: invalid prop 'scale' value: <span class="hljs-subst">#{jasmine.pp value}</span>"</span>, <span class="hljs-function">-&gt;</span>
+
+            propDesc = {type: test.type.name, precision: prop.correctVal}
+
+            propDesc.scale = value
+
+            compileType (result = <span class="hljs-keyword">new</span> Result), propDesc
+
+            expect(result).resultContains [
+              {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'scale'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: value}
+            ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h2 id="string">string</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> lengthValue <span class="hljs-keyword">in</span> [<span class="hljs-number">10</span>, <span class="hljs-number">256</span>, <span class="hljs-number">2123</span>]
+
+    <span class="hljs-keyword">do</span> (lengthValue) -&gt; check <span class="hljs-string">"string: parse length from type: <span class="hljs-subst">#{lengthValue}</span>"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Длина может быть указана в строки типа, в скобках</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      typeDesc = {type: <span class="hljs-string">"string(<span class="hljs-subst">#{lengthValue}</span>)"</span>}
+
+      expect(compileType (result = <span class="hljs-keyword">new</span> Result), typeDesc).sameStructure
+
+        type: <span class="hljs-string">'string'</span>
+
+        length: lengthValue</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Если длина указана в скобках в типе, то не должно быть свойства length</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      typeDesc = {type: <span class="hljs-string">"string(<span class="hljs-subst">#{lengthValue}</span>)"</span>, length: <span class="hljs-number">10</span>}
+
+      compileType (result = <span class="hljs-keyword">new</span> Result), typeDesc
+
+      expect(result).resultContains [
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">"(<span class="hljs-subst">#{lengthValue}</span>)"</span>, code: <span class="hljs-string">'dsc.ambiguousProp'</span>, name: <span class="hljs-string">'length'</span>, value1: lengthValue, value2: <span class="hljs-number">10</span>}
+      ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Отрицательная длина - это не правильно</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> lengthValue <span class="hljs-keyword">in</span> [<span class="hljs-number">-1000</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">0</span>]
+
+    <span class="hljs-keyword">do</span> (lengthValue) -&gt; check <span class="hljs-string">"string: invalid length: <span class="hljs-subst">#{lengthValue}</span>"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Как в скобках</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      typeDesc = {type: <span class="hljs-string">"string(<span class="hljs-subst">#{lengthValue}</span>)"</span>}
+
+      compileType (result = <span class="hljs-keyword">new</span> Result), typeDesc
+
+      expect(result).resultContains [
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">"(<span class="hljs-subst">#{lengthValue}</span>)"</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: lengthValue}
+      ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Так и в свойстве length</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      typeDesc = {type: <span class="hljs-string">"string"</span>, length: lengthValue}
+
+      compileType (result = <span class="hljs-keyword">new</span> Result), typeDesc
+
+      expect(result).resultContains [
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'length'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: lengthValue}
+      ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Если длина в имени типа написана не верно, то возвращается ошибка</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'string: invalid parenthesis'</span>, <span class="hljs-function">-&gt;</span>
+
+    compileType (result = <span class="hljs-keyword">new</span> Result), {type: invalidType = <span class="hljs-string">'string (20'</span>}
+
+    expect(result.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.invalidTypeValue'</span>, value: invalidType}]
+
+    compileType (result = <span class="hljs-keyword">new</span> Result), {type: invalidType = <span class="hljs-string">'string (20) extra'</span>}
+
+    expect(result.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.invalidTypeValue'</span>, value: invalidType}]
+
+    compileType (result = <span class="hljs-keyword">new</span> Result), {type: invalidType = <span class="hljs-string">'string ()'</span>}
+
+    expect(result.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.invalidTypeValue'</span>, value: invalidType}]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <h2 id="enum">enum</h2>
+<p>enum может быть задан несколькими способами:</p>
+<ul>
+<li>массив строк</li>
+<li>строка, с где значения разделены запятыми</li>
+<li>как массив объектов, где имя элементов задано в свойтсве name</li>
+<li>как map, в котором ключи - названия элементов.  при этом значение может быть как объект, так и true</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'enum: as array of strings'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'enum'</span>, enum: [<span class="hljs-string">'v1'</span>, <span class="hljs-string">'v2'</span>, <span class="hljs-string">'v3'</span>]}
+
+    expect(result.messages).sameStructure []
+
+    expect(res).sameStructure
+      type: <span class="hljs-string">'enum'</span>
+      enum:
+        v1: v1 = {name: <span class="hljs-string">'v1'</span>}
+        v2: v2 = {name: <span class="hljs-string">'v2'</span>}
+        v3: v3 = {name: <span class="hljs-string">'v3'</span>}
+        $$list: [v1, v2, v3]
+
+  check <span class="hljs-string">'enum: comma delimited string'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'enum'</span>, enum: <span class="hljs-string">'v1, v2, v3'</span>}
+
+    expect(result.messages).sameStructure []
+
+    expect(res).sameStructure
+      type: <span class="hljs-string">'enum'</span>
+      enum:
+        v1: v1 = {name: <span class="hljs-string">'v1'</span>}
+        v2: v2 = {name: <span class="hljs-string">'v2'</span>}
+        v3: v3 = {name: <span class="hljs-string">'v3'</span>}
+        $$list: [v1, v2, v3]
+
+  check <span class="hljs-string">'enum: list of objects'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result),
+      type: <span class="hljs-string">'enum'</span>
+      enum: [
+        {name: <span class="hljs-string">'v1'</span>}
+        {name: <span class="hljs-string">'v2'</span>}
+        {name: <span class="hljs-string">'v3'</span>}
+      ]
+
+    expect(result.messages).sameStructure []
+
+    expect(res).sameStructure
+      type: <span class="hljs-string">'enum'</span>
+      enum:
+        v1: v1 = {name: <span class="hljs-string">'v1'</span>, $$src: {name: <span class="hljs-string">'v1'</span>}}
+        v2: v2 = {name: <span class="hljs-string">'v2'</span>, $$src: {name: <span class="hljs-string">'v2'</span>}}
+        v3: v3 = {name: <span class="hljs-string">'v3'</span>, $$src: {name: <span class="hljs-string">'v3'</span>}}
+        $$list: [v1, v2, v3]
+
+  check <span class="hljs-string">'enum: map of objects or true-values'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result),
+      type: <span class="hljs-string">'enum'</span>
+      enum:
+        v1: <span class="hljs-literal">true</span>
+        v2: <span class="hljs-literal">true</span>
+        v3: {}
+
+    expect(result.messages).sameStructure []
+
+    expect(res).sameStructure
+      type: <span class="hljs-string">'enum'</span>
+      enum:
+        v1: v1 = {name: <span class="hljs-string">'v1'</span>}
+        v2: v2 = {name: <span class="hljs-string">'v2'</span>}
+        v3: v3 = {name: <span class="hljs-string">'v3'</span>, $$src: {}}
+        $$list: [v1, v2, v3]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <h2 id="fields">fields</h2>
+<p>fields может быть задан несколькими способами:</p>
+<ul>
+<li>как массив объектов, где имя поля задано в свойтсве name и элементы содержат свойства полей</li>
+<li>как map, в котором ключи - названия полей, и элементы содержат свойства полей</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'fields: list of objects'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result),
+      type: <span class="hljs-string">'structure'</span>
+      fields: [
+        {name: <span class="hljs-string">'v1'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>}
+        {name: <span class="hljs-string">'v2'</span>, type: <span class="hljs-string">'integer'</span>}
+        {name: <span class="hljs-string">'v3'</span>, type: <span class="hljs-string">'uuid'</span>}
+      ]
+
+    expect(result.messages).sameStructure []
+
+    expect(res).sameStructure
+      type: <span class="hljs-string">'structure'</span>
+      fields:
+        v1: v1 = {name: <span class="hljs-string">'v1'</span>, $$src: {name: <span class="hljs-string">'v1'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>}}
+        v2: v2 = {name: <span class="hljs-string">'v2'</span>, $$src: {name: <span class="hljs-string">'v2'</span>, type: <span class="hljs-string">'integer'</span>}}
+        v3: v3 = {name: <span class="hljs-string">'v3'</span>, $$src: {name: <span class="hljs-string">'v3'</span>, type: <span class="hljs-string">'uuid'</span>}}
+        $$list: [v1, v2, v3]
+
+  check <span class="hljs-string">'fields: map of objects'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result),
+      type: <span class="hljs-string">'structure'</span>
+      fields:
+        v1: {type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>}
+        v2: {name: <span class="hljs-string">'v2'</span>, type: <span class="hljs-string">'integer'</span>}
+        v3: {type: <span class="hljs-string">'uuid'</span>}
+
+    expect(result.messages).sameStructure []
+
+    expect(res).sameStructure
+      type: <span class="hljs-string">'structure'</span>
+      fields:
+        v1: v1 = {name: <span class="hljs-string">'v1'</span>, $$src: {type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>}}
+        v2: v2 = {name: <span class="hljs-string">'v2'</span>, $$src: {name: <span class="hljs-string">'v2'</span>, type: <span class="hljs-string">'integer'</span>}}
+        v3: v3 = {name: <span class="hljs-string">'v3'</span>, $$src: {type: <span class="hljs-string">'uuid'</span>}}
+        $$list: [v1, v2, v3]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h2 id="refers">refers</h2>
+<p>ссылка на документ задается:</p>
+<ul>
+<li>или через свойство refers</li>
+<li>или в скобках в свойстве type</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'refers: type string options'</span>,  <span class="hljs-function">-&gt;</span>
+
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), type: <span class="hljs-string">'refers (Doc)'</span>).sameStructure
+      type: <span class="hljs-string">'refers'</span>
+      refers: <span class="hljs-string">'Doc'</span>
+
+    expect(result.messages).sameStructure []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>если refers задан как тег #any - тогда он может принимать документы любого типа</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'refers: type string options'</span>,  <span class="hljs-function">-&gt;</span>
+
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), type: <span class="hljs-string">'refers (#any)'</span>).sameStructure
+      type: <span class="hljs-string">'refers'</span>
+      refers: <span class="hljs-string">'#any'</span>
+
+    expect(result.messages).sameStructure []
+
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), refers: <span class="hljs-string">'#any'</span>).sameStructure
+      type: <span class="hljs-string">'refers'</span>
+      refers: <span class="hljs-string">'#any'</span>
+    expect(result.messages).sameStructure []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>есди refers задан, списком типов документов - в виде массива или как строка с разделителем</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'refers: type string options'</span>,  <span class="hljs-function">-&gt;</span>
+
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), type: <span class="hljs-string">'refers (Doc1, Doc2)'</span>).sameStructure
+      type: <span class="hljs-string">'refers'</span>
+      refers: <span class="hljs-string">'Doc1, Doc2'</span>
+    expect(result.messages).sameStructure []
+
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), refers: <span class="hljs-string">'Doc1, Doc2'</span>).sameStructure
+      type: <span class="hljs-string">'refers'</span>
+      refers: <span class="hljs-string">'Doc1, Doc2'</span>
+    expect(result.messages).sameStructure []
+
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), refers: [<span class="hljs-string">'Doc1'</span>, <span class="hljs-string">'Doc2'</span>]).sameStructure
+      type: <span class="hljs-string">'refers'</span>
+      refers: [<span class="hljs-string">'Doc1'</span>, <span class="hljs-string">'Doc2'</span>]
+    expect(result.messages).sameStructure []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>документ может быть задан, как названием типа документа, так и тегом</p>
+<p>TODO: Implement in other spec</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h2 id="implicit-types">implicit types</h2>
+<p>Если не указан type, но есть другие свойства, из которых можно опеределить тип, то свойство type указывать не обязательно.</p>
+<p>Свойства по которым можно определить тип:</p>
+<ul>
+<li>enum -&gt; тип enum</li>
+<li>fields -&gt; тип structure</li>
+<li>refers -&gt; тип refers</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'enum: implicit type by property'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {enum: <span class="hljs-string">'a, b, c'</span>}
+
+    expect(result.messages).sameStructure []
+
+    expect(res).sameStructure
+      type: <span class="hljs-string">'enum'</span>
+      enum:
+        a: a = {name: <span class="hljs-string">'a'</span>}
+        b: b = {name: <span class="hljs-string">'b'</span>}
+        c: c = {name: <span class="hljs-string">'c'</span>}
+        $$list: [a, b, c]
+
+  check <span class="hljs-string">'fields: implicit type by property'</span>, <span class="hljs-function">-&gt;</span>
+
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), {fields: [{name: <span class="hljs-string">'fld1'</span>, type: <span class="hljs-string">'integer'</span>}, {name: <span class="hljs-string">'fld2'</span>, type: <span class="hljs-string">'text'</span>}]}).sameStructure
+      type: <span class="hljs-string">'structure'</span>
+      fields:
+        fld1: fld1 = {name: <span class="hljs-string">'fld1'</span>, $$src: {name: <span class="hljs-string">'fld1'</span>, type: <span class="hljs-string">'integer'</span>}}
+        fld2: fld2 = {name: <span class="hljs-string">'fld2'</span>, $$src: {name: <span class="hljs-string">'fld2'</span>, type: <span class="hljs-string">'text'</span>}}
+        $$list: [fld1, fld2]
+
+  check <span class="hljs-string">'refers: implicit type by property'</span>, <span class="hljs-function">-&gt;</span>
+
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), {refers: <span class="hljs-string">'#all'</span>}).sameStructure
+      type: <span class="hljs-string">'refers'</span>
+      refers: <span class="hljs-string">'#all'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <h2 id="reserved-types">reserved types</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> type <span class="hljs-keyword">in</span> reservedTypes
+
+    <span class="hljs-keyword">do</span> (type) -&gt; check <span class="hljs-string">"reserved type: '<span class="hljs-subst">#{type}</span>'"</span>, <span class="hljs-function">-&gt;</span>
+
+      res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: type}
+
+      expect(result.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.reservedType'</span>, value: type}]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <h2 id="udtype">udtype</h2>
+<p>udtypes (именованные типы) задаются в config.udtypes</p>
+<p>Cчитаем все типы, которые не являются встроенными и зарезервированными, что это udType</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"unknown type, expect to be an udType"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'wrongType'</span>}
+
+    expect(res).toEqual udType: <span class="hljs-string">'wrongType'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Свойство udType не задается на прямую.  Это имя берется из ключа config.udtypes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"error: attr udType is not expected"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'int'</span>, udType: <span class="hljs-string">'intBasedType'</span>}
+
+    expect(result.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.reservedAttr'</span>, value: <span class="hljs-string">'udType'</span>}]
+
+  check <span class="hljs-string">"error: type 'dsvalue' is not allowed in a field def"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'dsvalue'</span>}
+
+    expect(result.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.notAllowedInFieldDef'</span>, value: <span class="hljs-string">'dsvalue'</span>}]
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'dsvalue'</span>}, <span class="hljs-literal">undefined</span>, context: <span class="hljs-string">'field'</span>
+
+    expect(result.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.notAllowedInFieldDef'</span>, value: <span class="hljs-string">'dsvalue'</span>}]
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'dsvalue'</span>}, <span class="hljs-literal">undefined</span>, context: <span class="hljs-string">'udtype'</span>
+
+    expect(result.messages).sameStructure []
+
+  check <span class="hljs-string">"error: attr 'nullable' is not allowed in udt"</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileType (result = <span class="hljs-keyword">new</span> Result), {type: <span class="hljs-string">'dsvalue'</span>, nullable: <span class="hljs-literal">true</span>}, <span class="hljs-literal">undefined</span>, context: <span class="hljs-string">'udtype'</span>
+
+    expect(result.messages).sameStructure [{type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'nullable'</span>, code: <span class="hljs-string">'dsc.notApplicableInUdtype'</span>}]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Дальнейшая обработка на наличие udt - это отдельный шаг в спецификации …config_udtypes</p>
+
+            </div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

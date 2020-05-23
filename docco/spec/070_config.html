@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>config</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="config">config</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
+utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">"070_config"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Модель документов, состоит из следующих элементов:</p>
+<ul>
+<li>Пользовательские типы (udtype)</li>
+<li>Описание документов</li>
+<li>Система прав, внутри документов</li>
+<li>Описание меню</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  beforeEach -&gt;
+
+    @config =</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>TODO: Menu</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      udtypes:
+        t1: type: <span class="hljs-string">'int'</span>
+        t2: type: <span class="hljs-string">'t1'</span>
+      docs:
+        DocA:
+          fields:
+            fldA: {refers: <span class="hljs-string">'anamespace.DocB'</span>} <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process refers</span>
+            fldB: {type: <span class="hljs-string">'string(20)'</span>}
+          actions:
+            close: <span class="hljs-function">-&gt;</span> a = <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
+            open: <span class="hljs-function">-&gt;</span> <span class="hljs-keyword">return</span>
+          states:
+            opened:
+              update: <span class="hljs-string">'fldA'</span>
+              transitions:
+                close: <span class="hljs-string">'closed'</span>
+            closed:
+              view: <span class="hljs-string">'fldA, fldB'</span>
+              transitions:
+                open: <span class="hljs-string">'opened'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>TODO: Rights</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-string">'anamespace.DocB'</span>: <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process names with namespaces</span>
+          fields:
+            fldA: {refers: <span class="hljs-string">'doc.DocA'</span>}
+            fldB: {type: <span class="hljs-string">'string(20)'</span>}
+            fldC: {refers: [<span class="hljs-string">'doc.DocA'</span>]}
+            fldD: {refers: <span class="hljs-string">'#all'</span>}
+            fldT: {type: <span class="hljs-string">'t2'</span>}
+
+  check <span class="hljs-string">'general'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Документы задаются в виде sortedMap в элементе docs.  Namespace’ы документов, указываются в именах элементов.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
+
+    expect(result.messages).toEqual []
+
+    docA = res.docs[<span class="hljs-string">'doc.DocA'</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>console.info ‘1: ‘, docA.states.closed == docA.states.opened.transitions.close.next
+console.info ‘2: ‘, docA.states.opened == docA.states.closed.transitions.open.next</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>console.info ‘res: ‘, res.docs[‘doc.DocA’].states.opened
+console.info ‘res: ‘, res.docs[‘doc.DocA’].states.opened.transitions.close
+console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Документы в docs.$$list должны быть в альфавитном порядке</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(res.docs.$$list[<span class="hljs-number">0</span>].name).toBe <span class="hljs-string">'anamespace.DocB'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Если документ был указан в корне без namespace’а - то он помещается в стандартный namespace ‘doc’.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(res.docs.$$list[<span class="hljs-number">1</span>].name).toBe <span class="hljs-string">'doc.DocA'</span>
+
+  check <span class="hljs-string">'unlink'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
+
+    expect(result.messages).toEqual []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>console.info ‘unlinked: ‘, JSON.stringify unlinkConfig(res), null, ‘  ‘</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  check <span class="hljs-string">'link'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
+
+    unlinkedConfig = unlinkConfig(res)
+
+    linkConfig = linkConfig unlinkedConfig
+
+    expect(linkConfig).sameStructure res</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

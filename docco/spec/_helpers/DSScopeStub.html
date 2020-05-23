@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>DSScopeStub</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="..\000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="..\300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="dsscopestub">DSScopeStub</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports =</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Интерфейс DSScope нужен для работы DSDocument.</p>
+<p>Есть три реализации DSScope:</p>
+<ul>
+<li>DSConnector</li>
+<li>DSScope</li>
+<li>DSTransaction</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DSScopeStub</span></span>
+
+    constructor: <span class="hljs-function">-&gt;</span>
+      @_findArgs = []
+      @_editableDocArgs = []
+      @_wait = <span class="hljs-literal">false</span>
+
+    _set: <span class="hljs-function"><span class="hljs-params">({error, doc})</span> -&gt;</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> @_wait
+      @_wait = <span class="hljs-literal">true</span>
+      @_cb (<span class="hljs-keyword">if</span> error <span class="hljs-keyword">then</span> error <span class="hljs-keyword">else</span> <span class="hljs-literal">null</span>), doc
+      <span class="hljs-keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Метод find, производит асинхронную загрузку документа с указанным ID.  После загрузки вызывается callback с параметрами (error, doc),
+где error если не null, то объект класса Result, обязательно с isError == true.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    find: <span class="hljs-function"><span class="hljs-params">(@_owner, @_docId, @_cb)</span> -&gt;</span>
+
+      @_findArgs.push {owner: @_owner, docId: @_docId, cb: @_cb}
+
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"owner: <span class="hljs-subst">#{@_owner}</span>"</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> @_owner == <span class="hljs-string">'object'</span> &amp;&amp; @_owner != <span class="hljs-literal">null</span> &amp;&amp; @_owner.hasOwnProperty(<span class="hljs-string">'$ds_ref'</span>)
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"docId: <span class="hljs-subst">#{@_docId}</span>"</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> @_docId == <span class="hljs-string">'string'</span> &amp;&amp; @_docId.indexOf(<span class="hljs-string">'@'</span>) &gt;= <span class="hljs-number">0</span>
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"cb: <span class="hljs-subst">#{@_cb}</span>"</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> @_cb == <span class="hljs-string">'function'</span>
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Too many args"</span> <span class="hljs-keyword">unless</span> arguments.length &lt;= <span class="hljs-number">3</span>
+      @_wait = <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Метод find возвращает функцию unwait, которая позволяет отказаться от получения результата</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      =&gt; @_wait = <span class="hljs-literal">false</span>; <span class="hljs-keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>При присвоении документ в propDoc в редактируемой версии документа - документ</p>
+<ul>
+<li>проверяется, что он принадлежит к правильному dsscope</li>
+<li>возможно, подменяется на правильную версию (оригинальную или редактируемую) документа</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    editableDoc: <span class="hljs-function"><span class="hljs-params">(_owner, _value, _propName)</span> -&gt;</span>
+
+      @_editableDocArgs.push {owner: _owner, value: _value, propName: _propName}
+
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"owner: <span class="hljs-subst">#{_owner}</span>"</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> _owner == <span class="hljs-string">'object'</span> &amp;&amp; _owner != <span class="hljs-literal">null</span> &amp;&amp; _owner.hasOwnProperty(<span class="hljs-string">'$ds_ref'</span>)
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"value: <span class="hljs-subst">#{_value}</span>"</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> _value == <span class="hljs-string">'object'</span> &amp;&amp; _value != <span class="hljs-literal">null</span> &amp;&amp; _value.hasOwnProperty(<span class="hljs-string">'$ds_ref'</span>)
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"propName: <span class="hljs-subst">#{_propName}</span>"</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> _propName == <span class="hljs-string">'string'</span>
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Too many args"</span> <span class="hljs-keyword">unless</span> arguments.length &lt;= <span class="hljs-number">3</span>
+
+      <span class="hljs-keyword">unless</span> _value.$ds_scope == <span class="hljs-literal">null</span>
+        setterResult.currentPropName = propName
+        setterResult.result.error <span class="hljs-string">'dsd.documentHasWrongDSScope'</span>
+        setterResult.currentPropName = <span class="hljs-literal">null</span>
+        setterResult.result.throwIfError()
+        <span class="hljs-keyword">return</span>
+
+      _value.$addRef _owner</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

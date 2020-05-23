@@ -7,6 +7,7 @@ const chalk = require('chalk');
 const copy = promisify(require('copy'));
 const rimraf = promisify(require('rimraf'));
 const cmd = require('commander');
+const glob = promisify(require('glob'));
 
 const blockProcessTimer = setTimeout(() => {
 }, 0x7FFFFFFF);
@@ -80,9 +81,9 @@ const tasks =
         },
       }),
       new Task({
-        name: `clean 'docs'`,
+        name: `clean 'docco'`,
         run() {
-          return rimraf(path.join(process.cwd(), 'html/'));
+          return rimraf(path.join(process.cwd(), 'docco/'));
         },
       }),
     ]),
@@ -139,17 +140,20 @@ const tasks =
           },
         }),
       ]),
-      /*
-            new Task({
-              name: `docco 'spec/' to 'html/'`,
-              run() {
-                return spawn('node', ['node_modules/docco/bin/docco', '--transpile', '--output', path.join(process.cwd(), 'lib/'), path.join(process.cwd(), 'src/')]);
-              },
-              watch(cb) {
-                chokidar.watch(path.join(process.cwd(), 'src/!**!/!*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
-              },
-            }),
-      */
+      new Task({
+        name: `docco 'spec/' to 'docco/'`,
+        run() {
+          return glob('spec/**/*.litcoffee')
+            .then((files) => {
+              return spawn('node', ['node_modules/docco/bin/docco', '--output', 'docco'].concat(files), {
+                stdio: 'ignore',
+              });
+            });
+        },
+        watch(cb) {
+          chokidar.watch(path.join(process.cwd(), 'spec/**/*.litcoffee'), {ignoreInitial: true}).on('all', cb);
+        },
+      }),
     ]),
   ]);
 

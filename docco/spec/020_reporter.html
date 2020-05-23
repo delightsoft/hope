@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>reporter</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="reporter">reporter</h1>
+<p>Reporter и Result решают очень похожую задачу - вывод сообщений.  Разница в том, что Result накапливает сообщения,
+но сам их никуда не выводит.  А Reporter выводит сообщения по мере поступления.  В том числе, он может вывести
+сообщения из Result</p>
+<p>Все сообщения о найденных ошибках и предупреждения о возможных ошибках, выдаются через метод reporter.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, Reporter, i18n} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>focusOnCheck = “contextResport has same interface as Result (3): keep errors”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Объект Reporter может работать без локализации, что полезно для процесса разработки              </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"A"</span>, <span class="hljs-function">-&gt;</span>
+
+    reporter = <span class="hljs-keyword">new</span> Reporter
+
+    reporter._print = jasmine.createSpy <span class="hljs-string">'reporter.print'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Сообщения могут быть трех типов:</p>
+<ul>
+<li>error - ошибка</li>
+<li>warn - предупреждения</li>
+<li>info - информация</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    reporter.error <span class="hljs-string">'test.sampleMessage'</span>
+    reporter.warn <span class="hljs-string">'test.sampleMessage2'</span>, a: <span class="hljs-number">12</span>
+    reporter.info <span class="hljs-string">'test.sampleMessage3'</span>, b: <span class="hljs-string">'test'</span>, c: <span class="hljs-literal">false</span>
+
+    expect(reporter._print.calls.allArgs()).sameStructure [
+      [<span class="hljs-string">'error'</span>, <span class="hljs-string">'test.sampleMessage'</span>]
+      [<span class="hljs-string">'warn'</span>, <span class="hljs-string">'test.sampleMessage2{"a":12}'</span>]
+      [<span class="hljs-string">'info'</span>, <span class="hljs-string">'test.sampleMessage3{"b":"test","c":false}'</span>]
+    ]
+
+    reporter._print.calls.reset()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Но штатный режим, это работа с локализацией        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"B"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Задаем тестовую локализацию</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    messages =
+
+      dsc:
+
+        messageA: <span class="hljs-function"><span class="hljs-params">(args)</span> -&gt;</span> <span class="hljs-string">"Message A: Val: <span class="hljs-subst">#{args.value}</span>"</span>
+
+        messageB: <span class="hljs-string">'simple message'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Переводим конфигурацию в рабочую верси, через операцию link</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    messages = i18n.link (result = <span class="hljs-keyword">new</span> Result), messages
+
+    expect(result.isError).toBeFalsy()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Создаем объект отчёт с локализацией из config</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    reporter = <span class="hljs-keyword">new</span> Reporter messages</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Добавляем метод, через который происходит вывод</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    reporter._print = jasmine.createSpy <span class="hljs-string">'reporter.print'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Делаем вывод нескольких сообщений</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    reporter.info <span class="hljs-string">'dsc.messageA'</span>, value: <span class="hljs-literal">null</span>
+
+    reporter.error <span class="hljs-string">'dsc.messageB'</span>
+
+    reporter.warn <span class="hljs-string">'dsc.messageC'</span>, a: <span class="hljs-number">12</span>, s: <span class="hljs-string">'test'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Проверяем что в reporter._print пришли все сообщения в ожидаемом виде</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(reporter._print.calls.allArgs()).sameStructure [
+      [<span class="hljs-string">'info'</span>, <span class="hljs-string">'Message A: Val: null'</span>]
+      [<span class="hljs-string">'error'</span>, <span class="hljs-string">'simple message'</span>]
+      [<span class="hljs-string">'warn'</span>, <span class="hljs-string">'dsc.messageC{"a":12,"s":"test"}'</span>]
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Сбрасываем _print для следующего теста</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    reporter._print.calls.reset()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h2 id="вывод-result">Вывод result</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    result = <span class="hljs-keyword">new</span> Result
+
+    result.log <span class="hljs-string">'error'</span>, <span class="hljs-string">'dsc.messageA'</span>, value: <span class="hljs-number">121</span>
+    result.log <span class="hljs-string">'info'</span>, <span class="hljs-string">'dsc.messageB'</span>
+
+    reporter.logResult result
+
+    expect(reporter._print.calls.allArgs()).sameStructure [
+      [<span class="hljs-string">'error'</span>, <span class="hljs-string">'Message A: Val: 121'</span>]
+      [<span class="hljs-string">'info'</span>, <span class="hljs-string">'simple message'</span>]
+    ]
+
+    reporter._print.calls.reset()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h2 id="вывод-result-с-контекстом">Вывод result с контекстом</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    field = <span class="hljs-string">'Field1'</span>
+
+    result = <span class="hljs-keyword">new</span> Result (path) -&gt; (Result.prop field) path
+
+    result.log <span class="hljs-string">'error'</span>, <span class="hljs-string">'dsc.messageA'</span>, value: <span class="hljs-string">'test'</span>
+
+    field = <span class="hljs-string">'Field2'</span>
+
+    result.log <span class="hljs-string">'info'</span>, <span class="hljs-string">'dsc.messageB'</span>
+
+    reporter.logResult result
+
+    expect(reporter._print.calls.allArgs()).sameStructure [
+      [<span class="hljs-string">'error'</span>, <span class="hljs-string">'Field1: Message A: Val: test'</span>]
+      [<span class="hljs-string">'info'</span>, <span class="hljs-string">'Field2: simple message'</span>]
+    ]
+
+    reporter._print.calls.reset()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>А теперь ещё и с название действия</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    reporter.logResult result, <span class="hljs-string">'dsc.messageA'</span>, value: <span class="hljs-number">111</span>
+
+    expect(reporter._print.calls.allArgs()).sameStructure [
+      [<span class="hljs-string">'error'</span>, <span class="hljs-string">'Message A: Val: 111'</span>]
+      [<span class="hljs-string">'error'</span>, <span class="hljs-string">'Field1: Message A: Val: test'</span>]
+      [<span class="hljs-string">'info'</span>, <span class="hljs-string">'Field2: simple message'</span>]
+    ]
+
+    reporter._print.calls.reset()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h2 id="reporter-должен-быть-не-отличим-от-result-при-работе-с-контекстом-и-выводе-сообщений">Reporter должен быть не отличим от Result при работе с контекстом и выводе сообщений</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'Resport has same interface as Result (1)'</span>, <span class="hljs-function">-&gt;</span>
+
+    reporter = <span class="hljs-keyword">new</span> Reporter
+
+    reporter._print = jasmine.createSpy <span class="hljs-string">'reporter.print'</span>
+
+    reporter.context (Result.prop <span class="hljs-string">'testProp'</span>), <span class="hljs-function">-&gt;</span>
+
+      reporter.error <span class="hljs-string">'dsc.errMsg'</span>, value: <span class="hljs-number">100</span>
+
+      reporter.warn <span class="hljs-string">'dsc.warnMsg'</span>, value: <span class="hljs-number">50</span>
+
+      reporter.info <span class="hljs-string">'dsc.infoMsg'</span>, value: <span class="hljs-number">10</span>
+
+    expect(reporter._print.calls.allArgs()).sameStructure [
+      [<span class="hljs-string">'error'</span>, <span class="hljs-string">'testProp: dsc.errMsg{"value":100}'</span>]
+      [<span class="hljs-string">'warn'</span>, <span class="hljs-string">'testProp: dsc.warnMsg{"value":50}'</span>]
+      [<span class="hljs-string">'info'</span>, <span class="hljs-string">'testProp: dsc.infoMsg{"value":10}'</span>]
+    ]
+
+  check <span class="hljs-string">'Resport has same interface as Result (2)'</span>, <span class="hljs-function">-&gt;</span>
+
+    reporter = <span class="hljs-keyword">new</span> Reporter
+
+    reporter._print = jasmine.createSpy <span class="hljs-string">'reporter.print'</span>
+
+    reporter.error Result.prop(<span class="hljs-string">'testProp'</span>), <span class="hljs-string">'dsc.errMsg'</span>, value: <span class="hljs-number">100</span>
+
+    reporter.warn Result.prop(<span class="hljs-string">'testProp'</span>), <span class="hljs-string">'dsc.warnMsg'</span>, value: <span class="hljs-number">50</span>
+
+    reporter.info Result.prop(<span class="hljs-string">'testProp'</span>), <span class="hljs-string">'dsc.infoMsg'</span>, value: <span class="hljs-number">10</span>
+
+    expect(reporter._print.calls.allArgs()).sameStructure [
+      [<span class="hljs-string">'error'</span>, <span class="hljs-string">'testProp: dsc.errMsg{"value":100}'</span>]
+      [<span class="hljs-string">'warn'</span>, <span class="hljs-string">'testProp: dsc.warnMsg{"value":50}'</span>]
+      [<span class="hljs-string">'info'</span>, <span class="hljs-string">'testProp: dsc.infoMsg{"value":10}'</span>]
+    ]
+
+  check <span class="hljs-string">"contextResport has same interface as Result (3): keep errors"</span>, <span class="hljs-function">-&gt;</span>
+
+    reporter = <span class="hljs-keyword">new</span> Reporter
+
+    reporter._print = jasmine.createSpy <span class="hljs-string">'reporter.print'</span>
+
+    (result = reporter).context (<span class="hljs-function">-&gt;</span>), <span class="hljs-function">-&gt;</span>
+
+      result.error <span class="hljs-string">'someError'</span>
+
+      expect(result.isError).toBe <span class="hljs-literal">true</span> <span class="hljs-comment"># ###</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>При входе в context isError сбрасывается в false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      result.context (<span class="hljs-function">-&gt;</span>), <span class="hljs-function">-&gt;</span>
+
+        expect(result.isError).toBe <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>При выходе наличие ошибки восстанавливается</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+      result.isError = <span class="hljs-literal">false</span>
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span> <span class="hljs-comment"># ###</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

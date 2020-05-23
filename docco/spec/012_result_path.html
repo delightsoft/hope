@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>result path</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="000_globals.html">
+                  spec/000_globals.litcoffee
+                </a>
+              
+                
+                <a class="source" href="001_globals_sameStructure.html">
+                  spec/001_globals_sameStructure.litcoffee
+                </a>
+              
+                
+                <a class="source" href="002_utils_checkItemName.html">
+                  spec/002_utils_checkItemName.litcoffee
+                </a>
+              
+                
+                <a class="source" href="003_utils_prettyPrint.html">
+                  spec/003_utils_prettyPrint.litcoffee
+                </a>
+              
+                
+                <a class="source" href="004_utils_deepClone.html">
+                  spec/004_utils_deepClone.litcoffee
+                </a>
+              
+                
+                <a class="source" href="006_sortedMap.html">
+                  spec/006_sortedMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="007_flatMap.html">
+                  spec/007_flatMap.litcoffee
+                </a>
+              
+                
+                <a class="source" href="008_bitArray.html">
+                  spec/008_bitArray.litcoffee
+                </a>
+              
+                
+                <a class="source" href="009_flatMap_masks.html">
+                  spec/009_flatMap_masks.litcoffee
+                </a>
+              
+                
+                <a class="source" href="010_result.html">
+                  spec/010_result.litcoffee
+                </a>
+              
+                
+                <a class="source" href="012_result_path.html">
+                  spec/012_result_path.litcoffee
+                </a>
+              
+                
+                <a class="source" href="015_i18n.html">
+                  spec/015_i18n.litcoffee
+                </a>
+              
+                
+                <a class="source" href="020_reporter.html">
+                  spec/020_reporter.litcoffee
+                </a>
+              
+                
+                <a class="source" href="030_loader.html">
+                  spec/030_loader.litcoffee
+                </a>
+              
+                
+                <a class="source" href="040_types.html">
+                  spec/040_types.litcoffee
+                </a>
+              
+                
+                <a class="source" href="042_tags_compile.html">
+                  spec/042_tags_compile.litcoffee
+                </a>
+              
+                
+                <a class="source" href="043_tags_calc.html">
+                  spec/043_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="044_tags_calc_tokenizer.html">
+                  spec/044_tags_calc_tokenizer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="050_config_udtypes.html">
+                  spec/050_config_udtypes.litcoffee
+                </a>
+              
+                
+                <a class="source" href="060_config_fields.html">
+                  spec/060_config_fields.litcoffee
+                </a>
+              
+                
+                <a class="source" href="062_config_actions.html">
+                  spec/062_config_actions.litcoffee
+                </a>
+              
+                
+                <a class="source" href="064_config_states.html">
+                  spec/064_config_states.litcoffee
+                </a>
+              
+                
+                <a class="source" href="070_config.html">
+                  spec/070_config.litcoffee
+                </a>
+              
+                
+                <a class="source" href="300\300_ConfigContainer.html">
+                  spec/300/300_ConfigContainer.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\DSScopeStub.html">
+                  spec/_helpers/DSScopeStub.litcoffee
+                </a>
+              
+                
+                <a class="source" href="_helpers\SpecSteps.html">
+                  spec/_helpers/SpecSteps.litcoffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="result-path">result path</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, utils: {err: {_argError}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Стало понятно, что у ошибок не бывает сложного понятия context, для которого нужно иметь возможность сохранять
+разнообразную информацию.  Всё что реально нужно, это путь (path) к элементу, к которому относится ошибка.  И для этого
+достаточно буквально трех элементов:</p>
+<ul>
+<li>ключ, если речь идет об объекте (map),</li>
+<li>индекс, если речь идет о массиве</li>
+<li>имя элемента, если речь идет о sortedMap, для которого одна и та же структура может быть представлена и как массив,
+как объект или просто как строка с элементами разделенными запятой</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"Result.prop"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Для поддержания такой структуры оставляем ту же идею, что у объекта result, должен быть массив методов - context, которые
+в момент записи сообщения, используются для получения пути к элементу.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    propContext = Result.prop <span class="hljs-string">'propName'</span>
+
+    expect(<span class="hljs-keyword">typeof</span> propContext).toBe <span class="hljs-string">'function'</span>
+
+    expect(propContext <span class="hljs-string">''</span>).toBe <span class="hljs-string">'propName'</span>
+
+    expect(propContext <span class="hljs-string">'rootContext'</span>).toBe <span class="hljs-string">'rootContext.propName'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Можно объединять несколько свойств в одну функцию</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect((Result.prop <span class="hljs-string">'propName'</span>) <span class="hljs-string">''</span>).toBe <span class="hljs-string">'propName'</span>
+
+    expect((Result.prop <span class="hljs-string">'a'</span>, Result.prop <span class="hljs-string">'propName'</span>) <span class="hljs-string">''</span>).toBe <span class="hljs-string">'propName.a'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Result.item добавляет индекс в квадратных скобках</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"Result.index"</span>, <span class="hljs-function">-&gt;</span>
+
+    propContext = Result.index <span class="hljs-number">10</span>
+
+    expect(<span class="hljs-keyword">typeof</span> propContext).toBe <span class="hljs-string">'function'</span>
+
+    expect(propContext <span class="hljs-string">''</span>).toBe <span class="hljs-string">'[10]'</span>
+
+    expect(propContext <span class="hljs-string">'rootContext'</span>).toBe <span class="hljs-string">'rootContext[10]'</span>
+
+    expect((Result.index <span class="hljs-number">20</span>) <span class="hljs-string">''</span>).sameStructure <span class="hljs-string">'[20]'</span>
+
+    expect((Result.index <span class="hljs-number">20</span>, Result.prop <span class="hljs-string">'config'</span>) <span class="hljs-string">''</span>).sameStructure <span class="hljs-string">'config[20]'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Result.name добавляет имя (name) элемента в квадратных скобках</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"Result.item"</span>, <span class="hljs-function">-&gt;</span>
+
+    propContext = Result.item <span class="hljs-string">'field1'</span>
+
+    expect(<span class="hljs-keyword">typeof</span> propContext).toBe <span class="hljs-string">'function'</span>
+
+    expect(propContext <span class="hljs-string">''</span>).toBe <span class="hljs-string">'[field1]'</span>
+
+    expect(propContext <span class="hljs-string">'rootContext'</span>).toBe <span class="hljs-string">'rootContext[field1]'</span>
+
+    expect((Result.item <span class="hljs-string">'field1'</span>) <span class="hljs-string">''</span>).sameStructure <span class="hljs-string">'[field1]'</span>
+
+    expect((Result.item <span class="hljs-string">'field1'</span>, Result.prop <span class="hljs-string">'config'</span>) <span class="hljs-string">''</span>).sameStructure <span class="hljs-string">'config[field1]'</span>
+
+  check <span class="hljs-string">"complex"</span>, <span class="hljs-function">-&gt;</span>
+
+    context =
+      Result.index <span class="hljs-number">10</span>,
+      Result.prop <span class="hljs-string">'update'</span>,
+      Result.item <span class="hljs-string">'opened'</span>,
+      Result.prop <span class="hljs-string">'states'</span>,
+      Result.item <span class="hljs-string">'fieldA'</span>,
+      Result.prop <span class="hljs-string">'fields'</span>,
+      Result.item <span class="hljs-string">'Doc1'</span>,
+      Result.prop <span class="hljs-string">'docs'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Собираем path, как последовательные вызовы функций ctx</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    path = context <span class="hljs-string">''</span>
+
+    expect(path).toBe <span class="hljs-string">'docs[Doc1].fields[fieldA].states[opened].update[10]'</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
