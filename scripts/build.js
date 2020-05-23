@@ -6,9 +6,15 @@ const chokidar = require('chokidar');
 const chalk = require('chalk');
 const copy = promisify(require('copy'));
 const rimraf = promisify(require('rimraf'));
+const cmd = require('commander');
 
 const blockProcessTimer = setTimeout(() => {
 }, 0x7FFFFFFF);
+
+cmd
+  .name(`node scripts/build.js`)
+  .option(`-d, --dev`, `development mode`)
+  .parse(process.argv);
 
 class Task {
   constructor({name, run, watch}) {
@@ -83,30 +89,22 @@ const tasks =
     parallel([
       serial([
         parallel([
-          serial([
-            new Task({
-              name: `compile 'src/' to 'lib/'`,
-              run() {
-                return spawn('node', ['node_modules/coffeescript/bin/coffee', '--transpile', '--output', path.join(process.cwd(), 'lib/'), path.join(process.cwd(), 'src/')]);
-              },
-              watch(cb) {
-                chokidar.watch(path.join(process.cwd(), 'src/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
-              },
-            }),
-            new Task({
-              name: `copy 'lib/' to 'temp/src/'`,
-              run() {
-                return copy(path.join(process.cwd(), 'lib/**/*'), path.join(process.cwd(), 'temp/src/'));
-              },
-            }),
-          ]),
+          new Task({
+            name: `compile 'src/' to 'temp/src/'`,
+            run() {
+              return spawn('node', ['node_modules/coffeescript/bin/coffee', '--transpile', '--output', path.join(process.cwd(), 'temp/src/'), path.join(process.cwd(), 'src/')]);
+            },
+            watch(cb) {
+              cmd.dev && chokidar.watch(path.join(process.cwd(), 'src/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+            },
+          }),
           new Task({
             name: `compile 'spec/' to 'temp/spec/'`,
             run() {
               return spawn('node', ['node_modules/coffeescript/bin/coffee', '--compile', '--output', path.join(process.cwd(), 'temp/spec/'), path.join(process.cwd(), 'spec/')]);
             },
             watch(cb) {
-              chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+              cmd.dev && chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
             },
           }),
           new Task({
@@ -115,7 +113,7 @@ const tasks =
               return copy(path.join(process.cwd(), 'samples/**/*'), path.join(process.cwd(), 'temp/samples/'));
             },
             watch(cb) {
-              chokidar.watch(path.join(process.cwd(), 'spec/**/*'), {ignoreInitial: true}).on('all', cb);
+              cmd.dev && chokidar.watch(path.join(process.cwd(), 'spec/**/*'), {ignoreInitial: true}).on('all', cb);
             },
           }),
         ]),
@@ -125,7 +123,19 @@ const tasks =
             return spawn('node', ['node_modules/jasmine/bin/jasmine.js', path.join(process.cwd(), 'temp/spec/**/*.js')]);
           },
           watch(cb) {
-            chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+            cmd.dev && chokidar.watch(path.join(process.cwd(), 'spec/**/*.(coffee|litcoffee)'), {ignoreInitial: true}).on('all', cb);
+          },
+        }),
+        new Task({
+          name: `copy 'temp/src/' to 'lib/'`,
+          run() {
+            return copy(path.join(process.cwd(), 'temp/src/**/*'), path.join(process.cwd(), 'lib/'));
+          },
+        }),
+        !cmd.dev && new Task({
+          name: `clean 'temp'`,
+          run() {
+            return rimraf(path.join(process.cwd(), 'temp/'));
           },
         }),
       ]),
@@ -160,10 +170,10 @@ function startOver() {
     });
 }
 
-startOver();
-// .finally(function () {
-//   clearTimeout(blockProcessTimer);
-// });
+startOver()
+  .finally(function () {
+    !cmd.dev && clearTimeout(blockProcessTimer);
+  });
 
 function parallel(tasks) {
   const task = {

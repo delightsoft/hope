@@ -4,7 +4,9 @@
   "description": "",
   "main": "./lib/dscommon.js",
   "scripts": {
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "build:dev": "node scripts/build.js --dev",
+    "build:help": "node scripts/build.js --help"
   },
   "author": "Alexey Zorkaltsev (alexey@zorkaltsev.com)",
   "license": "ISC",
@@ -12,16 +14,16 @@
     "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.9.6",
+    "chalk": "^4.0.0",
     "chokidar": "^3.4.0",
     "coffeescript": "^2.5.1",
+    "commander": "^5.1.0",
     "copy": "^0.3.2",
     "debounce": "^1.2.0",
+    "docco": "^0.8.0",
     "jasmine": "^3.5.0",
     "moment": "^2.26.0",
-    "rimraf": "^3.0.2",
-    "chalk": "^4.0.0",
-    "docco": "^0.8.0"
+    "rimraf": "^3.0.2"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
