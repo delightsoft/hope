@@ -1,6 +1,5 @@
 const {promisify} = require('util');
 const path = require('path');
-const {spawn: realSpawn} = require('child_process');
 const chokidar = require('chokidar');
 const copy = promisify(require('copy'));
 const rimraf = promisify(require('rimraf'));
@@ -14,8 +13,6 @@ cmd
   .option(`-d, --dev`, `development mode`)
   .option(`-c, --coverage`, `build coverage`)
   .parse(process.argv);
-
-const atch = !cmd.dev || cmd.coverage;
 
 runTasks({
 
@@ -75,12 +72,13 @@ runTasks({
             }),
 
             new Task({
-              name: `copy 'samples/' to 'temp/samples/'`,
+              name: `compile 'samples/' to 'temp/samples/'`,
               run() {
-                return copy(path.join(process.cwd(), 'samples/**/*'), path.join(process.cwd(), 'temp/samples/'));
+                return spawn('node', ['node_modules/coffeescript/bin/coffee', '--compile', '--output', path.join(process.cwd(), 'temp/samples/'), path.join(process.cwd(), 'samples/')]);
+                // return copy(path.join(process.cwd(), 'samples/**/*'), path.join(process.cwd(), 'temp/samples/'));
               },
               watch(cb) {
-                chokidar.watch(path.join(process.cwd(), 'spec/**/*'), {ignoreInitial: true}).on('all', cb);
+                chokidar.watch(path.join(process.cwd(), 'samples/**/*'), {ignoreInitial: true}).on('all', cb);
               },
             }),
           ]),
@@ -122,9 +120,10 @@ runTasks({
           run() {
             return glob('spec/**/*.litcoffee')
               .then((files) => {
-                return spawn('node', ['node_modules/docco/bin/docco', '--output', 'docco'].concat(files), {
-                  stdio: 'ignore',
-                });
+                return spawn('node', ['node_modules/docco/bin/docco', '--output', 'docco'].concat(files),
+                  {
+                    stdio: 'ignore',
+                  });
               });
           },
           watch(cb) {

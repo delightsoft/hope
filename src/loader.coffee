@@ -20,6 +20,7 @@ deleteRequireCache = (id) ->
 
   return
 
+
 loader = (result, sourceDir) ->
 
   invalidArg 'result', result unless isResult result
@@ -28,7 +29,7 @@ loader = (result, sourceDir) ->
 
   new Promise (resolve, reject) -> # loader =
 
-    dir = path.join process.cwd(), sourceDir
+    dir = path.resolve process.cwd(), sourceDir
 
     loadFile = (filename, required) ->
 
@@ -40,7 +41,13 @@ loader = (result, sourceDir) ->
 
         deleteRequireCache modId
 
-        require filename # loadFile =
+        res = require filename
+
+        res = res.default || res if typeof res == 'object' && res != null
+
+        res = res result if typeof res == 'function'
+
+        res # loadFile =
 
       catch err
 
@@ -70,7 +77,7 @@ loader = (result, sourceDir) ->
 
     res.rights = rights if (rights = loadFile 'rights', false)
 
-    if result.isError then reject result else resolve res
+    resolve res
 
     return # new Promise
 

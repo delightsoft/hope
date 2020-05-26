@@ -54,7 +54,7 @@ processDocs = (result, config) ->
         return # result.context
 
       # rule: docs.$$list is sorted in alpabetical order of their names
-      res.$$list.sort (left, right) -> if left.name < right.name then -1 else 1
+      res.$$list.sort (left, right) -> left.name.localeCompare right.name
 
       sortedMap.finish result, res
 

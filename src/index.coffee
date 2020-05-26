@@ -7,6 +7,7 @@
 
 require './polyfills'
 
+
 module.exports =
 
   Result: require './result'
