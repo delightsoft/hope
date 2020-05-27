@@ -10,7 +10,7 @@ _compactValue = (v) ->
 
     v # _compactValue =
 
-_compareMap = (result, path, actual, expected) ->
+_compareMap = (result, path, actual, expected, severity) ->
 
   unless path.indexOf(actual) >= 0
 
@@ -26,21 +26,21 @@ _compareMap = (result, path, actual, expected) ->
 
         unless actual.hasOwnProperty k
 
-          result.info 'missing', value: _compactValue v
+          result[severity] 'missing', value: _compactValue v
 
         else
 
-          _compareValue result, path, actual[k], v
+          _compareValue result, path, actual[k], v, severity
 
       for k in Object.keys(actual) when not expected.hasOwnProperty k
 
-        result.info 'extra', value: _compactValue actual[k]
+        result[severity] 'extra', value: _compactValue actual[k]
 
     path.pop()
 
   return # _compareMap =
 
-_compareList = (result, path, actual, expected) ->
+_compareList = (result, path, actual, expected, severity) ->
 
   unless path.indexOf(actual) >= 0
 
@@ -54,21 +54,21 @@ _compareList = (result, path, actual, expected) ->
 
         if i < actual.length
 
-          _compareValue result, path, actual[i], v
+          _compareValue result, path, actual[i], v, severity
 
         else
 
-          result.info 'missing', value: _compactValue v
+          result[severity] 'missing', value: _compactValue v
 
       for v, i in actual[expected.length...actual.length]
 
-        result.info 'extra', value: _compactValue v
+        result[severity] 'extra', value: _compactValue v
 
     path.pop()
 
   return # _compareList =
 
-_compareValue = (result, path, actual, expected) ->
+_compareValue = (result, path, actual, expected, severity) ->
 
   if (atype = typeof actual) == 'object'
 
@@ -80,7 +80,7 @@ _compareValue = (result, path, actual, expected) ->
 
   unless atype == etype
 
-    result.info 'diffType', actual: atype, expected: etype
+    result[severity] 'diffType', actual: atype, expected: etype
 
   else
 
@@ -88,23 +88,23 @@ _compareValue = (result, path, actual, expected) ->
 
       when 'object'
 
-        _compareMap result, path, actual, expected
+        _compareMap result, path, actual, expected, severity
 
       when 'array'
 
-        _compareList result, path, actual, expected
+        _compareList result, path, actual, expected, severity
 
       else
 
         if actual != expected
 
-          result.info 'diffValue', actual: _compactValue(actual), expected: _compactValue expected
+          result[severity] 'diffValue', actual: _compactValue(actual), expected: _compactValue expected
 
   return # _compareValue =
 
-compareStructures = (result, actual, expected) ->
+compareStructures = (result, actual, expected, severity = 'info') ->
 
-  _compareValue result, [], actual, expected
+  _compareValue result, [], actual, expected, severity
 
   return # compareStructures =
 

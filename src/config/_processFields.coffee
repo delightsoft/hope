@@ -32,9 +32,19 @@ processFields = (result, doc, config) ->
 
             compileType result, field.$$src, field, context: 'field'
 
-            if field.hasOwnProperty('udType') && config.hasOwnProperty('udtypes') # missing 'udtypes' means that udtypes compilation failed
+            if field.$$src.hasOwnProperty('required')
 
-              unless config.udtypes.hasOwnProperty(field.udType)
+              unless typeof (value = field.$$src.required) == 'boolean'
+
+                result.error (Result.prop 'required'), 'dsc.invalidValue', value: value
+
+              else
+
+                field.required = value if value
+
+            if field.hasOwnProperty('udType')
+
+              unless config.udtypes && config.udtypes.hasOwnProperty(field.udType)
 
                 result.error 'dsc.unknownType', value: field.udType
 
@@ -72,7 +82,7 @@ processFields = (result, doc, config) ->
 
       compileTags result, res
 
-      flatMap.finish result, res, 'fields', skipProps: ['tags']
+      flatMap.finish result, res, 'fields', skipProps: ['tags', 'required', 'null']
 
       res unless result.isError # result.context
 

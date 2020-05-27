@@ -4,14 +4,14 @@ Result = require '../result'
 
 sortedMap = require '../sortedMap'
 
-#typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'nullable']
-typeProps = ['length', 'enum', 'fields', 'refers', 'valueClass', 'nullable']
+#typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null']
+typeProps = ['length', 'enum', 'fields', 'refers', 'valueClass', 'null']
 
 builtInTypes = [
   'string', 'text', 'boolean'
   # 'integer', 'long', 'float', 'double', 'decimal'
   'integer', 'double'
-  # 'decimal'
+  'decimal'
   'time', 'date', 'dateonly', 'now'
   'json', 'blob', 'uuid',  'enum'
   'structure',  'subtable'
@@ -19,7 +19,7 @@ builtInTypes = [
   'dsvalue'
 ]
 
-reservedTypes = ['long', 'float', 'decimal']
+reservedTypes = ['long', 'float']
 
 compile = (result, fieldDesc, res, opts) ->
 
@@ -34,7 +34,7 @@ compile = (result, fieldDesc, res, opts) ->
   else
     invalidArgValue 'opts.context', opts.context unless (optsContext = opts.context) == 'field' || optsContext == 'udtype'
 
-  throw new Error "fieldDesc was alreay process by tags/compile()" unless not fieldDesc.hasOwnProperty '$$tags'
+  throw new Error "fieldDesc was already process by tags/compile()" unless not fieldDesc.hasOwnProperty '$$tags'
 
 # Определяем тип.  То что в скобках выделяем в options.
 
@@ -55,6 +55,7 @@ compile = (result, fieldDesc, res, opts) ->
       type = type.substr(0, optionsIndex).trim()
 
     unless checkItemName type
+
       result.error 'dsc.invalidTypeValue', value: type; return
 
 # Если тип не указан, пробуем его определить по косвенному признаку
@@ -107,15 +108,15 @@ compile = (result, fieldDesc, res, opts) ->
 
       result.context ((path) -> (Result.prop prop) path), ->
 
-        for prop in typeProps when fieldDesc.hasOwnProperty(prop) && prop != 'nullable' # udType can have nullable in a field definition
+        for prop in typeProps when fieldDesc.hasOwnProperty(prop) && prop != 'null' # udType can have null in a field definition
 
           result.error 'dsc.notApplicableForTheTypeProp', name: prop, type: type
 
-      (res ?= {}).udType = type
+      res.udType = type
 
-      if typeof nullableProp == 'boolean'
+      if typeof nullProp == 'boolean'
 
-        res.nullable = nullableProp
+        res.null = nullProp
 
       return res unless result.isError
 
@@ -129,7 +130,7 @@ compile = (result, fieldDesc, res, opts) ->
 
 # Проверяем, наличие всех свойств относящихся к типу.  Если свойство не должно быть у данного типа, добавляем ошибку
 
-  prop = lengthProp = enumProp = precisionProp = scaleProp = fieldsProp = nullableProp = refersProp = valueClass = undefined
+  prop = lengthProp = enumProp = precisionProp = scaleProp = fieldsProp = nullProp = refersProp = valueClass = undefined
 
   if fieldDesc.hasOwnProperty('udType')
 
@@ -153,11 +154,11 @@ compile = (result, fieldDesc, res, opts) ->
 
         when 'fields' then if (ok = (type == 'structure' || type == 'subtable')) then fieldsProp = takeFields result, fieldDesc.fields
 
-        when 'nullable'
+        when 'null'
 
           if optsContext == null || optsContext == 'field'
 
-            if (ok = not (type == 'now' || type == 'structure' || type == 'subtable')) then nullableProp = takeBoolean result, fieldDesc.nullable
+            if (ok = not (type == 'now' || type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
 
           else
 
@@ -183,21 +184,15 @@ compile = (result, fieldDesc, res, opts) ->
 
         when 'string'
 
-          if isNaN(value = parseInt options)
+          lengthPropFromOptions = takePositiveInt result, parseFloat options
 
-            result.error 'dsc.invalidValue', value: options
+          if lengthProp
+
+            result.error 'dsc.ambiguousProp', name: 'length', value1: (lengthPropFromOptions || options), value2: lengthProp
 
           else
 
-            lengthPropFromOptions = takePositiveInt result, value
-
-            if lengthProp
-
-              result.error 'dsc.ambiguousProp', name: 'length', value1: (lengthPropFromOptions || options), value2: lengthProp
-
-            else
-
-              lengthProp = lengthPropFromOptions
+            lengthProp = lengthPropFromOptions
 
         when 'refers'
 
@@ -221,11 +216,11 @@ compile = (result, fieldDesc, res, opts) ->
 
   return if result.isError
 
-  (res ?= {}).type = type
+  res.type = type
 
-  if typeof nullableProp == 'boolean'
+  if typeof nullProp == 'boolean'
 
-    res.nullable = nullableProp
+    res.null = nullProp if nullProp
 
   switch type
 
@@ -251,7 +246,7 @@ compile = (result, fieldDesc, res, opts) ->
 
 takePositiveInt = (result, value) ->
 
-  unless typeof value == 'number' && Math.floor(value) == value && value > 0
+  unless typeof value == 'number' && !isNaN(value) && Number.isInteger(value) && value > 0
 
     result.error 'dsc.invalidValue', value: value; return
 
@@ -308,7 +303,7 @@ setRequiredProp = (result, res, propName, value) ->
 
     if typeof value == 'undefined'
 
-      result.error 'dsc.missingProp', name: propName; return
+      result.error 'dsc.missingProp', value: propName; return
 
     res[propName] = value
 

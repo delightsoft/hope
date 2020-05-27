@@ -4,6 +4,8 @@ Result = require './result'
 
 {err: {tooManyArgs, invalidArg, isResult}} = require './utils'
 
+hasOwnProperty = Object::hasOwnProperty
+
 deleteRequireCache = (id) ->
 
   if !id or id.indexOf('node_modules') != -1
@@ -43,7 +45,7 @@ loader = (result, sourceDir) ->
 
         res = require filename
 
-        res = res.default || res if typeof res == 'object' && res != null
+        res = res.default || res if typeof res == 'object' && res != null && hasOwnProperty.call(res, 'default')
 
         res = res result if typeof res == 'function'
 
@@ -73,9 +75,11 @@ loader = (result, sourceDir) ->
 
       docs: loadFile 'docs', true
 
-    res.udt = udt if (udt = loadFile 'udt', false)
+    res.udtypes = types if (types = loadFile 'types', false)
 
-    res.rights = rights if (rights = loadFile 'rights', false)
+#    res.rights = rights if (rights = loadFile 'rights', false)
+
+    res.api = api if (api = loadFile 'api', false)
 
     resolve res
 

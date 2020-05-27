@@ -16,7 +16,7 @@
 - length - длина для строк
 - enum - набор значений для enum
 - fields - набор полей для struct[ure] или subtable
-- nullable - поле может иметь значение null
+- null - поле может иметь значение null
 
 Тех. прием: Для отработки отдельных пунктов спецификации делаем свой метод check, который может подставлять вызов
 fit, для задачи указанной в focusOnCheck
@@ -49,7 +49,7 @@ scale это не самостоятельное свойство, оно иде
 
         {name: 'scale', correctVal: valNum, optional: true, required: false}
         {name: 'fields', correctVal: valArrayOfFieldsDesc, skipVal: [valStr, valArrayOfDocTypes, valArrayOfEnumObjects], required: true}
-        {name: 'nullable', correctVal: valBool, required: false}
+        {name: 'null', correctVal: valBool, required: false}
 
         {name: 'refers', correctVal: valStr, required: true, skipVal: [valEmptyArray, valArrayOfDocTypes]}
       ]
@@ -68,50 +68,50 @@ scale это не самостоятельное свойство, оно иде
 
       builtInTypes = [
 
-        {name: 'string', short: 'str', length: true, nullable: true}
-        {name: 'text', nullable: true}
-        {name: 'boolean', short: 'bool', nullable: true}
+        {name: 'string', short: 'str', length: true, null: true}
+        {name: 'text', null: true}
+        {name: 'boolean', short: 'bool', null: true}
 
-        {name: 'integer', short: 'int', nullable: true}
+        {name: 'integer', short: 'int', null: true}
 
 На этом этапе поддержки long не будет. так как есть вопрос, как исползоваться long в JavaScript.  long не входит
 в JavaScript-number - так как это double
 
-        # {name: 'long', nullable: true}
+        # {name: 'long', null: true}
 
 И не будет поддержки float - пока не станет понятно зачем на это
 
-        # {name: 'float', nullable: true}
+        # {name: 'float', null: true}
 
-        {name: 'double', nullable: true}
+        {name: 'double', null: true}
 
 C decimal тоже пока повременим
 
-        # {name: 'decimal', precision: true, scale: true, nullable: true}
+        # {name: 'decimal', precision: true, scale: true, null: true}
 
-        {name: 'time', nullable: true}
-        {name: 'date', nullable: true}
-        {name: 'dateonly', nullable: true}
+        {name: 'time', null: true}
+        {name: 'date', null: true}
+        {name: 'dateonly', null: true}
         {name: 'now'}
 
-        {name: 'json', nullable: true}
-        {name: 'blob', nullable: true}
-        {name: 'uuid', nullable: true}
-        {name: 'enum', autotypeBy: 'enum', enum: true, nullable: true}
+        {name: 'json', null: true}
+        {name: 'blob', null: true}
+        {name: 'uuid', null: true}
+        {name: 'enum', autotypeBy: 'enum', enum: true, null: true}
 
         {name: 'structure', autotypeBy: 'fields', short: 'struct', fields: true}
         {name: 'subtable', fields: true}
 
-        {name: 'refers', short: 'ref', autotypeBy: 'refers', refers: true, nullable: true}
+        {name: 'refers', short: 'ref', autotypeBy: 'refers', refers: true, null: true}
 
-        #{name: 'dsvalue', short: 'value', nullable: true}
+        #{name: 'dsvalue', short: 'value', null: true}
       ]
 
 Для начала проверяем, что если описание поля, не содержит type, то будет ошибка
 
       check "type is missing", ->
 
-        compileType (result = new Result), {}
+        compileType (result = new Result), {}, {}
 
         expect(result).resultContains [
           {type: 'error', code: 'dsc.missingProp', value: 'type'}
@@ -119,7 +119,7 @@ C decimal тоже пока повременим
 
       check "type has invalid chars in it's name", ->
 
-        compileType (result = new Result), {type: '[WrongType]'}
+        compileType (result = new Result), {type: '[WrongType]'}, {}
 
         expect(result).resultContains [
           {type: 'error', code: 'dsc.invalidTypeValue', value: '[WrongType]'}
@@ -132,7 +132,7 @@ C decimal тоже пока повременим
       for type in builtInTypes
 
 Для коротких имен типов, сохраняем полное имя типа, чтоб знать что ожидать в результате compileType
-        
+
         type.fullname = type.name
 
         tests.push {name: type.name, type: type}
@@ -158,10 +158,10 @@ Required props
 
             propDesc = {type: test.type.name}
 
-            compileType (result = new Result), propDesc
+            compileType (result = new Result), propDesc, {}
 
             expect(result).resultContains [
-              {type: 'error', code: 'dsc.missingProp', name: prop.name}
+              {type: 'error', code: 'dsc.missingProp', value : prop.name}
             ]
 
 Right value
@@ -179,7 +179,7 @@ Right value
 
               propDesc[prop.name] = value
 
-              compileType (result = new Result), propDesc
+              compileType (result = new Result), propDesc, {}
 
               expect(result).resultContains (
 
@@ -197,7 +197,7 @@ Right value
 
                 propDesc.scale = value
 
-                compileType (result = new Result), propDesc
+                compileType (result = new Result), propDesc, {}
 
                 expect(result).resultContains [
                   {type: 'error', path: 'scale', code: 'dsc.invalidValue', value: value}
@@ -214,7 +214,7 @@ string
 
           typeDesc = {type: "string(#{lengthValue})"}
 
-          expect(compileType (result = new Result), typeDesc).sameStructure
+          expect(compileType (result = new Result), typeDesc, {}).sameStructure
 
             type: 'string'
 
@@ -224,7 +224,7 @@ string
 
           typeDesc = {type: "string(#{lengthValue})", length: 10}
 
-          compileType (result = new Result), typeDesc
+          compileType (result = new Result), typeDesc, {}
 
           expect(result).resultContains [
             {type: 'error', path: "(#{lengthValue})", code: 'dsc.ambiguousProp', name: 'length', value1: lengthValue, value2: 10}
@@ -240,7 +240,7 @@ string
 
           typeDesc = {type: "string(#{lengthValue})"}
 
-          compileType (result = new Result), typeDesc
+          compileType (result = new Result), typeDesc, {}
 
           expect(result).resultContains [
             {type: 'error', path: "(#{lengthValue})", code: 'dsc.invalidValue', value: lengthValue}
@@ -250,7 +250,7 @@ string
 
           typeDesc = {type: "string", length: lengthValue}
 
-          compileType (result = new Result), typeDesc
+          compileType (result = new Result), typeDesc, {}
 
           expect(result).resultContains [
             {type: 'error', path: 'length', code: 'dsc.invalidValue', value: lengthValue}
@@ -260,15 +260,15 @@ string
 
       check 'string: invalid parenthesis', ->
 
-        compileType (result = new Result), {type: invalidType = 'string (20'}
+        compileType (result = new Result), {type: invalidType = 'string (20'}, {}
 
         expect(result.messages).sameStructure [{type: 'error', code: 'dsc.invalidTypeValue', value: invalidType}]
 
-        compileType (result = new Result), {type: invalidType = 'string (20) extra'}
+        compileType (result = new Result), {type: invalidType = 'string (20) extra'}, {}
 
         expect(result.messages).sameStructure [{type: 'error', code: 'dsc.invalidTypeValue', value: invalidType}]
 
-        compileType (result = new Result), {type: invalidType = 'string ()'}
+        compileType (result = new Result), {type: invalidType = 'string ()'}, {}
 
         expect(result.messages).sameStructure [{type: 'error', code: 'dsc.invalidTypeValue', value: invalidType}]
 
@@ -283,7 +283,7 @@ enum может быть задан несколькими способами:
 
       check 'enum: as array of strings', ->
 
-        res = compileType (result = new Result), {type: 'enum', enum: ['v1', 'v2', 'v3']}
+        res = compileType (result = new Result), {type: 'enum', enum: ['v1', 'v2', 'v3']}, {}
 
         expect(result.messages).sameStructure []
 
@@ -297,7 +297,7 @@ enum может быть задан несколькими способами:
 
       check 'enum: comma delimited string', ->
 
-        res = compileType (result = new Result), {type: 'enum', enum: 'v1, v2, v3'}
+        res = compileType (result = new Result), {type: 'enum', enum: 'v1, v2, v3'}, {}
 
         expect(result.messages).sameStructure []
 
@@ -311,13 +311,13 @@ enum может быть задан несколькими способами:
 
       check 'enum: list of objects', ->
 
-        res = compileType (result = new Result),
+        res = compileType (result = new Result), {
           type: 'enum'
           enum: [
             {name: 'v1'}
             {name: 'v2'}
             {name: 'v3'}
-          ]
+          ]}, {}
 
         expect(result.messages).sameStructure []
 
@@ -331,12 +331,13 @@ enum может быть задан несколькими способами:
 
       check 'enum: map of objects or true-values', ->
 
-        res = compileType (result = new Result),
+        res = compileType (result = new Result), {
           type: 'enum'
           enum:
             v1: true
             v2: true
-            v3: {}
+            v3: {},
+        }, {}
 
         expect(result.messages).sameStructure []
 
@@ -357,13 +358,13 @@ fields может быть задан несколькими способами:
 
       check 'fields: list of objects', ->
 
-        res = compileType (result = new Result),
+        res = compileType (result = new Result), {
           type: 'structure'
           fields: [
             {name: 'v1', type: 'string', length: 20}
             {name: 'v2', type: 'integer'}
             {name: 'v3', type: 'uuid'}
-          ]
+          ]}, {}
 
         expect(result.messages).sameStructure []
 
@@ -377,12 +378,13 @@ fields может быть задан несколькими способами:
 
       check 'fields: map of objects', ->
 
-        res = compileType (result = new Result),
+        res = compileType (result = new Result), {
           type: 'structure'
           fields:
             v1: {type: 'string', length: 20}
             v2: {name: 'v2', type: 'integer'}
             v3: {type: 'uuid'}
+        }, {}
 
         expect(result.messages).sameStructure []
 
@@ -403,7 +405,7 @@ refers
 
       check 'refers: type string options',  ->
 
-        expect(compileType (result = new Result), type: 'refers (Doc)').sameStructure
+        expect(compileType (result = new Result), type: 'refers (Doc)', {}).sameStructure
           type: 'refers'
           refers: 'Doc'
 
@@ -413,13 +415,13 @@ refers
 
       check 'refers: type string options',  ->
 
-        expect(compileType (result = new Result), type: 'refers (#any)').sameStructure
+        expect(compileType (result = new Result), type: 'refers (#any)', {}).sameStructure
           type: 'refers'
           refers: '#any'
 
         expect(result.messages).sameStructure []
 
-        expect(compileType (result = new Result), refers: '#any').sameStructure
+        expect(compileType (result = new Result), refers: '#any', {}).sameStructure
           type: 'refers'
           refers: '#any'
         expect(result.messages).sameStructure []
@@ -428,17 +430,17 @@ refers
 
       check 'refers: type string options',  ->
 
-        expect(compileType (result = new Result), type: 'refers (Doc1, Doc2)').sameStructure
+        expect(compileType (result = new Result), type: 'refers (Doc1, Doc2)', {}).sameStructure
           type: 'refers'
           refers: 'Doc1, Doc2'
         expect(result.messages).sameStructure []
 
-        expect(compileType (result = new Result), refers: 'Doc1, Doc2').sameStructure
+        expect(compileType (result = new Result), refers: 'Doc1, Doc2', {}).sameStructure
           type: 'refers'
           refers: 'Doc1, Doc2'
         expect(result.messages).sameStructure []
 
-        expect(compileType (result = new Result), refers: ['Doc1', 'Doc2']).sameStructure
+        expect(compileType (result = new Result), refers: ['Doc1', 'Doc2'], {}).sameStructure
           type: 'refers'
           refers: ['Doc1', 'Doc2']
         expect(result.messages).sameStructure []
@@ -459,7 +461,7 @@ implicit types
 
       check 'enum: implicit type by property', ->
 
-        res = compileType (result = new Result), {enum: 'a, b, c'}
+        res = compileType (result = new Result), {enum: 'a, b, c'}, {}
 
         expect(result.messages).sameStructure []
 
@@ -473,7 +475,7 @@ implicit types
 
       check 'fields: implicit type by property', ->
 
-        expect(compileType (result = new Result), {fields: [{name: 'fld1', type: 'integer'}, {name: 'fld2', type: 'text'}]}).sameStructure
+        expect(compileType (result = new Result), {fields: [{name: 'fld1', type: 'integer'}, {name: 'fld2', type: 'text'}]}, {}).sameStructure
           type: 'structure'
           fields:
             fld1: fld1 = {name: 'fld1', $$src: {name: 'fld1', type: 'integer'}}
@@ -482,7 +484,7 @@ implicit types
 
       check 'refers: implicit type by property', ->
 
-        expect(compileType (result = new Result), {refers: '#all'}).sameStructure
+        expect(compileType (result = new Result), {refers: '#all'}, {}).sameStructure
           type: 'refers'
           refers: '#all'
 
@@ -493,7 +495,7 @@ reserved types
 
         do (type) -> check "reserved type: '#{type}'", ->
 
-          res = compileType (result = new Result), {type: type}
+          res = compileType (result = new Result), {type: type}, {}
 
           expect(result.messages).sameStructure [{type: 'error', code: 'dsc.reservedType', value: type}]
 
@@ -506,7 +508,7 @@ Cчитаем все типы, которые не являются встрое
 
       check "unknown type, expect to be an udType", ->
 
-        res = compileType (result = new Result), {type: 'wrongType'}
+        res = compileType (result = new Result), {type: 'wrongType'}, {}
 
         expect(res).toEqual udType: 'wrongType'
 
@@ -514,28 +516,28 @@ Cчитаем все типы, которые не являются встрое
 
       check "error: attr udType is not expected", ->
 
-        res = compileType (result = new Result), {type: 'int', udType: 'intBasedType'}
+        res = compileType (result = new Result), {type: 'int', udType: 'intBasedType'}, {}
 
         expect(result.messages).sameStructure [{type: 'error', code: 'dsc.reservedAttr', value: 'udType'}]
 
       check "error: type 'dsvalue' is not allowed in a field def", ->
 
-        res = compileType (result = new Result), {type: 'dsvalue'}
+        res = compileType (result = new Result), {type: 'dsvalue'}, {}
 
         expect(result.messages).sameStructure [{type: 'error', code: 'dsc.notAllowedInFieldDef', value: 'dsvalue'}]
 
-        res = compileType (result = new Result), {type: 'dsvalue'}, undefined, context: 'field'
+        res = compileType (result = new Result), {type: 'dsvalue'}, {}, context: 'field'
 
         expect(result.messages).sameStructure [{type: 'error', code: 'dsc.notAllowedInFieldDef', value: 'dsvalue'}]
 
-        res = compileType (result = new Result), {type: 'dsvalue'}, undefined, context: 'udtype'
+        res = compileType (result = new Result), {type: 'dsvalue'}, {}, context: 'udtype'
 
         expect(result.messages).sameStructure []
 
-      check "error: attr 'nullable' is not allowed in udt", ->
+      check "error: attr 'null' is not allowed in udt", ->
 
-        res = compileType (result = new Result), {type: 'dsvalue', nullable: true}, undefined, context: 'udtype'
+        res = compileType (result = new Result), {type: 'dsvalue', null: true}, {}, context: 'udtype'
 
-        expect(result.messages).sameStructure [{type: 'error', path: 'nullable', code: 'dsc.notApplicableInUdtype'}]
+        expect(result.messages).sameStructure [{type: 'error', path: 'null', code: 'dsc.notApplicableInUdtype'}]
 
 Дальнейшая обработка на наличие udt - это отдельный шаг в спецификации ...config_udtypes

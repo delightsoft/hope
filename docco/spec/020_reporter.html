@@ -165,14 +165,8 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <h1 id="reporter">reporter</h1>
-<p>Reporter и Result решают очень похожую задачу - вывод сообщений.  Разница в том, что Result накапливает сообщения,
-но сам их никуда не выводит.  А Reporter выводит сообщения по мере поступления.  В том числе, он может вывести
-сообщения из Result</p>
-<p>Все сообщения о найденных ошибках и предупреждения о возможных ошибках, выдаются через метод reporter.</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>{Result, Reporter, i18n} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span></pre></div></div>
             
         </li>
         
@@ -183,12 +177,17 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>focusOnCheck = “contextResport has same interface as Result (3): keep errors”</p>
+              <p>Reporter и Result решают очень похожую задачу - вывод сообщений.  Разница в том, что Result накапливает сообщения,
+но сам их никуда не выводит.  А Reporter выводит сообщения по мере поступления.  В том числе, он может вывести
+сообщения из Result</p>
+<p>Все сообщения о найденных ошибках и предупреждения о возможных ошибках, выдаются через метод reporter.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+            <div class="content"><div class='highlight'><pre>{Result, Reporter, i18n} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
             
@@ -201,7 +200,7 @@ describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-fun
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Объект Reporter может работать без локализации, что полезно для процесса разработки              </p>
+              <p>Объект Reporter может работать без локализации, что полезно для процесса разработки</p>
 
             </div>
             
@@ -250,7 +249,7 @@ describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-fun
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Но штатный режим, это работа с локализацией        </p>
+              <p>Но штатный режим, это работа с локализацией</p>
 
             </div>
             
@@ -390,6 +389,18 @@ describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-fun
 
             </div>
             
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              
+            </div>
+            
             <div class="content"><div class='highlight'><pre>    result = <span class="hljs-keyword">new</span> Result
 
     result.log <span class="hljs-string">'error'</span>, <span class="hljs-string">'dsc.messageA'</span>, value: <span class="hljs-number">121</span>
@@ -407,14 +418,26 @@ describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <h2 id="вывод-result-с-контекстом">Вывод result с контекстом</h2>
 
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>    field = <span class="hljs-string">'Field1'</span>
@@ -439,11 +462,11 @@ describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-15">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>А теперь ещё и с название действия</p>
 
@@ -462,14 +485,26 @@ describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-16">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <h2 id="reporter-должен-быть-не-отличим-от-result-при-работе-с-контекстом-и-выводе-сообщений">Reporter должен быть не отличим от Result при работе с контекстом и выводе сообщений</h2>
 
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'Resport has same interface as Result (1)'</span>, <span class="hljs-function">-&gt;</span>
@@ -525,11 +560,11 @@ describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-17">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>При входе в context isError сбрасывается в false</p>
 
@@ -542,11 +577,11 @@ describe <span class="hljs-string">'020_reporter:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-18">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>При выходе наличие ошибки восстанавливается</p>
 

@@ -177,26 +177,29 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h1 id="result-loader">{Result, loader,</h1>
-<h1 id="utils-deepclone-prettyprint--require-src">utils: {deepClone, prettyPrint}} = require ‘../src’</h1>
-<p>#</p>
-<h1 id="focusoncheck--">focusOnCheck = “”</h1>
-<h1 id="check--itname-itbody---if-focusoncheck--itname-then-fit-else-it-itname-itbody-return">check = (itName, itBody) -&gt; (if focusOnCheck == itName then fit else it) itName, itBody; return</h1>
-<p>#</p>
-<h1 id="describe-030_loader--">describe “030_loader”, -&gt;</h1>
-<p>#</p>
-<h1 id="check-general-done--">check ‘general’, (done) -&gt;</h1>
-<p>#</p>
-<h1 id="loader-result--new-result-samples">loader (result = new Result), ‘samples’</h1>
-<h1 id="then-config--">.then (config) -&gt;</h1>
-<h1 id="expectconfigdocstobedefined">expect(config.docs).toBeDefined()</h1>
-<h1 id="done">done()</h1>
-<h1 id="return">return</h1>
-<h1 id="catch-err--">.catch (err) -&gt;</h1>
-<h1 id="expecterrmessagestoequal-">expect(err.messages).toEqual []</h1>
-<h1 id="done-1">done()</h1>
-
+              
             </div>
+            
+            <div class="content"><div class='highlight'><pre>path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+{Result, loader,
+utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">"030_loader"</span>, <span class="hljs-function">-&gt;</span>
+
+  check <span class="hljs-string">'general'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+
+    loader (result = <span class="hljs-keyword">new</span> Result), path.resolve __dirname, <span class="hljs-string">'../samples'</span>
+    .<span class="hljs-keyword">then</span> (config) -&gt;
+      expect(config.docs).toBeDefined()
+      done()
+      <span class="hljs-keyword">return</span>
+    .<span class="hljs-keyword">catch</span> (err) -&gt;
+      expect(err.messages).toEqual []
+      done()</pre></div></div>
             
         </li>
         
