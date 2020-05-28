@@ -168,15 +168,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result,
-config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
-utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">"070_config"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
         </li>
         
         
@@ -185,6 +176,27 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
+utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">"070_config"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Модель документов, состоит из следующих элементов:</p>
 <ul>
@@ -203,11 +215,11 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>TODO: Menu</p>
 
@@ -237,11 +249,11 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>TODO: Rights</p>
 
@@ -260,11 +272,11 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Документы задаются в виде sortedMap в элементе docs.  Namespace’ы документов, указываются в именах элементов.</p>
 
@@ -279,29 +291,14 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
         </li>
         
         
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>console.info ‘1: ‘, docA.states.closed == docA.states.opened.transitions.close.next
-console.info ‘2: ‘, docA.states.opened == docA.states.closed.transitions.open.next</p>
-
-            </div>
-            
-        </li>
-        
-        
         <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>console.info ‘res: ‘, res.docs[‘doc.DocA’].states.opened
-console.info ‘res: ‘, res.docs[‘doc.DocA’].states.opened.transitions.close
-console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
+              <p>console.info ‘1: ‘, docA.states.closed == docA.states.opened.transitions.close.next
+console.info ‘2: ‘, docA.states.opened == docA.states.closed.transitions.open.next</p>
 
             </div>
             
@@ -314,11 +311,11 @@ console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Документы в docs.$$list должны быть в альфавитном порядке</p>
+              <p>console.info ‘res: ‘, res.docs[‘doc.DocA’].states.opened
+console.info ‘res: ‘, res.docs[‘doc.DocA’].states.opened.transitions.close
+console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    expect(res.docs.$$list[<span class="hljs-number">0</span>].name).toBe <span class="hljs-string">'anamespace.DocB'</span></pre></div></div>
             
         </li>
         
@@ -328,6 +325,21 @@ console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Документы в docs.$$list должны быть в альфавитном порядке</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(res.docs.$$list[<span class="hljs-number">0</span>].name).toBe <span class="hljs-string">'anamespace.DocB'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Если документ был указан в корне без namespace’а - то он помещается в стандартный namespace ‘doc’.</p>
 
@@ -344,11 +356,11 @@ console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>console.info ‘unlinked: ‘, JSON.stringify unlinkConfig(res), null, ‘  ‘</p>
 

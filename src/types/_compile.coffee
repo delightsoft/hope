@@ -106,11 +106,13 @@ compile = (result, fieldDesc, res, opts) ->
 
     else # user defined type
 
+      prop = undefined
+
       result.context ((path) -> (Result.prop prop) path), ->
 
         for prop in typeProps when fieldDesc.hasOwnProperty(prop) && prop != 'null' # udType can have null in a field definition
 
-          result.error 'dsc.notApplicableForTheTypeProp', name: prop, type: type
+          result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
 
       res.udType = type
 
@@ -170,7 +172,7 @@ compile = (result, fieldDesc, res, opts) ->
 
       unless ok
 
-        result.error 'dsc.notApplicableForTheTypeProp', name: prop, type: type
+        result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
 
 # работаем с length для string
 

@@ -66,7 +66,7 @@ processRefers = (result, docs) ->
         else if field.hasOwnProperty('fields')
 
           _processFields doc, field
-          
+
     return
 
   doc = undefined
@@ -78,7 +78,7 @@ processRefers = (result, docs) ->
     return # result.context
 
   return
-  
+
 # ----------------------------
 
 module.exports = processRefers

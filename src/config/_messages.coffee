@@ -4,7 +4,7 @@ messages =
 
   dsc:
 
-    ambiguousProp: (args) -> "Ambiguous property #{args.name} values: #{value1} and #{value2}"
+    ambiguousProp: (args) -> "Ambiguous property #{args.name} values: #{args.value1} and #{args.value2}"
 
     compilerError: (args) -> "#{args.value}"
 
@@ -26,7 +26,7 @@ messages =
 
     noSuchFile: (args) -> "Optional file is missing: #{args.value}"
 
-    notApplicableForTheTypeProp: (args) -> "Property #{args.name} is not applicable for type #{args.type}"
+    notApplicableForTheTypeProp: (args) -> "Property #{args.nameValue} is not applicable for type #{args.typeValue}"
 
     reservedName: (args) -> "Reserved name: #{args.value}"
 
