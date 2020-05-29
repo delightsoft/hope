@@ -57,6 +57,8 @@ class Reporter
 
       when 'warn' then @warnings++
 
+    @messages++
+
     @_print (if msg.type then msg.type else 'info'), i18n.format @i18n, msg
 
     msg # log: (arg1, arg2, arg3) ->

@@ -2,6 +2,8 @@ Result = require '../result'
 
 flatMap = require '../flatMap'
 
+copyOptions = require './_copyOptions'
+
 {compile: compileType, compile: {_typeProps: typeProps}} = require '../types'
 
 {compile: compileTags} = require '../tags'
@@ -21,6 +23,8 @@ processFields = (result, doc, config) ->
     unless result.isError
 
       _processLevel = (level) ->
+
+        copyOptions result, level
 
         field = undefined
 

@@ -186,7 +186,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, types: {compile: compileType}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+            <div class="content"><div class='highlight'><pre>{Result, types: {compile: compileType}, sortedMap} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
 reservedTypes = compileType._reservedTypes
 
@@ -525,7 +525,13 @@ fit, для задачи указанной в focusOnCheck</p>
 
           propDesc = {type: test.type.name}
 
-          propDesc[prop.name] = value
+          propDesc[prop.name] =
+
+            <span class="hljs-keyword">if</span> propDesc.fields
+
+              sortedMap (result = <span class="hljs-keyword">new</span> Result), value
+
+            <span class="hljs-keyword">else</span> value
 
           compileType (result = <span class="hljs-keyword">new</span> Result), propDesc, {}
 
@@ -864,11 +870,11 @@ fit, для задачи указанной в focusOnCheck</p>
 
     res = compileType (result = <span class="hljs-keyword">new</span> Result), {
       type: <span class="hljs-string">'structure'</span>
-      fields: [
+      fields: fields = [
         {name: <span class="hljs-string">'v1'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>}
         {name: <span class="hljs-string">'v2'</span>, type: <span class="hljs-string">'integer'</span>}
         {name: <span class="hljs-string">'v3'</span>, type: <span class="hljs-string">'uuid'</span>}
-      ]}, {}
+      ]}, {fields: sortedMap result, fields}
 
     expect(result.messages).sameStructure []
 
@@ -884,11 +890,11 @@ fit, для задачи указанной в focusOnCheck</p>
 
     res = compileType (result = <span class="hljs-keyword">new</span> Result), {
       type: <span class="hljs-string">'structure'</span>
-      fields:
+      fields: fields =
         v1: {type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>}
         v2: {name: <span class="hljs-string">'v2'</span>, type: <span class="hljs-string">'integer'</span>}
         v3: {type: <span class="hljs-string">'uuid'</span>}
-    }, {}
+    }, {fields: sortedMap result, fields}
 
     expect(result.messages).sameStructure []
 
@@ -1056,7 +1062,7 @@ fit, для задачи указанной в focusOnCheck</p>
 
   check <span class="hljs-string">'fields: implicit type by property'</span>, <span class="hljs-function">-&gt;</span>
 
-    expect(compileType (result = <span class="hljs-keyword">new</span> Result), {fields: [{name: <span class="hljs-string">'fld1'</span>, type: <span class="hljs-string">'integer'</span>}, {name: <span class="hljs-string">'fld2'</span>, type: <span class="hljs-string">'text'</span>}]}, {}).sameStructure
+    expect(compileType (result = <span class="hljs-keyword">new</span> Result), {fields: fields = [{name: <span class="hljs-string">'fld1'</span>, type: <span class="hljs-string">'integer'</span>}, {name: <span class="hljs-string">'fld2'</span>, type: <span class="hljs-string">'text'</span>}]}, {fields: sortedMap result, fields}).sameStructure
       type: <span class="hljs-string">'structure'</span>
       fields:
         fld1: fld1 = {name: <span class="hljs-string">'fld1'</span>, $$src: {name: <span class="hljs-string">'fld1'</span>, type: <span class="hljs-string">'integer'</span>}}

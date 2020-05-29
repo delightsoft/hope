@@ -20,17 +20,23 @@ linkFields = (collection) ->
 
   list = []
 
-  _linkLevel = (level) ->
+  _linkLevel = (level, prefix = '') ->
 
     for v in level
 
-      v.fields = _linkLevel v.fields if v.hasOwnProperty('fields')
-
       v.$$index = list.length
+
+      if level.hasOwnProperty('mask')
+
+        v.$$mask = new BitArray collection, v.mask
+
+        delete v.mask
 
       list.push v
 
-      map[v.name] = v
+      v.fields = _linkLevel v.fields, "#{prefix}#{v.name}." if v.hasOwnProperty 'fields'
+
+      map["#{prefix}#{v.name}"] = v
 
     linkSortedMap level, true # _linkLevel
 
@@ -60,7 +66,7 @@ link = (config) ->
 
       res.$$tags = linkTags res.$$flat.$$list, doc.fields.tags
 
-      for field in res.$$list
+      for field in res.$$flat.$$list
 
         if field.hasOwnProperty('udType')
 
@@ -76,7 +82,11 @@ link = (config) ->
 
           field.udType = udtList
 
-        field.$$mask = new BitArray res, field.$$mask if field.hasOwnProperty('$$mask')
+        if field.hasOwnProperty('mask')
+
+          field.$$mask = new BitArray res.$$flat.$$list, field.mask
+
+          delete field.mask
 
         field.refers = (config.docs[refName] for refName in field.refers) if field.hasOwnProperty('refers')
 

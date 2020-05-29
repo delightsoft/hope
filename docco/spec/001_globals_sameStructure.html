@@ -168,13 +168,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, compareStructures} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'001_global_jsonDiff:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
         </li>
         
         
@@ -183,6 +176,25 @@ describe <span class="hljs-string">'001_global_jsonDiff:'</span>, <span class="h
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, compareStructures} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'001_global_jsonDiff:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>При работе со спецификация для работы со структурами документов, сталкнулся с проблемой понятного для человека
 сравнения двух структур.  Структуры могут содержать кольцевые ссылки.</p>
@@ -234,11 +246,11 @@ describe <span class="hljs-string">'001_global_jsonDiff:'</span>, <span class="h
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Полезный для сложных ситуаций момент - данные в объектах (map’ах) проверяются именно в той последовательности как они
 перечислены в expected</p>

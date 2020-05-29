@@ -154,7 +154,7 @@ compile = (result, fieldDesc, res, opts) ->
 
         when 'scale' then if (ok = type == 'decimal') then scaleProp = takePositiveInt result, fieldDesc.scale
 
-        when 'fields' then if (ok = (type == 'structure' || type == 'subtable')) then fieldsProp = takeFields result, fieldDesc.fields
+        when 'fields' then ok = (type == 'structure' || type == 'subtable') # this prop is already taken during flatMap
 
         when 'null'
 
@@ -236,9 +236,25 @@ compile = (result, fieldDesc, res, opts) ->
 
       res.scale = scaleProp if typeof scaleProp == 'number'
 
-    when 'structure' then setRequiredProp result, res, 'fields', fieldsProp
+    when 'structure'
 
-    when 'subtable' then setRequiredProp result, res, 'fields', fieldsProp
+      unless fieldDesc.hasOwnProperty('fields')
+
+        result.error 'dsc.missingProp', value: 'fields'
+
+      unless res.hasOwnProperty('fields')
+
+        result.error (Result.prop 'fields'), 'dsc.invalidValue', value: fieldDesc.fields
+
+    when 'subtable'
+
+      unless fieldDesc.hasOwnProperty('fields')
+
+        result.error 'dsc.missingProp', value: 'fields'
+
+      unless res.hasOwnProperty('fields')
+
+        result.error (Result.prop 'fields'), 'dsc.invalidValue', value: fieldDesc.fields
 
     when 'refers' then setRequiredProp result, res, 'refers', refersProp
 
@@ -290,14 +306,6 @@ takeStringOrArrayOfStrings = (result, value) ->
 takeEnum = (result, value) ->
 
   sortedMap result, value, string: true, boolean: true
-
-# fields это map элементов, где элементы это описание вложенных полей
-
-takeFields = (result, value) ->
-
-  sortedMap result, value
-
-  # TODO: Add fields processing
 
 # присваиваем значение в res, если оно есть.  а если значения нет - добавляем ошибку
 

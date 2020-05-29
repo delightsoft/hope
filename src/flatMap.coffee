@@ -25,9 +25,17 @@ finish = (result, resValue, subitemsField, opts) ->
 
           result.context (Result.prop subitemsField), ->
 
-            _processSublevel item[subitemsField]
+            value = item[subitemsField]
 
-            sortedMap.finish result, item[subitemsField], opts
+            unless (typeof value == 'object' && value != null) || typeof value == 'string'
+
+              result.error 'dsc.invalidValue', value: value
+
+            else
+
+              _processSublevel value
+
+              sortedMap.finish result, value, opts
 
             return # result.context
 

@@ -20,7 +20,7 @@ unlinkFields = (docOrField) ->
 
     res.fields = unlinkFields(field) if field.hasOwnProperty('fields')
 
-    res.$$mask = field.$$mask._mask if field.hasOwnProperty('$$mask')
+    res.mask = field.$$mask._mask if field.hasOwnProperty('$$mask')
 
     res
 

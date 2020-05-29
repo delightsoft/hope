@@ -1,7 +1,7 @@
 Типы полей документов
 ------------------------------
 
-    {Result, types: {compile: compileType}} = require '../src'
+    {Result, types: {compile: compileType}, sortedMap} = require '../src'
 
     reservedTypes = compileType._reservedTypes
 
@@ -177,7 +177,13 @@ Right value
 
               propDesc = {type: test.type.name}
 
-              propDesc[prop.name] = value
+              propDesc[prop.name] =
+
+                if propDesc.fields
+
+                  sortedMap (result = new Result), value
+
+                else value
 
               compileType (result = new Result), propDesc, {}
 
@@ -360,11 +366,11 @@ fields может быть задан несколькими способами:
 
         res = compileType (result = new Result), {
           type: 'structure'
-          fields: [
+          fields: fields = [
             {name: 'v1', type: 'string', length: 20}
             {name: 'v2', type: 'integer'}
             {name: 'v3', type: 'uuid'}
-          ]}, {}
+          ]}, {fields: sortedMap result, fields}
 
         expect(result.messages).sameStructure []
 
@@ -380,11 +386,11 @@ fields может быть задан несколькими способами:
 
         res = compileType (result = new Result), {
           type: 'structure'
-          fields:
+          fields: fields =
             v1: {type: 'string', length: 20}
             v2: {name: 'v2', type: 'integer'}
             v3: {type: 'uuid'}
-        }, {}
+        }, {fields: sortedMap result, fields}
 
         expect(result.messages).sameStructure []
 
@@ -475,7 +481,7 @@ implicit types
 
       check 'fields: implicit type by property', ->
 
-        expect(compileType (result = new Result), {fields: [{name: 'fld1', type: 'integer'}, {name: 'fld2', type: 'text'}]}, {}).sameStructure
+        expect(compileType (result = new Result), {fields: fields = [{name: 'fld1', type: 'integer'}, {name: 'fld2', type: 'text'}]}, {fields: sortedMap result, fields}).sameStructure
           type: 'structure'
           fields:
             fld1: fld1 = {name: 'fld1', $$src: {name: 'fld1', type: 'integer'}}
