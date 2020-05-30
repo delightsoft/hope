@@ -78,7 +78,7 @@ processUdtypes = (result, config) ->
 
       sortedMap.finish result, res
 
-      config.udtypes = res unless result.isError
+      config.udtypes = if result.isError then 'failed' else res
 
       return # processUdtypes = (result, config) ->
 

@@ -6,6 +6,8 @@ processUdtypes = require './_processUdtypes'
 
 processDocs = require './_processDocs'
 
+processAPI = require './_processAPI'
+
 # TODO: Add opts - to add DSValue implementations
 
 compile = (result, sourceConfig) ->
@@ -19,6 +21,8 @@ compile = (result, sourceConfig) ->
   processUdtypes result, config
 
   processDocs result, config
+
+  processAPI result, config
 
   unless result.isError
 

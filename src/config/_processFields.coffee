@@ -8,17 +8,17 @@ copyOptions = require './_copyOptions'
 
 {compile: compileTags} = require '../tags'
 
-processFields = (result, doc, config) ->
+processFields = (result, doc, config, fieldsProp = 'fields') ->
 
-  unless doc.$$src.hasOwnProperty('fields')
+  unless doc.$$src.hasOwnProperty(fieldsProp)
 
-    result.error 'dsc.missingProp', value: 'fields'
+    result.error 'dsc.missingProp', value: fieldsProp
 
     return
 
-  result.context (Result.prop 'fields'), -> # processFields
+  result.context (Result.prop fieldsProp), -> # processFields
 
-    res = flatMap result, doc.$$src.fields, 'fields', index: true, mask: true
+    res = flatMap result, doc.$$src[fieldsProp], 'fields', index: true, mask: true
 
     unless result.isError
 
@@ -46,7 +46,7 @@ processFields = (result, doc, config) ->
 
                 field.required = value if value
 
-            if field.hasOwnProperty('udType')
+            if field.hasOwnProperty('udType') && config.udtypes != 'failed'
 
               unless config.udtypes && config.udtypes.hasOwnProperty(field.udType)
 

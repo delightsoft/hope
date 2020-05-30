@@ -6,7 +6,7 @@ copyOptions = (result, map) ->
 
   result.context ((path) -> (Result.prop 'options', (Result.item item.name)) path), ->
 
-    for item in map.$$list when item.$$src.hasOwnProperty 'options'
+    for item in map.$$list when item.$$src?.hasOwnProperty 'options'
 
       value = item.$$src.options
 

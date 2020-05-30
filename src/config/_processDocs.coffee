@@ -12,6 +12,8 @@ processStates = require './_processStates'
 
 processRefers = require './_processRefers'
 
+copyOptions = require './_copyOptions'
+
 processDocs = (result, config) ->
 
   unless config.$$src.hasOwnProperty('docs')
@@ -55,6 +57,8 @@ processDocs = (result, config) ->
 
       # rule: docs.$$list is sorted in alpabetical order of their names
       res.$$list.sort (left, right) -> left.name.localeCompare right.name
+
+      copyOptions result, res
 
       sortedMap.finish result, res
 

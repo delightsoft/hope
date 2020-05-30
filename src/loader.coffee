@@ -22,7 +22,6 @@ deleteRequireCache = (id) ->
 
   return
 
-
 loader = (result, sourceDir) ->
 
   invalidArg 'result', result unless isResult result
@@ -35,41 +34,35 @@ loader = (result, sourceDir) ->
 
     loadFile = (filename, required) ->
 
-      try
+      filename = path.join dir, filename
 
-        filename = path.join dir, filename
+      modId = undefined
+
+      try
 
         modId = require.resolve filename
 
-        deleteRequireCache modId
-
-        res = require filename
-
-        res = res.default || res if typeof res == 'object' && res != null && hasOwnProperty.call(res, 'default')
-
-        res = res result if typeof res == 'function'
-
-        res # loadFile =
-
       catch err
 
-        isFileItself = (err.message.indexOf filename) >= 0
+        if required
 
-        if isFileItself
-
-          if required
-
-            result.error 'dsc.missingFile', value: filename
-
-          else
-
-            result.warn 'dsc.noSuchFile', value: filename
+          result.error 'dsc.missingFile', value: filename
 
         else
 
-          result.error (-> filename), 'dsc.compilerError', value: err.message, stack: err.stack
+          result.warn 'dsc.noSuchFile', value: filename
 
-        return # loadFile =
+        return
+
+      deleteRequireCache modId
+
+      res = require filename
+
+      res = res.default || res if typeof res == 'object' && res != null && hasOwnProperty.call(res, 'default')
+
+      res = res result if typeof res == 'function'
+
+      res # loadFile =
 
     res =
 

@@ -232,7 +232,7 @@ compile = (result, fieldDesc, res, opts) ->
 
     when 'decimal'
 
-      setRequiredProp result, res, 'precision', precisionProp
+      setRequiredProp result, res, 'precision', precisionPropv
 
       res.scale = scaleProp if typeof scaleProp == 'number'
 

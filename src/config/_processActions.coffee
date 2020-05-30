@@ -4,6 +4,8 @@ sortedMap = require '../sortedMap'
 
 {compile: compileTags} = require '../tags'
 
+copyOptions = require './_copyOptions'
+
 processActions = (result, doc) ->
 
   unless doc.$$src.hasOwnProperty('actions')
@@ -53,6 +55,8 @@ processActions = (result, doc) ->
             action.value = action.$$src.value
 
         return # result.context
+
+      copyOptions result, res
 
       compileTags result, res
 
