@@ -193,6 +193,8 @@ sortedMap из списка или массива делает map (object):
 
         res = sortedMap (result = new Result), ['doc1', 'doc2'], string: true
 
+        expect(result.messages).sameStructure []
+
         expect(res).sameStructure
 
           doc1: doc1 = {name: 'doc1'}

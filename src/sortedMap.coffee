@@ -79,7 +79,7 @@ sortedMap = (result, value, opts) ->
 
   list = []
 
-  if optsString && typeof value == 'string' && value.length > 0 && optsString # на вход дали строку
+  if optsString && typeof value == 'string' && value.length > 0 # на вход дали строку
 
     items = (v.trim() for v in value.split(',') when v.trim())
 
@@ -91,7 +91,11 @@ sortedMap = (result, value, opts) ->
 
       for v,  i in items
 
-        unless not res.hasOwnProperty v
+        if optsCheckName then fixedName = optsCheckName v.name else checkItemName v.name
+
+        v = fixedName if typeof fixedName == 'string'
+
+        if res.hasOwnProperty v
 
           result.error (Result.index i), 'dsc.duplicatedName', value: v
 
@@ -101,7 +105,7 @@ sortedMap = (result, value, opts) ->
 
         list.push (res[v] = {name: v})
 
-  else if typeof value == 'object' && value != null # на вход дали map
+  else if typeof value == 'object' && value != null # на вход дали map или массив
 
     if Array.isArray value
 
@@ -113,33 +117,43 @@ sortedMap = (result, value, opts) ->
 
           if optsString && typeof v == 'string' && v.length > 0
 
+            unless (if optsCheckName then (fixedName = optsCheckName v) else checkItemName v)
+
+              result.error 'dsc.invalidName', value: v.name
+
+              continue
+
+            v.name = fixedName if typeof fixedName == 'string'
+
             res[v] = clone = {name: v}
 
-          else unless typeof v == 'object' && v != null && !Array.isArray(v)
-
-            result.error 'dsc.invalidValue', value: v
-
-            continue
-
-          else unless v.hasOwnProperty('name')
-
-            result.error 'dsc.missingProp', value: 'name'
-
-            continue
-
-          else unless (if optsCheckName then optsCheckName v.name else checkItemName v.name)
-
-            result.error 'dsc.invalidName', value: v.name
-
-            continue
-
-          else unless not res.hasOwnProperty v.name
-
-            result.error 'dsc.duplicatedName', value: v.name
-
-            continue
-
           else
+
+            unless typeof v == 'object' && v != null && !Array.isArray(v)
+
+              result.error 'dsc.invalidValue', value: v
+
+              continue
+
+            else unless v.hasOwnProperty('name')
+
+              result.error 'dsc.missingProp', value: 'name'
+
+              continue
+
+            unless (if optsCheckName then (fixedName = optsCheckName v.name) else checkItemName v.name)
+
+              result.error 'dsc.invalidName', value: v.name
+
+              continue
+
+            v.name = fixedName if typeof fixedName == 'string'
+
+            unless not res.hasOwnProperty v.name
+
+              result.error 'dsc.duplicatedName', value: v.name
+
+              continue
 
             res[v.name] = clone = {name: v.name, $$src: v}
 
@@ -161,9 +175,11 @@ sortedMap = (result, value, opts) ->
 
         for k, v of value
 
-          unless (if optsCheckName then optsCheckName k else checkItemName k)
+          unless (if optsCheckName then fixedName = optsCheckName k else checkItemName k)
 
             result.error 'dsc.invalidName', value: k
+
+          k = fixedName if typeof fixedName == 'string'
 
           res[k] = clone = {name: k}
 

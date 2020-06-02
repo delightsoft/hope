@@ -128,21 +128,33 @@ unlink = (config) ->
 
     newConfig.api = unlinkSortedMap newConfig.api
 
-    for api in newConfig.api.$$list
+    for api in newConfig.api.list
 
       unless api.methods.$$list.length > 0
 
-        delete res.methods
+        delete api.methods
 
       else
 
-        api.methods = unlinkSortedMap api.methods
+        console.info 139, api
 
-        for method in api.methods
+        unless api.hasOwnProperty('methods')
 
-          method.input = unlinkFlatMap method.input, 'fields', unlinkField if method.input.$$list.length > 0
+          delete api.methods
 
-          method.output = unlinkFlatMap method.output, 'fields', unlinkField if method.output.$$list.length > 0
+        else
+
+          api.methods = unlinkSortedMap api.methods
+
+          for method in api.methods.list
+
+            console.info 143, method.input
+
+            method.input = unlinkFlatMap method.input, 'fields', unlinkField if method.input.$$list.length > 0
+
+            console.info 146, method.input
+
+            method.output = unlinkFlatMap method.output, 'fields', unlinkField if method.output.$$list.length > 0
 
   newConfig
 

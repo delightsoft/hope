@@ -481,6 +481,8 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
 
     res = sortedMap (result = <span class="hljs-keyword">new</span> Result), [<span class="hljs-string">'doc1'</span>, <span class="hljs-string">'doc2'</span>], string: <span class="hljs-literal">true</span>
 
+    expect(result.messages).sameStructure []
+
     expect(res).sameStructure
 
       doc1: doc1 = {name: <span class="hljs-string">'doc1'</span>}

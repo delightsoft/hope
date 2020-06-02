@@ -24,7 +24,14 @@ processDocs = (result, config) ->
 
   result.context (Result.prop 'docs'), -> # processDocs =
 
-    res = sortedMap result, config.$$src.docs, checkName: checkDocumentName
+    res = sortedMap result, config.$$src.docs, checkName: (v) ->
+
+      return false unless checkDocumentName v
+
+      # rule: 'doc.' is a default namespace
+      return "doc.#{v}" if v.indexOf('.') == -1
+
+      return true
 
     unless result.isError
 
@@ -35,15 +42,6 @@ processDocs = (result, config) ->
         for doc in res.$$list
 
           result.isError = false
-
-          # rule: 'doc' is a default namespace
-          if doc.name.indexOf('.') == -1
-
-            delete res[doc.name]
-
-            doc.name = "doc.#{doc.name}"
-
-            res[doc.name] = doc
 
           doc.fields = processFields result, doc, config
 
