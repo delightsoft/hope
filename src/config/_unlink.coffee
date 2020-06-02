@@ -28,7 +28,7 @@ unlinkFlatMap = (collection, prop, process) ->
 
       clone = (lightClone item)
 
-      clone[prop] = unlinkLevel clone[prop] if clone.hasOwnProperty prop
+      clone[prop] = unlinkLevel clone[prop].$$list if clone.hasOwnProperty prop
 
       process? clone
 
@@ -74,9 +74,9 @@ unlinkMethods = (methods) ->
 
     res = lightClone method
 
-    res.input = unlinkMap method.input if res.input.$$list.length > 0
+    res.arguments = unlinkMap method.arguments if res.arguments.$$list.length > 0
 
-    res.output = unlinkMap method.output if res.output.$$list.length > 0
+    res.result = unlinkMap method.result if res.result.$$list.length > 0
 
     res
 
@@ -136,8 +136,6 @@ unlink = (config) ->
 
       else
 
-        console.info 139, api
-
         unless api.hasOwnProperty('methods')
 
           delete api.methods
@@ -148,13 +146,9 @@ unlink = (config) ->
 
           for method in api.methods.list
 
-            console.info 143, method.input
+            method.arguments = unlinkFlatMap method.arguments, 'fields', unlinkField if method.arguments.$$list.length > 0
 
-            method.input = unlinkFlatMap method.input, 'fields', unlinkField if method.input.$$list.length > 0
-
-            console.info 146, method.input
-
-            method.output = unlinkFlatMap method.output, 'fields', unlinkField if method.output.$$list.length > 0
+            method.result = unlinkFlatMap method.result, 'fields', unlinkField if method.result.$$list.length > 0
 
   newConfig
 

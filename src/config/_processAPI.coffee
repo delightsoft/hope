@@ -40,7 +40,7 @@ processAPI = (result, config) ->
 
             result.context ((path) -> (Result.prop 'methods') path), ->
 
-              api.methods = sortedMap result, api.$$src.methods
+              api.methods = sortedMap result, api.$$src.methods, index: true
 
               unless result.isError
 
@@ -50,7 +50,7 @@ processAPI = (result, config) ->
 
                   for method in api.methods.$$list
 
-                    for prop in ['input', 'output']
+                    for prop in ['arguments', 'result']
 
                       unless method.$$src?.hasOwnProperty(prop)
 

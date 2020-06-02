@@ -20,7 +20,7 @@ EMPTY_TAGS = freeze {all: EMPTY_MASK}
 
 EMPTY_FLAT_MAP = freeze ({$$list: EMPTY_LIST, $$flat: freeze {$$list: EMPTY_LIST}, $$tags: EMPTY_TAGS})
 
-EMPTY_MAP_WITH_TAGS = Object.freeze({$$list: [], $$tags: {}})
+EMPTY_MAP_WITH_TAGS = Object.freeze({$$list: [], $$tags: EMPTY_TAGS})
 
 linkSortedMap = (collection, noIndex, noFreeze) ->
 
@@ -180,13 +180,13 @@ link = (config) ->
 
     for method in api.methods.$$list
 
-      method.input = linkFlatMap method.input, 'fields'
+      method.arguments = linkFlatMap method.arguments, 'fields'
 
-      linkFields config, method.input.$$flat.$$list
+      linkFields config, method.arguments.$$flat.$$list
 
-      method.output = linkFlatMap method.output, 'fields'
+      method.result = linkFlatMap method.result, 'fields'
 
-      linkFields config, method.output.$$flat.$$list
+      linkFields config, method.result.$$flat.$$list
 
       freeze method
 

@@ -231,8 +231,12 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
       docs:
         DocA:
           fields:
-            fldA: {refers: <span class="hljs-string">'anamespace.DocB'</span>} <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process refers</span>
-            fldG: {type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>}
+            fldA: refers: <span class="hljs-string">'anamespace.DocB'</span>, options: {f: <span class="hljs-number">123</span>} <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process refers</span>
+            fldG: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
+            fldQ:
+              fields:
+                sa: type: <span class="hljs-string">'date'</span>
+                sb: type: <span class="hljs-string">'t1'</span>
           actions:
             close: <span class="hljs-function">-&gt;</span> a = <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
             open: <span class="hljs-function">-&gt;</span> <span class="hljs-keyword">return</span>
@@ -261,11 +265,28 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
             
             <div class="content"><div class='highlight'><pre>        <span class="hljs-string">'anamespace.DocB'</span>: <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process names with namespaces</span>
           fields:
-            fldA: {refers: <span class="hljs-string">'doc.DocA'</span>}
-            fldB: {type: <span class="hljs-string">'string(20)'</span>}
-            fldC: {refers: [<span class="hljs-string">'doc.DocA'</span>]}
-            fldD: {refers: <span class="hljs-string">'#all'</span>}
-            fldT: {type: <span class="hljs-string">'t2'</span>}
+            fldA: refers: <span class="hljs-string">'doc.DocA'</span>
+            fldB: type: <span class="hljs-string">'string(20)'</span>
+            fldC: refers: [<span class="hljs-string">'doc.DocA'</span>]
+            fldD: refers: <span class="hljs-string">'#all'</span>
+            fldT: type: <span class="hljs-string">'t2'</span>
+      api:
+        Api1:
+          options: {t: <span class="hljs-string">'321'</span>}
+          methods:
+            methodA:
+              tags: <span class="hljs-string">'a, b'</span>
+              options: a: <span class="hljs-number">12</span>, b: <span class="hljs-string">'123'</span>
+              arguments:
+                a1: type: <span class="hljs-string">'double'</span>, tags: <span class="hljs-string">'x, y'</span>
+                a2: type: <span class="hljs-string">'dateonly'</span>, tags: <span class="hljs-string">'y'</span>
+              result:
+                r:
+                  fields:
+                    x: type: <span class="hljs-string">'string(20)'</span>
+                    y: type: <span class="hljs-string">'t2'</span>
+        Api2: {methods: []} <span class="hljs-comment"># nothing</span>
+
 
   check <span class="hljs-string">'general'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
             

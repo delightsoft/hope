@@ -26,8 +26,12 @@ config
           docs:
             DocA:
               fields:
-                fldA: {refers: 'anamespace.DocB'} # TODO: Process refers
-                fldG: {type: 'string(20)', tags: 'a'}
+                fldA: refers: 'anamespace.DocB', options: {f: 123} # TODO: Process refers
+                fldG: type: 'string(20)', tags: 'a'
+                fldQ:
+                  fields:
+                    sa: type: 'date'
+                    sb: type: 't1'
               actions:
                 close: -> a = 12; return
                 open: -> return
@@ -43,11 +47,28 @@ config
             # TODO: Rights
             'anamespace.DocB': # TODO: Process names with namespaces
               fields:
-                fldA: {refers: 'doc.DocA'}
-                fldB: {type: 'string(20)'}
-                fldC: {refers: ['doc.DocA']}
-                fldD: {refers: '#all'}
-                fldT: {type: 't2'}
+                fldA: refers: 'doc.DocA'
+                fldB: type: 'string(20)'
+                fldC: refers: ['doc.DocA']
+                fldD: refers: '#all'
+                fldT: type: 't2'
+          api:
+            Api1:
+              options: {t: '321'}
+              methods:
+                methodA:
+                  tags: 'a, b'
+                  options: a: 12, b: '123'
+                  arguments:
+                    a1: type: 'double', tags: 'x, y'
+                    a2: type: 'dateonly', tags: 'y'
+                  result:
+                    r:
+                      fields:
+                        x: type: 'string(20)'
+                        y: type: 't2'
+            Api2: {methods: []} # nothing
+
 
       check 'general', ->
 
