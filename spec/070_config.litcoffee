@@ -26,27 +26,27 @@ config
           docs:
             DocA:
               fields:
-                # fldA: {refers: 'anamespace.DocB'} # TODO: Process refers
-                fldG: {type: 'string(20)'}
+                fldA: {refers: 'anamespace.DocB'} # TODO: Process refers
+                fldG: {type: 'string(20)', tags: 'a'}
               actions:
                 close: -> a = 12; return
                 open: -> return
               states:
                 opened:
-                  # update: 'fldA'
+                  update: 'fldA'
                   transitions:
                     close: 'closed'
                 closed:
-                  # view: 'fldA, fldG'
+                  view: 'fldA, fldG'
                   transitions:
                     open: 'opened'
             # TODO: Rights
             'anamespace.DocB': # TODO: Process names with namespaces
               fields:
-                # fldA: {refers: 'doc.DocA'}
+                fldA: {refers: 'doc.DocA'}
                 fldB: {type: 'string(20)'}
-                # fldC: {refers: ['doc.DocA']}
-                # fldD: {refers: '#all'}
+                fldC: {refers: ['doc.DocA']}
+                fldD: {refers: '#all'}
                 fldT: {type: 't2'}
 
       check 'general', ->

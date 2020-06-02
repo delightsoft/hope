@@ -46,11 +46,11 @@ unlinkFlatMap = (collection, prop, process) ->
 
   res # unlinkFlatMap =
 
-unlinkTags = (collection) ->
+unlinkTags = (tags) ->
 
   res = {}
 
-  res[k] = v._mask for k, v of collection.$$tags when k != 'all'
+  res[k] = v._mask for k, v of tags when k != 'all'
 
   res # unlinkTags =
 

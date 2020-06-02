@@ -38,7 +38,7 @@ linkSortedMap = (collection, noIndex, noFreeze) ->
 
   res.$$list = collection.list
 
-  res.$$tags = linkTags res, collection.tags if collection.tags
+  res.$$tags = linkTags res, collection if collection.tags
 
   if noFreeze then res else freeze res # linkSortedMap =
 
@@ -70,7 +70,7 @@ linkFlatMap = (collection, prop, noIndex, noMask) ->
 
   freeze map
 
-  linkTags res, collection.tags if collection.tags
+  linkTags res, collection if collection.tags
 
   unless noMask
 
