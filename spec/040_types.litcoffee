@@ -5,7 +5,7 @@
 
     reservedTypes = compileType._reservedTypes
 
-    focusOnCheck = ""
+    focusOnCheck = "ref: invalid prop 'refers' value: ''"
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '040_types:', ->
@@ -31,6 +31,7 @@ fit, для задачи указанной в focusOnCheck
         valNum = 12
         valEmptyArray = []
         valEmptyMap = {}
+        valEmptyStr = ''
         valArrayOfDocTypes = ['Doc1', 'Doc2']
         valArrayOfEnumObjects = [{name: 'Field1'}, {name: 'Field2'}, {name: 'Field3'}]
         valArrayOfFieldsDesc = [{name: 'field1', type: 'string', length: 10}, {name: 'field2', type: 'int'}, {name: 'field3', type: 'bool'}]
@@ -41,17 +42,17 @@ fit, для задачи указанной в focusOnCheck
 
       propDescs = [
         {name: 'length', correctVal: valNum}
-        {name: 'enum', correctVal: valArrayOfEnumObjects, skipVal: [valStr, valArrayOfFieldsDesc, valArrayOfDocTypes], required: true}
+        {name: 'enum', correctVal: valArrayOfEnumObjects, skipVal: [valStr, valEmptyArray, valEmptyMap, valArrayOfFieldsDesc, valArrayOfDocTypes], required: true}
 
         {name: 'precision', correctVal: valNum, required: true}
 
 scale это не самостоятельное свойство, оно идет в паре с precision
 
         {name: 'scale', correctVal: valNum, optional: true, required: false}
-        {name: 'fields', correctVal: valArrayOfFieldsDesc, skipVal: [valStr, valArrayOfDocTypes, valArrayOfEnumObjects], required: true}
+        {name: 'fields', correctVal: valArrayOfFieldsDesc, skipVal: [valStr, valEmptyArray, valEmptyMap, valArrayOfDocTypes, valArrayOfEnumObjects], required: true}
         {name: 'null', correctVal: valBool, required: false}
 
-        {name: 'refers', correctVal: valStr, required: true, skipVal: [valEmptyArray, valArrayOfDocTypes]}
+        {name: 'refers', correctVal: valStr, required: true, skipVal: [valEmptyArray, valEmptyStr, valArrayOfDocTypes]}
       ]
 
 Это список встроенных в DSCommon типов.  Атрибуты говорят какие дополнительные поля нужно (можно) указывать для

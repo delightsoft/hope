@@ -230,21 +230,7 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
         t2: type: <span class="hljs-string">'t1'</span>
       docs:
         DocA:
-          fields:
-            fldA: {refers: <span class="hljs-string">'anamespace.DocB'</span>} <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process refers</span>
-            fldB: {type: <span class="hljs-string">'string(20)'</span>}
-          actions:
-            close: <span class="hljs-function">-&gt;</span> a = <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
-            open: <span class="hljs-function">-&gt;</span> <span class="hljs-keyword">return</span>
-          states:
-            opened:
-              update: <span class="hljs-string">'fldA'</span>
-              transitions:
-                close: <span class="hljs-string">'closed'</span>
-            closed:
-              view: <span class="hljs-string">'fldA, fldB'</span>
-              transitions:
-                open: <span class="hljs-string">'opened'</span></pre></div></div>
+          fields:</pre></div></div>
             
         </li>
         
@@ -255,19 +241,16 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>TODO: Rights</p>
+              <p>fldA: {refers: ‘anamespace.DocB’} # TODO: Process refers</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-string">'anamespace.DocB'</span>: <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process names with namespaces</span>
-          fields:
-            fldA: {refers: <span class="hljs-string">'doc.DocA'</span>}
-            fldB: {type: <span class="hljs-string">'string(20)'</span>}
-            fldC: {refers: [<span class="hljs-string">'doc.DocA'</span>]}
-            fldD: {refers: <span class="hljs-string">'#all'</span>}
-            fldT: {type: <span class="hljs-string">'t2'</span>}
-
-  check <span class="hljs-string">'general'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>            fldG: {type: <span class="hljs-string">'string(20)'</span>}
+          actions:
+            close: <span class="hljs-function">-&gt;</span> a = <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
+            open: <span class="hljs-function">-&gt;</span> <span class="hljs-keyword">return</span>
+          states:
+            opened:</pre></div></div>
             
         </li>
         
@@ -277,6 +260,88 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>update: ‘fldA’</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>              transitions:
+                close: <span class="hljs-string">'closed'</span>
+            closed:</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>view: ‘fldA, fldG’</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>              transitions:
+                open: <span class="hljs-string">'opened'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>TODO: Rights</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-string">'anamespace.DocB'</span>: <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process names with namespaces</span>
+          fields:</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>fldA: {refers: ‘doc.DocA’}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            fldB: {type: <span class="hljs-string">'string(20)'</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>fldC: {refers: [‘doc.DocA’]}
+fldD: {refers: ‘#all’}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            fldT: {type: <span class="hljs-string">'t2'</span>}
+
+  check <span class="hljs-string">'general'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Документы задаются в виде sortedMap в элементе docs.  Namespace’ы документов, указываются в именах элементов.</p>
 
@@ -291,40 +356,11 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
         </li>
         
         
-        <li id="section-7">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <p>console.info ‘1: ‘, docA.states.closed == docA.states.opened.transitions.close.next
-console.info ‘2: ‘, docA.states.opened == docA.states.closed.transitions.open.next</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <p>console.info ‘res: ‘, res.docs[‘doc.DocA’].states.opened
-console.info ‘res: ‘, res.docs[‘doc.DocA’].states.opened.transitions.close
-console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Документы в docs.$$list должны быть в альфавитном порядке</p>
 
@@ -335,11 +371,11 @@ console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>Если документ был указан в корне без namespace’а - то он помещается в стандартный namespace ‘doc’.</p>
 
@@ -351,31 +387,19 @@ console.info ‘res: ‘, prettyPrint res.docs[‘doc.DocA’].states.opened</p>
 
     res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
 
-    expect(result.messages).toEqual []</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>console.info ‘unlinked: ‘, JSON.stringify unlinkConfig(res), null, ‘  ‘</p>
+    expect(result.messages).toEqual []
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
   check <span class="hljs-string">'link'</span>, <span class="hljs-function">-&gt;</span>
 
     res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
 
+    expect(result.messages).toEqual []
+
     unlinkedConfig = unlinkConfig(res)
 
-    linkConfig = linkConfig unlinkedConfig
+    linkedConfig = linkConfig unlinkedConfig
 
-    expect(linkConfig).sameStructure res</pre></div></div>
+    expect(linkedConfig).sameStructure res</pre></div></div>
             
         </li>
         

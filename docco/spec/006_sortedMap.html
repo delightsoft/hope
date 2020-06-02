@@ -168,13 +168,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, sortedMap, utils: {checkItemName, deepClone, combineMsg, err: {isResult, invalidArg, tooManyArgs}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
         </li>
         
         
@@ -183,6 +176,25 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, sortedMap, utils: {checkItemName, deepClone, combineMsg, err: {isResult, invalidArg, tooManyArgs}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <h1 id="todo-добавить-опциональное-индексирование-элементов-для-работы-с-bitarray">TODO: Добавить опциональное индексирование элементов для работы с bitArray</h1>
 <p>Сортедмап (sortedMap) - это соглашение по работе с коллекциями элементов - списками документов, полей, значений enum и
@@ -227,11 +239,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Можно получить sortedMap из массива</p>
 
@@ -256,11 +268,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>И из строки</p>
 
@@ -285,11 +297,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Есть два параметра:</p>
 <ul>
@@ -306,17 +318,17 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Значение может быть только или объект или массив</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> wrongValue <span class="hljs-keyword">in</span> [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">12</span>, <span class="hljs-string">''</span>, {}, []]
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> wrongValue <span class="hljs-keyword">in</span> [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">12</span>, <span class="hljs-string">''</span>]
 
     <span class="hljs-keyword">do</span> (wrongValue) -&gt; check <span class="hljs-string">"invalid argument 'value': <span class="hljs-subst">#{jasmine.pp wrongValue}</span>"</span>, <span class="hljs-function">-&gt;</span>
 
@@ -331,11 +343,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Значение может быть обработано только один раз</p>
 
@@ -352,11 +364,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Если значения заданы в object, то значения могут содержать name</p>
 
@@ -381,11 +393,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Но name в значении должно совпадать с ключом</p>
 
@@ -408,11 +420,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Значение в map может быть или объектом или true</p>
 
@@ -455,11 +467,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Значения в массиве могут быть или объектом или строкой</p>
 
@@ -492,11 +504,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>Объект в массиве обязательно должен иметь свойство name</p>
 
@@ -516,11 +528,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>В массиве не должно быть элементов с одинаковыми имена</p>
 
@@ -549,11 +561,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Имена элементов могут состоять только из латинских букв и цифр, и обяхательно начанаться с маленькой буквы</p>
 
@@ -587,14 +599,26 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <h2 id="модификация-поведения-sortedmap">Модификация поведения sortedMap</h2>
-<p>Третий параметр в sortedMap это options, который может содержать следующие свойства</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Третий параметр в sortedMap это options, который может содержать следующие свойства</p>
 <ul>
 <li>checkName - метод проверки написания имени</li>
 <li>getValue - позволяет обрабатывать произвольное значение в map и присваевает значение в резльутат.</li>
@@ -650,11 +674,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-16">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Метод getValue возвращает true, если это поддерживаемый тип значения.  И это значение перенесено в dest - собираемый
 объект</p>
@@ -697,11 +721,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-17">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Метод copyProps копирует свойства исходного map в результат</p>
 
@@ -714,11 +738,11 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
         </li>
         
         
-        <li id="section-18">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Не копируем свойство в этом методе</p>
 

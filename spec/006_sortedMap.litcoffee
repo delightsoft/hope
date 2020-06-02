@@ -95,7 +95,7 @@ sortedMap из списка или массива делает map (object):
 
 Значение может быть только или объект или массив
 
-      for wrongValue in [undefined, null, false, 12, '', {}, []]
+      for wrongValue in [undefined, null, false, 12, '']
 
         do (wrongValue) -> check "invalid argument 'value': #{jasmine.pp wrongValue}", ->
 

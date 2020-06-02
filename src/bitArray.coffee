@@ -6,6 +6,8 @@ class BitArray
 
     if Array.isArray arg1 # it's private constructor
 
+      throw new Error "Invalid arg2: #{arg2}" if !Array.isArray arg2
+
       @_collection = arg1
 
       @_mask = arg2

@@ -1,73 +1,150 @@
 {lightClone} = require '../utils'
 
+unlinkSortedMap = (collection, process) ->
+
+  res =
+
+    list:
+
+      for item in collection.$$list
+
+        newItem = lightClone item
+
+        process? newItem
+
+        newItem
+
+  if collection.$$tags
+
+    res.tags = unlinkTags collection.$$tags
+
+  res # unlinkSortedMap =
+
+unlinkFlatMap = (collection, prop, process) ->
+
+  unlinkLevel = (level) ->
+
+    for item in level
+
+      clone = (lightClone item)
+
+      clone[prop] = unlinkLevel clone[prop] if clone.hasOwnProperty prop
+
+      process? clone
+
+      clone
+
+  res =
+
+    list:
+
+      unlinkLevel collection.$$list
+
+  if collection.$$tags
+
+    res.tags = unlinkTags collection.$$tags
+
+  res # unlinkFlatMap =
+
 unlinkTags = (collection) ->
 
   res = {}
 
-  res[k] = v._mask for k, v of collection.$$tags
+  res[k] = v._mask for k, v of collection.$$tags when k != 'all'
 
   res # unlinkTags =
 
-unlinkFields = (docOrField) ->
+unlinkField = (field) ->
 
-  for field in docOrField.fields.$$list # unlinkFields =
+  field.udType = field.udType[0] if field.hasOwnProperty('udType')
 
-    res = lightClone field
+  field.refers = (ref.name for ref in field.refers) if field.hasOwnProperty('refers')
 
-    res.udType = field.udType[0] if field.hasOwnProperty('udType')
+  return
 
-    res.refers = (ref.name for ref in field.refers) if field.hasOwnProperty('refers')
+unlinkUDType = (field) ->
 
-    res.fields = unlinkFields(field) if field.hasOwnProperty('fields')
+  field.refers = (ref.name for ref in field.refers) if field.hasOwnProperty('refers')
 
-    res.mask = field.$$mask._mask if field.hasOwnProperty('$$mask')
+  return
+
+unlinkMethods = (methods) ->
+
+  for method in methods.$$list
+
+    res = lightClone method
+
+    res.input = unlinkMap method.input if res.input.$$list.length > 0
+
+    res.output = unlinkMap method.output if res.output.$$list.length > 0
 
     res
 
 unlink = (config) ->
 
-    udtypes: config.udtypes.$$list
+  newConfig = lightClone config
 
-    docs:
+  unless config.udtypes.$$list.length > 0
 
-      (for doc in config.docs.$$list
+    delete newConfig.udtypes
 
-        name: doc.name
+  else
 
-        fields:
+    newConfig.udtypes = unlinkSortedMap newConfig.udtypes, unlinkUDType
 
-          list: unlinkFields doc
+  unless config.docs.$$list.length > 0
 
-          tags: unlinkTags doc.fields
+    delete newConfig.docs
 
-        actions:
+  else
 
-          list: (lightClone action for action in doc.actions.$$list)
+    newConfig.docs = unlinkSortedMap newConfig.docs
 
-          tags: unlinkTags doc.actions
+    for newDoc in newConfig.docs.list
 
-        states: (
+      newDoc.fields = unlinkFlatMap newDoc.fields, 'fields', unlinkField
 
-          for state in doc.states.$$list
+      newDoc.actions = unlinkSortedMap newDoc.actions
 
-            name: state.name
+      newDoc.states = unlinkSortedMap newDoc.states
 
-            view: state.view._mask
+      for newState in newDoc.states.list
 
-            update: state.update._mask
+        newState.view = newState.view._mask
 
-            transitions: (
+        newState.update = newState.update._mask
 
-              for transition in state.transitions.$$list
+        newState.transitions = unlinkSortedMap newState.transitions
 
-                res = lightClone transition
+        for newTran in newState.transitions.list
 
-                res.next = res.next.name
+          newTran.next = newTran.next.name
 
-                res)
-        )
+  unless newConfig.api.$$list.length > 0
 
-      )
+    delete newConfig.api
+
+  else
+
+    newConfig.api = unlinkSortedMap newConfig.api
+
+    for api in newConfig.api.$$list
+
+      unless api.methods.$$list.length > 0
+
+        delete res.methods
+
+      else
+
+        api.methods = unlinkSortedMap api.methods
+
+        for method in api.methods
+
+          method.input = unlinkFlatMap method.input, 'fields', unlinkField if method.input.$$list.length > 0
+
+          method.output = unlinkFlatMap method.output, 'fields', unlinkField if method.output.$$list.length > 0
+
+  newConfig
 
 # ----------------------------
 

@@ -1,8 +1,10 @@
-{checkDocumentName} = require '../utils'
+{checkAPIName} = require '../utils'
 
 Result = require '../result'
 
 sortedMap = require '../sortedMap'
+
+bitArray = require '../bitArray'
 
 processFields = require './_processFields'
 
@@ -14,11 +16,13 @@ processAPI = (result, config) ->
 
   unless config.$$src.hasOwnProperty('api')
 
-    return {}
+    config.api = $$list: []
+
+    return
 
   result.context (Result.prop 'api'), -> # processDocs =
 
-    res = sortedMap result, config.$$src.api
+    res = sortedMap result, config.$$src.api, checkName: checkAPIName
 
     unless result.isError
 
@@ -28,9 +32,7 @@ processAPI = (result, config) ->
 
         for api in res.$$list
 
-          continue unless api.$$src
-
-          unless api.$$src.hasOwnProperty('methods')
+          unless api.$$src?.hasOwnProperty('methods')
 
             result.warn 'missingProp', value: 'methods'
 
@@ -38,38 +40,38 @@ processAPI = (result, config) ->
 
             result.context ((path) -> (Result.prop 'methods') path), ->
 
-            api.methods = sortedMap result, api.$$src.methods
+              api.methods = sortedMap result, api.$$src.methods
 
-            unless result.isError
+              unless result.isError
 
-              method = undefined
+                method = undefined
 
-              result.context ((path) -> (Result.item method.name) path), ->
+                result.context ((path) -> (Result.item method.name) path), ->
 
-                for method in api.methods.$$list
+                  for method in api.methods.$$list
 
-                  continue unless method.$$src
+                    for prop in ['input', 'output']
 
-                  for prop in ['input', 'output']
+                      unless method.$$src?.hasOwnProperty(prop)
 
-                    unless method.hasOwnProperty(prop)
+                        method[prop] = {}
 
-                      method[prop] = {}
+                      else
 
-                    else
+                        method[prop] = processFields result, method, config, prop
 
-                      method[prop] = processFields result, method, config, prop
+                  return # result.context
 
-                return # result.context
+                copyOptions result, api.methods
 
-              copyOptions result, api.methods
+                # rule: api.methods.$$list is sorted in alphabetical order of their names
+                api.methods.$$list.sort (left, right) -> left.name.localeCompare right.name
 
-              # rule: api.methods.$$list is sorted in alphabetical order of their names
-              api.methods.$$list.sort (left, right) -> left.name.localeCompare right.name
+                compileTags result, api.methods
 
-              compileTags result, api.methods
+                sortedMap.finish result, api.methods, skipProps: ['tags']
 
-              sortedMap.finish result, api.methods, skipProps: ['tags']
+              return # result.context
 
         return # result.context
 
@@ -78,9 +80,7 @@ processAPI = (result, config) ->
       # rule: api.$$list is sorted in alphabetical order of their names
       res.$$list.sort (left, right) -> left.name.localeCompare right.name
 
-      compileTags result, res
-
-      sortedMap.finish result, res, skipProps: ['tags']
+      sortedMap.finish result, res
 
       unless result.isError
 

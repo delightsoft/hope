@@ -190,7 +190,7 @@
 
 reservedTypes = compileType._reservedTypes
 
-focusOnCheck = <span class="hljs-string">""</span>
+focusOnCheck = <span class="hljs-string">"ref: invalid prop 'refers' value: ''"</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'040_types:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
@@ -227,6 +227,7 @@ fit, для задачи указанной в focusOnCheck</p>
     valNum = <span class="hljs-number">12</span>
     valEmptyArray = []
     valEmptyMap = {}
+    valEmptyStr = <span class="hljs-string">''</span>
     valArrayOfDocTypes = [<span class="hljs-string">'Doc1'</span>, <span class="hljs-string">'Doc2'</span>]
     valArrayOfEnumObjects = [{name: <span class="hljs-string">'Field1'</span>}, {name: <span class="hljs-string">'Field2'</span>}, {name: <span class="hljs-string">'Field3'</span>}]
     valArrayOfFieldsDesc = [{name: <span class="hljs-string">'field1'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">10</span>}, {name: <span class="hljs-string">'field2'</span>, type: <span class="hljs-string">'int'</span>}, {name: <span class="hljs-string">'field3'</span>, type: <span class="hljs-string">'bool'</span>}]
@@ -248,7 +249,7 @@ fit, для задачи указанной в focusOnCheck</p>
             
             <div class="content"><div class='highlight'><pre>  propDescs = [
     {name: <span class="hljs-string">'length'</span>, correctVal: valNum}
-    {name: <span class="hljs-string">'enum'</span>, correctVal: valArrayOfEnumObjects, skipVal: [valStr, valArrayOfFieldsDesc, valArrayOfDocTypes], required: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'enum'</span>, correctVal: valArrayOfEnumObjects, skipVal: [valStr, valEmptyArray, valEmptyMap, valArrayOfFieldsDesc, valArrayOfDocTypes], required: <span class="hljs-literal">true</span>}
 
     {name: <span class="hljs-string">'precision'</span>, correctVal: valNum, required: <span class="hljs-literal">true</span>}</pre></div></div>
             
@@ -266,10 +267,10 @@ fit, для задачи указанной в focusOnCheck</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    {name: <span class="hljs-string">'scale'</span>, correctVal: valNum, optional: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">false</span>}
-    {name: <span class="hljs-string">'fields'</span>, correctVal: valArrayOfFieldsDesc, skipVal: [valStr, valArrayOfDocTypes, valArrayOfEnumObjects], required: <span class="hljs-literal">true</span>}
+    {name: <span class="hljs-string">'fields'</span>, correctVal: valArrayOfFieldsDesc, skipVal: [valStr, valEmptyArray, valEmptyMap, valArrayOfDocTypes, valArrayOfEnumObjects], required: <span class="hljs-literal">true</span>}
     {name: <span class="hljs-string">'null'</span>, correctVal: valBool, required: <span class="hljs-literal">false</span>}
 
-    {name: <span class="hljs-string">'refers'</span>, correctVal: valStr, required: <span class="hljs-literal">true</span>, skipVal: [valEmptyArray, valArrayOfDocTypes]}
+    {name: <span class="hljs-string">'refers'</span>, correctVal: valStr, required: <span class="hljs-literal">true</span>, skipVal: [valEmptyArray, valEmptyStr, valArrayOfDocTypes]}
   ]</pre></div></div>
             
         </li>

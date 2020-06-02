@@ -1,20 +1,50 @@
 BitArray = require '../bitArray'
 
-linkSortedMap = (collection, noIndex) ->
+freeze = (obj) ->
+
+  if '_mask' in obj
+
+    obj.$$list # force mask to compute list
+
+  Object.freeze obj
+
+EMPTY_LIST = freeze []
+
+EMPTY_MAP_WITH_TAGS = freeze ({$$list: EMPTY_LIST, $$tags: EMPTY_TAGS})
+
+EMPTY_MAP = freeze ({$$list: EMPTY_LIST})
+
+EMPTY_MASK = freeze new BitArray EMPTY_MAP
+
+EMPTY_TAGS = freeze {all: EMPTY_MASK}
+
+EMPTY_FLAT_MAP = freeze ({$$list: EMPTY_LIST, $$flat: freeze {$$list: EMPTY_LIST}, $$tags: EMPTY_TAGS})
+
+EMPTY_MAP_WITH_TAGS = Object.freeze({$$list: [], $$tags: {}})
+
+linkSortedMap = (collection, noIndex, noFreeze) ->
+
+  if collection == undefined
+
+    return if noIndex then EMPTY_MAP else EMPTY_MAP_WITH_TAGS
 
   res = {}
 
-  for v, i in collection
+  for v, i in collection.list
 
     res[v.name] = v
 
     v.$$index = i unless noIndex
 
-  res.$$list = collection
+  res.$$list = collection.list
 
-  res # linkSortedMap =
+  res.$$tags = linkTags res, collection.tags if collection.tags
 
-linkFields = (collection) ->
+  if noFreeze then res else freeze res # linkSortedMap =
+
+linkFlatMap = (collection, prop, noIndex, noMask) ->
+
+  return EMPTY_FLAT_MAP if collection == undefined
 
   map = {}
 
@@ -24,93 +54,143 @@ linkFields = (collection) ->
 
     for v in level
 
-      v.$$index = list.length
-
-      if level.hasOwnProperty('mask')
-
-        v.$$mask = new BitArray collection, v.mask
-
-        delete v.mask
+      v.$$index = list.length unless noIndex
 
       list.push v
 
-      v.fields = _linkLevel v.fields, "#{prefix}#{v.name}." if v.hasOwnProperty 'fields'
+      v[prop] = _linkLevel v[prop], "#{prefix}#{v.name}." if v.hasOwnProperty prop
 
       map["#{prefix}#{v.name}"] = v
 
-    linkSortedMap level, true # _linkLevel
+    linkSortedMap {list: level}, true, prefix == '' # _linkLevel
 
-  res =  _linkLevel collection
+  res = _linkLevel collection.list
 
-  (res.$$flat = map).$$list = list
+  (res.$$flat = map).$$list = freeze list
 
-  res # linkFlatMap =
+  freeze map
 
-linkTags = (collection, tags) ->
+  linkTags res, collection.tags if collection.tags
 
-  tags[k] = new BitArray collection, v for k, v of tags
+  unless noMask
 
-  tags # linkTags =
+    masks = []
+
+    buildMask = (list) ->
+
+      for item in list
+
+        v.set item.$$index for v in masks
+
+        if item.hasOwnProperty(prop)
+
+          masks.push item.$$mask = mask = new BitArray res
+
+          buildMask item[prop].$$list
+
+          masks.pop()
+
+      return # buildMask =
+
+    buildMask res.$$list
+
+  freeze res # linkFlatMode =
+
+linkTags = (res, collection) ->
+
+  tags =
+
+    all: freeze (new BitArray res).invert()
+
+  tags[k] = freeze (new BitArray res.$$flat?.$$list || res.$$list, v) for k, v of collection.tags
+
+  res.$$tags = freeze tags # linkTags =
+
+linkUDTypes = (config, list) ->
+
+  for type in list
+
+    type.refers = (config.docs[refName] for refName in type.refers) if type.hasOwnProperty('refers')
+
+  return # linkUDTypes =
+
+linkFields = (config, list) ->
+
+  for field in list
+
+    if field.hasOwnProperty('udType')
+
+      udt = config.udtypes[field.udType]
+
+      udtList = [udt.name]
+
+      while udt.hasOwnProperty('udType')
+
+        udt = config.udtypes[udt.udType]
+
+        udtList.push udt.name
+
+      field.udType = freeze udtList
+
+    field.refers = (config.docs[refName] for refName in field.refers) if field.hasOwnProperty('refers')
+
+    freeze field
+
+  return # linkFields =
 
 link = (config) ->
 
   config.udtypes = linkSortedMap config.udtypes, true
 
+  linkUDTypes config, config.udtypes.$$list
+
   config.docs = linkSortedMap config.docs, true
 
   for doc in config.docs.$$list
 
-    doc.fields = do ->
+    doc.fields = linkFlatMap doc.fields, 'fields'
 
-      res = linkFields doc.fields.list
+    linkFields config, doc.fields.$$flat.$$list
 
-      res.$$tags = linkTags res.$$flat.$$list, doc.fields.tags
-
-      for field in res.$$flat.$$list
-
-        if field.hasOwnProperty('udType')
-
-          udt = config.udtypes[field.udType]
-
-          udtList = [udt.name]
-
-          while udt.hasOwnProperty('udType')
-
-            udt = config.udtypes[udt.udType]
-
-            udtList.push udt.name
-
-          field.udType = udtList
-
-        if field.hasOwnProperty('mask')
-
-          field.$$mask = new BitArray res.$$flat.$$list, field.mask
-
-          delete field.mask
-
-        field.refers = (config.docs[refName] for refName in field.refers) if field.hasOwnProperty('refers')
-
-      res
-
-    doc.actions = do ->
-
-      res = linkSortedMap doc.actions.list
-
-      res.$$tags = linkTags res.$$list, doc.actions.tags
-
-      res
+    doc.actions = linkSortedMap doc.actions
 
     doc.states = linkSortedMap doc.states, true
 
     for state in doc.states.$$list
 
-      state.view = new BitArray doc.fields.$$flat.$$list, state.view
+      state.view = freeze new BitArray doc.fields.$$flat.$$list, state.view
 
-      state.update = new BitArray doc.fields.$$list, state.update
+      state.update = freeze new BitArray doc.fields.$$flat.$$list, state.update
 
       state.transitions = linkSortedMap state.transitions, true
 
-      transition.next = doc.states[transition.next] for transition in state.transitions.$$list
+      for transition in state.transitions.$$list
+
+        transition.next = doc.states[transition.next]
+
+        freeze transition
+
+      freeze state
+
+  config.api = linkSortedMap config.api, true
+
+  for api in config.api.$$list
+
+    api.methods = linkSortedMap api.methods
+
+    for method in api.methods.$$list
+
+      method.input = linkFlatMap method.input, 'fields'
+
+      linkFields config, method.input.$$flat.$$list
+
+      method.output = linkFlatMap method.output, 'fields'
+
+      linkFields config, method.output.$$flat.$$list
+
+      freeze method
+
+    freeze api
 
   config # link =
 

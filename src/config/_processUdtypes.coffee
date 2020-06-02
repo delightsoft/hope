@@ -9,7 +9,9 @@ processUdtypes = (result, config) ->
 
   unless config.$$src.hasOwnProperty('udtypes')
 
-    return {}
+    config.udtypes = {$$list: []}
+
+    return
 
   result.context (Result.prop 'udtypes'), -> # processUdtypes =
 

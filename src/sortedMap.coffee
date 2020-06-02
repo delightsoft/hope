@@ -20,29 +20,29 @@ finish = (result, resValue, opts) ->
     invalidArgValue 'opts.validate', opts.validate unless typeof (optsValidate = opts.validate) == 'boolean'
 
   optsValidate = false if result.isError # just remove $$src in case of prev error
-  
+
   if optsValidate
-    
-    item = undefined 
-    
+
+    item = undefined
+
     result.context ((path) -> (Result.item item.name) path), ->
-          
+
       for item in resValue.$$list
 
         if optsValidate && item.hasOwnProperty('$$src')
-    
+
           for k of item.$$src when not (item.hasOwnProperty(k) || k.startsWith('$') || optsSkipProps?.indexOf(k) >= 0)
 
             result.error 'dsc.unexpectedProp', value: k
-        
+
         delete item.$$src
 
       return # result.context
 
   else
-    
+
     delete item.$$src for item in resValue.$$list
-    
+
   return # finish =
 
 sortedMap = (result, value, opts) ->
@@ -203,19 +203,11 @@ sortedMap = (result, value, opts) ->
 
     result.error 'dsc.invalidValue', value: value
 
-  if not result.isError
+  unless result.isError
 
-    if list.length > 0
+    res.$$list = list
 
-      res.$$list = list
-
-      res # sortedMap =
-
-    else
-
-      result.error 'dsc.invalidValue', value: value
-
-      return # sortedMap =
+    res # sortedMap =
 
 # ----------------------------
 

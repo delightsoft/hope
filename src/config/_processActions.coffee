@@ -2,6 +2,8 @@ Result = require '../result'
 
 sortedMap = require '../sortedMap'
 
+bitArray = require '../bitArray'
+
 {compile: compileTags} = require '../tags'
 
 copyOptions = require './_copyOptions'
@@ -14,7 +16,7 @@ processActions = (result, doc) ->
 
       $$list: []
 
-      $$tags: {}}
+      $$tags: {all: new bitArray {$$list: []}}}
 
   result.context (Result.prop 'actions'), -> # processActions =
 
