@@ -1,5 +1,7 @@
 BitArray = require '../bitArray'
 
+BitArray = BitArray.default || BitArray
+
 freeze = (obj) ->
 
   if '_mask' in obj
@@ -200,4 +202,8 @@ link = (config) ->
 
 # ----------------------------
 
-module.exports = link
+try
+  module.exports = link
+catch err # если exports read-only
+  module.exports.default = link
+
