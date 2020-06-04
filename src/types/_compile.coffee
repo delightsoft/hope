@@ -4,17 +4,19 @@ Result = require '../result'
 
 sortedMap = require '../sortedMap'
 
+copyOptions = require '../config/_copyOptions'
+
 #typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null']
 typeProps = ['length', 'enum', 'fields', 'refers', 'valueClass', 'null']
 
 builtInTypes = [
   'string', 'text', 'boolean'
-  # 'integer', 'long', 'float', 'double', 'decimal'
+# 'integer', 'long', 'float', 'double', 'decimal'
   'integer', 'double'
   'decimal'
   'time', 'date', 'dateonly', 'now'
-  'json', 'blob', 'uuid',  'enum'
-  'structure',  'subtable'
+  'json', 'blob', 'uuid', 'enum'
+  'structure', 'subtable'
   'refers'
   'dsvalue'
 ]
@@ -22,7 +24,6 @@ builtInTypes = [
 reservedTypes = ['long', 'float']
 
 compile = (result, fieldDesc, res, opts) ->
-
   invalidArg 'result', result unless isResult result
   invalidArg 'fieldDesc', fieldDesc unless typeof fieldDesc == 'object' && fieldDesc != null
   invalidArg 'res', fieldDesc unless res == undefined || (typeof res == 'object' && res != null && !Array.isArray(res))
@@ -36,27 +37,31 @@ compile = (result, fieldDesc, res, opts) ->
 
   throw new Error "fieldDesc was already process by tags/compile()" unless not fieldDesc.hasOwnProperty '$$tags'
 
-# Определяем тип.  То что в скобках выделяем в options.
+  # Определяем тип.  То что в скобках выделяем в options.
 
   if fieldDesc.hasOwnProperty('type')
 
     if (optionsIndex = (type = sourceType = fieldDesc.type.trim()).indexOf '(') != -1
 
       unless (optionsEnd = (options = type.indexOf ')')) > optionsIndex # missing ) or it's before (
-        result.error 'dsc.invalidTypeValue', value: type; return
+        result.error 'dsc.invalidTypeValue', value: type;
+        return
 
       unless optionsEnd == type.length - 1 # something after )
-        result.error 'dsc.invalidTypeValue', value: type; return
+        result.error 'dsc.invalidTypeValue', value: type;
+        return
 
       if (optionsLen = optionsEnd - optionsIndex - 1) == 0
-        result.error 'dsc.invalidTypeValue', value: type; return
+        result.error 'dsc.invalidTypeValue', value: type;
+        return
 
       options = type.substr optionsIndex + 1, optionsLen
       type = type.substr(0, optionsIndex).trim()
 
     unless checkItemName type
 
-      result.error 'dsc.invalidTypeValue', value: type; return
+      result.error 'dsc.invalidTypeValue', value: type;
+      return
 
 # Если тип не указан, пробуем его определить по косвенному признаку
 
@@ -73,10 +78,10 @@ compile = (result, fieldDesc, res, opts) ->
     type = 'refers'
 
   else
+    result.error 'dsc.missingProp', value: 'type';
+    return
 
-    result.error 'dsc.missingProp', value: 'type'; return
-
-# Заменяем короткие имена типов на полные
+  # Заменяем короткие имена типов на полные
 
   switch type
 
@@ -92,7 +97,7 @@ compile = (result, fieldDesc, res, opts) ->
 
     when 'value' then type = 'dsvalue'
 
-# Проверяем, что тип входит в список типов
+  # Проверяем, что тип входит в список типов
 
   unless builtInTypes.indexOf(type) >= 0
 
@@ -109,7 +114,6 @@ compile = (result, fieldDesc, res, opts) ->
       prop = undefined
 
       result.context ((path) -> (Result.prop prop) path), ->
-
         for prop in typeProps when fieldDesc.hasOwnProperty(prop) && prop != 'null' # udType can have null in a field definition
 
           result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
@@ -130,7 +134,7 @@ compile = (result, fieldDesc, res, opts) ->
 
     return
 
-# Проверяем, наличие всех свойств относящихся к типу.  Если свойство не должно быть у данного типа, добавляем ошибку
+  # Проверяем, наличие всех свойств относящихся к типу.  Если свойство не должно быть у данного типа, добавляем ошибку
 
   prop = lengthProp = enumProp = precisionProp = scaleProp = fieldsProp = nullProp = refersProp = valueClass = undefined
 
@@ -139,7 +143,6 @@ compile = (result, fieldDesc, res, opts) ->
     result.error 'dsc.reservedAttr', value: 'udType'
 
   result.context ((path) -> (Result.prop prop) path), ->
-
     for prop in typeProps when fieldDesc.hasOwnProperty(prop)
 
       ok = false
@@ -163,7 +166,6 @@ compile = (result, fieldDesc, res, opts) ->
             if (ok = not (type == 'now' || type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
 
           else
-
             ok = true
 
             result.error 'dsc.notApplicableInUdtype'
@@ -174,14 +176,13 @@ compile = (result, fieldDesc, res, opts) ->
 
         result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
 
-# работаем с length для string
+  # работаем с length для string
 
   return if result.isError
 
   if options
 
     result.context ((path) -> (Result.prop "(#{options})") path), ->
-
       switch type
 
         when 'string'
@@ -190,10 +191,10 @@ compile = (result, fieldDesc, res, opts) ->
 
           if lengthProp
 
-            result.error 'dsc.ambiguousProp', name: 'length', value1: (lengthPropFromOptions || options), value2: lengthProp
+            result.error 'dsc.ambiguousProp',
+              name: 'length', value1: (lengthPropFromOptions || options), value2: lengthProp
 
           else
-
             lengthProp = lengthPropFromOptions
 
         when 'refers'
@@ -204,17 +205,17 @@ compile = (result, fieldDesc, res, opts) ->
 
           else if refersProp
 
-            result.error 'dsc.ambiguousProp', name: 'refers', value1: (refersPropFromOptions || options), value2: refersProp
+            result.error 'dsc.ambiguousProp',
+              name: 'refers', value1: (refersPropFromOptions || options), value2: refersProp
 
           else
-
             refersProp = refersPropFromOptions
 
         else
 
           result.error 'dsc.unknownType', value: sourceType
 
-# собираем результирующую структуру
+  # собираем результирующую структуру
 
   return if result.isError
 
@@ -232,7 +233,7 @@ compile = (result, fieldDesc, res, opts) ->
 
     when 'decimal'
 
-      setRequiredProp result, res, 'precision', precisionPropv
+      setRequiredProp result, res, 'precision', precisionProp
 
       res.scale = scaleProp if typeof scaleProp == 'number'
 
@@ -263,31 +264,30 @@ compile = (result, fieldDesc, res, opts) ->
 # пропускаем целое позитивное число
 
 takePositiveInt = (result, value) ->
-
   unless typeof value == 'number' && !isNaN(value) && Number.isInteger(value) && value > 0
 
-    result.error 'dsc.invalidValue', value: value; return
+    result.error 'dsc.invalidValue', value: value;
+    return
 
   value # parseLength =
 
 takeBoolean = (result, value) ->
-
   unless typeof value == 'boolean'
 
-    result.error 'dsc.invalidValue', value: value; return
+    result.error 'dsc.invalidValue', value: value;
+    return
 
   value # takeBoolean =
 
 takeString = (result, value) ->
-
   if typeof value == 'string'
 
     return value
 
-  result.error 'dsc.invalidValue', value: value; return # takeString =
+  result.error 'dsc.invalidValue', value: value;
+  return # takeString =
 
 takeStringOrArrayOfStrings = (result, value) ->
-
   if typeof value == 'string'
 
     return value
@@ -298,26 +298,34 @@ takeStringOrArrayOfStrings = (result, value) ->
 
     return value unless value.some (s) -> typeof s != 'string'
 
-  result.error 'dsc.invalidValue', value: value; return # takeStringOrArrayOfStrings =
+  result.error 'dsc.invalidValue', value: value;
+  return # takeStringOrArrayOfStrings =
 
 # enum может быть или массив строк или строка, со значениями разделеннымм запятыми.
 # массив должен быть не пустой. значения в нем уникальными. пустых строк быть не должно.
 
 takeEnum = (result, value) ->
 
-  sortedMap result, value, string: true, boolean: true
+  res = sortedMap result, value, string: true, boolean: true
+
+  unless result.isError
+
+    copyOptions result, res
+
+  res
 
 # присваиваем значение в res, если оно есть.  а если значения нет - добавляем ошибку
 
 setRequiredProp = (result, res, propName, value) ->
+  if typeof value == 'undefined'
 
-    if typeof value == 'undefined'
+    result.error 'dsc.missingProp', value: propName;
 
-      result.error 'dsc.missingProp', value: propName; return
+    return
 
-    res[propName] = value
+  res[propName] = value
 
-    return # setRequiredProp =
+  return # setRequiredProp =
 
 # ----------------------------
 

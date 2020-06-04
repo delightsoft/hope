@@ -32,6 +32,10 @@ config
                   fields:
                     sa: type: 'date'
                     sb: type: 't1'
+                    sc:
+                      enum:
+                        x: options: {a:12}
+                        y: {}
               actions:
                 close: -> a = 12; return
                 open: -> return

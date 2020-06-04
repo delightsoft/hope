@@ -2,8 +2,8 @@
 # - namespace'ы начинаются с маленьких букв и содержит буквы и цифры
 # - имя документа начинается с большой буквы и содержит буквы и цифры
 
-_checkAPIName = (value) -> typeof value == 'string' && /^[A-Z][a-zA-Z0-9_]*$/.test value
+checkUDTypeName = (value) -> typeof value == 'string' && /^([a-z][a-zA-Z0-9]*\.)*[a-z][a-zA-Z0-9]*$/.test value
 
 # ----------------------------
 
-module.exports = _checkAPIName
+module.exports = checkUDTypeName

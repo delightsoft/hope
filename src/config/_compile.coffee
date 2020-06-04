@@ -13,7 +13,7 @@ processAPI = require './_processAPI'
 compile = (result, sourceConfig) ->
 
   invalidArg 'result', result unless isResult result
-  invalidArg 'sourceConfig', fieldDesc unless typeof sourceConfig == 'object' && sourceConfig != null
+  invalidArg 'sourceConfig', sourceConfig unless typeof sourceConfig == 'object' && sourceConfig != null
   tooManyArgs() unless arguments.length <= 2
 
   config = $$src: sourceConfig

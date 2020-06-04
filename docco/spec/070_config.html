@@ -237,6 +237,10 @@ describe <span class="hljs-string">"070_config"</span>, <span class="hljs-functi
               fields:
                 sa: type: <span class="hljs-string">'date'</span>
                 sb: type: <span class="hljs-string">'t1'</span>
+                sc:
+                  enum:
+                    x: options: {a:<span class="hljs-number">12</span>}
+                    y: {}
           actions:
             close: <span class="hljs-function">-&gt;</span> a = <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
             open: <span class="hljs-function">-&gt;</span> <span class="hljs-keyword">return</span>

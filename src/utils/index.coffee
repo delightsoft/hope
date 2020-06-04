@@ -12,6 +12,8 @@ module.exports =
 
   checkDocumentName: require './_checkDocumentName'
 
+  checkUDTypeName: require './_checkUDTypeName'
+
   checkAPIName: require './_checkAPIName'
 
   prettyPrint: require './_prettyPrint'

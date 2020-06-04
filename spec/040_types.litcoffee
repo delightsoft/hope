@@ -5,7 +5,7 @@
 
     reservedTypes = compileType._reservedTypes
 
-    focusOnCheck = "ref: invalid prop 'refers' value: ''"
+    focusOnCheck = ""
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '040_types:', ->

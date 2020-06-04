@@ -1,6 +1,6 @@
-{checkDocumentName} = require '../utils'
-
 Result = require '../result'
+
+{checkDocumentName} = require '../utils'
 
 sortedMap = require '../sortedMap'
 

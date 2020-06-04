@@ -1,6 +1,10 @@
 Result = require '../result'
 
+{checkUDTypeName} = require '../utils'
+
 sortedMap = require '../sortedMap'
+
+copyOptions = require './_copyOptions'
 
 {compile: compileType,
 compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}} = require '../types'
@@ -15,7 +19,7 @@ processUdtypes = (result, config) ->
 
   result.context (Result.prop 'udtypes'), -> # processUdtypes =
 
-    res = sortedMap result, config.$$src.udtypes
+    res = sortedMap result, config.$$src.udtypes, checkName: checkUDTypeName
 
     return if result.isError
 
@@ -77,6 +81,8 @@ processUdtypes = (result, config) ->
     processUdtype udt for udt in res.$$list
 
     unless result.isError
+
+      copyOptions result, res
 
       sortedMap.finish result, res
 
