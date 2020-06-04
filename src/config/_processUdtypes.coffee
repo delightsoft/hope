@@ -4,7 +4,7 @@ Result = require '../result'
 
 sortedMap = require '../sortedMap'
 
-copyOptions = require './_copyOptions'
+copyExtra = require './_copyExtra'
 
 {compile: compileType,
 compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}} = require '../types'
@@ -82,7 +82,7 @@ processUdtypes = (result, config) ->
 
     unless result.isError
 
-      copyOptions result, res
+      copyExtra result, res
 
       sortedMap.finish result, res
 

@@ -1,13 +1,12 @@
-{checkItemName, err: {tooManyArgs, invalidArg, invalidArgValue, isResult}} = require '../utils'
+{checkUDTypeName, err: {tooManyArgs, invalidArg, invalidArgValue, isResult}} = require '../utils'
 
 Result = require '../result'
 
 sortedMap = require '../sortedMap'
 
-copyOptions = require '../config/_copyOptions'
+copyExtra = require '../config/_copyExtra'
 
-#typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null']
-typeProps = ['length', 'enum', 'fields', 'refers', 'valueClass', 'null']
+typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null']
 
 builtInTypes = [
   'string', 'text', 'boolean'
@@ -58,7 +57,7 @@ compile = (result, fieldDesc, res, opts) ->
       options = type.substr optionsIndex + 1, optionsLen
       type = type.substr(0, optionsIndex).trim()
 
-    unless checkItemName type
+    unless checkUDTypeName type
 
       result.error 'dsc.invalidTypeValue', value: type;
       return
@@ -178,7 +177,13 @@ compile = (result, fieldDesc, res, opts) ->
 
   # работаем с length для string
 
-  return if result.isError
+  if result.isError
+
+    delete fieldDesc.type
+
+    delete fieldDesc[prop] for prop in typeProps
+
+    return
 
   if options
 
@@ -217,7 +222,13 @@ compile = (result, fieldDesc, res, opts) ->
 
   # собираем результирующую структуру
 
-  return if result.isError
+  if result.isError
+
+    delete fieldDesc.type
+
+    delete fieldDesc[prop] for prop in typeProps
+
+    return
 
   res.type = type
 
@@ -308,9 +319,9 @@ takeEnum = (result, value) ->
 
   res = sortedMap result, value, string: true, boolean: true
 
-  unless result.isError
+  copyExtra result, res unless result.isError
 
-    copyOptions result, res
+  sortedMap.finish result, res unless result.isError
 
   res
 

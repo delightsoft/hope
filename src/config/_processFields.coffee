@@ -2,7 +2,7 @@ Result = require '../result'
 
 flatMap = require '../flatMap'
 
-copyOptions = require './_copyOptions'
+copyExtra = require './_copyExtra'
 
 {compile: compileType, compile: {_typeProps: typeProps}} = require '../types'
 
@@ -24,7 +24,7 @@ processFields = (result, doc, config, fieldsProp = 'fields') ->
 
       _processLevel = (level) ->
 
-        copyOptions result, level
+        copyExtra result, level
 
         field = undefined
 

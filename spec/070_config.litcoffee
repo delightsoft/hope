@@ -26,7 +26,7 @@ config
           docs:
             DocA:
               fields:
-                fldA: refers: 'anamespace.DocB', options: {f: 123} # TODO: Process refers
+                fldA: refers: 'anamespace.DocB', extra: {f: 123} # TODO: Process refers
                 fldG: type: 'string(20)', tags: 'a'
                 fldQ:
                   fields:
@@ -34,7 +34,7 @@ config
                     sb: type: 't1'
                     sc:
                       enum:
-                        x: options: {a:12}
+                        x: extra: {a:12}
                         y: {}
               actions:
                 close: -> a = 12; return
@@ -58,11 +58,11 @@ config
                 fldT: type: 't2'
           api:
             Api1:
-              options: {t: '321'}
+              extra: t: '321'
               methods:
                 methodA:
                   tags: 'a, b'
-                  options: a: 12, b: '123'
+                  extra: a: 12, b: '123'
                   arguments:
                     a1: type: 'double', tags: 'x, y'
                     a2: type: 'dateonly', tags: 'y'

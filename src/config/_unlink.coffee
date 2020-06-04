@@ -60,11 +60,15 @@ unlinkField = (field) ->
 
   field.refers = (ref.name for ref in field.refers) if field.hasOwnProperty('refers')
 
+  field.enum = unlinkSortedMap field.enum if field.hasOwnProperty('enum')
+
   return
 
-unlinkUDType = (field) ->
+unlinkUDType = (type) ->
 
-  field.refers = (ref.name for ref in field.refers) if field.hasOwnProperty('refers')
+  type.refers = (ref.name for ref in type.refers) if type.hasOwnProperty('refers')
+
+  type.enum = unlinkSortedMap type.enum if type.hasOwnProperty('enum')
 
   return
 

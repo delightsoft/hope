@@ -196,8 +196,7 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h1 id="todo-добавить-опциональное-индексирование-элементов-для-работы-с-bitarray">TODO: Добавить опциональное индексирование элементов для работы с bitArray</h1>
-<p>Сортедмап (sortedMap) - это соглашение по работе с коллекциями элементов - списками документов, полей, значений enum и
+              <p>Сортедмап (sortedMap) - это соглашение по работе с коллекциями элементов - списками документов, полей, значений enum и
 т.п. Полезно как иметь список значений, так и map для быстрого нахождения элемента по имени.</p>
 <p>sortedMap из списка или массива делает map (object):</p>
 <ul>
@@ -208,7 +207,6 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
 <li>и свойство <em>index</em>, содержащие индекс элемента в списке</li>
 <li>имена элементов должны быть из латинский символов и цифры, начинаться с цифры или маленькой буквы</li>
 </ul>
-<h1 id="todo-сделать-objectfreeze-после-завершения-обработки">TODO: Сделать Object.freeze после завершения обработки</h1>
 <p>Важно: sortedMap должен быть immutable, чтобы легче было отлаживать - не менять входящие данные</p>
 <p>Можно получить sortedMap из объекта</p>
 
@@ -282,7 +280,7 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
 
     res = sortedMap (result = <span class="hljs-keyword">new</span> Result), <span class="hljs-string">'doc1, doc2, doc3'</span>, string: <span class="hljs-literal">true</span>
 
-    expect(result.isError).toBe <span class="hljs-literal">false</span>
+    expect(result.messages).sameStructure []
 
     expect(res).sameStructure
 

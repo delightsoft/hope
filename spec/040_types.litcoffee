@@ -331,9 +331,9 @@ enum может быть задан несколькими способами:
         expect(res).sameStructure
           type: 'enum'
           enum:
-            v1: v1 = {name: 'v1', $$src: {name: 'v1'}}
-            v2: v2 = {name: 'v2', $$src: {name: 'v2'}}
-            v3: v3 = {name: 'v3', $$src: {name: 'v3'}}
+            v1: v1 = {name: 'v1'}
+            v2: v2 = {name: 'v2'}
+            v3: v3 = {name: 'v3'}
             $$list: [v1, v2, v3]
 
       check 'enum: map of objects or true-values', ->
@@ -353,7 +353,7 @@ enum может быть задан несколькими способами:
           enum:
             v1: v1 = {name: 'v1'}
             v2: v2 = {name: 'v2'}
-            v3: v3 = {name: 'v3', $$src: {}}
+            v3: v3 = {name: 'v3'}
             $$list: [v1, v2, v3]
 
 fields

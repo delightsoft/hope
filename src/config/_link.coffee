@@ -112,6 +112,8 @@ linkUDTypes = (config, list) ->
 
     type.refers = (config.docs[refName] for refName in type.refers) if type.hasOwnProperty('refers')
 
+    type.enum = linkSortedMap type.enum, true if type.hasOwnProperty('enum')
+
   return # linkUDTypes =
 
 linkFields = (config, list) ->
@@ -133,6 +135,8 @@ linkFields = (config, list) ->
       field.udType = freeze udtList
 
     field.refers = (config.docs[refName] for refName in field.refers) if field.hasOwnProperty('refers')
+
+    field.enum = linkSortedMap field.enum, true if field.hasOwnProperty('enum')
 
     freeze field
 

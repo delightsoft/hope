@@ -91,7 +91,11 @@ sortedMap = (result, value, opts) ->
 
       for v,  i in items
 
-        if optsCheckName then fixedName = optsCheckName v.name else checkItemName v.name
+        unless (if optsCheckName then fixedName = optsCheckName v else checkItemName v)
+
+          result.error 'dsc.invalidName', value: v
+
+          continue
 
         v = fixedName if typeof fixedName == 'string'
 
@@ -119,7 +123,7 @@ sortedMap = (result, value, opts) ->
 
             unless (if optsCheckName then (fixedName = optsCheckName v) else checkItemName v)
 
-              result.error 'dsc.invalidName', value: v.name
+              result.error 'dsc.invalidName', value: v
 
               continue
 

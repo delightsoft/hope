@@ -8,7 +8,7 @@ bitArray = require '../bitArray'
 
 processFields = require './_processFields'
 
-copyOptions = require './_copyOptions'
+copyExtra = require './_copyExtra'
 
 {compile: compileTags} = require '../tags'
 
@@ -62,7 +62,7 @@ processAPI = (result, config) ->
 
                   return # result.context
 
-                copyOptions result, api.methods
+                copyExtra result, api.methods
 
                 # rule: api.methods.$$list is sorted in alphabetical order of their names
                 api.methods.$$list.sort (left, right) -> left.name.localeCompare right.name
@@ -75,7 +75,7 @@ processAPI = (result, config) ->
 
         return # result.context
 
-      copyOptions result, res
+      copyExtra result, res
 
       # rule: api.$$list is sorted in alphabetical order of their names
       res.$$list.sort (left, right) -> left.name.localeCompare right.name

@@ -6,7 +6,7 @@ bitArray = require '../bitArray'
 
 {compile: compileTags} = require '../tags'
 
-copyOptions = require './_copyOptions'
+copyExtra = require './_copyExtra'
 
 processActions = (result, doc) ->
 
@@ -58,7 +58,7 @@ processActions = (result, doc) ->
 
         return # result.context
 
-      copyOptions result, res
+      copyExtra result, res
 
       compileTags result, res
 
