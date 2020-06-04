@@ -232,4 +232,8 @@ Object.defineProperty BitArray::, 'list',
 
 # ----------------------------
 
-module.exports = BitArray
+try
+  module.exports = BitArray
+catch err # если exports read-only
+  module.exports.default = BitArray
+
