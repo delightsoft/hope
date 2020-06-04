@@ -1,4 +1,5 @@
-{err: {invalidArg, tooManyArgs}} = require './utils'
+invalidArg = (name, value) -> throw new Error "Invalid argument '#{name}': #{value}"; return
+tooManyArgs = -> throw new Error "Too many arguments"; return
 
 class BitArray
 
