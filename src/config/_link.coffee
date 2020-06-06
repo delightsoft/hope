@@ -202,8 +202,4 @@ link = (config) ->
 
 # ----------------------------
 
-try
-  module.exports = link
-catch err # если exports read-only
-  exports.default = link
-
+module.exports = link
