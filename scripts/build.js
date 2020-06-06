@@ -23,7 +23,7 @@ runTasks({
 
       parallel([
 
-        !cmd.coverage && new Task({
+        !(cmd.coverage || cmd.dev) && new Task({
           name: `clean 'lib'`,
           run() {
             return rimraf(path.join(process.cwd(), 'lib/'));
