@@ -16,6 +16,8 @@ module.exports =
 
   checkAPIName: require './_checkAPIName'
 
+  checkTagName: require './_checkTagName'
+
   prettyPrint: require './_prettyPrint'
 
   extend: require './_extend'

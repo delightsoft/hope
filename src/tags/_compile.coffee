@@ -1,4 +1,4 @@
-{checkItemName, err: {tooManyArgs, invalidArg, isResult}} = require '../utils'
+{checkTagName, err: {tooManyArgs, invalidArg, isResult}} = require '../utils'
 
 Result = require '../result'
 
@@ -26,7 +26,7 @@ compile = (result, collection) ->
 
         dupCheck[tag] = true
 
-        unless checkItemName tag
+        unless checkTagName tag
 
           result.error 'dsc.invalidName', value: tag
 

@@ -6,7 +6,7 @@ freeze = (obj) ->
 
   if '_mask' in obj
 
-    obj.$$list # force mask to compute list
+    obj.list # force mask to compute list
 
   Object.freeze obj
 

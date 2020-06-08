@@ -33,6 +33,7 @@ config
                     sa: type: 'date'
                     sb: type: 't1'
                     sc:
+                      tags: 'namespace.tag'
                       enum:
                         x: extra: {a:12}
                         y: {}
@@ -57,7 +58,7 @@ config
                 fldD: refers: '#all'
                 fldT: type: 't2'
           api:
-            Api1:
+            api1:
               extra: t: '321'
               methods:
                 methodA:
@@ -71,7 +72,7 @@ config
                       fields:
                         x: type: 'string(20)'
                         y: type: 't2'
-            Api2: {methods: []} # nothing
+            api2: {methods: []} # nothing
 
 
       check 'general', ->

@@ -2,6 +2,8 @@
 
 Result = require '../result'
 
+{checkEnumName} = require '../utils'
+
 sortedMap = require '../sortedMap'
 
 copyExtra = require '../config/_copyExtra'
@@ -9,8 +11,7 @@ copyExtra = require '../config/_copyExtra'
 typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null']
 
 builtInTypes = [
-  'string', 'text', 'boolean'
-# 'integer', 'long', 'float', 'double', 'decimal'
+  'string', 'text', 'boolean',
   'integer', 'double'
   'decimal'
   'time', 'date', 'dateonly', 'now'
