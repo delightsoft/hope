@@ -107,6 +107,6 @@ config
 
         unlinkedConfig = unlinkConfig(res)
 
-        linkedConfig = linkConfig unlinkedConfig
+        linkedConfig = linkConfig unlinkedConfig, true
 
         expect(linkedConfig).sameStructure res
