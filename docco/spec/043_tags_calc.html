@@ -165,7 +165,19 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <h1 id="tagscalc">Tags.Calc</h1>
-<p>Метод для обработки выражений, содержаших теги.  Результатом является список элементов, которые были получени или
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Метод для обработки выражений, содержаших теги.  Результатом является список элементов, которые были получени или
 напрямую или через теги.</p>
 <p>Операции которые можно использовать в строке</p>
 <ul>
@@ -192,19 +204,19 @@
             
             <div class="content"><div class='highlight'><pre>{Result, sortedMap, flatMap, tags: {calc: calcTags, compile: compileTags}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'043_tags_calc'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Создаем документ для проверки разных выражений</p>
 
@@ -213,19 +225,19 @@ describe <span class="hljs-string">'043_tags_calc'</span>, <span class="hljs-fun
             <div class="content"><div class='highlight'><pre>  beforeEach -&gt;
 
     @fields =
-      fld1: {tags: <span class="hljs-string">'a, b, c'</span>}    <span class="hljs-comment"># 0</span>
+      fld1: {tags: <span class="hljs-string">'a, test.b, c'</span>}    <span class="hljs-comment"># 0</span>
       fld2: {tags: <span class="hljs-string">''</span>}           <span class="hljs-comment"># 1</span>
       fld3:                      <span class="hljs-comment"># 2</span>
         tags: <span class="hljs-string">''</span>
         fields:
-          fld3a: {tags: <span class="hljs-string">'b'</span>}     <span class="hljs-comment"># 3</span>
+          fld3a: {tags: <span class="hljs-string">'test.b'</span>} <span class="hljs-comment"># 3</span>
           fld3b: {}              <span class="hljs-comment"># 4</span>
           fld3c:                 <span class="hljs-comment"># 5</span>
             tags: <span class="hljs-string">'c'</span>
             fields:
               fld3a1: {tags: <span class="hljs-string">''</span>} <span class="hljs-comment"># 6</span>
               fld3a2: {tags: <span class="hljs-string">''</span>} <span class="hljs-comment"># 7</span>
-      fld4: {tags: <span class="hljs-string">'a, b, c'</span>}    <span class="hljs-comment"># 8</span>
+      fld4: {tags: <span class="hljs-string">'a, test.b, c'</span>}    <span class="hljs-comment"># 8</span>
 
     @fields = flatMap (result = <span class="hljs-keyword">new</span> Result), @fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
 
@@ -243,7 +255,7 @@ describe <span class="hljs-string">'043_tags_calc'</span>, <span class="hljs-fun
 
     expect((calcTags (result = <span class="hljs-keyword">new</span> Result), @fields, <span class="hljs-string">'fld3.fld3c, fld4'</span>).valueOf()).toEqual [<span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>]
 
-    expect((calcTags (result = <span class="hljs-keyword">new</span> Result), @fields, <span class="hljs-string">'#a, #b'</span>).valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">8</span>]
+    expect((calcTags (result = <span class="hljs-keyword">new</span> Result), @fields, <span class="hljs-string">'#a, #test.b'</span>).valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">8</span>]
 
     expect((calcTags (result = <span class="hljs-keyword">new</span> Result), @fields, <span class="hljs-string">'#all'</span>).valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>]
 
@@ -274,11 +286,12 @@ describe <span class="hljs-string">'043_tags_calc'</span>, <span class="hljs-fun
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.unknownItem'</span>, value: <span class="hljs-string">'bbb'</span>, position: <span class="hljs-number">17</span>}
     ]
 
-    calcTags (result = <span class="hljs-keyword">new</span> Result), @fields, expr = <span class="hljs-string">'#a, #f, #b, #q'</span>
+    calcTags (result = <span class="hljs-keyword">new</span> Result), @fields, expr = <span class="hljs-string">'#a, #f, #test.b, #q, #ui.a123'</span>
 
     expect(result.messages).sameStructure [
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'f'</span>, position: <span class="hljs-number">4</span>}
-      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'q'</span>, position: <span class="hljs-number">12</span>}
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'q'</span>, position: <span class="hljs-number">17</span>}
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'ui.a123'</span>, position: <span class="hljs-number">21</span>}
     ]</pre></div></div>
             
         </li>

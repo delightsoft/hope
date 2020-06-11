@@ -12,7 +12,7 @@ Tags.Calc._Tokenzier
 
       check "simple", ->
 
-        nextToken = tokenizer (result = new Result), 'a, boom.aaa + c - d, #a1, !#b2'
+        nextToken = tokenizer (result = new Result), 'a, boom.aaa + c - d, #a1, !#test.b2'
 
         expect(nextToken()).toBe 'a'
         expect(nextToken()).toBe '+'
@@ -25,7 +25,7 @@ Tags.Calc._Tokenzier
         expect(nextToken()).toBe '#a1'
         expect(nextToken()).toBe '+'
         expect(nextToken()).toBe '!'
-        expect(nextToken()).toBe '#b2'
+        expect(nextToken()).toBe '#test.b2'
         expect(nextToken()).toBe null
 
 Выражение не может начинаться с операции

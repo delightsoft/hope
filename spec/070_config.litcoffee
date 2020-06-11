@@ -5,10 +5,10 @@ config
     config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
     utils: {deepClone, prettyPrint}} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
-    describe "070_config", ->
+    describe '070_config', ->
 
 Модель документов, состоит из следующих элементов:
 * Пользовательские типы (udtype)

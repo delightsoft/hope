@@ -13,6 +13,8 @@ _tokenizer = (result, expression) ->
     # 10 - имя элемента,
     # 20 - начало имени тега,
     # 21 - имя тега,
+    # 22 - начало имени тега после namespace,
+    # 23 - имя тега после namespace,
     # 30 - запятая, плюс или минус
     # 31 - после восклицательного знака
     # 100 - end
@@ -25,7 +27,7 @@ _tokenizer = (result, expression) ->
 
       if (p + 1) == expression.length
         switch s
-          when 10, 21
+          when 10, 21, 23
             s = 1; return expression.substr m, p - m + 1 # push back
           when 20, 30, 31
             result.error 'dsc.invalidExpression', value: expression, position: p + 1
@@ -57,10 +59,17 @@ _tokenizer = (result, expression) ->
           if /[a-z0-9\.]/i.test char then undefined
           else p--; s = 1; return expression.substr m, p - m + 1 # push back
         when 20
-          if /[a-z0-9]/i.test char then s = 21
+          if /[a-z0-9]/.test char then s = 21
           else wrong = true
         when 21
-          if /[a-z0-9]/i.test char then s = 21
+          if /[a-z0-9]/i.test char then undefined
+          else if char == '.' then s = 22
+          else p--; s = 1; return expression.substr m, p - m + 1 # push back
+        when 22
+          if /[a-z0-9]/.test char then s = 23
+          else wrong = true
+        when 23
+          if /[a-z0-9]/i.test char then undefined
           else p--; s = 1; return expression.substr m, p - m + 1 # push back
         when 30
           if /\s/i.test char then undefined

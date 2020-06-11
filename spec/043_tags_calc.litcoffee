@@ -37,19 +37,19 @@ Tags.Calc
       beforeEach ->
 
         @fields =
-          fld1: {tags: 'a, b, c'}    # 0
+          fld1: {tags: 'a, test.b, c'}    # 0
           fld2: {tags: ''}           # 1
           fld3:                      # 2
             tags: ''
             fields:
-              fld3a: {tags: 'b'}     # 3
+              fld3a: {tags: 'test.b'} # 3
               fld3b: {}              # 4
               fld3c:                 # 5
                 tags: 'c'
                 fields:
                   fld3a1: {tags: ''} # 6
                   fld3a2: {tags: ''} # 7
-          fld4: {tags: 'a, b, c'}    # 8
+          fld4: {tags: 'a, test.b, c'}    # 8
 
         @fields = flatMap (result = new Result), @fields, 'fields', index: true, mask: true
 
@@ -67,7 +67,7 @@ Tags.Calc
 
         expect((calcTags (result = new Result), @fields, 'fld3.fld3c, fld4').valueOf()).toEqual [2, 5, 6, 7, 8]
 
-        expect((calcTags (result = new Result), @fields, '#a, #b').valueOf()).toEqual [0, 2, 3, 8]
+        expect((calcTags (result = new Result), @fields, '#a, #test.b').valueOf()).toEqual [0, 2, 3, 8]
 
         expect((calcTags (result = new Result), @fields, '#all').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
@@ -98,10 +98,11 @@ Tags.Calc
           {type: 'error', code: 'dsc.unknownItem', value: 'bbb', position: 17}
         ]
 
-        calcTags (result = new Result), @fields, expr = '#a, #f, #b, #q'
+        calcTags (result = new Result), @fields, expr = '#a, #f, #test.b, #q, #ui.a123'
 
         expect(result.messages).sameStructure [
           {type: 'error', code: 'dsc.unknownTag', value: 'f', position: 4}
-          {type: 'error', code: 'dsc.unknownTag', value: 'q', position: 12}
+          {type: 'error', code: 'dsc.unknownTag', value: 'q', position: 17}
+          {type: 'error', code: 'dsc.unknownTag', value: 'ui.a123', position: 21}
         ]
 
