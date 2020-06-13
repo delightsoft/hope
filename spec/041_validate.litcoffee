@@ -24,15 +24,14 @@
        double: {right: [0, 1, -10.2], wrong: [undefined, null, true, false, '', 'test', [], {}]},
 
 #       decimal: {right: ['123.456'], wrong: wrongVal = [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
-#
-#       time: {right: ['12:15'], wrong: wrongVal},
-#
-#       date: {right: ['2020-11-15'], wrong: wrongVal},
-#
-#       dateonly: {right: ['2020-11-15T09:15Z'], wrong: wrongVal},
+
+       time: {right: ['12:15'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
+
+       date: {right: ['2020-11-15'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
+
+       dateonly: {right: ['2020-11-15T09:15Z'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
        enum: {enum: {a: {name: 'a'}, b: {name: 'b'}}, right: ['a', 'b'], wrong: wrongVal = [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]}
-#       enum: {enum: {a: {name: 'a'}, b: {name: 'b'}}, right: ['a', 'b'], wrong: wrongVal},
 
        structure:
 
@@ -46,8 +45,8 @@
 
          right: [{f1: 'test', f2: '12', f3: false}], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', []]
 
-#       subtable: {right: [[], [fieldsVal], [fieldsVal, fieldsVal, fieldsVal]], wrong: wrongVal}
-#
+       subtable: {right: [[], [fieldsVal], [fieldsVal, fieldsVal, fieldsVal]], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', {}]}
+
 #       refers: {right: ['cY2yZAwgwkanklftLyYzL', '123@doc.Doc1'], wrong: wrongVal}
 
      for typeName, typeTestDesc of typesDesc
@@ -62,7 +61,7 @@
 
        for value in typeTestDesc.right
 
-         do (type, validate, value) -> check "#{typeName}: simple types - ok: #{prettyPrint value}", ->
+         do (typeName, type, validate, value) -> check "#{typeName}: simple types - ok: #{prettyPrint value}", ->
 
            validate (result = new Result), value
 
@@ -70,12 +69,12 @@
 
        for value in typeTestDesc.wrong
 
-         do (type, validate, value) ->  check "#{typeName}: simple types - wrong: #{prettyPrint value}", ->
+         do (typeName, type, validate, value) ->  check "#{typeName}: simple types - wrong: #{prettyPrint value}", ->
 
            validate (result = new Result), value
 
            expect(result).resultContains [
-             {type: 'error', code: 'dsc.invalidValue', value}
+             {type: 'error', code: 'validate.invalidValue', value}
            ]
 
 required
