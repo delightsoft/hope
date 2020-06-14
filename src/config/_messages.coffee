@@ -43,6 +43,10 @@ messages =
 
     unknownType: (args) -> "Unknown type: #{args.value}"
 
+    tooBig: (args) -> "Too big: #{args.value}"
+
+    tooSmall: (args) -> "Too small: #{args.value}"
+
     unmatchParenthesis: (args) -> "Unmatch parenthesis at position #{args.position}: #{args.value}"
 
 # DSDocument

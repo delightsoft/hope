@@ -7,7 +7,7 @@ sortedMap = require '../sortedMap'
 copyExtra = require './_copyExtra'
 
 {compile: compileType,
-compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}} = require '../types'
+compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps, _extraProps: extraProps}} = require '../types'
 
 processUdtypes = (result, config) ->
 
@@ -75,6 +75,10 @@ processUdtypes = (result, config) ->
           udt.udType = parent.name
 
           for prop in typeProps when parent.hasOwnProperty(prop) # derive type props
+
+            udt[prop] = parent[prop]
+
+          for prop in extraProps when parent.hasOwnProperty(prop) # derive type props
 
             udt[prop] = parent[prop]
 

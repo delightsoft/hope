@@ -1,5 +1,4 @@
 {checkUDTypeName, err: {tooManyArgs, invalidArg, invalidArgValue, isResult}} = require '../utils'
-{checkUDTypeName, err: {tooManyArgs, invalidArg, invalidArgValue, isResult}} = require '../utils'
 
 Result = require '../result'
 
@@ -7,15 +6,19 @@ Result = require '../result'
 
 sortedMap = require '../sortedMap'
 
+processExraProps = require './_processExraProps'
+
 copyExtra = require '../config/_copyExtra'
 
 typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null', 'required']
+
+extraProps = ['min', 'max', 'regexp', 'init']
 
 builtInTypes = [
   'string', 'text', 'boolean',
   'integer', 'double'
   'decimal'
-  'time', 'date', 'dateonly', 'now'
+  'time', 'date', 'dateonly', 'timestamp'
   'json', 'blob', 'uuid', 'enum'
   'structure', 'subtable'
   'refers'
@@ -166,7 +169,7 @@ compile = (result, fieldDesc, res, opts) ->
 
           if optsContext == null || optsContext == 'field'
 
-            if (ok = not (type == 'now' || type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
+            if (ok = not (type == 'timestamp' || type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
 
           else
 
@@ -188,7 +191,7 @@ compile = (result, fieldDesc, res, opts) ->
 
         when 'refers' then if (ok = (type == 'refers')) then refersProp = takeStringOrArrayOfStrings result, fieldDesc.refers
 
-      unless ok
+      unless ok or extraProps.indexOf(prop) >= 0
 
         result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
 
@@ -287,6 +290,8 @@ compile = (result, fieldDesc, res, opts) ->
 
     when 'refers' then setRequiredProp result, res, 'refers', refersProp
 
+  processExraProps result, fieldDesc, res unless result.isError
+
   res # compile =
 
 # пропускаем целое позитивное число
@@ -364,3 +369,5 @@ compile._builtInTypes = builtInTypes
 compile._reservedTypes = reservedTypes
 
 compile._typeProps = typeProps
+
+compile._extraProps = extraProps
