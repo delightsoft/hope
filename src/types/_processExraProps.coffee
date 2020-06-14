@@ -20,7 +20,35 @@ processExtraProps = (result, fieldDesc, res) ->
 
   if fieldDesc.type in ['string', 'text']
 
-    if fieldDesc.hasOwnProperty('min')
+     if fieldDesc.hasOwnProperty('regexp') then do ->
+
+       regexp = fieldDesc.regexp
+
+       ok = false
+
+       if typeof regexp == 'string'
+
+         if (i = regexp.lastIndex('/')) > 0
+
+           try
+
+             res.regexp = new RegExp (regexp.substr 0, i - 1), (regexp.substr i + 1)
+
+             ok = true
+
+           catch err
+
+             result.error ((path) -> (Result.prop 'regexp') path), 'dsc.invalidRegexp', value: regexp, msg: err.message
+
+       else if regexp instanceof RegExp
+
+         res.regexp = regexp
+
+         ok = true
+
+       result.error ((path) -> (Result.prop 'regexp') path), 'dsc.invalidValue', value: regexp unless ok
+
+     if fieldDesc.hasOwnProperty('min')
 
       unless typeof fieldDesc.min == 'number' and Number.isInteger(fieldDesc.min) and fieldDesc.min > 0
 

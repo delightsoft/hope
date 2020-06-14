@@ -18,6 +18,8 @@ messages =
 
     invalidValue: (args) -> "Invalid value: #{args.value}"
 
+    invalidRegexp: (args) -> "Invalid regexp: #{args.value} (Error: #{args.msg})"
+
     keyAndNameHasDifferenValues: (args) -> "Key (value: #{args.value1} and name (value: #{value2} have different values"
 
     missingFile: (args) -> "Missing file: #{args.value}"
