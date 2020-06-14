@@ -1,11 +1,25 @@
-    {Result, types: {compile: compileType}, sortedMap, utils: {prettyPrint}} = require '../src'
+    {Result, sortedMap, utils: {prettyPrint}} = require '../src'
+
+    {compile: compileType} = require '../src/types'
 
     validateBuilder = require '../src/validate'
 
     focusOnCheck = ""
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
-    describe '042_validate:', ->
+    compileFields = (result, fields) ->
+
+      map = sortedMap (result = new Result), fields
+
+      map.$$list.forEach (field) -> compileType result, field.$$src, field, context: 'field'; return
+
+      map = validateBuilder.addValidate map
+
+      sortedMap.finish result, map
+
+      map # do ->
+
+    describe '041_validate:', ->
 
 На основаннит описания типа, могут быть созданны валидаторы отдельных полей.  Так и валидатор документа.
 
@@ -35,15 +49,15 @@
 
        structure:
 
-         fields: fieldsVal =
+         fields: compileFields (result = new Result),
 
-           f1: type: 'string', length: 10, validate: validateBuilder type: 'string', length: 10
+           f1: type: 'string', length: 10
 
-           f2: type: 'integer', validate: validateBuilder type: 'integer'
+           f2: type: 'integer'
 
-           f3: type: 'boolean', validate: validateBuilder type: 'boolean'
+           f3: type: 'boolean'
 
-         right: [{f1: 'test', f2: '12', f3: false}], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', []]
+         right: [fieldsVal = {f1: 'test', f2: '12', f3: false}], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', []]
 
        subtable: {right: [[], [fieldsVal], [fieldsVal, fieldsVal, fieldsVal]], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', {}]}
 
@@ -79,15 +93,94 @@
 
 required
 
+     check "required: ok", ->
+
+       validate = validateBuilder
+
+         type: 'structure'
+
+         fields: compileFields (result = new Result),
+
+           f1: type: 'integer', required: true, validate: validateBuilder type: 'integer'
+
+           f2: type: 'string', length: 20, required: true, validate: validateBuilder type: 'string', length: 20
+
+           f3: type: 'boolean', validate: validateBuilder type: 'boolean'
+
+       validate (result = new Result), f1: 12, f2: 'test'
+
+       expect(result).resultContains []
+
+     check "required: wrong", ->
+
+       validate = validateBuilder
+
+         type: 'structure'
+
+         fields: compileFields (result = new Result),
+
+           f1: type: 'integer', required: true
+
+           f2: type: 'string', length: 20, required: true
+
+           f3: type: 'boolean'
+
+       validate (result = new Result), f3: false
+
+       expect(result).resultContains [
+         {type: 'error', path: 'f1', code: 'validate.missingField', value: 'f1'},
+         {type: 'error', path: 'f2', code: 'validate.missingField', value: 'f2'},
+       ]
+
 null
 
-string: length
+     check "null: ok", ->
+
+       testStructure =
+
+         type: 'structure'
+
+         fields: compileFields (result = new Result),
+
+           f1: type: 'integer', null: true
+
+           f2: type: 'string', length: 20, null: true
+
+           f3: type: 'boolean'
+
+       validate (result = new Result), f1: null, f2: 'test', f3: false
+
+       expect(result).resultContains []
+
+     check "null: wrong", ->
+
+       validate = validateBuilder
+
+         type: 'structure'
+
+         fields: compileFields (result = new Result),
+
+           f1: type: 'integer', null: true
+
+           f2: type: 'string', length: 20, null: true
+
+           f3: type: 'boolean'
+
+       validate (result = new Result), f1: null, f2: 'test', f3: null
+
+       expect(result).resultContains [
+         {type: 'error', path: 'f3', code: 'validate.invalidValue', value: null}
+       ]
+
+string: min, max, regexp
 
 int: min, max
 
 double: min, max
 
 decimal: precision, scale, min, max
+
+    # TODO:
 
 RegExp
 

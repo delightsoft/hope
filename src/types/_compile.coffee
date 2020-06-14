@@ -1,4 +1,5 @@
 {checkUDTypeName, err: {tooManyArgs, invalidArg, invalidArgValue, isResult}} = require '../utils'
+{checkUDTypeName, err: {tooManyArgs, invalidArg, invalidArgValue, isResult}} = require '../utils'
 
 Result = require '../result'
 
@@ -8,7 +9,7 @@ sortedMap = require '../sortedMap'
 
 copyExtra = require '../config/_copyExtra'
 
-typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null']
+typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null', 'required']
 
 builtInTypes = [
   'string', 'text', 'boolean',
@@ -114,6 +115,7 @@ compile = (result, fieldDesc, res, opts) ->
       prop = undefined
 
       result.context ((path) -> (Result.prop prop) path), ->
+
         for prop in typeProps when fieldDesc.hasOwnProperty(prop) && prop != 'null' # udType can have null in a field definition
 
           result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
@@ -136,13 +138,14 @@ compile = (result, fieldDesc, res, opts) ->
 
   # Проверяем, наличие всех свойств относящихся к типу.  Если свойство не должно быть у данного типа, добавляем ошибку
 
-  prop = lengthProp = enumProp = precisionProp = scaleProp = fieldsProp = nullProp = refersProp = valueClass = undefined
+  prop = lengthProp = enumProp = precisionProp = scaleProp = fieldsProp = nullProp = requiredProp = refersProp = valueClass = undefined
 
   if fieldDesc.hasOwnProperty('udType')
 
     result.error 'dsc.reservedAttr', value: 'udType'
 
   result.context ((path) -> (Result.prop prop) path), ->
+
     for prop in typeProps when fieldDesc.hasOwnProperty(prop)
 
       ok = false
@@ -166,7 +169,20 @@ compile = (result, fieldDesc, res, opts) ->
             if (ok = not (type == 'now' || type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
 
           else
+
             ok = true
+
+            result.error 'dsc.notApplicableInUdtype'
+
+        when 'required'
+
+          ok = true
+
+          if optsContext == null || optsContext == 'field'
+
+            requiredProp = takeBoolean result, fieldDesc.required
+
+          else
 
             result.error 'dsc.notApplicableInUdtype'
 
@@ -233,9 +249,9 @@ compile = (result, fieldDesc, res, opts) ->
 
   res.type = type
 
-  if typeof nullProp == 'boolean'
+  res.required = true if typeof requiredProp == 'boolean' and requiredProp
 
-    res.null = nullProp if nullProp
+  res.null = true if typeof nullProp == 'boolean' and nullProp
 
   switch type
 
