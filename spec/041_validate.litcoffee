@@ -9,9 +9,21 @@
 
     compileFields = (result, fields) ->
 
-      map = sortedMap (result = new Result), fields
+      map = sortedMap result, fields
 
-      map.$$list.forEach (field) -> compileType result, field.$$src, field, context: 'field'; return
+      name = undefined
+
+      result.context ((path) -> (Result.item name) path), ->
+
+        map.$$list.forEach (field) ->
+
+          name = field.name
+
+          result.isError = false;
+
+          compileType result, field.$$src, field, context: 'field'
+
+          return
 
       map = validateBuilder.addValidate map
 
@@ -172,7 +184,52 @@ null
          {type: 'error', path: 'f3', code: 'validate.invalidValue', value: null}
        ]
 
-string: min, max, regexp
+string: min, max, regexp, init
+
+     check "string: wrong", ->
+
+       compileFields (result = new Result),
+         f1: type: 'string', length: 20, min: 40, init: ''
+         ft1: type: 'text', min: 40, max: 30, init: ''
+
+       expect(result.messages).sameStructure [
+         {type: 'error', path: '[f1].min', code: 'dsc.tooBig', value: 40}
+         {type: 'error', path: '[ft1].max', code: 'dsc.tooSmall', value: 30}
+       ]
+
+       compileFields (result = new Result),
+         f1a: type: 'string', length: 20, min: 10, init: ''
+         ft1a: type: 'text', min: 10, max: 5, init: ''
+
+       expect(result.messages).sameStructure [
+         {type: 'error', path: '[ft1a].max', code: 'dsc.tooSmall', value: 5}
+       ]
+
+       compileFields (result = new Result),
+         f1b: type: 'string', length: 20, min: 10, init: ''
+         ft1b: type: 'text', min: 10, max: 5, init: ''
+
+       expect(result.messages).sameStructure [
+         {type: 'error', path: '[ft1b].max', code: 'dsc.tooSmall', value: 5}
+       ]
+
+       compileFields (result = new Result),
+         f2: type: 'string', length: 20, min: 10, max: 5
+         ft2: type: 'text', min: 10, max: 5
+
+       expect(result.messages).sameStructure [
+         {type: 'error', path: '[ft2].max', code: 'dsc.tooSmall', value: 5}
+       ]
+
+       compileFields (result = new Result),
+         f1: type: 'string', length: 20, min: '10', init: ''
+         ft1: type: 'text', min: false, max: null, init: ''
+
+       expect(result.messages).sameStructure [
+         {type: 'error', path: '[f1].min', code: 'dsc.invalidValue', value: '10'}
+         {type: 'error', path: '[ft1].min', code: 'dsc.invalidValue', value: false}
+         {type: 'error', path: '[ft1].max', code: 'dsc.invalidValue', value: null }
+       ]
 
 int: min, max
 
@@ -199,3 +256,5 @@ refers
     # TODO:  С проверкой других полей
 
 Валидатор документ
+
+init

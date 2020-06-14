@@ -46,13 +46,6 @@ validate = (type) ->
           result.error 'validate.tooShort', value: value, min: min unless !result.isError and min <= value.length
           return
         return
-      if type.hasOwnProperty('max') then do (pf = f) ->
-        max = type.max
-        f = (result, value) ->
-          pf(result, value)
-          result.error 'validate.tooLong', value: value, max: max unless !result.isError and value.length <= max
-          return
-        return
       if type.hasOwnProperty('regexp') then do (pf = f) ->
         regexp = type.regexp
         f = (result, value) ->
@@ -62,6 +55,20 @@ validate = (type) ->
         return
 
     when 'text'
+      if type.hasOwnProperty('min') then do (pf = f) ->
+        min = type.min
+        f = (result, value) ->
+          pf(result, value)
+          result.error 'validate.tooShort', value: value, min: min unless !result.isError and min <= value.length
+          return
+        return
+      if type.hasOwnProperty('max') then do (pf = f) ->
+        max = type.max
+        f = (result, value) ->
+          pf(result, value)
+          result.error 'validate.tooLong', value: value, max: max unless !result.isError and value.length <= max
+          return
+        return
       f = (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string'
       if type.hasOwnProperty('regexp') then do (pf = f) ->
         regexp = type.regexp

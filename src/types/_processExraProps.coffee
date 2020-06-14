@@ -16,7 +16,7 @@ processExtraProps = (result, fieldDesc, res) ->
 
         (validator || (validator = validateBuilder res)) result, fieldDesc.init
 
-      res[prop] = fieldDescres[prop] unless result.isError
+      res[prop] = fieldDesc[prop]
 
   if fieldDesc.type in ['string', 'text']
 
@@ -26,13 +26,11 @@ processExtraProps = (result, fieldDesc, res) ->
 
         result.error ((path) -> (Result.prop 'min') path), 'dsc.invalidValue', value: fieldDesc.min
 
-      unless fieldDesc.min <= res.length
+      unless fieldDesc.type == 'text' or fieldDesc.min <= res.length
 
         result.error ((path) -> (Result.prop 'min') path), 'dsc.tooBig', value: fieldDesc.min
 
-      else
-
-        res.min = fieldDesc.min
+      res.min = fieldDesc.min
 
     if fieldDesc.type == 'text'
 
@@ -42,27 +40,23 @@ processExtraProps = (result, fieldDesc, res) ->
 
           result.error ((path) -> (Result.prop 'max') path), 'dsc.invalidValue', value: fieldDesc.max
 
-        unless res.hasOwnProperty('min') and fieldDesc.max < res.min
+        unless res.hasOwnProperty('min') and res.min <= fieldDesc.max
 
           result.error ((path) -> (Result.prop 'max') path), 'dsc.tooSmall', value: fieldDesc.max
 
-        else
-
-          res.max = fieldDesc.max
+        res.max = fieldDesc.max
 
   else if fieldDesc.type in ['integer', 'double', 'decimal']
-
-    result.isError = false
 
     copyIfValid 'min'
 
     copyIfValid 'max'
 
-    if !result.isError && res.hasOwnProperty('min') && res.hasOwnProperty('max') && res.min > res.max
+    if not result.isError and res.hasOwnProperty('min') and res.hasOwnProperty('max') and res.min > res.max
 
       result.error ((path) -> (Result.prop 'max') path), 'dsc.tooSmall', value: fieldDesc.max
 
-  copyIfValid 'init' if fieldDesc.hasOwnProperty('init')
+  copyIfValid 'init' if fieldDesc.hasOwnProperty('init') and not result.isError and not fieldDesc.type in ['structure', 'subtable']
 
   res # processExtraProps =
 
