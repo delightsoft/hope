@@ -124,7 +124,7 @@ link = (config, noHelpers) ->
 
       noCache = (result, expr) ->
 
-        if typeof result == 'object' && result != null && result.hasOwnProperty('isError')
+        unless typeof result == 'object' && result != null && result.hasOwnProperty('isError')
 
           localResult = true
 
@@ -140,7 +140,7 @@ link = (config, noHelpers) ->
 
       res.$$calc = (result, expr) ->
 
-        if typeof result == 'object' && result != null && result.hasOwnProperty('isError')
+        unless typeof result == 'object' && result != null && result.hasOwnProperty('isError')
 
           expr = result
 
