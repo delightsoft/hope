@@ -132,7 +132,7 @@ link = (config, noHelpers) ->
 
           expr = result
 
-        res = calc result, tags, expr
+        res = calc result, res, expr
 
         result.throwIfError() if localResult
 
