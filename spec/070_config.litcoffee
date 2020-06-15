@@ -23,6 +23,7 @@ config
           udtypes:
             t1: type: 'int'
             t2: type: 't1'
+            t3: enum: 'a,b,c'
           docs:
             DocA:
               fields:
@@ -31,8 +32,9 @@ config
                 fldQ:
                   fields:
                     sa: type: 'date'
-                    sb: type: 't1'
-                    sc:
+                    sb: type: 't1', required: true, null: true
+                    sc: type: 't3', required: true
+                    sd:
                       tags: 'namespace.tag'
                       enum:
                         x: extra: {a:12}

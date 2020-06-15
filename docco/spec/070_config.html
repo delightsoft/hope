@@ -233,6 +233,7 @@ describe <span class="hljs-string">'070_config'</span>, <span class="hljs-functi
             <div class="content"><div class='highlight'><pre>      udtypes:
         t1: type: <span class="hljs-string">'int'</span>
         t2: type: <span class="hljs-string">'t1'</span>
+        t3: enum: <span class="hljs-string">'a,b,c'</span>
       docs:
         DocA:
           fields:
@@ -241,8 +242,9 @@ describe <span class="hljs-string">'070_config'</span>, <span class="hljs-functi
             fldQ:
               fields:
                 sa: type: <span class="hljs-string">'date'</span>
-                sb: type: <span class="hljs-string">'t1'</span>
-                sc:
+                sb: type: <span class="hljs-string">'t1'</span>, required: <span class="hljs-literal">true</span>, null: <span class="hljs-literal">true</span>
+                sc: type: <span class="hljs-string">'t3'</span>, required: <span class="hljs-literal">true</span>
+                sd:
                   tags: <span class="hljs-string">'namespace.tag'</span>
                   enum:
                     x: extra: {a:<span class="hljs-number">12</span>}

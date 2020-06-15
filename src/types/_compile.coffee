@@ -119,7 +119,7 @@ compile = (result, fieldDesc, res, opts) ->
 
       result.context ((path) -> (Result.prop prop) path), ->
 
-        for prop in typeProps when fieldDesc.hasOwnProperty(prop) && prop != 'null' # udType can have null in a field definition
+        for prop in typeProps when fieldDesc.hasOwnProperty(prop) and not prop in ['null', 'required'] # udType can have null in a field definition
 
           result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
 
