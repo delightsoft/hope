@@ -118,9 +118,9 @@ link = (config, noHelpers) ->
 
     tags = res.$$tags = freeze tags
 
-    cache = Object.create(null)
-
     unless noHelpers
+
+      cache = Object.create(null)
 
       noCache = (result, expr) ->
 
@@ -132,11 +132,11 @@ link = (config, noHelpers) ->
 
           expr = result
 
-        res = calc result, res, expr
+        r = calc result, res, expr
 
         result.throwIfError() if localResult
 
-        res # noCache =
+        r # noCache =
 
       res.$$calc = (result, expr) ->
 
