@@ -91,7 +91,7 @@
 
           processUdtypes (result = new Result), conf
 
-          expect(result.messages).toEqual [{type: 'error', path: "udtypes[#{type}]", code: 'dsc.builtInTypeName'}]
+          expect(result.messages).toEqual [{type: 'error', path: "udtypes.#{type}", code: 'dsc.builtInTypeName'}]
 
           expect(conf.udtypes).not.toBeDefined()
 
@@ -103,6 +103,6 @@
 
           processUdtypes (result = new Result), conf
 
-          expect(result.messages).toEqual [{type: 'error', path: "udtypes[#{type}]", code: 'dsc.reservedTypeName'}]
+          expect(result.messages).toEqual [{type: 'error', path: "udtypes.#{type}", code: 'dsc.reservedTypeName'}]
 
           expect(conf.udtypes).not.toBeDefined()

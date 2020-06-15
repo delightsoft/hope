@@ -4,7 +4,7 @@ copyExtra = (result, map) ->
 
   item = undefined
 
-  result.context ((path) -> (Result.prop 'extra', (Result.item item.name)) path), ->
+  result.context ((path) -> (Result.prop 'extra', (Result.prop item.name)) path), ->
 
     for item in map.$$list when item.$$src?.hasOwnProperty 'extra'
 

@@ -25,7 +25,7 @@ finish = (result, resValue, opts) ->
 
     item = undefined
 
-    result.context ((path) -> (Result.item item.name) path), ->
+    result.context ((path) -> (Result.prop item.name) path), ->
 
       for item in resValue.$$list
 

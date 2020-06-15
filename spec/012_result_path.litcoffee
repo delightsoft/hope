@@ -53,34 +53,34 @@ Result.item добавляет индекс в квадратных скобка
 
 Result.name добавляет имя (name) элемента в квадратных скобках
 
-      check "Result.item", ->
-
-        propContext = Result.item 'field1'
-
-        expect(typeof propContext).toBe 'function'
-
-        expect(propContext '').toBe '[field1]'
-
-        expect(propContext 'rootContext').toBe 'rootContext[field1]'
-
-        expect((Result.item 'field1') '').sameStructure '[field1]'
-
-        expect((Result.item 'field1', Result.prop 'config') '').sameStructure 'config[field1]'
+#      check "Result.item", ->
+#
+#        propContext = Result.item 'field1'
+#
+#        expect(typeof propContext).toBe 'function'
+#
+#        expect(propContext '').toBe '.field1'
+#
+#        expect(propContext 'rootContext').toBe 'rootContext.field1'
+#
+#        expect((Result.item 'field1') '').sameStructure '.field1'
+#
+#        expect((Result.item 'field1', Result.prop 'config') '').sameStructure 'config.field1'
 
       check "complex", ->
 
         context =
           Result.index 10,
           Result.prop 'update',
-          Result.item 'opened',
+          Result.prop 'opened',
           Result.prop 'states',
-          Result.item 'fieldA',
+          Result.prop 'fieldA',
           Result.prop 'fields',
-          Result.item 'Doc1',
+          Result.prop 'Doc1',
           Result.prop 'docs'
 
 Собираем path, как последовательные вызовы функций ctx
 
         path = context ''
 
-        expect(path).toBe 'docs[Doc1].fields[fieldA].states[opened].update[10]'
+        expect(path).toBe 'docs.Doc1.fields.fieldA.states.opened.update[10]'

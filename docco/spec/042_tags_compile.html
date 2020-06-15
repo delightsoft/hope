@@ -173,13 +173,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, tags: {compile: compileTags}, sortedMap, flatMap} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
         </li>
         
         
@@ -188,6 +181,25 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, tags: {compile: compileTags}, sortedMap, flatMap} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Тегирование нужно для работы с группами элементов.  Например, через теги можно указать в свойствах <em>doc.state.view</em> и
 <em>doc.state.update</em> группу полей.</p>
@@ -244,11 +256,11 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Можно тегировать элементы в иерархической структуре, которую готовить flatMap.</p>
 
@@ -280,11 +292,11 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>При этом теги нормализуются методом BitArray.fixVertical()</p>
 
@@ -296,11 +308,11 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Если поле tag одного из элементов содержит недопустимое значение.  Возвращается ошибка с указанием неправильного
 значения.  К какому элементу односится значение и к какому свойству элемента - указано в контексте ошибки.</p>
@@ -321,17 +333,17 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
       compileTags (result = <span class="hljs-keyword">new</span> Result), fields
 
       expect(result.messages).sameStructure [
-        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: errValue}
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld2.tags'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: errValue}
       ]</pre></div></div>
             
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Если в списке tags содержится неверное значение - возвращается соотвествующее сообщение, с указанием индекса
 неправильного значения в списке</p>
@@ -352,17 +364,17 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
       compileTags (result = <span class="hljs-keyword">new</span> Result), fields
 
       expect(result.messages).sameStructure [
-        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.invalidTagValue'</span>, value: errValue, index: <span class="hljs-number">1</span>}
+        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld2.tags'</span>, code: <span class="hljs-string">'dsc.invalidTagValue'</span>, value: errValue, index: <span class="hljs-number">1</span>}
       ]</pre></div></div>
             
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Если список тего содержит повторяющиеся значени - возвращается предупреждение</p>
 
@@ -384,17 +396,17 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
     expect(result.isError).toBe <span class="hljs-literal">false</span>
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.duplicatedTag'</span>, value: <span class="hljs-string">'user'</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'fld2.tags'</span>, code: <span class="hljs-string">'dsc.duplicatedTag'</span>, value: <span class="hljs-string">'user'</span>}
     ]</pre></div></div>
             
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Все имена тегов должны соотвествовать соглашению об именование элементов.  Иначе ошибка.</p>
 
@@ -412,19 +424,19 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
     compileTags (result = <span class="hljs-keyword">new</span> Result), fields
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld1].tags'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'Admin'</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'A'</span>}
-      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.duplicatedTag'</span>, value: <span class="hljs-string">'A'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld1.tags'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'Admin'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld2.tags'</span>, code: <span class="hljs-string">'dsc.invalidName'</span>, value: <span class="hljs-string">'A'</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'fld2.tags'</span>, code: <span class="hljs-string">'dsc.duplicatedTag'</span>, value: <span class="hljs-string">'A'</span>}
     ]</pre></div></div>
             
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Имя тега ‘all’ зарезервировано, и не может явно использоваться</p>
 
@@ -444,8 +456,8 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
     expect(result.isError).toBe <span class="hljs-literal">true</span>
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld1].tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'all'</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[fld2].tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'all'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld1.tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'all'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld2.tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'all'</span>}
     ]</pre></div></div>
             
         </li>

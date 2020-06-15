@@ -107,7 +107,7 @@ Tags.Compile
           compileTags (result = new Result), fields
 
           expect(result.messages).sameStructure [
-            {type: 'error', path: '[fld2].tags', code: 'dsc.invalidValue', value: errValue}
+            {type: 'error', path: 'fld2.tags', code: 'dsc.invalidValue', value: errValue}
           ]
 
 Если в списке tags содержится неверное значение - возвращается соотвествующее сообщение, с указанием индекса
@@ -127,7 +127,7 @@ Tags.Compile
           compileTags (result = new Result), fields
 
           expect(result.messages).sameStructure [
-            {type: 'error', path: '[fld2].tags', code: 'dsc.invalidTagValue', value: errValue, index: 1}
+            {type: 'error', path: 'fld2.tags', code: 'dsc.invalidTagValue', value: errValue, index: 1}
           ]
 
 Если список тего содержит повторяющиеся значени - возвращается предупреждение
@@ -148,7 +148,7 @@ Tags.Compile
         expect(result.isError).toBe false
 
         expect(result.messages).sameStructure [
-          {type: 'warn', path: '[fld2].tags', code: 'dsc.duplicatedTag', value: 'user'}
+          {type: 'warn', path: 'fld2.tags', code: 'dsc.duplicatedTag', value: 'user'}
         ]
 
 Все имена тегов должны соотвествовать соглашению об именование элементов.  Иначе ошибка.
@@ -165,9 +165,9 @@ Tags.Compile
         compileTags (result = new Result), fields
 
         expect(result.messages).sameStructure [
-          {type: 'error', path: '[fld1].tags', code: 'dsc.invalidName', value: 'Admin'}
-          {type: 'error', path: '[fld2].tags', code: 'dsc.invalidName', value: 'A'}
-          {type: 'warn', path: '[fld2].tags', code: 'dsc.duplicatedTag', value: 'A'}
+          {type: 'error', path: 'fld1.tags', code: 'dsc.invalidName', value: 'Admin'}
+          {type: 'error', path: 'fld2.tags', code: 'dsc.invalidName', value: 'A'}
+          {type: 'warn', path: 'fld2.tags', code: 'dsc.duplicatedTag', value: 'A'}
         ]
 
 Имя тега 'all' зарезервировано, и не может явно использоваться
@@ -186,6 +186,6 @@ Tags.Compile
         expect(result.isError).toBe true
 
         expect(result.messages).sameStructure [
-          {type: 'error', path: '[fld1].tags', code: 'dsc.reservedName', value: 'all'}
-          {type: 'error', path: '[fld2].tags', code: 'dsc.reservedName', value: 'all'}
+          {type: 'error', path: 'fld1.tags', code: 'dsc.reservedName', value: 'all'}
+          {type: 'error', path: 'fld2.tags', code: 'dsc.reservedName', value: 'all'}
         ]

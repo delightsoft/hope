@@ -49,7 +49,7 @@ processRefers = (result, docs) ->
 
     field = undefined
 
-    result.context ((path) -> (Result.item field.name, Result.prop 'fields') path), ->
+    result.context ((path) -> (Result.prop field.name, Result.prop 'fields') path), ->
 
       for field in docOrField.fields.$$list
 
@@ -71,7 +71,7 @@ processRefers = (result, docs) ->
 
   doc = undefined
 
-  result.context ((path) -> (Result.item doc.name, Result.prop 'docs') path), -> # processRefers =
+  result.context ((path) -> (Result.prop doc.name, Result.prop 'docs') path), -> # processRefers =
 
     _processFields doc, doc for doc in docs.$$list
 

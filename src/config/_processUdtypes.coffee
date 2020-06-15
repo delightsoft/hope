@@ -25,7 +25,7 @@ processUdtypes = (result, config) ->
 
     udType = undefined
 
-    result.context ((path) -> (Result.item udType.name) path), ->
+    result.context ((path) -> (Result.prop udType.name) path), ->
 
       for t in builtInTypes when res.hasOwnProperty(t)
 

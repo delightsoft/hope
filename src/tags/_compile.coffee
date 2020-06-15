@@ -48,7 +48,7 @@ compile = (result, collection) ->
 
   item = undefined
 
-  result.context ((path) -> (Result.prop 'tags', Result.item item.name) path), ->
+  result.context ((path) -> (Result.prop 'tags', Result.prop item.name) path), ->
 
     for item in list when item.hasOwnProperty('$$src') && item.$$src.hasOwnProperty('tags')
 

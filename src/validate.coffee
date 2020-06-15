@@ -130,7 +130,7 @@ validate = (type) ->
         return
       result.isError = false
       i = undefined
-      result.context ((path) -> (Result.item i) path), ->
+      result.context ((path) -> (Result.prop i) path), ->
         for row, i in value
           validateStructure result, row
       result.error 'validate.invalidValue', value: value if result.isError or (type.required and value.length == 0)

@@ -28,7 +28,7 @@ processFields = (result, doc, config, fieldsProp = 'fields') ->
 
         field = undefined
 
-        result.context ((path) -> (Result.item field.name) path), ->
+        result.context ((path) -> (Result.prop field.name) path), ->
 
           for field in level.$$list
 

@@ -641,9 +641,9 @@ result переносился pathFunc исходного Result’а.  Если
       code: <span class="hljs-string">'dsc.code'</span>
       v: <span class="hljs-number">20</span>
 
-    expect(result.warn (Result.item <span class="hljs-string">'D'</span>, Result.prop <span class="hljs-string">'propA'</span>), <span class="hljs-string">'dsc.code'</span>, v: <span class="hljs-number">20</span>).sameStructure
+    expect(result.warn (Result.prop <span class="hljs-string">'D'</span>, Result.prop <span class="hljs-string">'propA'</span>), <span class="hljs-string">'dsc.code'</span>, v: <span class="hljs-number">20</span>).sameStructure
       type: <span class="hljs-string">'warn'</span>
-      path: <span class="hljs-string">'propA[D]'</span>
+      path: <span class="hljs-string">'propA.D'</span>
       code: <span class="hljs-string">'dsc.code'</span>
       v: <span class="hljs-number">20</span></pre></div></div>
             

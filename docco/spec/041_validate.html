@@ -193,7 +193,7 @@ focusOnCheck = <span class="hljs-string">""</span>
 
   name = <span class="hljs-literal">undefined</span>
 
-  result.context (<span class="hljs-function"><span class="hljs-params">(path)</span> -&gt;</span> (Result.item name) path), <span class="hljs-function">-&gt;</span>
+  result.context (<span class="hljs-function"><span class="hljs-params">(path)</span> -&gt;</span> (Result.prop name) path), <span class="hljs-function">-&gt;</span>
 
     map.$$list.forEach (field) -&gt;
 
@@ -438,8 +438,8 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
      ft1: type: <span class="hljs-string">'text'</span>, min: <span class="hljs-number">40</span>, max: <span class="hljs-number">30</span>, init: <span class="hljs-string">''</span>
 
    expect(result.messages).sameStructure [
-     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[f1].min'</span>, code: <span class="hljs-string">'dsc.tooBig'</span>, value: <span class="hljs-number">40</span>}
-     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[ft1].max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">30</span>}
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1.min'</span>, code: <span class="hljs-string">'dsc.tooBig'</span>, value: <span class="hljs-number">40</span>}
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'ft1.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">30</span>}
    ]
 
    compileFields (result = <span class="hljs-keyword">new</span> Result),
@@ -447,7 +447,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
      ft1a: type: <span class="hljs-string">'text'</span>, min: <span class="hljs-number">10</span>, max: <span class="hljs-number">5</span>, init: <span class="hljs-string">''</span>
 
    expect(result.messages).sameStructure [
-     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[ft1a].max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">5</span>}
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'ft1a.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">5</span>}
    ]
 
    compileFields (result = <span class="hljs-keyword">new</span> Result),
@@ -455,7 +455,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
      ft1b: type: <span class="hljs-string">'text'</span>, min: <span class="hljs-number">10</span>, max: <span class="hljs-number">5</span>, init: <span class="hljs-string">''</span>
 
    expect(result.messages).sameStructure [
-     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[ft1b].max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">5</span>}
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'ft1b.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">5</span>}
    ]
 
    compileFields (result = <span class="hljs-keyword">new</span> Result),
@@ -463,7 +463,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
      ft2: type: <span class="hljs-string">'text'</span>, min: <span class="hljs-number">10</span>, max: <span class="hljs-number">5</span>
 
    expect(result.messages).sameStructure [
-     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[ft2].max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">5</span>}
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'ft2.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">5</span>}
    ]
 
    compileFields (result = <span class="hljs-keyword">new</span> Result),
@@ -471,9 +471,9 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
      ft1: type: <span class="hljs-string">'text'</span>, min: <span class="hljs-literal">false</span>, max: <span class="hljs-literal">null</span>, init: <span class="hljs-string">''</span>
 
    expect(result.messages).sameStructure [
-     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[f1].min'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-string">'10'</span>}
-     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[ft1].min'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-literal">false</span>}
-     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'[ft1].max'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-literal">null</span> }
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1.min'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-string">'10'</span>}
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'ft1.min'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-literal">false</span>}
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'ft1.max'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-literal">null</span> }
    ]</pre></div></div>
             
         </li>

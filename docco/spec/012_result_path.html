@@ -291,33 +291,32 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Result.name добавляет имя (name) элемента в квадратных скобках</p>
+<h1 id="check-resultitem--">check “Result.item”, -&gt;</h1>
+<p>#</p>
+<h1 id="propcontext--resultitem-field1">propContext = Result.item ‘field1’</h1>
+<p>#</p>
+<h1 id="expecttypeof-propcontexttobe-function">expect(typeof propContext).toBe ‘function’</h1>
+<p>#</p>
+<h1 id="expectpropcontext-tobe-field1">expect(propContext ‘’).toBe ‘.field1’</h1>
+<p>#</p>
+<h1 id="expectpropcontext-rootcontexttobe-rootcontextfield1">expect(propContext ‘rootContext’).toBe ‘rootContext.field1’</h1>
+<p>#</p>
+<h1 id="expectresultitem-field1-samestructure-field1">expect((Result.item ‘field1’) ‘’).sameStructure ‘.field1’</h1>
+<p>#</p>
+<h1 id="expectresultitem-field1-resultprop-config-samestructure-configfield1">expect((Result.item ‘field1’, Result.prop ‘config’) ‘’).sameStructure ‘config.field1’</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"Result.item"</span>, <span class="hljs-function">-&gt;</span>
-
-    propContext = Result.item <span class="hljs-string">'field1'</span>
-
-    expect(<span class="hljs-keyword">typeof</span> propContext).toBe <span class="hljs-string">'function'</span>
-
-    expect(propContext <span class="hljs-string">''</span>).toBe <span class="hljs-string">'[field1]'</span>
-
-    expect(propContext <span class="hljs-string">'rootContext'</span>).toBe <span class="hljs-string">'rootContext[field1]'</span>
-
-    expect((Result.item <span class="hljs-string">'field1'</span>) <span class="hljs-string">''</span>).sameStructure <span class="hljs-string">'[field1]'</span>
-
-    expect((Result.item <span class="hljs-string">'field1'</span>, Result.prop <span class="hljs-string">'config'</span>) <span class="hljs-string">''</span>).sameStructure <span class="hljs-string">'config[field1]'</span>
-
-  check <span class="hljs-string">"complex"</span>, <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"complex"</span>, <span class="hljs-function">-&gt;</span>
 
     context =
       Result.index <span class="hljs-number">10</span>,
       Result.prop <span class="hljs-string">'update'</span>,
-      Result.item <span class="hljs-string">'opened'</span>,
+      Result.prop <span class="hljs-string">'opened'</span>,
       Result.prop <span class="hljs-string">'states'</span>,
-      Result.item <span class="hljs-string">'fieldA'</span>,
+      Result.prop <span class="hljs-string">'fieldA'</span>,
       Result.prop <span class="hljs-string">'fields'</span>,
-      Result.item <span class="hljs-string">'Doc1'</span>,
+      Result.prop <span class="hljs-string">'Doc1'</span>,
       Result.prop <span class="hljs-string">'docs'</span></pre></div></div>
             
         </li>
@@ -335,7 +334,7 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
             
             <div class="content"><div class='highlight'><pre>    path = context <span class="hljs-string">''</span>
 
-    expect(path).toBe <span class="hljs-string">'docs[Doc1].fields[fieldA].states[opened].update[10]'</span></pre></div></div>
+    expect(path).toBe <span class="hljs-string">'docs.Doc1.fields.fieldA.states.opened.update[10]'</span></pre></div></div>
             
         </li>
         

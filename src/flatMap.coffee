@@ -17,7 +17,7 @@ finish = (result, resValue, subitemsField, opts) ->
 
     item = undefined
 
-    result.context ((path) -> (Result.item item.name) path), -> # _processSublevel =
+    result.context ((path) -> (Result.prop item.name) path), -> # _processSublevel =
 
       for item in level.$$list
 
@@ -99,7 +99,7 @@ flatMap = (result, value, subitemsField, opts) ->
 
       if item.$$src?.hasOwnProperty(subitemsField)
 
-        result.context (Result.item item.name, Result.prop(subitemsField)), ->
+        result.context (Result.prop item.name, Result.prop(subitemsField)), ->
 
           item[subitemsField] = resLevel = sortedMap result, item.$$src[subitemsField], opts
 

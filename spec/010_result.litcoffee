@@ -247,9 +247,9 @@ result переносился pathFunc исходного Result'а.  Если �
           code: 'dsc.code'
           v: 20
 
-        expect(result.warn (Result.item 'D', Result.prop 'propA'), 'dsc.code', v: 20).sameStructure
+        expect(result.warn (Result.prop 'D', Result.prop 'propA'), 'dsc.code', v: 20).sameStructure
           type: 'warn'
-          path: 'propA[D]'
+          path: 'propA.D'
           code: 'dsc.code'
           v: 20
 

@@ -37,7 +37,7 @@ processDocs = (result, config) ->
 
       doc = undefined
 
-      result.context ((path) -> (Result.item doc.name) path), ->
+      result.context ((path) -> (Result.prop doc.name) path), ->
 
         for doc in res.$$list
 

@@ -20,7 +20,7 @@ processStates = (result, doc, fields, actions) ->
 
       state = undefined
 
-      result.context ((path) -> (Result.item state.name) path), ->
+      result.context ((path) -> (Result.prop state.name) path), ->
 
         for state in res.$$list
 
@@ -80,7 +80,7 @@ processStates = (result, doc, fields, actions) ->
 
                 transition = undefined
 
-                result.context ((path) -> (Result.item transition.name) path), ->
+                result.context ((path) -> (Result.prop transition.name) path), ->
 
                   for transition in state.transitions.$$list
 

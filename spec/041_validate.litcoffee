@@ -13,7 +13,7 @@
 
       name = undefined
 
-      result.context ((path) -> (Result.item name) path), ->
+      result.context ((path) -> (Result.prop name) path), ->
 
         map.$$list.forEach (field) ->
 
@@ -193,8 +193,8 @@ string: min, max, regexp, init
          ft1: type: 'text', min: 40, max: 30, init: ''
 
        expect(result.messages).sameStructure [
-         {type: 'error', path: '[f1].min', code: 'dsc.tooBig', value: 40}
-         {type: 'error', path: '[ft1].max', code: 'dsc.tooSmall', value: 30}
+         {type: 'error', path: 'f1.min', code: 'dsc.tooBig', value: 40}
+         {type: 'error', path: 'ft1.max', code: 'dsc.tooSmall', value: 30}
        ]
 
        compileFields (result = new Result),
@@ -202,7 +202,7 @@ string: min, max, regexp, init
          ft1a: type: 'text', min: 10, max: 5, init: ''
 
        expect(result.messages).sameStructure [
-         {type: 'error', path: '[ft1a].max', code: 'dsc.tooSmall', value: 5}
+         {type: 'error', path: 'ft1a.max', code: 'dsc.tooSmall', value: 5}
        ]
 
        compileFields (result = new Result),
@@ -210,7 +210,7 @@ string: min, max, regexp, init
          ft1b: type: 'text', min: 10, max: 5, init: ''
 
        expect(result.messages).sameStructure [
-         {type: 'error', path: '[ft1b].max', code: 'dsc.tooSmall', value: 5}
+         {type: 'error', path: 'ft1b.max', code: 'dsc.tooSmall', value: 5}
        ]
 
        compileFields (result = new Result),
@@ -218,7 +218,7 @@ string: min, max, regexp, init
          ft2: type: 'text', min: 10, max: 5
 
        expect(result.messages).sameStructure [
-         {type: 'error', path: '[ft2].max', code: 'dsc.tooSmall', value: 5}
+         {type: 'error', path: 'ft2.max', code: 'dsc.tooSmall', value: 5}
        ]
 
        compileFields (result = new Result),
@@ -226,9 +226,9 @@ string: min, max, regexp, init
          ft1: type: 'text', min: false, max: null, init: ''
 
        expect(result.messages).sameStructure [
-         {type: 'error', path: '[f1].min', code: 'dsc.invalidValue', value: '10'}
-         {type: 'error', path: '[ft1].min', code: 'dsc.invalidValue', value: false}
-         {type: 'error', path: '[ft1].max', code: 'dsc.invalidValue', value: null }
+         {type: 'error', path: 'f1.min', code: 'dsc.invalidValue', value: '10'}
+         {type: 'error', path: 'ft1.min', code: 'dsc.invalidValue', value: false}
+         {type: 'error', path: 'ft1.max', code: 'dsc.invalidValue', value: null }
        ]
 
 int: min, max

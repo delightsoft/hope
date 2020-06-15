@@ -28,7 +28,7 @@ processAPI = (result, config) ->
 
       api = undefined
 
-      result.context ((path) -> (Result.item api.name) path), ->
+      result.context ((path) -> (Result.prop api.name) path), ->
 
         for api in res.$$list
 
@@ -46,7 +46,7 @@ processAPI = (result, config) ->
 
                 method = undefined
 
-                result.context ((path) -> (Result.item method.name) path), ->
+                result.context ((path) -> (Result.prop method.name) path), ->
 
                   for method in api.methods.$$list
 

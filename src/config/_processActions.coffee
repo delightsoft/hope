@@ -38,7 +38,7 @@ processActions = (result, doc) ->
 
       action = undefined
 
-      result.context ((path) -> (Result.item action.name) path), ->
+      result.context ((path) -> (Result.prop action.name) path), ->
 
         for action in res.$$list when action.hasOwnProperty('$$src')
 

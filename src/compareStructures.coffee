@@ -18,7 +18,7 @@ _compareMap = (result, path, actual, expected, severity) ->
 
     k = undefined
 
-    result.context ((path) -> ((if expected.hasOwnProperty('$$list') && not k.startsWith('$') then Result.item else Result.prop) k) path), ->
+    result.context ((path) -> ((if expected.hasOwnProperty('$$list') && not k.startsWith('$') then Result.prop else Result.prop) k) path), ->
 
       for k in Object.keys(expected)
 

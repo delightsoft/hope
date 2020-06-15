@@ -85,10 +85,10 @@ general
         res.states = processStates (result = new Result), doc, res.fields, res.actions
 
         expect(result.messages).sameStructure [
-          {type: 'error', path: 'states[opened].view', code: 'dsc.unknownItem', value: 'notAField', position: 12 }
-          {type: 'error', path: 'states[opened].transitions[notAnAction]', code: 'dsc.unknownAction', value: 'notAnAction' }
-          {type: 'error', path: 'states[opened].transitions[notAnAction].next', code: 'dsc.unknownState', value: 'tralala' }
-          {type: 'error', path: 'states[closed].view', code: 'dsc.unknownTag', value: 'invalidTag', position: 16 }
+          {type: 'error', path: 'states.opened.view', code: 'dsc.unknownItem', value: 'notAField', position: 12 }
+          {type: 'error', path: 'states.opened.transitions.notAnAction', code: 'dsc.unknownAction', value: 'notAnAction' }
+          {type: 'error', path: 'states.opened.transitions.notAnAction.next', code: 'dsc.unknownState', value: 'tralala' }
+          {type: 'error', path: 'states.closed.view', code: 'dsc.unknownTag', value: 'invalidTag', position: 16 }
         ]
 
 //      check "general", ->
