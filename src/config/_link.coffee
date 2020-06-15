@@ -142,9 +142,9 @@ link = (config, noHelpers) ->
 
         if typeof result == 'object' && result != null && result.hasOwnProperty('isError')
 
-          result = undefined
-
           expr = result
+
+          result = undefined
 
         return cache[expr] if hasOwnProperty.call cache, expr
 
