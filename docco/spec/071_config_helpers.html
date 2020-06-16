@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>result path</title>
+  <title>config</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="..\docco.css" />
@@ -174,7 +174,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="result-path">result path</h1>
+              <h1 id="config">config</h1>
 
             </div>
             
@@ -190,12 +190,14 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, utils: {err: {_argError}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
+utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">""</span>
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
-describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
             
         </li>
         
@@ -206,19 +208,52 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Стало понятно, что у ошибок не бывает сложного понятия context, для которого нужно иметь возможность сохранять
-разнообразную информацию.  Всё что реально нужно, это путь (path) к элементу, к которому относится ошибка.  И для этого
-достаточно буквально трех элементов:</p>
+              <p>Модель документов, состоит из следующих элементов:</p>
 <ul>
-<li>ключ, если речь идет об объекте (map),</li>
-<li>индекс, если речь идет о массиве</li>
-<li>имя элемента, если речь идет о sortedMap, для которого одна и та же структура может быть представлена и как массив,
-как объект или просто как строка с элементами разделенными запятой</li>
+<li>Пользовательские типы (udtype)</li>
+<li>Описание документов</li>
+<li>Система прав, внутри документов</li>
+<li>Описание меню</li>
 </ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"Result.prop"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  beforeEach -&gt;
+
+    @config =
+      udtypes:
+        t1: type: <span class="hljs-string">'int'</span>
+        t2: type: <span class="hljs-string">'t1'</span>
+        t3: enum: <span class="hljs-string">'a,b,c'</span>
+      docs:
+        DocA:
+          fields:
+            fldA: refers: <span class="hljs-string">'anamespace.DocB'</span>, extra: {f: <span class="hljs-number">123</span>}, tags: <span class="hljs-string">'a, b, c'</span>
+            fldG: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
+            fldQ:
+              tags: <span class="hljs-string">'c'</span>
+              fields:
+                sa: type: <span class="hljs-string">'date'</span>
+                sb: type: <span class="hljs-string">'t1'</span>, required: <span class="hljs-literal">true</span>, null: <span class="hljs-literal">true</span>
+                sc: type: <span class="hljs-string">'t3'</span>, required: <span class="hljs-literal">true</span>
+                sd:
+                  tags: <span class="hljs-string">'namespace.tag'</span>
+                  enum:
+                    x: extra: {a:<span class="hljs-number">12</span>}
+                    y: {}
+        <span class="hljs-string">'anamespace.DocB'</span>: <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> Process names with namespaces</span>
+          fields:
+            fldA:
+              type: <span class="hljs-string">'subtable'</span>
+              fields:
+                f1: type: <span class="hljs-string">'integer'</span>, init: <span class="hljs-number">12</span>
+                f2: type: <span class="hljs-string">'string(20)'</span>, init: <span class="hljs-string">'tralala'</span>
+            fldB:
+              type: <span class="hljs-string">'subtable'</span>
+              required: <span class="hljs-literal">true</span>,
+              fields:
+                f1: type: <span class="hljs-string">'double'</span>
+                f2: type: <span class="hljs-string">'string(20)'</span></pre></div></div>
             
         </li>
         
@@ -229,18 +264,20 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Для поддержания такой структуры оставляем ту же идею, что у объекта result, должен быть массив методов - context, которые
-в момент записи сообщения, используются для получения пути к элементу.</p>
+              <p>TODO: Validate</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    propContext = Result.prop <span class="hljs-string">'propName'</span>
+            <div class="content"><div class='highlight'><pre>
+  check <span class="hljs-string">'$$calc'</span>, <span class="hljs-function">-&gt;</span>
 
-    expect(<span class="hljs-keyword">typeof</span> propContext).toBe <span class="hljs-string">'function'</span>
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
 
-    expect(propContext <span class="hljs-string">''</span>).toBe <span class="hljs-string">'propName'</span>
+    expect(result.messages).toEqual []
 
-    expect(propContext <span class="hljs-string">'rootContext'</span>).toBe <span class="hljs-string">'rootContext.propName'</span></pre></div></div>
+    unlinkedConfig = unlinkConfig(res)
+
+    linkedConfig = linkConfig unlinkedConfig, <span class="hljs-literal">false</span></pre></div></div>
             
         </li>
         
@@ -251,13 +288,17 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Можно объединять несколько свойств в одну функцию</p>
+              <p>После линкиовки доступен метод $$calc на всех sortedMap у которых есть теги</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    expect((Result.prop <span class="hljs-string">'propName'</span>) <span class="hljs-string">''</span>).toBe <span class="hljs-string">'propName'</span>
+            <div class="content"><div class='highlight'><pre>    mask1 = linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$calc <span class="hljs-string">'#a - #b'</span>
 
-    expect((Result.prop <span class="hljs-string">'a'</span>, Result.prop <span class="hljs-string">'propName'</span>) <span class="hljs-string">''</span>).toBe <span class="hljs-string">'propName.a'</span></pre></div></div>
+    expect(mask1.list).toEqual [linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.fldG]
+
+    mask2 = linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$calc <span class="hljs-string">'#a - fldG'</span>
+
+    expect(mask2.list).toEqual [linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.fldA]</pre></div></div>
             
         </li>
         
@@ -268,23 +309,31 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Result.item добавляет индекс в квадратных скобках</p>
+              <p>Ответы кешируются</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"Result.index"</span>, <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>    expect(linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$calc <span class="hljs-string">'#a - #b'</span>).toEqual mask1
 
-    propContext = Result.index <span class="hljs-number">10</span>
+  check <span class="hljs-string">'$$new'</span>, <span class="hljs-function">-&gt;</span>
 
-    expect(<span class="hljs-keyword">typeof</span> propContext).toBe <span class="hljs-string">'function'</span>
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
 
-    expect(propContext <span class="hljs-string">''</span>).toBe <span class="hljs-string">'[10]'</span>
+    expect(result.messages).toEqual []
 
-    expect(propContext <span class="hljs-string">'rootContext'</span>).toBe <span class="hljs-string">'rootContext[10]'</span>
+    unlinkedConfig = unlinkConfig(res)
 
-    expect((Result.index <span class="hljs-number">20</span>) <span class="hljs-string">''</span>).sameStructure <span class="hljs-string">'[20]'</span>
+    linkedConfig = linkConfig unlinkedConfig, <span class="hljs-literal">false</span>
 
-    expect((Result.index <span class="hljs-number">20</span>, Result.prop <span class="hljs-string">'config'</span>) <span class="hljs-string">''</span>).sameStructure <span class="hljs-string">'config[20]'</span></pre></div></div>
+    newDoc = linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$<span class="hljs-keyword">new</span>()
+
+    expect(newDoc).toEqual
+
+      fldA: <span class="hljs-literal">null</span>
+
+      fldG: <span class="hljs-string">''</span>
+
+      fldQ: sa: <span class="hljs-literal">null</span>, sb: <span class="hljs-number">0</span>, sc: <span class="hljs-string">'a'</span>, sd: <span class="hljs-string">'x'</span></pre></div></div>
             
         </li>
         
@@ -295,34 +344,19 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Result.name добавляет имя (name) элемента в квадратных скобках</p>
-<h1 id="check-resultitem--">check “Result.item”, -&gt;</h1>
-<p>#</p>
-<h1 id="propcontext--resultitem-field1">propContext = Result.item ‘field1’</h1>
-<p>#</p>
-<h1 id="expecttypeof-propcontexttobe-function">expect(typeof propContext).toBe ‘function’</h1>
-<p>#</p>
-<h1 id="expectpropcontext-tobe-field1">expect(propContext ‘’).toBe ‘.field1’</h1>
-<p>#</p>
-<h1 id="expectpropcontext-rootcontexttobe-rootcontextfield1">expect(propContext ‘rootContext’).toBe ‘rootContext.field1’</h1>
-<p>#</p>
-<h1 id="expectresultitem-field1-samestructure-field1">expect((Result.item ‘field1’) ‘’).sameStructure ‘.field1’</h1>
-<p>#</p>
-<h1 id="expectresultitem-field1-resultprop-config-samestructure-configfield1">expect((Result.item ‘field1’, Result.prop ‘config’) ‘’).sameStructure ‘config.field1’</h1>
+              <p>subtale с признаком required создаются с одной новой пустой записью</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"complex"</span>, <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>    newDoc = linkedConfig.docs[<span class="hljs-string">'anamespace.DocB'</span>].fields.$$<span class="hljs-keyword">new</span>()
 
-    context =
-      Result.index <span class="hljs-number">10</span>,
-      Result.prop <span class="hljs-string">'update'</span>,
-      Result.prop <span class="hljs-string">'opened'</span>,
-      Result.prop <span class="hljs-string">'states'</span>,
-      Result.prop <span class="hljs-string">'fieldA'</span>,
-      Result.prop <span class="hljs-string">'fields'</span>,
-      Result.prop <span class="hljs-string">'Doc1'</span>,
-      Result.prop <span class="hljs-string">'docs'</span></pre></div></div>
+    expect(newDoc).toEqual
+
+      fldA: [],
+
+      fldB: [
+        { f1: <span class="hljs-number">0</span>, f2: <span class="hljs-string">''</span> }
+      ]</pre></div></div>
             
         </li>
         
@@ -333,13 +367,17 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Собираем path, как последовательные вызовы функций ctx</p>
+              <p>записи для subtable можно создавать через $$new в поле типа subtable</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    path = context <span class="hljs-string">''</span>
+            <div class="content"><div class='highlight'><pre>    newRow = linkedConfig.docs[<span class="hljs-string">'anamespace.DocB'</span>].fields.fldA.fields.$$<span class="hljs-keyword">new</span>()
 
-    expect(path).toBe <span class="hljs-string">'docs.Doc1.fields.fieldA.states.opened.update[10]'</span></pre></div></div>
+    expect(newRow).toEqual
+
+      f1: <span class="hljs-number">12</span>
+
+      f2: <span class="hljs-string">'tralala'</span></pre></div></div>
             
         </li>
         

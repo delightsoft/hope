@@ -8,6 +8,8 @@ hasOwnProperty = Object::hasOwnProperty
 
 {isResult} = require '../utils/_err'
 
+$$newBuilder = require './helpers/new'
+
 link = (config, noHelpers) ->
 
   freeze = (obj) ->
@@ -54,7 +56,7 @@ link = (config, noHelpers) ->
 
     if noFreeze then res else (freeze res) # linkSortedMap =
 
-  linkFlatMap = (collection, prop, noIndex, noMask) ->
+  linkFlatMap = (collection, prop, noIndex, noMask, noFreeze) ->
 
     return EMPTY_FLAT_MAP if collection == undefined
 
@@ -74,7 +76,7 @@ link = (config, noHelpers) ->
 
         map["#{prefix}#{v.name}"] = v
 
-      linkSortedMap {list: level}, true, prefix == '' # _linkLevel
+      linkSortedMap {list: level}, true, prefix == '' || noFreeze # _linkLevel
 
     res = _linkLevel collection.list
 
@@ -106,7 +108,7 @@ link = (config, noHelpers) ->
 
       buildMask res.$$list
 
-    freeze res # linkFlatMode =
+    if noFreeze then res else (freeze res) # linkFlatMode =
 
   linkTags = (res, collection) ->
 
@@ -188,6 +190,16 @@ link = (config, noHelpers) ->
 
       field.enum = linkSortedMap field.enum, true if field.hasOwnProperty('enum')
 
+      if field.hasOwnProperty('regexp')
+
+        i = regexp.lastIndexOf('/')
+
+        field.regexp = new RegExp (field.regexp.substr 0, i - 1), (field.regexp.substr i + 1)
+
+      unless noHelpers
+
+        field.fields.$$new = $$newBuilder field.fields if field.type == 'subtable'
+
       freeze field
 
     return # linkFields =
@@ -200,9 +212,21 @@ link = (config, noHelpers) ->
 
   for doc in config.docs.$$list
 
-    doc.fields = linkFlatMap doc.fields, 'fields', false, false
+    doc.fields = linkFlatMap doc.fields, 'fields', false, false, true
 
     linkFields config, doc.fields.$$flat.$$list
+
+    unless noHelpers
+
+      doc.fields.$$new = $$newBuilder doc.fields
+
+    freezeFields = (fields) ->
+
+      fields.$$list.forEach (field) -> (freeze field.fields if field.fields; return)
+
+      freeze fields
+
+    freezeFields doc.fields
 
     doc.actions = linkSortedMap doc.actions, false, false
 

@@ -6,17 +6,13 @@ processExtraProps = (result, fieldDesc, res) ->
 
   validator = undefined
 
-  copyIfValid = (prop) ->
+  copyAndValidateProp = (prop) ->
 
-    if fieldDesc.hasOwnProperty(prop)
+    result.context ((path) -> (Result.prop prop) path), ->
 
-      result.isError = false
+      (validator || (validator = validateBuilder res)) result, fieldDesc.init
 
-      result.context ((path) -> (Result.prop prop) path), ->
-
-        (validator || (validator = validateBuilder res)) result, fieldDesc.init
-
-      res[prop] = fieldDesc[prop]
+    res[prop] = fieldDesc[prop]
 
   if fieldDesc.type in ['string', 'text']
 
@@ -28,7 +24,7 @@ processExtraProps = (result, fieldDesc, res) ->
 
        if typeof regexp == 'string'
 
-         if (i = regexp.lastIndex('/')) > 0
+         if (i = regexp.lastIndexOf('/')) > 0
 
            try
 
@@ -76,15 +72,15 @@ processExtraProps = (result, fieldDesc, res) ->
 
   else if fieldDesc.type in ['integer', 'double', 'decimal']
 
-    copyIfValid 'min'
+    copyAndValidateProp 'min' if fieldDesc.hasOwnProperty('min')
 
-    copyIfValid 'max'
+    copyAndValidateProp 'max' if fieldDesc.hasOwnProperty('max')
 
     if not result.isError and res.hasOwnProperty('min') and res.hasOwnProperty('max') and res.min > res.max
 
       result.error ((path) -> (Result.prop 'max') path), 'dsc.tooSmall', value: fieldDesc.max
 
-  copyIfValid 'init' if fieldDesc.hasOwnProperty('init') and not result.isError and not fieldDesc.type in ['structure', 'subtable']
+  copyAndValidateProp 'init' if fieldDesc.hasOwnProperty('init') and not result.isError and not (fieldDesc.type in ['structure', 'subtable'])
 
   res # processExtraProps =
 

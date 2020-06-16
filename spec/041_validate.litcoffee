@@ -202,6 +202,7 @@ string: min, max, regexp, init
          ft1a: type: 'text', min: 10, max: 5, init: ''
 
        expect(result.messages).sameStructure [
+         {type: 'error', path: 'f1a.init', code: 'validate.tooShort', value: '', min: 10 }
          {type: 'error', path: 'ft1a.max', code: 'dsc.tooSmall', value: 5}
        ]
 
@@ -210,6 +211,7 @@ string: min, max, regexp, init
          ft1b: type: 'text', min: 10, max: 5, init: ''
 
        expect(result.messages).sameStructure [
+         {type: 'error', path: 'f1b.init', code: 'validate.tooShort', value: '', min: 10 }
          {type: 'error', path: 'ft1b.max', code: 'dsc.tooSmall', value: 5}
        ]
 
@@ -240,6 +242,15 @@ decimal: precision, scale, min, max
     # TODO:
 
 RegExp
+
+      check "regexp: right", ->
+
+       fields = compileFields (result = new Result),
+         f1: type: 'string', length: 20, regexp: /.*/gi
+         ft1: type: 'text', regexp: '/.*/gi'
+
+       expect(fields.f1.regexp instanceof RegExp).toBe true
+       expect(fields.ft1.regexp instanceof RegExp).toBe true
 
 enum
 

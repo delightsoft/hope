@@ -140,6 +140,11 @@
                 </a>
               
                 
+                <a class="source" href="071_config_helpers.html">
+                  spec/071_config_helpers.litcoffee
+                </a>
+              
+                
                 <a class="source" href="300\300_ConfigContainer.html">
                   spec/300/300_ConfigContainer.litcoffee
                 </a>
@@ -447,6 +452,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
      ft1a: type: <span class="hljs-string">'text'</span>, min: <span class="hljs-number">10</span>, max: <span class="hljs-number">5</span>, init: <span class="hljs-string">''</span>
 
    expect(result.messages).sameStructure [
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1a.init'</span>, code: <span class="hljs-string">'validate.tooShort'</span>, value: <span class="hljs-string">''</span>, min: <span class="hljs-number">10</span> }
      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'ft1a.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">5</span>}
    ]
 
@@ -455,6 +461,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
      ft1b: type: <span class="hljs-string">'text'</span>, min: <span class="hljs-number">10</span>, max: <span class="hljs-number">5</span>, init: <span class="hljs-string">''</span>
 
    expect(result.messages).sameStructure [
+     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1b.init'</span>, code: <span class="hljs-string">'validate.tooShort'</span>, value: <span class="hljs-string">''</span>, min: <span class="hljs-number">10</span> }
      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'ft1b.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">5</span>}
    ]
 
@@ -502,13 +509,17 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>RegExp</p>
-<p>enum</p>
-<p>structure, subtable</p>
-<p>date, time</p>
-<p>refers</p>
-<p>TODO:</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"regexp: right"</span>, <span class="hljs-function">-&gt;</span>
+
+   fields = compileFields (result = <span class="hljs-keyword">new</span> Result),
+     f1: type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>, regexp: <span class="hljs-regexp">/.*/gi</span>
+     ft1: type: <span class="hljs-string">'text'</span>, regexp: <span class="hljs-string">'/.*/gi'</span>
+
+   expect(fields.f1.regexp <span class="hljs-keyword">instanceof</span> RegExp).toBe <span class="hljs-literal">true</span>
+   expect(fields.ft1.regexp <span class="hljs-keyword">instanceof</span> RegExp).toBe <span class="hljs-literal">true</span></pre></div></div>
             
         </li>
         
@@ -519,8 +530,11 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Кастомный валидатор</p>
-<p>TODO:  С проверкой других полей</p>
+              <p>enum</p>
+<p>structure, subtable</p>
+<p>date, time</p>
+<p>refers</p>
+<p>TODO:</p>
 
             </div>
             
@@ -532,6 +546,20 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Кастомный валидатор</p>
+<p>TODO:  С проверкой других полей</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Валидатор документ</p>
 <p>init</p>
