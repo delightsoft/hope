@@ -56,8 +56,6 @@ unlinkTags = (tags) ->
 
 unlinkField = (field) ->
 
-  field.udType = field.udType[0] if field.hasOwnProperty('udType')
-
   field.refers = (ref.name for ref in field.refers) if field.hasOwnProperty('refers')
 
   field.enum = unlinkSortedMap field.enum if field.hasOwnProperty('enum')
@@ -88,14 +86,6 @@ unlink = (config) ->
 
   newConfig = lightClone config
 
-  unless config.udtypes.$$list.length > 0
-
-    delete newConfig.udtypes
-
-  else
-
-    newConfig.udtypes = unlinkSortedMap newConfig.udtypes, unlinkUDType
-
   unless config.docs.$$list.length > 0
 
     delete newConfig.docs
@@ -105,6 +95,7 @@ unlink = (config) ->
     newConfig.docs = unlinkSortedMap newConfig.docs
 
     for newDoc in newConfig.docs.list
+
 
       newDoc.fields = unlinkFlatMap newDoc.fields, 'fields', unlinkField
 

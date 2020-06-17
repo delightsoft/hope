@@ -28,6 +28,8 @@ compile = (result, sourceConfig) ->
 
     delete config.$$src
 
+    delete config.udtypes
+
     config # compile =
 
 # ----------------------------

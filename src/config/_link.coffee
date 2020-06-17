@@ -158,33 +158,33 @@ link = (config, noHelpers) ->
 
     return # linkTags =
 
-  linkUDTypes = (config, list) ->
+  linkFieldsWithHelpers = (obj, prop) ->
 
-    for type in list
+    obj[prop] = linkFlatMap obj[prop], 'fields', false, false, true
 
-      type.refers = (config.docs[refName] for refName in type.refers) if type.hasOwnProperty('refers')
+    linkFields config, obj[prop].$$flat.$$list
 
-      type.enum = linkSortedMap type.enum, true, false if type.hasOwnProperty('enum')
+    unless noHelpers
 
-    return # linkUDTypes =
+      for field in obj[prop].$$flat.$$list when field.hasOwnProperty('fields')
+
+        field.fields.$$new = $$newBuilder field.fields
+
+      obj[prop].$$new = $$newBuilder obj[prop]
+
+    for field in obj[prop].$$flat.$$list
+
+      freeze field.fields if field.hasOwnProperty('fields')
+
+      freeze field
+
+    return # linkFieldsWithHelpers =
 
   linkFields = (config, list) ->
 
     for field in list
 
-      if field.hasOwnProperty('udType')
-
-        udt = config.udtypes[field.udType]
-
-        udtList = [udt.name]
-
-        while udt.hasOwnProperty('udType')
-
-          udt = config.udtypes[udt.udType]
-
-          udtList.push udt.name
-
-        field.udType = freeze udtList
+      freeze field.udType if field.hasOwnProperty('udType')
 
       field.refers = (config.docs[refName] for refName in field.refers) if field.hasOwnProperty('refers')
 
@@ -196,37 +196,13 @@ link = (config, noHelpers) ->
 
         field.regexp = new RegExp (field.regexp.substr 0, i - 1), (field.regexp.substr i + 1)
 
-      unless noHelpers
-
-        field.fields.$$new = $$newBuilder field.fields if field.type == 'subtable'
-
-      freeze field
-
     return # linkFields =
-
-  config.udtypes = linkSortedMap config.udtypes, true, false
-
-  linkUDTypes config, config.udtypes.$$list
 
   config.docs = linkSortedMap config.docs, true, false
 
   for doc in config.docs.$$list
 
-    doc.fields = linkFlatMap doc.fields, 'fields', false, false, true
-
-    linkFields config, doc.fields.$$flat.$$list
-
-    unless noHelpers
-
-      doc.fields.$$new = $$newBuilder doc.fields
-
-    freezeFields = (fields) ->
-
-      fields.$$list.forEach (field) -> (freeze field.fields if field.fields; return)
-
-      freeze fields
-
-    freezeFields doc.fields
+    linkFieldsWithHelpers doc, 'fields'
 
     doc.actions = linkSortedMap doc.actions, false, false
 
@@ -256,13 +232,9 @@ link = (config, noHelpers) ->
 
     for method in api.methods.$$list
 
-      method.arguments = linkFlatMap method.arguments, 'fields', false, false
+      linkFieldsWithHelpers method, 'arguments'
 
-      linkFields config, method.arguments.$$flat.$$list
-
-      method.result = linkFlatMap method.result, 'fields', false, false
-
-      linkFields config, method.result.$$flat.$$list
+      linkFieldsWithHelpers method, 'result'
 
       freeze method
 

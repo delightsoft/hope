@@ -52,6 +52,18 @@ config
                   fields:
                     f1: type: 'double'
                     f2: type: 'string(20)'
+          api:
+            api1:
+              methods:
+                methodA:
+                  arguments:
+                    a1: type: 'double', tags: 'x, y'
+                    a2: type: 'dateonly', tags: 'y'
+                  result:
+                    r:
+                      fields:
+                        x: type: 'string(20)'
+                        y: type: 't2'
 
       # TODO: Validate
 

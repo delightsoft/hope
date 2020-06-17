@@ -253,7 +253,19 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
               required: <span class="hljs-literal">true</span>,
               fields:
                 f1: type: <span class="hljs-string">'double'</span>
-                f2: type: <span class="hljs-string">'string(20)'</span></pre></div></div>
+                f2: type: <span class="hljs-string">'string(20)'</span>
+      api:
+        api1:
+          methods:
+            methodA:
+              arguments:
+                a1: type: <span class="hljs-string">'double'</span>, tags: <span class="hljs-string">'x, y'</span>
+                a2: type: <span class="hljs-string">'dateonly'</span>, tags: <span class="hljs-string">'y'</span>
+              result:
+                r:
+                  fields:
+                    x: type: <span class="hljs-string">'string(20)'</span>
+                    y: type: <span class="hljs-string">'t2'</span></pre></div></div>
             
         </li>
         

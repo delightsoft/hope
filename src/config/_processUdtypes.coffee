@@ -61,6 +61,7 @@ processUdtypes = (result, config) ->
 
         unless res.hasOwnProperty(udt.udType)
           result.error code: 'dsc.unknownType', value: udt.udType
+          return
 
         parent = res[udt.udType]
 
