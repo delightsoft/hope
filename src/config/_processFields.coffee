@@ -4,7 +4,7 @@ flatMap = require '../flatMap'
 
 copyExtra = require './_copyExtra'
 
-{compile: compileType, compile: {_typeProps: typeProps}} = require '../types'
+{compile: compileType, compile: {_typeProps: typeProps, _extraProps: extraProps}} = require '../types'
 
 {compile: compileTags} = require '../tags'
 
@@ -36,16 +36,6 @@ processFields = (result, doc, config, fieldsProp = 'fields') ->
 
             compileType result, field.$$src, field, context: 'field'
 
-            if field.$$src.hasOwnProperty('required')
-
-              unless typeof (value = field.$$src.required) == 'boolean'
-
-                result.error (Result.prop 'required'), 'dsc.invalidValue', value: value
-
-              else
-
-                field.required = value if value
-
             if field.hasOwnProperty('udType') && config.udtypes != 'failed'
 
               unless config.udtypes && config.udtypes.hasOwnProperty(field.udType)
@@ -60,15 +50,29 @@ processFields = (result, doc, config, fieldsProp = 'fields') ->
 
                 field[prop] = udt[prop] for prop in typeProps when udt.hasOwnProperty(prop)
 
+                field[prop] = udt[prop] for prop in extraProps when udt.hasOwnProperty(prop)
+
                 udtList = [udt.name]
 
-                while udt.hasOwnProperty('udType')
+                parentUdt = udt
 
-                  udt = config.udtypes[udt.udType]
+                while parentUdt.hasOwnProperty('udType')
 
-                  udtList.push udt.name
+                  parentUdt = config.udtypes[parentUdt.udType]
+
+                  udtList.push parentUdt.name
 
                 field.udType = udtList
+
+                if udt.hasOwnProperty('extra')
+
+                  if field.hasOwnProperty('extra')
+
+                    field.extra = Object.assign {}, udt.extra, field.extra
+
+                  else
+
+                    field.extra = udt.extra
 
             unless result.isError
 

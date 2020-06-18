@@ -9,6 +9,8 @@ copyExtra = require './_copyExtra'
 {compile: compileType,
 compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps, _extraProps: extraProps}} = require '../types'
 
+copyExtra = require './_copyExtra'
+
 processUdtypes = (result, config) ->
 
   unless config.$$src.hasOwnProperty('udtypes')
@@ -22,6 +24,8 @@ processUdtypes = (result, config) ->
     res = sortedMap result, config.$$src.udtypes, checkName: checkUDTypeName
 
     return if result.isError
+
+    copyExtra result, res
 
     udType = undefined
 
@@ -82,6 +86,16 @@ processUdtypes = (result, config) ->
           for prop in extraProps when parent.hasOwnProperty(prop) # derive type props
 
             udt[prop] = parent[prop]
+
+          if parent.hasOwnProperty('extra')
+
+            if udt.hasOwnProperty('extra')
+
+              udt.extra = Object.assign {}, parent.extra, udt.extra
+
+            else
+
+              udt.extra = parent.extra
 
     processUdtype udt for udt in res.$$list
 

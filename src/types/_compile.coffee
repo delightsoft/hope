@@ -48,15 +48,15 @@ compile = (result, fieldDesc, res, opts) ->
     if (optionsIndex = (type = sourceType = fieldDesc.type.trim()).indexOf '(') != -1
 
       unless (optionsEnd = (options = type.indexOf ')')) > optionsIndex # missing ) or it's before (
-        result.error 'dsc.invalidTypeValue', value: type;
+        result.error 'dsc.invalidTypeValue', value: type
         return
 
       unless optionsEnd == type.length - 1 # something after )
-        result.error 'dsc.invalidTypeValue', value: type;
+        result.error 'dsc.invalidTypeValue', value: type
         return
 
       if (optionsLen = optionsEnd - optionsIndex - 1) == 0
-        result.error 'dsc.invalidTypeValue', value: type;
+        result.error 'dsc.invalidTypeValue', value: type
         return
 
       options = type.substr optionsIndex + 1, optionsLen
@@ -119,15 +119,15 @@ compile = (result, fieldDesc, res, opts) ->
 
       result.context ((path) -> (Result.prop prop) path), ->
 
-        for prop in typeProps when fieldDesc.hasOwnProperty(prop) and not prop in ['null', 'required'] # udType can have null in a field definition
+        for prop in typeProps when fieldDesc.hasOwnProperty(prop) and not prop in ['null', 'required'] # udType can have null and required in a field definition
 
           result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
 
       res.udType = type
 
-      if typeof nullProp == 'boolean'
+      res.required = true if typeof requiredProp == 'boolean' and requiredProp
 
-        res.null = nullProp
+      res.null = true if typeof nullProp == 'boolean' and nullProp
 
       return res unless result.isError
 
@@ -326,8 +326,6 @@ takeStringOrArrayOfStrings = (result, value) ->
     return value
 
   else if Array.isArray value
-
-    ok = true
 
     return value unless value.some (s) -> typeof s != 'string'
 

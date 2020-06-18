@@ -22,8 +22,9 @@ config
           # TODO: Menu
           udtypes:
             t1: type: 'int'
-            t2: type: 't1'
+            t2: type: 't1', extra: {a:0, b:0}
             t3: enum: 'a,b,c'
+            t4: type: 't2', extra: {a:1}
           docs:
             DocA:
               fields:
@@ -32,7 +33,7 @@ config
                 fldQ:
                   fields:
                     sa: type: 'date'
-                    sb: type: 't1', required: true, null: true
+                    sb: type: 't4', required: true, null: true, extra: {b:2}
                     sc: type: 't3', required: true
                     sd:
                       tags: 'namespace.tag'
@@ -94,6 +95,8 @@ config
 Если документ был указан в корне без namespace'а - то он помещается в стандартный namespace 'doc'.
 
         expect(res.docs.$$list[1].name).toBe 'doc.DocA'
+
+        expect(res.docs['doc.DocA'].fields['fldQ'].fields['sb'].extra).toEqual {a: 1, b: 2}
 
       check 'unlink', ->
 

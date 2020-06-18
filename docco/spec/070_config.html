@@ -237,8 +237,9 @@ describe <span class="hljs-string">'070_config'</span>, <span class="hljs-functi
             
             <div class="content"><div class='highlight'><pre>      udtypes:
         t1: type: <span class="hljs-string">'int'</span>
-        t2: type: <span class="hljs-string">'t1'</span>
+        t2: type: <span class="hljs-string">'t1'</span>, extra: {a:<span class="hljs-number">0</span>, b:<span class="hljs-number">0</span>}
         t3: enum: <span class="hljs-string">'a,b,c'</span>
+        t4: type: <span class="hljs-string">'t2'</span>, extra: {a:<span class="hljs-number">1</span>}
       docs:
         DocA:
           fields:
@@ -247,7 +248,7 @@ describe <span class="hljs-string">'070_config'</span>, <span class="hljs-functi
             fldQ:
               fields:
                 sa: type: <span class="hljs-string">'date'</span>
-                sb: type: <span class="hljs-string">'t1'</span>, required: <span class="hljs-literal">true</span>, null: <span class="hljs-literal">true</span>
+                sb: type: <span class="hljs-string">'t4'</span>, required: <span class="hljs-literal">true</span>, null: <span class="hljs-literal">true</span>, extra: {b:<span class="hljs-number">2</span>}
                 sc: type: <span class="hljs-string">'t3'</span>, required: <span class="hljs-literal">true</span>
                 sd:
                   tags: <span class="hljs-string">'namespace.tag'</span>
@@ -355,6 +356,8 @@ describe <span class="hljs-string">'070_config'</span>, <span class="hljs-functi
             </div>
             
             <div class="content"><div class='highlight'><pre>    expect(res.docs.$$list[<span class="hljs-number">1</span>].name).toBe <span class="hljs-string">'doc.DocA'</span>
+
+    expect(res.docs[<span class="hljs-string">'doc.DocA'</span>].fields[<span class="hljs-string">'fldQ'</span>].fields[<span class="hljs-string">'sb'</span>].extra).toEqual {a: <span class="hljs-number">1</span>, b: <span class="hljs-number">2</span>}
 
   check <span class="hljs-string">'unlink'</span>, <span class="hljs-function">-&gt;</span>
 
