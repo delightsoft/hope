@@ -22,6 +22,12 @@ link = (config, noHelpers) ->
 
     Object.freeze obj
 
+  deepFreeze = (obj) ->
+
+    freeze obj
+
+    deepFreeze fld for fldName, fld of obj when typeof fld == 'object' && fld != null
+
   EMPTY_LIST = freeze []
 
   EMPTY_MAP_WITH_TAGS = freeze ({$$list: EMPTY_LIST, $$tags: EMPTY_TAGS})
@@ -49,6 +55,8 @@ link = (config, noHelpers) ->
       v.$$index = i unless noIndex
 
       res[v.name] = if noFreeze then v else freeze v
+
+      deepFreeze v.extra if v.hasOwnProperty('extra')
 
     res.$$list = collection.list
 
