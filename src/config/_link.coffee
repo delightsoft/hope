@@ -46,9 +46,9 @@ link = (config, noHelpers) ->
 
     for v, i in collection.list
 
-      res[v.name] = v
-
       v.$$index = i unless noIndex
+
+      res[v.name] = if noFreeze then v else freeze v
 
     res.$$list = collection.list
 
@@ -158,13 +158,25 @@ link = (config, noHelpers) ->
 
     return # linkTags =
 
-  linkFieldsWithHelpers = (obj, prop) ->
+  linkFieldsWithHelpers = (obj, prop, prefix) ->
 
     obj[prop] = linkFlatMap obj[prop], 'fields', false, false, true
 
     linkFields config, obj[prop].$$flat.$$list
 
     unless noHelpers
+
+      assignKey = (fields, prefix) ->
+
+        for field in fields.$$list
+
+          field.$$key = nextLevelPrefix = "#{prefix}.field.#{field.name}"
+
+          nextLevelPrefix = "type.#{field.udtype[field.udtype.length - 1]}" if field.hasOwnProperty('udType')
+
+          assignKey field.fields, nextLevelPrefix if field.hasOwnProperty('fields')
+
+          field.enum.$$list.forEach((e) -> e.$$key = "#{nextLevelPrefix}.enum.#{e.name}"; return) if field.hasOwnProperty('enum')
 
       for field in obj[prop].$$flat.$$list when field.hasOwnProperty('fields')
 
@@ -173,6 +185,8 @@ link = (config, noHelpers) ->
       obj[prop].$$new = $$newBuilder obj[prop]
 
     for field in obj[prop].$$flat.$$list
+
+      field.enum.$$list.forEach ((i) -> freeze i; return) if field.hasOwnProperty('enum')
 
       freeze field.fields if field.hasOwnProperty('fields')
 
@@ -198,15 +212,23 @@ link = (config, noHelpers) ->
 
     return # linkFields =
 
-  config.docs = linkSortedMap config.docs, true, false
+  config.docs = linkSortedMap config.docs, true, true
+
+  freeze config.docs.$$list
 
   for doc in config.docs.$$list
 
-    linkFieldsWithHelpers doc, 'fields'
+    linkFieldsWithHelpers doc, 'fields', "doc.#{doc.name}"
 
     doc.actions = linkSortedMap doc.actions, false, false
 
     doc.states = linkSortedMap doc.states, true, false
+
+    unless noHelpers
+
+      doc.actions.$$list.forEach ((a) -> a.$$key = "doc.#{doc.name}.action.#{a.name}"; return)
+
+      doc.states.$$list.forEach ((s) -> s.$$key = "doc.#{doc.name}.state.#{s.name}"; return)
 
     for state in doc.states.$$list
 
@@ -224,11 +246,17 @@ link = (config, noHelpers) ->
 
       freeze state
 
-  config.api = linkSortedMap config.api, true, false
+    freeze doc
+
+  config.api = linkSortedMap config.api, true, true
+
+  freeze config.api.$$list
 
   for api in config.api.$$list
 
-    api.methods = linkSortedMap api.methods, false, false
+    api.methods = linkSortedMap api.methods, false, true
+
+    freeze api.methods
 
     for method in api.methods.$$list
 
