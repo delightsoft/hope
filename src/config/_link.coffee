@@ -178,13 +178,17 @@ link = (config, noHelpers) ->
 
         for field in fields.$$list
 
-          field.$$key = nextLevelPrefix = "#{prefix}.field.#{field.name}"
+          nextLevelPrefix = "#{prefix}.field.#{field.name}"
 
-          nextLevelPrefix = "type.#{field.udtype[field.udtype.length - 1]}" if field.hasOwnProperty('udType')
+          field.$$key = if field.hasOwnProperty('fields') then "#{nextLevelPrefix}.label" else nextLevelPrefix
+
+          nextLevelPrefix = "type.#{field.udType[field.udType.length - 1]}" if field.hasOwnProperty('udType')
 
           assignKey field.fields, nextLevelPrefix if field.hasOwnProperty('fields')
 
           field.enum.$$list.forEach((e) -> e.$$key = "#{nextLevelPrefix}.enum.#{e.name}"; return) if field.hasOwnProperty('enum')
+
+      assignKey obj[prop], prefix
 
       for field in obj[prop].$$flat.$$list when field.hasOwnProperty('fields')
 
@@ -210,7 +214,11 @@ link = (config, noHelpers) ->
 
       field.refers = (config.docs[refName] for refName in field.refers) if field.hasOwnProperty('refers')
 
-      field.enum = linkSortedMap field.enum, true if field.hasOwnProperty('enum')
+      if field.hasOwnProperty('enum')
+
+        field.enum = linkSortedMap field.enum, true, true
+
+        freeze field.enum.$$list
 
       if field.hasOwnProperty('regexp')
 
@@ -226,7 +234,13 @@ link = (config, noHelpers) ->
 
   for doc in config.docs.$$list
 
-    linkFieldsWithHelpers doc, 'fields', "doc.#{doc.name}"
+    unless noHelpers
+
+      docPrefix = doc.name
+
+      doc.$$key = "#{docPrefix}.title"
+
+    linkFieldsWithHelpers doc, 'fields', docPrefix
 
     doc.actions = linkSortedMap doc.actions, false, false
 
@@ -234,9 +248,9 @@ link = (config, noHelpers) ->
 
     unless noHelpers
 
-      doc.actions.$$list.forEach ((a) -> a.$$key = "doc.#{doc.name}.action.#{a.name}"; return)
+      doc.actions.$$list.forEach ((a) -> a.$$key = "#{docPrefix}.action.#{a.name}"; return)
 
-      doc.states.$$list.forEach ((s) -> s.$$key = "doc.#{doc.name}.state.#{s.name}"; return)
+      doc.states.$$list.forEach ((s) -> s.$$key = "#{docPrefix}.state.#{s.name}"; return)
 
     for state in doc.states.$$list
 
