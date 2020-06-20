@@ -178,9 +178,7 @@ link = (config, noHelpers) ->
 
         for field in fields.$$list
 
-          nextLevelPrefix = "#{prefix}.field.#{field.name}"
-
-          field.$$key = if field.hasOwnProperty('fields') then "#{nextLevelPrefix}.label" else nextLevelPrefix
+          field.$$key = nextLevelPrefix = "#{prefix}.field.#{field.name}"
 
           nextLevelPrefix = "type.#{field.udType[field.udType.length - 1]}" if field.hasOwnProperty('udType')
 
