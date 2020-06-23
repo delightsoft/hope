@@ -8,7 +8,13 @@ _add = (name, path) ->
 
   path += '.' if path.length > 0
 
-  path += name
+  if name.indexOf('.') >= 0
+
+    path += "['#{name}']"
+
+  else
+
+    path += name
 
   path # _add =
 

@@ -174,11 +174,11 @@ link = (config, noHelpers) ->
 
     unless noHelpers
 
-      assignKey = (fields, prefix) ->
+      assignKey = (fields, levelPrefix) ->
 
         for field in fields.$$list
 
-          field.$$key = nextLevelPrefix = "#{prefix}.field.#{field.name}"
+          field.$$key = nextLevelPrefix = "#{levelPrefix}.field.#{field.name}"
 
           nextLevelPrefix = "type.#{field.udType[field.udType.length - 1]}" if field.hasOwnProperty('udType')
 
@@ -216,6 +216,8 @@ link = (config, noHelpers) ->
 
         field.enum = linkSortedMap field.enum, true, true
 
+        freeze field.enum
+
         freeze field.enum.$$list
 
       if field.hasOwnProperty('regexp')
@@ -228,17 +230,17 @@ link = (config, noHelpers) ->
 
   config.docs = linkSortedMap config.docs, true, true
 
+  freeze config.docs
+
   freeze config.docs.$$list
 
   for doc in config.docs.$$list
 
     unless noHelpers
 
-      docPrefix = doc.name
+      doc.$$key = docKey = doc.name
 
-      doc.$$key = "#{docPrefix}.title"
-
-    linkFieldsWithHelpers doc, 'fields', docPrefix
+    linkFieldsWithHelpers doc, 'fields', docKey
 
     doc.actions = linkSortedMap doc.actions, false, false
 
@@ -246,9 +248,9 @@ link = (config, noHelpers) ->
 
     unless noHelpers
 
-      doc.actions.$$list.forEach ((a) -> a.$$key = "#{docPrefix}.action.#{a.name}"; return)
+      doc.actions.$$list.forEach ((a) -> a.$$key = "#{docKey}.action.#{a.name}"; return)
 
-      doc.states.$$list.forEach ((s) -> s.$$key = "#{docPrefix}.state.#{s.name}"; return)
+      doc.states.$$list.forEach ((s) -> s.$$key = "#{docKey}.state.#{s.name}"; return)
 
     for state in doc.states.$$list
 
@@ -270,25 +272,37 @@ link = (config, noHelpers) ->
 
   config.api = linkSortedMap config.api, true, true
 
+  freeze config.api
+
   freeze config.api.$$list
 
   for api in config.api.$$list
+
+    unless noHelpers
+
+      api.$$key = apiKey = "api.#{api.name}"
 
     api.methods = linkSortedMap api.methods, false, true
 
     freeze api.methods
 
+    freeze api.methods.$$list
+
     for method in api.methods.$$list
 
-      linkFieldsWithHelpers method, 'arguments'
+      unless noHelpers
 
-      linkFieldsWithHelpers method, 'result'
+        method.$$key = "#{apiKey}.method.#{method.name}"
+
+      linkFieldsWithHelpers method, 'arguments', "#{apiKey}.method.#{method.name}.arg"
+
+      linkFieldsWithHelpers method, 'result', "#{apiKey}.method.#{method.name}.result"
 
       freeze method
 
     freeze api
 
-  config # link =
+  freeze config # link =
 
 # ----------------------------
 
