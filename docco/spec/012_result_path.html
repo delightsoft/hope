@@ -178,6 +178,13 @@
 
             </div>
             
+            <div class="content"><div class='highlight'><pre>{Result, utils: {err: {_argError}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
         </li>
         
         
@@ -186,25 +193,6 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>{Result, utils: {err: {_argError}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span>
-<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Стало понятно, что у ошибок не бывает сложного понятия context, для которого нужно иметь возможность сохранять
 разнообразную информацию.  Всё что реально нужно, это путь (path) к элементу, к которому относится ошибка.  И для этого
@@ -223,11 +211,11 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Для поддержания такой структуры оставляем ту же идею, что у объекта result, должен быть массив методов - context, которые
 в момент записи сообщения, используются для получения пути к элементу.</p>
@@ -245,11 +233,11 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
         </li>
         
         
-        <li id="section-5">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Можно объединять несколько свойств в одну функцию</p>
 
@@ -262,11 +250,11 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
         </li>
         
         
-        <li id="section-6">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Result.item добавляет индекс в квадратных скобках</p>
 
@@ -289,11 +277,11 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Result.name добавляет имя (name) элемента в квадратных скобках</p>
 <h1 id="check-resultitem--">check “Result.item”, -&gt;</h1>
@@ -327,11 +315,11 @@ describe <span class="hljs-string">'012_result_path:'</span>, <span class="hljs-
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Собираем path, как последовательные вызовы функций ctx</p>
 
