@@ -8,7 +8,7 @@
 
     validateBuilder = require '../src/validate'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     compileFields = (result, fields) ->
@@ -75,9 +75,23 @@
 
            f3: type: 'boolean'
 
-         right: [fieldsVal = {f1: 'test', f2: 12, f3: false}], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', []]
+         right: [fieldsVal = {f1: 'test', f2: 12, f3: false}]
 
-       subtable: {right: [[], [fieldsVal], [fieldsVal, fieldsVal, fieldsVal]], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', {}]}
+         wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', []]
+
+       subtable:
+
+         fields: compileFields (result = new Result),
+
+           f1: type: 'string', length: 10
+
+           f2: type: 'integer'
+
+           f3: type: 'boolean'
+
+         right: [[], [fieldsVal], [fieldsVal, fieldsVal, fieldsVal]]
+
+         wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', {}]
 
 #       refers: {right: ['cY2yZAwgwkanklftLyYzL', '123@doc.Doc1'], wrong: wrongVal}
 
@@ -148,8 +162,8 @@
        validate (result = new Result), {f3: false}, fields.$$tags.all
 
        expect(result.messages).sameStructure [
-         {type: 'error', code: 'validate.missingField', value: 'f1'},
-         {type: 'error', code: 'validate.missingField', value: 'f2'},
+         {type: 'error', code: 'validate.requiredField', value: 'f1'},
+         {type: 'error', code: 'validate.requiredField', value: 'f2'},
        ]
 
 null

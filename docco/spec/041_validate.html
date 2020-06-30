@@ -193,7 +193,7 @@ flatMap = <span class="hljs-built_in">require</span> <span class="hljs-string">'
 
 validateBuilder = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate'</span>
 
-focusOnCheck = <span class="hljs-string">""</span>
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function">
 <span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
@@ -281,9 +281,23 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
        f3: type: <span class="hljs-string">'boolean'</span>
 
-     right: [fieldsVal = {f1: <span class="hljs-string">'test'</span>, f2: <span class="hljs-number">12</span>, f3: <span class="hljs-literal">false</span>}], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, []]
+     right: [fieldsVal = {f1: <span class="hljs-string">'test'</span>, f2: <span class="hljs-number">12</span>, f3: <span class="hljs-literal">false</span>}]
 
-   subtable: {right: [[], [fieldsVal], [fieldsVal, fieldsVal, fieldsVal]], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, {}]}</pre></div></div>
+     wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, []]
+
+   subtable:
+
+     fields: compileFields (result = <span class="hljs-keyword">new</span> Result),
+
+       f1: type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">10</span>
+
+       f2: type: <span class="hljs-string">'integer'</span>
+
+       f3: type: <span class="hljs-string">'boolean'</span>
+
+     right: [[], [fieldsVal], [fieldsVal, fieldsVal, fieldsVal]]
+
+     wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, {}]</pre></div></div>
             
         </li>
         
@@ -365,8 +379,8 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
    validate (result = <span class="hljs-keyword">new</span> Result), {f3: <span class="hljs-literal">false</span>}, fields.$$tags.all
 
    expect(result.messages).sameStructure [
-     {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.missingField'</span>, value: <span class="hljs-string">'f1'</span>},
-     {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.missingField'</span>, value: <span class="hljs-string">'f2'</span>},
+     {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f1'</span>},
+     {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f2'</span>},
    ]</pre></div></div>
             
         </li>

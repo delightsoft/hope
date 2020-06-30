@@ -59,7 +59,7 @@ messages =
 
     invalidValue: (args) -> "Invalid value: #{args.value}"
 
-    missingField: (args) -> "Missing field: #{args.value}"
+    requiredField: (args) -> "Required field: #{args.value}"
 
     unexpectedField: (args) -> "Unexpected field: #{args.value}"
 

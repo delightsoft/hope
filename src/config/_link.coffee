@@ -10,6 +10,8 @@ hasOwnProperty = Object::hasOwnProperty
 
 $$newBuilder = require './helpers/new'
 
+{structure: validateStructure, addValidate} = require '../validate'
+
 link = (config, noHelpers, methods) ->
 
   freeze = (obj) ->
@@ -188,6 +190,8 @@ link = (config, noHelpers, methods) ->
 
       assignKey obj[prop], prefix
 
+      addValidate obj[prop]
+
       for field in obj[prop].$$flat.$$list when field.hasOwnProperty('fields')
 
         field.fields.$$new = $$newBuilder field.fields
@@ -303,6 +307,20 @@ link = (config, noHelpers, methods) ->
       linkFieldsWithHelpers method, 'arguments', "#{apiKey}.method.#{method.name}.arg"
 
       linkFieldsWithHelpers method, 'result', "#{apiKey}.method.#{method.name}.result"
+
+      unless noHelpers
+
+        do ->
+
+          validateArguments = validateStructure method, 'arguments'
+
+          method.arguments.$$validate = (result, fields) -> validateArguments result, fields
+
+          validateResult = validateStructure method, 'result'
+
+          method.result.$$validate = (result, fields) -> validateResult result, fields
+
+          return
 
       freeze method
 
