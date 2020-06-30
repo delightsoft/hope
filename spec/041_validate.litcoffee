@@ -1,6 +1,10 @@
     {Result, sortedMap, utils: {prettyPrint}} = require '../src'
 
+    flatMap = require '../src/flatMap'
+
     {compile: compileType} = require '../src/types'
+
+    {compile: compileTags} = require '../src/tags'
 
     validateBuilder = require '../src/validate'
 
@@ -9,7 +13,7 @@
 
     compileFields = (result, fields) ->
 
-      map = sortedMap result, fields
+      map = sortedMap result, fields, index: true
 
       name = undefined
 
@@ -24,6 +28,8 @@
           compileType result, field.$$src, field, context: 'field'
 
           return
+
+      compileTags (result = new Result), map
 
       map = validateBuilder.addValidate map
 
@@ -69,7 +75,7 @@
 
            f3: type: 'boolean'
 
-         right: [fieldsVal = {f1: 'test', f2: '12', f3: false}], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', []]
+         right: [fieldsVal = {f1: 'test', f2: 12, f3: false}], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', []]
 
        subtable: {right: [[], [fieldsVal], [fieldsVal, fieldsVal, fieldsVal]], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', {}]}
 
@@ -81,7 +87,11 @@
 
        type.enum = typeTestDesc.enum if typeTestDesc.enum
 
-       type.fields = typeTestDesc.fields if typeTestDesc.fields
+       if typeTestDesc.fields
+
+         type.fields = typeTestDesc.fields
+
+         compileTags (result = new Result), type.fields
 
        validate = validateBuilder type
 
@@ -89,21 +99,19 @@
 
          do (typeName, type, validate, value) -> check "#{typeName}: simple types - ok: #{prettyPrint value}", ->
 
-           validate (result = new Result), value
+           validate (result = new Result), value, type.fields?.$$tags.all
 
-           expect(result).resultContains []
+           expect(result.messages).sameStructure []
 
        for value in typeTestDesc.wrong
 
          do (typeName, type, validate, value) ->  check "#{typeName}: simple types - wrong: #{prettyPrint value}", ->
 
-           validate (result = new Result), value
+           validate (result = new Result), value, type.fields?.$$tags.all
 
-           expect(result).resultContains [
+           expect(result.messages).sameStructure [
              {type: 'error', code: 'validate.invalidValue', value}
            ]
-
-required
 
      check "required: ok", ->
 
@@ -111,7 +119,7 @@ required
 
          type: 'structure'
 
-         fields: compileFields (result = new Result),
+         fields: fields = compileFields (result = new Result),
 
            f1: type: 'integer', required: true, validate: validateBuilder type: 'integer'
 
@@ -119,9 +127,9 @@ required
 
            f3: type: 'boolean', validate: validateBuilder type: 'boolean'
 
-       validate (result = new Result), f1: 12, f2: 'test'
+       validate (result = new Result), {f1: 12, f2: 'test'}, fields.$$tags.all
 
-       expect(result).resultContains []
+       expect(result.messages).sameStructure []
 
      check "required: wrong", ->
 
@@ -129,7 +137,7 @@ required
 
          type: 'structure'
 
-         fields: compileFields (result = new Result),
+         fields: fields = compileFields (result = new Result),
 
            f1: type: 'integer', required: true
 
@@ -137,22 +145,22 @@ required
 
            f3: type: 'boolean'
 
-       validate (result = new Result), f3: false
+       validate (result = new Result), {f3: false}, fields.$$tags.all
 
-       expect(result).resultContains [
-         {type: 'error', path: 'f1', code: 'validate.missingField', value: 'f1'},
-         {type: 'error', path: 'f2', code: 'validate.missingField', value: 'f2'},
+       expect(result.messages).sameStructure [
+         {type: 'error', code: 'validate.missingField', value: 'f1'},
+         {type: 'error', code: 'validate.missingField', value: 'f2'},
        ]
 
 null
 
      check "null: ok", ->
 
-       testStructure =
+       validate = validateBuilder
 
          type: 'structure'
 
-         fields: compileFields (result = new Result),
+         fields: fields = compileFields (result = new Result),
 
            f1: type: 'integer', null: true
 
@@ -160,9 +168,9 @@ null
 
            f3: type: 'boolean'
 
-       validate (result = new Result), f1: null, f2: 'test', f3: false
+       validate (result = new Result), {f1: null, f2: 'test', f3: false}, fields.$$tags.all
 
-       expect(result).resultContains []
+       expect(result.messages).sameStructure []
 
      check "null: wrong", ->
 
@@ -170,7 +178,7 @@ null
 
          type: 'structure'
 
-         fields: compileFields (result = new Result),
+         fields: fields = compileFields (result = new Result),
 
            f1: type: 'integer', null: true
 
@@ -178,9 +186,9 @@ null
 
            f3: type: 'boolean'
 
-       validate (result = new Result), f1: null, f2: 'test', f3: null
+       validate (result = new Result), {f1: null, f2: 'test', f3: null}, fields.$$tags.all
 
-       expect(result).resultContains [
+       expect(result.messages).sameStructure [
          {type: 'error', path: 'f3', code: 'validate.invalidValue', value: null}
        ]
 

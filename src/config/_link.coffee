@@ -10,7 +10,7 @@ hasOwnProperty = Object::hasOwnProperty
 
 $$newBuilder = require './helpers/new'
 
-link = (config, noHelpers) ->
+link = (config, noHelpers, methods) ->
 
   freeze = (obj) ->
 
@@ -251,6 +251,12 @@ link = (config, noHelpers) ->
       doc.actions.$$list.forEach ((a) -> a.$$key = "#{docKey}.action.#{a.name}"; return)
 
       doc.states.$$list.forEach ((s) -> s.$$key = "#{docKey}.state.#{s.name}"; return)
+
+      unless doc.access = methods?[doc.name]?.access
+
+        allAccess = {view: doc.fields.$$tags.all, update: doc.fields.$$tags.all, actions: doc.fields.$$tags.all}
+
+        doc.$$access = (doc, user) -> allAccess
 
     for state in doc.states.$$list
 

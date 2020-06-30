@@ -50,7 +50,7 @@ class BitArray
 
   get: (index) ->
 
-    invalidArg 'index' unless typeof index == 'number' && index % 1 == 0
+    invalidArg 'index', index unless typeof index == 'number' && index % 1 == 0
     if value == undefined then value = true
     tooManyArgs() unless arguments.length <= 1
 

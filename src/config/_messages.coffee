@@ -55,6 +55,22 @@ messages =
 
     fieldIsReadonly: (args) -> "Field is read-only: #{args.value}"
 
+  validate:
+
+    invalidValue: (args) -> "Invalid value: #{args.value}"
+
+    missingField: (args) -> "Missing field: #{args.value}"
+
+    unexpectedField: (args) -> "Unexpected field: #{args.value}"
+
+    tooShort: (args) -> "Value too short (min length: #{args.min}): '#{args.value}'"
+
+    tooLong: (args) -> "Value too long (max length: #{args.max}): '#{args.value}'"
+
+    tooSmall: (args) -> "Out of range (min: #{args.min}): #{args.value}"
+
+    tooBig: (args) -> "Out of range (max: #{args.max}): #{args.value}"
+
 # ----------------------------
 
 module.exports = (result) ->
