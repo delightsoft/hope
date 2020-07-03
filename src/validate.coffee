@@ -1,4 +1,4 @@
-Result = require '../src/result'
+Result = require './result'
 
 _moment = undefined
 momentLdr = -> _moment or (_moment = require 'moment')

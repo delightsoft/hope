@@ -62,8 +62,6 @@ loader = (result, sourceDir) ->
 
       res = res result if typeof res == 'function'
 
-      res = res.items if typeof res == 'object' && res != null && hasOwnProperty.call(res, 'items')
-
       res # loadFile =
 
     res =
