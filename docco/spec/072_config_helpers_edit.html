@@ -299,6 +299,24 @@ TODO: method result access</p>
 
             </div>
             
+            <div class="content"><div class='highlight'><pre>
+  check <span class="hljs-string">'edit validate builder'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
+
+    expect(result.messages).toEqual []
+
+    unlinkedConfig = deepClone unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig, @code
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder {f1: <span class="hljs-string">'wrong'</span>}).toEqual
+      save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
+        <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f2'</span>}]
+        f1: type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span></pre></div></div>
+            
         </li>
         
     </ul>

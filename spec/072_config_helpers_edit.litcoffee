@@ -93,3 +93,22 @@ config
         # TODO: method arg access
         # TODO: method result validate
         # TODO: method result access
+
+      check 'edit validate builder', ->
+
+        res = compileConfig (result = new Result), @config
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = deepClone unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig, @code
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder {f1: 12, f2: 'test', f3: true}).toEqual save: true, submit: true, messages: {}
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder {f1: 'wrong'}).toEqual
+          save: false, submit: false, messages:
+            '': [{type: 'error', code: 'validate.requiredField', value: 'f2'}]
+            f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
+
+

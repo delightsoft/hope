@@ -16,6 +16,8 @@ $$accessBuilder = require('./helpers/access')
 
 $$validateBuilder = require('./helpers/validate')
 
+$$editValidateBuilderBuilder = require('./helpers/editValidateBuilder')
+
 link = (config, noHelpers) ->
 
   if typeof noHelpers == 'object' and noHelpers != null
@@ -269,6 +271,8 @@ link = (config, noHelpers) ->
       doc.$$access = $$accessBuilder doc, 'fields', methods and methods.docs[doc.name] and methods.docs[doc.name].access
 
       doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
+
+      doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access
 
     for state in doc.states.$$list
 
