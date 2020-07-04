@@ -2,72 +2,74 @@ Result = require '../../result'
 
 $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
-  prevModel = undefined
+  ->
 
-  prevBusinessResult = undefined
+    prevModel = undefined
 
-  (fields) ->
+    prevBusinessResult = undefined
 
-    prevBusinessResult = undefined if fields != prevModel
+    (fields) =>
 
-    validate = type["#{fieldsProp}Validate"]
+      prevBusinessResult = undefined if fields != prevModel
 
-    messages = {}
+      validate = type["#{fieldsProp}Validate"]
 
-    r = access.call this, fields
+      messages = {}
 
-    localResult = new Result
+      r = access.call this, fields
 
-    save = true
+      localResult = new Result
 
-    submit = true
+      save = true
 
-    localResult.error = () -> # перехватываем сообщения об ошибках
+      submit = true
 
-      msg = Result::error.apply this, arguments
+      localResult.error = () -> # перехватываем сообщения об ошибках
 
-      if msg.type == 'error'
+        msg = Result::error.apply this, arguments
 
-        submit = false
+        if msg.type == 'error'
 
-        save = false unless msg.code == 'validate.requiredField'
+          submit = false
 
-      return # localResult.error = () ->
+          save = false unless msg.code == 'validate.requiredField'
 
-    validate localResult, fields, r.view, r.required, fields.$$touched
+        return # localResult.error = () ->
 
-    oldSave = save
+      validate localResult, fields, r.view, r.required, fields.$$touched
 
-    if localResult.isError
+      oldSave = save
 
-      if prevBusinessResult
+      if localResult.isError
 
-        prevBusinessResult.messages.forEach (msg) ->
-          if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-          else (messages[''] or (messages[''] = [])).push msg
-          return
+        if prevBusinessResult
 
-      localResult.messages.forEach (msg) ->
-        if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-        else (messages[''] or (messages[''] = [])).push msg
-        return
-
-    else
-
-      if typeof businessValidate == 'function'
-
-        localResult.messages.length = 0
-
-        businessValidate localResult, fields
+          prevBusinessResult.messages.forEach (msg) ->
+            if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
+            else (messages[''] or (messages[''] = [])).push msg
+            return
 
         localResult.messages.forEach (msg) ->
           if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
           else (messages[''] or (messages[''] = [])).push msg
           return
 
-        prevBusinessResult = localResult
+      else
 
-    {save: oldSave, submit, messages} # (fields) ->
+        if typeof businessValidate == 'function'
+
+          localResult.messages.length = 0
+
+          businessValidate localResult, fields
+
+          localResult.messages.forEach (msg) ->
+            if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
+            else (messages[''] or (messages[''] = [])).push msg
+            return
+
+          prevBusinessResult = localResult
+
+      {save: oldSave, submit, messages} # (fields) ->  # ->
 
 # ----------------------------
 

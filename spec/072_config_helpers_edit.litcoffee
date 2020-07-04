@@ -104,9 +104,9 @@ config
 
         linkedConfig = linkConfig unlinkedConfig, @code
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder {f1: 12, f2: 'test', f3: true}).toEqual save: true, submit: true, messages: {}
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 12, f2: 'test', f3: true}).toEqual save: true, submit: true, messages: {}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder {f1: 'wrong'}).toEqual
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 'wrong'}).toEqual
           save: false, submit: false, messages:
             '': [{type: 'error', code: 'validate.requiredField', value: 'f2'}]
             f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
