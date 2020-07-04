@@ -40,20 +40,19 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
       oldSave = save
 
+      localResult.messages.forEach (msg) ->
+        if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
+        else (messages[''] or (messages[''] = [])).push Object.freeze(msg)
+        return
+
       if localResult.isError
 
         if prevBusinessResult
 
           prevBusinessResult.messages.forEach (msg) ->
             if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-            else (messages[''] or (messages[''] = [])).push msg
+            else (messages[''] or (messages[''] = [])).push Object.freeze(msg)
             return
-
-        localResult.messages.forEach (msg) ->
-          if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-          else (messages[''] or (messages[''] = [])).push msg
-          return
-
       else
 
         if typeof businessValidate == 'function'
@@ -64,12 +63,12 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
           localResult.messages.forEach (msg) ->
             if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-            else (messages[''] or (messages[''] = [])).push msg
+            else (messages[''] or (messages[''] = [])).push Object.freeze(msg)
             return
 
           prevBusinessResult = localResult
 
-      {save: oldSave, submit, messages} # (fields) ->  # ->
+      Object.freeze({save: oldSave, submit, messages: Object.freeze(messages)}) # (fields) ->  # ->
 
 # ----------------------------
 
