@@ -12,7 +12,17 @@ $$newBuilder = require './helpers/new'
 
 {structure: validateStructure, addValidate} = require '../validate'
 
-link = (config, noHelpers, methods) ->
+$$accessBuilder = require('./helpers/access')
+
+$$validateBuilder = require('./helpers/validate')
+
+link = (config, noHelpers) ->
+
+  if typeof noHelpers == 'object' and noHelpers != null
+
+    methods = noHelpers
+
+    noHelpers = false
 
   freeze = (obj) ->
 
@@ -256,11 +266,9 @@ link = (config, noHelpers, methods) ->
 
       doc.states.$$list.forEach ((s) -> s.$$key = "#{docKey}.state.#{s.name}"; return)
 
-      unless doc.access = methods?[doc.name]?.access
+      doc.$$access = $$accessBuilder doc, 'fields', methods and methods.docs[doc.name] and methods.docs[doc.name].access
 
-        allAccess = {view: doc.fields.$$tags.all, update: doc.fields.$$tags.all, actions: doc.fields.$$tags.all}
-
-        doc.$$access = (doc, user) -> allAccess
+      doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
 
     for state in doc.states.$$list
 

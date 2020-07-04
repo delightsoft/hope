@@ -7,7 +7,7 @@ momentLdr = -> _moment or (_moment = require 'moment')
 validateStructureBuilder = (type, fieldsProp = 'fields') ->
   # mask - поля, которые нужно прверять
   # onlyFields - необязательный map, только поля которые нужно проверять
-  (result, value, viewMask, requiredMask, onlyFields) ->
+  (result, value, viewMask, requiredMask, onlyFields, strict) ->
 
     unless typeof value == 'object' and value != null and not Array.isArray value
       return result.error 'validate.invalidValue', value: value
@@ -21,13 +21,17 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
           err = (result.error 'validate.unknownField', name: fieldName, value: fieldValue) or err
         else
           field = type[fieldsProp][fieldName]
-          if viewMask and not viewMask.get(field.$$index)
-            err = (result.error 'validate.unexpectedField', name: fieldName, value: fieldValue) or err
+          if not viewMask.get(field.$$index)
+            err = (result.error 'validate.unexpectedField', name: fieldName, value: fieldValue) or err if strict
           else if not onlyFields or onlyFields[field.name]
-            err = (field.validate result, fieldValue, viewMask, requiredMask, if typeof field == 'object' and field != null and not Array.isArray(field) then field.$$touched) or err
+            err = (field.validate result, fieldValue, viewMask, requiredMask, (if typeof field == 'object' and field != null and not Array.isArray(field) then field.$$touched), strict) or err
 
-    for field in type[fieldsProp].$$list when (field.required or (requiredMask and requiredMask.get(field.$$index))) and not value.hasOwnProperty(field.name) and (not onlyFields or onlyFields[field.name])
-      err = (result.error 'validate.requiredField', value: field.name) or err
+    for field in type[fieldsProp].$$list when (
+      viewMask.get(field.$$index) and
+      (field.required or (requiredMask and requiredMask.get(field.$$index))) and
+      not value.hasOwnProperty(field.name) and
+      (not onlyFields or onlyFields[field.name]))
+        err = (result.error 'validate.requiredField', value: field.name) or err
 
     err # (result, value, mask, onlyFields) ->
 
@@ -166,7 +170,7 @@ validate = (fieldDesc) ->
     when 'subtable'
       do ->
         validateStructure = validateStructureBuilder fieldDesc
-        (result, value, viewMask, requiredMask) ->
+        (result, value, viewMask, requiredMask, strict) ->
           unless Array.isArray value
             return result.error 'validate.invalidValue', value: value
           return result.error 'validate.invalidValue', value: value if (fieldDesc.required or (requiredMask and requiredMask.get(fieldDesc.$$index))) and value.length == 0
@@ -175,7 +179,7 @@ validate = (fieldDesc) ->
           err = undefined
           result.context ((path) -> (Result.index i) path), ->
             for row, i in value
-              err = (validateStructure result, row, viewMask, requiredMask, row.$$touched) or err
+              err = (validateStructure result, row, viewMask, requiredMask, row.$$touched, strict) or err
               return
           err # (result, value, mask) ->
 

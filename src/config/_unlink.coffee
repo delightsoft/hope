@@ -96,7 +96,6 @@ unlink = (config) ->
 
     for newDoc in newConfig.docs.list
 
-
       newDoc.fields = unlinkFlatMap newDoc.fields, 'fields', unlinkField
 
       newDoc.actions = unlinkSortedMap newDoc.actions
