@@ -240,10 +240,26 @@ describe <span class="hljs-string">'071_config_helpers_edit'</span>, <span class
 
       api:
         api1:
-          argAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span> view: fields.$$tags.t1, update: fields.$$tags.t1
-          argValidate: <span class="hljs-function"><span class="hljs-params">(result, fields)</span> -&gt;</span> result.error <span class="hljs-string">'err2'</span> <span class="hljs-keyword">if</span> fields.a == <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
-          resultAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span> view: fields.$$tags.t1, update: fields.$$tags.t1
-          resultValidate: <span class="hljs-function"><span class="hljs-params">(result, fields)</span> -&gt;</span> result.error <span class="hljs-string">'err3'</span> <span class="hljs-keyword">if</span> fields.r2 == <span class="hljs-number">2.4</span>; <span class="hljs-keyword">return</span>
+          method1:
+            argAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>console.info 51, this</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>              view: <span class="hljs-keyword">this</span>.$$tags.t1, update: <span class="hljs-keyword">this</span>.$$tags.t1
+            argValidate: <span class="hljs-function"><span class="hljs-params">(result  , fields)</span> -&gt;</span> result.error <span class="hljs-string">'err2'</span> <span class="hljs-keyword">if</span> fields.a == <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
+            resultAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span> view: <span class="hljs-keyword">this</span>.$$tags.t1, update: <span class="hljs-keyword">this</span>.$$tags.t1
+            resultValidate: <span class="hljs-function"><span class="hljs-params">(result, fields)</span> -&gt;</span> result.error <span class="hljs-string">'err3'</span> <span class="hljs-keyword">if</span> fields.r2 == <span class="hljs-number">2.4</span>; <span class="hljs-keyword">return</span>
 
   check <span class="hljs-string">'general'</span>, <span class="hljs-function">-&gt;</span>
 
@@ -291,11 +307,11 @@ describe <span class="hljs-string">'071_config_helpers_edit'</span>, <span class
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>TODO: method arg validate
 TODO: method arg access
@@ -400,7 +416,21 @@ TODO: method result access</p>
 
     expect(editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
     save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
-      <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err1'</span>}]</pre></div></div>
+      <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err1'</span>}]
+
+  check <span class="hljs-string">'edit validate builder on methods'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
+
+    expect(result.messages).toEqual []
+
+    unlinkedConfig = deepClone unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig, @code
+
+    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].arguments.$$editValidateBuilder() {a: <span class="hljs-number">12</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+
+    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].result.$$editValidateBuilder() {r1: <span class="hljs-number">12</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}</pre></div></div>
             
         </li>
         

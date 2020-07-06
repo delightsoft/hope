@@ -80,7 +80,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
           localResult.messages.length = 0
 
-          businessValidate localResult, fields
+          businessValidate.call this, localResult, fields
 
           localResult.messages.forEach (msg) ->
             if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))

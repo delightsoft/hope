@@ -46,10 +46,13 @@ config
 
           api:
             api1:
-              argAccess: (fields) -> view: fields.$$tags.t1, update: fields.$$tags.t1
-              argValidate: (result, fields) -> result.error 'err2' if fields.a == 12; return
-              resultAccess: (fields) -> view: fields.$$tags.t1, update: fields.$$tags.t1
-              resultValidate: (result, fields) -> result.error 'err3' if fields.r2 == 2.4; return
+              method1:
+                argAccess: (fields) ->
+                  # console.info 51, this
+                  view: this.$$tags.t1, update: this.$$tags.t1
+                argValidate: (result  , fields) -> result.error 'err2' if fields.a == 12; return
+                resultAccess: (fields) -> view: this.$$tags.t1, update: this.$$tags.t1
+                resultValidate: (result, fields) -> result.error 'err3' if fields.r2 == 2.4; return
 
       check 'general', ->
 
@@ -195,3 +198,17 @@ config
         expect(editValidate model, {beforeSubmit: false}).toEqual
         save: false, submit: false, messages:
           '': [{type: 'error', code: 'err1'}]
+
+      check 'edit validate builder on methods', ->
+
+        res = compileConfig (result = new Result), @config
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = deepClone unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig, @code
+
+        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidateBuilder() {a: 12}).toEqual save: true, submit: true, messages: {}
+
+        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r1: 12}).toEqual save: true, submit: true, messages: {}
