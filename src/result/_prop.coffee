@@ -6,13 +6,13 @@ _add = (name, path) ->
   invalidArg 'path', path unless typeof path == 'string'
   tooManyArgs() unless arguments.length <= 2
 
-  path += '.' if path.length > 0
-
   if name.indexOf('.') >= 0
 
     path += "['#{name}']"
 
   else
+
+    path += '.' if path.length > 0
 
     path += name
 
