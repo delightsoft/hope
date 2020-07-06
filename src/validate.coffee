@@ -16,7 +16,7 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
     fieldName = undefined
 
     result.context ((path) -> (Result.prop fieldName) path), ->
-      for fieldName, fieldValue of value
+      for fieldName, fieldValue of value when not fieldName.startsWith '$$'
         unless type[fieldsProp].hasOwnProperty(fieldName)
           err = (result.error 'validate.unknownField', name: fieldName, value: fieldValue) or err
         else

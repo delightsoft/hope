@@ -1,5 +1,7 @@
 Result = require '../../result'
 
+{invalidArg, unknownOption} = require '../../utils/_err'
+
 $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
   ->
@@ -8,9 +10,27 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
     prevBusinessResult = undefined
 
-    (fields) =>
+    (fields, options) =>
 
-      prevBusinessResult = undefined if fields != prevModel
+      beforeSubmit = false
+
+      if options != undefined
+
+        invalidArg 'options', options unless typeof options == 'object' and options != null and not Array.isArray(options)
+
+        for optName, optValue of options
+
+          switch optName
+
+            when 'beforeSubmit' then beforeSubmit = !!optValue
+
+            else unknownOption optName
+
+      if fields != prevModel
+
+        prevBusinessResult = undefined
+
+        prevModel = fields
 
       validate = type["#{fieldsProp}Validate"]
 
@@ -36,7 +56,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
         return # localResult.error = () ->
 
-      validate localResult, fields, r.view, r.required, fields.$$touched
+      validate localResult, fields, r.view, r.required, if beforeSubmit then fields.$$touched else undefined
 
       oldSave = save
 
@@ -54,7 +74,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
           else (messages[''] or (messages[''] = [])).push msg
           return
 
-      else
+      else unless beforeSubmit
 
         if typeof businessValidate == 'function'
 

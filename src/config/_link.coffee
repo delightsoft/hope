@@ -272,7 +272,7 @@ link = (config, noHelpers) ->
 
       doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
 
-      doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access
+      doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
 
     for state in doc.states.$$list
 
