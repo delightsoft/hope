@@ -123,6 +123,18 @@ subtale с признаком required создаются с одной ново
             { f1: 0, f2: '' }
           ]
 
+        newDoc = linkedConfig.docs['anamespace.DocB'].fields.$$new({edit: true})
+
+        expect(newDoc).toEqual
+
+          fldA: [],
+
+          fldB: [
+            {f1: 0, f2: '', $$touched: {}}
+          ]
+
+          $$touched: {}
+
 записи для subtable можно создавать через $$new в поле типа subtable
 
         newRow = linkedConfig.docs['anamespace.DocB'].fields.fldA.fields.$$new()
@@ -132,3 +144,13 @@ subtale с признаком required создаются с одной ново
           f1: 12
 
           f2: 'tralala'
+
+        newRow = linkedConfig.docs['anamespace.DocB'].fields.fldA.fields.$$new({edit: true})
+
+        expect(newRow).toEqual
+
+          f1: 12
+
+          f2: 'tralala'
+
+          $$touched: {}

@@ -1,3 +1,5 @@
+{invalidArg, unknownOption} = require '../../utils/_err'
+
 defaultInit =
   string: ''
   text: ''
@@ -38,7 +40,7 @@ $$newBuilder = (fields) ->
 
             $$new = field.fields.$$new
 
-            init = () -> [$$new()]
+            init = (options) -> [$$new options]
 
         else
 
@@ -66,17 +68,35 @@ $$newBuilder = (fields) ->
 
       if typeof init == 'function'
 
-        newFuncs.push ((res) -> res[name] = init(); return)
+        newFuncs.push ((res, options) ->
+
+          res[name] = init(options); return)
 
       else
 
         newFuncs.push ((res) -> res[name] = init; return)
 
-  () ->
+  (options) ->
+
+    edit = false
+
+    if options != undefined
+
+      invalidArg 'options', options unless typeof options == 'object' and options != null and not Array.isArray(options)
+
+      for optName, optValue of options
+
+        switch optName
+
+          when 'edit' then edit = !!optValue
+
+          else unknownOption optName
 
     res = {}
 
-    newFuncs.forEach ((f) -> f(res); return)
+    newFuncs.forEach ((f) -> f(res, options); return)
+
+    res.$$touched = {} if edit
 
     res # () ->
 

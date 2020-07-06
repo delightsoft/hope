@@ -97,11 +97,6 @@ config
           {type: 'error', code: 'validate.requiredField', value: 'f2'}
         ]
 
-        # TODO: method arg validate
-        # TODO: method arg access
-        # TODO: method result validate
-        # TODO: method result access
-
       check 'edit validate builder', ->
 
         res = compileConfig (result = new Result), @config

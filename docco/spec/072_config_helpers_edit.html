@@ -302,25 +302,8 @@ describe <span class="hljs-string">'071_config_helpers_edit'</span>, <span class
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f2'</span>}
-    ]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>TODO: method arg validate
-TODO: method arg access
-TODO: method result validate
-TODO: method result access</p>
+    ]
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
   check <span class="hljs-string">'edit validate builder'</span>, <span class="hljs-function">-&gt;</span>
 
     res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
