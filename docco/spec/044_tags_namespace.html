@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>globals jsondiff</title>
+  <title>Tags.Namespace</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="..\docco.css" />
@@ -184,16 +184,58 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="globals-jsondiff">globals jsondiff</h1>
+              <h1 id="tagsnamespace">Tags.Namespace</h1>
+<p>  {Result, tags: {compile: compileTags}, sortedMap, flatMap} = require ‘../src’</p>
+<p>  focusOnCheck = ‘’
+  check = (itName, itBody) -&gt; (if focusOnCheck == itName then fit else it) itName, itBody; return</p>
+<p>  describe ‘044_tags_namespace’, -&gt;</p>
+<p>В название тегов можно добавлять namespace или указав его в поле tags в названии тега или указав его в названии поля</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, compareStructures} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+            <div class="content"><div class='highlight'><pre>check <span class="hljs-string">"tags with namespace in tags name"</span>, <span class="hljs-function">-&gt;</span>
 
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+  fields =
+    fld1: {type: <span class="hljs-string">'integer'</span>, tags: <span class="hljs-string">'user, test.admin'</span>}
+    fld2: {type: <span class="hljs-string">'text'</span>, tags: [<span class="hljs-string">'test.abc'</span>, <span class="hljs-string">'json'</span>]}
+    fld3: {type: <span class="hljs-string">'uuid'</span>}
 
-describe <span class="hljs-string">'001_global_jsonDiff:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+  fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+  expect(result.messages).toEqual []
+
+  compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+  expect(result.messages).toEqual []
+
+  expect(fields.$$tags.hasOwnProperty(<span class="hljs-string">'json'</span>)).toBe <span class="hljs-literal">true</span>
+  expect(fields.$$tags.hasOwnProperty(<span class="hljs-string">'test.abc'</span>)).toBe <span class="hljs-literal">true</span>
+
+check <span class="hljs-string">"tags with namespace in tags attr"</span>, <span class="hljs-function">-&gt;</span>
+
+  fields =
+    fld1: {
+      type: <span class="hljs-string">'integer'</span>,
+      tags: <span class="hljs-string">'user'</span>
+      <span class="hljs-string">'tags.test'</span>: <span class="hljs-string">'user'</span>
+    }
+    fld2: {
+      type: <span class="hljs-string">'text'</span>,
+      tags: [<span class="hljs-string">'json'</span>]
+      <span class="hljs-string">'tags.test'</span>: [<span class="hljs-string">'abc'</span>]
+    }
+    fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+  fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+  expect(result.messages).toEqual []
+
+  compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+  expect(result.messages).toEqual []
+
+  expect(fields.$$tags.hasOwnProperty(<span class="hljs-string">'json'</span>)).toBe <span class="hljs-literal">true</span>
+  expect(fields.$$tags.hasOwnProperty(<span class="hljs-string">'test.abc'</span>)).toBe <span class="hljs-literal">true</span></pre></div></div>
             
         </li>
         
@@ -204,97 +246,35 @@ describe <span class="hljs-string">'001_global_jsonDiff:'</span>, <span class="h
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>При работе со спецификация для работы со структурами документов, сталкнулся с проблемой понятного для человека
-сравнения двух структур.  Структуры могут содержать кольцевые ссылки.</p>
-<p>Использование готового модуля jsondiffpatch вопрос не решило.  На примере сравнение в простой спецификации deepClone,
-выяснилось что он сбоит на объектах или массивах внутри массива.  А на пример отладки метода link, стало понятно, что
-он не умеет сравнивать структуры с кольцевыми ссылками.  Поэтому пишем свое.  А коль, это уже случилась когда есть
-некоторые готовые наработки, то для формирования отчета будем использовать класс DSCommon - Result.</p>
+              <p>Нельзя в аттрибутах tags с namespace указывать теги с namespace</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"ok: tree"</span>, <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>check <span class="hljs-string">"tags with ambiguous namespaces"</span>, <span class="hljs-function">-&gt;</span>
 
-    tree =
-      a: <span class="hljs-number">12</span>
-      b: <span class="hljs-function">-&gt;</span>
-      c: <span class="hljs-literal">true</span>
-      d: <span class="hljs-literal">false</span>
-      e: {}
-      f: []
-      g: <span class="hljs-string">''</span>
-      h: <span class="hljs-literal">undefined</span>
-      i: <span class="hljs-literal">null</span>
-      s:
-        a: <span class="hljs-number">12</span>
-        b: <span class="hljs-function">-&gt;</span>
+  fields =
+    fld1: {
+      type: <span class="hljs-string">'integer'</span>,
+      tags: <span class="hljs-string">'user'</span>
+      <span class="hljs-string">'tags.test'</span>: <span class="hljs-string">'test.user'</span>
+    }
+    fld2: {
+      type: <span class="hljs-string">'text'</span>,
+      tags: [<span class="hljs-string">'json'</span>]
+      <span class="hljs-string">'tags.test'</span>: [<span class="hljs-string">'test.abc'</span>]
+    }
+    fld3: {type: <span class="hljs-string">'uuid'</span>}
 
-    expect(tree).sameStructure tree
+  fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
 
-  check <span class="hljs-string">"ok: cicle"</span>, <span class="hljs-function">-&gt;</span>
+  expect(result.messages).toEqual []
 
-    tree =
-      a: <span class="hljs-number">12</span>
-      b: <span class="hljs-function">-&gt;</span>
-      c: <span class="hljs-literal">true</span>
-      d: <span class="hljs-literal">false</span>
-      e: {}
-      f: []
-      g: <span class="hljs-string">''</span>
-      h: <span class="hljs-literal">undefined</span>
-      i: <span class="hljs-literal">null</span>
-      s:
-        a: <span class="hljs-number">12</span>
-        b: <span class="hljs-function">-&gt;</span>
+  compileTags (result = <span class="hljs-keyword">new</span> Result), fields
 
-    tree.s.a = tree
-
-    expect(tree).sameStructure tree</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>Полезный для сложных ситуаций момент - данные в объектах (map’ах) проверяются именно в той последовательности как они
-перечислены в expected</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"error: right sequence of messages"</span>, <span class="hljs-function">-&gt;</span>
-
-    treeActual =
-      a: <span class="hljs-number">12</span>
-      b: <span class="hljs-string">'string'</span>
-      c: <span class="hljs-literal">true</span>
-
-    treeExpected =
-      a: <span class="hljs-string">''</span>
-      b: <span class="hljs-literal">false</span>
-
-    compareStructures (result = <span class="hljs-keyword">new</span> Result), treeActual, treeExpected
-
-    expect(result.messages).toEqual [
-      {path: <span class="hljs-string">'a'</span>, code: <span class="hljs-string">'diffType'</span>, actual: <span class="hljs-string">'number'</span>, expected: <span class="hljs-string">'string'</span>}
-      {path: <span class="hljs-string">'b'</span>, code: <span class="hljs-string">'diffType'</span>, actual: <span class="hljs-string">'string'</span>, expected: <span class="hljs-string">'boolean'</span>}
-      {path: <span class="hljs-string">'c'</span>, code: <span class="hljs-string">'extra'</span>, value: <span class="hljs-literal">true</span>}
-    ]
-
-    treeExpected2 =
-      b: <span class="hljs-literal">false</span>
-      a: <span class="hljs-string">''</span>
-
-    compareStructures (result = <span class="hljs-keyword">new</span> Result), treeActual, treeExpected2
-
-    expect(result.messages).toEqual [
-      {path: <span class="hljs-string">'b'</span>, code: <span class="hljs-string">'diffType'</span>, actual: <span class="hljs-string">'string'</span>, expected: <span class="hljs-string">'boolean'</span>}
-      {path: <span class="hljs-string">'a'</span>, code: <span class="hljs-string">'diffType'</span>, actual: <span class="hljs-string">'number'</span>, expected: <span class="hljs-string">'string'</span>}
-      {path: <span class="hljs-string">'c'</span>, code: <span class="hljs-string">'extra'</span>, value: <span class="hljs-literal">true</span>}
-    ]</pre></div></div>
+  expect(result.messages).toEqual [
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld1[\'tags.test\']'</span>, code: <span class="hljs-string">'dsc.ambiguousNamespaces'</span>, value1: <span class="hljs-string">'tags.test'</span>, value2: <span class="hljs-string">'test.user'</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld2[\'tags.test\']'</span>, code: <span class="hljs-string">'dsc.ambiguousNamespaces'</span>, value1: <span class="hljs-string">'tags.test'</span>, value2: <span class="hljs-string">'test.abc'</span>}
+  ]</pre></div></div>
             
         </li>
         

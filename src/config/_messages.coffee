@@ -6,6 +6,8 @@ messages =
 
     ambiguousProp: (args) -> "Ambiguous property #{args.name} values: #{args.value1} and #{args.value2}"
 
+    ambiguousNamespaces: (args) -> "Ambiguous namespaces: #{args.value1} and #{args.value2}"
+
     compilerError: (args) -> "#{args.value}"
 
     duplicatedName: (args) -> "Dulicated name: #{args.value}"
@@ -31,6 +33,8 @@ messages =
     notApplicableForTheTypeProp: (args) -> "Property #{args.nameValue} is not applicable for type #{args.typeValue}"
 
     reservedName: (args) -> "Reserved name: #{args.value}"
+
+    invalidProp: (args) -> "Invalid property name: #{args.value}"
 
     unexpectedProp: (args) -> "Unexpected property: #{args.value}"
 

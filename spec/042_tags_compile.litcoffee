@@ -189,3 +189,23 @@ Tags.Compile
           {type: 'error', path: 'fld1.tags', code: 'dsc.reservedName', value: 'all'}
           {type: 'error', path: 'fld2.tags', code: 'dsc.reservedName', value: 'all'}
         ]
+
+Имя тега 'system' зарезервировано, и не может явно использоваться
+
+      check "reserved tag 'system'", ->
+
+        fields =
+          fld1: {type: 'integer', tags: 'user, admin, system'}
+          fld2: {type: 'text', tags: ['user', 'system']}
+          fld3: {type: 'uuid'}
+
+        fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+
+        compileTags (result = new Result), fields
+
+        expect(result.isError).toBe true
+
+        expect(result.messages).sameStructure [
+          {type: 'error', path: 'fld1.tags', code: 'dsc.reservedName', value: 'system'}
+          {type: 'error', path: 'fld2.tags', code: 'dsc.reservedName', value: 'system'}
+        ]

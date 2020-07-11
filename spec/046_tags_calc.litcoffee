@@ -30,7 +30,7 @@ Tags.Calc
     focusOnCheck = ""
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
-    describe '043_tags_calc', ->
+    describe '046_tags_calc', ->
 
 Создаем документ для проверки разных выражений
 

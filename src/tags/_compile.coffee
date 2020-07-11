@@ -1,4 +1,4 @@
-{checkTagName, err: {tooManyArgs, invalidArg, isResult}} = require '../utils'
+{checkTagName, checkTagsNamespace, err: {tooManyArgs, invalidArg, isResult}} = require '../utils'
 
 Result = require '../result'
 
@@ -14,9 +14,19 @@ compile = (result, collection) ->
 
     all: (new BitArray collection).invert()
 
-  _addTag = (result, dupCheck, tag, item) ->
+  _addTag = (result, dupCheck, tag, item, namespace) ->
 
     if (tag = tag.trim()).length > 0
+
+      if namespace
+
+        unless tag.indexOf('.') == -1
+
+          return result.error 'dsc.ambiguousNamespaces', value1: "tags.#{namespace}", value2: tag
+
+        else
+
+          tag = "#{namespace}.#{tag}"
 
       if dupCheck.hasOwnProperty tag
 
@@ -34,6 +44,10 @@ compile = (result, collection) ->
 
           result.error 'dsc.reservedName', value: 'all'
 
+        else if tag == 'system'
+
+          result.error 'dsc.reservedName', value: 'system'
+
         else
 
           (if tags.hasOwnProperty(tag) then tags[tag]
@@ -48,35 +62,57 @@ compile = (result, collection) ->
 
   item = undefined
 
-  result.context ((path) -> (Result.prop 'tags', Result.prop item.name) path), ->
+  propName = undefined
 
-    for item in list when item.hasOwnProperty('$$src') && item.$$src.hasOwnProperty('tags')
+  result.context ((path) -> (Result.prop propName, Result.prop item.name) path), ->
+
+    for item in list when item.hasOwnProperty('$$src')
+
+      tagsProps = if item.$$src.hasOwnProperty('tags') then ['tags'] else []
+
+      for propName of item.$$src when propName.startsWith('tags.') or propName.startsWith('tags_')
+
+        unless checkTagsNamespace propName
+
+          result.error 'dsc.invalidProp', value: propName
+
+        else
+
+          tagsProps.push propName
 
       dupCheck = {}
 
-      srcTags = item.$$src.tags
+      namespace = undefined
 
-      if typeof srcTags == 'string'
+      for propName in tagsProps
 
-        for tag in srcTags.split ','
+        namespace = propName.substr dotIndex + 1 if (dotIndex = propName.indexOf('.')) != -1 or (dotIndex = propName.indexOf('_')) != -1
 
-          _addTag result, dupCheck, tag, item
+        srcTags = item.$$src[propName]
 
-      else if Array.isArray srcTags
+        delete item.$$src[propName] if namespace # так как имена свойвст содержат namespace, то проще их удалить во время обработки, чем формировать список для sortedMap.finish
 
-        for tag, i in srcTags
+        if typeof srcTags == 'string'
 
-          if typeof tag == 'string'
+          for tag in srcTags.split ','
 
-            _addTag result, dupCheck, tag, item
+            _addTag result, dupCheck, tag, item, namespace
 
-          else
+        else if Array.isArray srcTags
 
-            result.error 'dsc.invalidTagValue', value: tag, index: i
+          for tag, i in srcTags
 
-      else
+            if typeof tag == 'string'
 
-        result.error 'dsc.invalidValue', value: srcTags
+              _addTag result, dupCheck, tag, item, namespace
+
+            else
+
+              result.error 'dsc.invalidTagValue', value: tag, index: i
+
+        else
+
+          result.error 'dsc.invalidValue', value: srcTags
 
   if isFlat
 

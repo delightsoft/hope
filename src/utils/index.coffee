@@ -18,6 +18,8 @@ module.exports =
 
   checkTagName: require './_checkTagName'
 
+  checkTagsNamespace: require './_checkTagsNamespace'
+
   prettyPrint: require './_prettyPrint'
 
   extend: require './_extend'

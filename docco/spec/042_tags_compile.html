@@ -105,13 +105,18 @@
                 </a>
               
                 
-                <a class="source" href="043_tags_calc.html">
-                  spec/043_tags_calc.litcoffee
+                <a class="source" href="044_tags_namespace.html">
+                  spec/044_tags_namespace.litcoffee
                 </a>
               
                 
-                <a class="source" href="044_tags_calc_tokenizer.html">
-                  spec/044_tags_calc_tokenizer.litcoffee
+                <a class="source" href="046_tags_calc.html">
+                  spec/046_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="048_tags_calc_tokenizer.html">
+                  spec/048_tags_calc_tokenizer.litcoffee
                 </a>
               
                 
@@ -456,6 +461,37 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
     expect(result.messages).sameStructure [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld1.tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'all'</span>}
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld2.tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'all'</span>}
+    ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Имя тега ‘system’ зарезервировано, и не может явно использоваться</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"reserved tag 'system'"</span>, <span class="hljs-function">-&gt;</span>
+
+    fields =
+      fld1: {type: <span class="hljs-string">'integer'</span>, tags: <span class="hljs-string">'user, admin, system'</span>}
+      fld2: {type: <span class="hljs-string">'text'</span>, tags: [<span class="hljs-string">'user'</span>, <span class="hljs-string">'system'</span>]}
+      fld3: {type: <span class="hljs-string">'uuid'</span>}
+
+    fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+    compileTags (result = <span class="hljs-keyword">new</span> Result), fields
+
+    expect(result.isError).toBe <span class="hljs-literal">true</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld1.tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'system'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'fld2.tags'</span>, code: <span class="hljs-string">'dsc.reservedName'</span>, value: <span class="hljs-string">'system'</span>}
     ]</pre></div></div>
             
         </li>
