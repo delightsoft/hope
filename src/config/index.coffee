@@ -7,3 +7,5 @@ module.exports =
   unlink: require './_unlink'
 
   messages: require './_messages'
+
+  actionsIndex: require './_actionsIndex'

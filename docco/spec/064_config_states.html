@@ -269,7 +269,7 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
     $$src = deepClone doc.$$src
 
     (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>, <span class="hljs-literal">true</span>
-    res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc
+    res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc, <span class="hljs-literal">true</span>
     res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions
 
     expect(result.messages).toEqual []</pre></div></div>
@@ -318,7 +318,7 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
               open: <span class="hljs-string">'opened'</span>
 
     (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>, <span class="hljs-literal">true</span>
-    res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc
+    res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc, <span class="hljs-literal">true</span>
     res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions
 
     expect(result.messages).sameStructure [

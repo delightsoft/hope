@@ -43,7 +43,7 @@ general
         $$src = deepClone doc.$$src
 
         (res = {}).fields = processFields (result = new Result), doc, {}, 'fields', true
-        res.actions = processActions (result = new Result), doc
+        res.actions = processActions (result = new Result), doc, true
         res.states = processStates (result = new Result), doc, res.fields, res.actions
 
         expect(result.messages).toEqual []
@@ -81,7 +81,7 @@ general
                   open: 'opened'
 
         (res = {}).fields = processFields (result = new Result), doc, {}, 'fields', true
-        res.actions = processActions (result = new Result), doc
+        res.actions = processActions (result = new Result), doc, true
         res.states = processStates (result = new Result), doc, res.fields, res.actions
 
         expect(result.messages).sameStructure [

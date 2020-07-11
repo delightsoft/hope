@@ -258,23 +258,31 @@ link = (config, noHelpers) ->
 
     linkFieldsWithHelpers doc, 'fields', docKey
 
-    doc.actions = linkSortedMap doc.actions, false, false
+    doc.actions = linkSortedMap doc.actions, false, true
 
-    doc.states = linkSortedMap doc.states, true, false
+    doc.states = linkSortedMap doc.states, true, true
 
     unless noHelpers
 
-      doc.actions.$$list.forEach ((a) -> a.$$key = "#{docKey}.action.#{a.name}"; return)
+      doc.actions.$$list.forEach (action) ->
 
-      doc.states.$$list.forEach ((s) -> s.$$key = "#{docKey}.state.#{s.name}"; return)
+        action.$$key = "#{docKey}.action.#{action.name}"
 
-      doc.$$access = $$accessBuilder doc, 'fields', methods and methods.docs[doc.name] and methods.docs[doc.name].access
+        freeze action
+
+        return
+
+      doc.$$access = $$accessBuilder doc, 'fields', methods and methods.docs[doc.name] and methods.docs[doc.name].access, true
 
       doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
 
       doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
 
     for state in doc.states.$$list
+
+      unless noHelpers
+
+        state.$$key = "#{docKey}.state.#{state.name}"
 
       state.view = freeze (new BitArray doc.fields.$$flat.$$list, state.view)
 

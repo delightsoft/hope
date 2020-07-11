@@ -8,9 +8,9 @@ bitArray = require '../bitArray'
 
 copyExtra = require './_copyExtra'
 
-processActions = (result, doc) ->
+processActions = (result, doc, noSystemItems) ->
 
-  unless doc.$$src.hasOwnProperty('actions')
+  unless doc.$$src.hasOwnProperty('actions') or not noSystemItems
 
     return { # processActions =
 
@@ -20,19 +20,34 @@ processActions = (result, doc) ->
 
   result.context (Result.prop 'actions'), -> # processActions =
 
-    res = sortedMap result, doc.$$src.actions, index: true
+    sortedMapOpts = index: true
 
-    , getValue: (result, value, res) ->
+      , getValue: (result, value, res) ->
 
-      if typeof value == 'function'
+        if typeof value == 'function'
 
-        # TODO: Check number of parameters in given function
+          # TODO: Check number of parameters in given function
 
-        res.value = value
+          res.value = value
 
-        return true
+          return true
 
-      false
+        false
+
+    unless noSystemItems
+
+      sortedMapOpts.before = [
+        # TODO: Think of replacement of 'value'
+        {name: 'create', tags: 'system', value: ->}
+        {name: 'retrieve', tags: 'system', value: ->}
+        {name: 'update', tags: 'system', value: ->}
+        {name: 'delete', tags: 'system', value: ->}
+        {name: 'restore', tags: 'system', value: ->}
+      ]
+
+      sortedMapOpts.reservedName = ['create', 'retrieve', 'update', 'delete', 'restore']
+
+    res = sortedMap result, doc.$$src.actions or {}, sortedMapOpts
 
     unless result.isError
 

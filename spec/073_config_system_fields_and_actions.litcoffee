@@ -44,6 +44,8 @@ config
 
         expect(Object.keys(deepClone(linkedConfig.docs['doc.Doc1'].fields))).toEqual ['id', 'rev', 'f1', 'f2', 'f3', 'created', 'modified', 'deleted']
 
+        expect(Object.keys(deepClone(linkedConfig.docs['doc.Doc1'].actions))).toEqual ['create', 'retrieve', 'update', 'delete', 'restore']
+
         expect(Object.keys(deepClone(linkedConfig.api['api1'].methods['method1'].arguments))).toEqual ['a', 'b']
 
         expect(Object.keys(deepClone(linkedConfig.api['api1'].methods['method1'].result))).toEqual ['r1', 'r2']
