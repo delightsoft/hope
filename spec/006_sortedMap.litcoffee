@@ -383,7 +383,6 @@ sortedMap из списка или массива делает map (object):
           index: true
           before: [
             {
-              system: true,
               name: 'id',
               type: 'string',
               length: 40,
@@ -391,12 +390,10 @@ sortedMap из списка или массива делает map (object):
           ]
           after: [
             {
-              system: true,
               name: 'created',
               type: 'timestamp',
             }
             {
-              system: true,
               name: 'modified',
               type: 'timestamp',
             }
@@ -406,7 +403,6 @@ sortedMap из списка или массива делает map (object):
 
         expect(res).toEqual
           id: id = {name: 'id', $$src: {
-            system: true,
             name: 'id',
             type: 'string',
             length: 40,
@@ -414,12 +410,10 @@ sortedMap из списка или массива делает map (object):
           field1: field1 = {name: 'field1', $$src: {}, $$index: 1}
           field2: field2 = {name: 'field2', $$src: {}, $$index: 2}
           created: created = {name: 'created', $$src: {
-            system: true,
             name: 'created',
             type: 'timestamp',
           }, $$index: 3}
           modified: modified = {name: 'modified', $$src: {
-            system: true,
             name: 'modified',
             type: 'timestamp',
           }, $$index: 4}

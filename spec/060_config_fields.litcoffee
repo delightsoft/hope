@@ -3,7 +3,7 @@ config.docs.Doc.fields
 
     {Result, utils: {deepClone}, config: {compile: {_processFields: processFields}}} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe "060_config_fields", ->
@@ -26,7 +26,7 @@ general
 
         $$src = deepClone doc.$$src
 
-        (res = {}).fields = processFields (result = new Result), doc
+        (res = {}).fields = processFields (result = new Result), doc, {}, 'fields', true
 
         expect(result.messages).toEqual []
 

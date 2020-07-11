@@ -14,7 +14,7 @@ processRefers = require './_processRefers'
 
 copyExtra = require './_copyExtra'
 
-processDocs = (result, config) ->
+processDocs = (result, config, noSystemItems) ->
 
   unless config.$$src.hasOwnProperty('docs')
 
@@ -43,7 +43,7 @@ processDocs = (result, config) ->
 
           result.isError = false
 
-          doc.fields = processFields result, doc, config
+          doc.fields = processFields result, doc, config, 'fields', noSystemItems
 
           doc.actions = processActions result, doc
 

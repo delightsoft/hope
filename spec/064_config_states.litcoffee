@@ -42,7 +42,7 @@ general
 
         $$src = deepClone doc.$$src
 
-        (res = {}).fields = processFields (result = new Result), doc
+        (res = {}).fields = processFields (result = new Result), doc, {}, 'fields', true
         res.actions = processActions (result = new Result), doc
         res.states = processStates (result = new Result), doc, res.fields, res.actions
 
@@ -80,7 +80,7 @@ general
                 transitions:
                   open: 'opened'
 
-        (res = {}).fields = processFields (result = new Result), doc
+        (res = {}).fields = processFields (result = new Result), doc, {}, 'fields', true
         res.actions = processActions (result = new Result), doc
         res.states = processStates (result = new Result), doc, res.fields, res.actions
 

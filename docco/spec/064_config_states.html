@@ -155,6 +155,11 @@
                 </a>
               
                 
+                <a class="source" href="073_config_system_fields_and_actions.html">
+                  spec/073_config_system_fields_and_actions.litcoffee
+                </a>
+              
+                
                 <a class="source" href="300\300_ConfigContainer.html">
                   spec/300/300_ConfigContainer.litcoffee
                 </a>
@@ -188,15 +193,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result,
-config: {compile: {_processStates: processStates, _processFields: processFields, _processActions: processActions}},
-utils: {deepClone}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
         </li>
         
         
@@ -206,8 +202,41 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: {_processStates: processStates, _processFields: processFields, _processActions: processActions}},
+utils: {deepClone}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
               <h2 id="general">general</h2>
 
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"general"</span>, <span class="hljs-function">-&gt;</span>
@@ -239,7 +268,7 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
 
     $$src = deepClone doc.$$src
 
-    (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc
+    (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>, <span class="hljs-literal">true</span>
     res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc
     res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions
 
@@ -248,11 +277,11 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
         </li>
         
         
-        <li id="section-3">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Исходный документ не изменяется</p>
 
@@ -288,7 +317,7 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
             transitions:
               open: <span class="hljs-string">'opened'</span>
 
-    (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc
+    (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>, <span class="hljs-literal">true</span>
     res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc
     res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions
 
@@ -302,11 +331,11 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
         </li>
         
         
-        <li id="section-4">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>//      check “general”, -&gt;
 //

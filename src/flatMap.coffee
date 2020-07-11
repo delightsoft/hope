@@ -103,6 +103,14 @@ flatMap = (result, value, subitemsField, opts) ->
 
           item[subitemsField] = resLevel = sortedMap result, item.$$src[subitemsField], opts
 
+          if opts.hasOwnProperty('before') or opts.hasOwnProperty('after')
+
+            opts = deepClone opts
+
+            delete opts.before
+
+            delete opts.after
+
           _processLevel resLevel unless result.isError # result.context
 
           return # result.context

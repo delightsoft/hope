@@ -44,10 +44,6 @@ compile = (result, collection) ->
 
           result.error 'dsc.reservedName', value: 'all'
 
-        else if tag == 'system'
-
-          result.error 'dsc.reservedName', value: 'system'
-
         else
 
           (if tags.hasOwnProperty(tag) then tags[tag]

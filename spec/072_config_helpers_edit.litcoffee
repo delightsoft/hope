@@ -8,7 +8,7 @@ config
     focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
-    describe '071_config_helpers_edit', ->
+    describe '072_config_helpers_edit', ->
 
       beforeEach ->
 
@@ -56,7 +56,7 @@ config
 
       check 'general', ->
 
-        res = compileConfig (result = new Result), @config
+        res = compileConfig (result = new Result), @config, true
 
         expect(result.messages).toEqual []
 
@@ -99,7 +99,7 @@ config
 
       check 'edit validate builder', ->
 
-        res = compileConfig (result = new Result), @config
+        res = compileConfig (result = new Result), @config, true
 
         expect(result.messages).toEqual []
 
@@ -196,7 +196,7 @@ config
 
       check 'edit validate builder on methods', ->
 
-        res = compileConfig (result = new Result), @config
+        res = compileConfig (result = new Result), @config, true
 
         expect(result.messages).toEqual []
 

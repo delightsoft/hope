@@ -8,7 +8,7 @@ copyExtra = require './_copyExtra'
 
 {compile: compileTags} = require '../tags'
 
-processFields = (result, doc, config, fieldsProp = 'fields') ->
+processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
   unless doc.$$src.hasOwnProperty(fieldsProp)
 
@@ -18,7 +18,24 @@ processFields = (result, doc, config, fieldsProp = 'fields') ->
 
   result.context (Result.prop fieldsProp), -> # processFields
 
-    res = flatMap result, doc.$$src[fieldsProp], 'fields', index: true, mask: true
+    flatMapOpts = index: true, mask: true
+
+    unless noSystemItems
+
+      flatMapOpts.before = [
+        {name: 'id', type: 'string(40)', tags: 'system', required: true}
+        {name: 'rev', type: 'int', tags: 'system'}
+      ]
+
+      flatMapOpts.after = [
+        {name: 'created', type: 'timestamp', tags: 'system'}
+        {name: 'modified', type: 'timestamp', tags: 'system'}
+        {name: 'deleted', type: 'boolean', tags: 'system'}
+      ]
+
+      flatMapOpts.reservedNames = ['id', 'rev', 'created', 'modified', 'deleted']
+
+    res = flatMap result, doc.$$src[fieldsProp], 'fields', flatMapOpts
 
     unless result.isError
 

@@ -85,6 +85,11 @@ sortedMap = (result, value, opts) ->
   else
     invalidArgValue 'opts.after', opts.after unless Array.isArray(optsAfter = opts.after)
 
+  unless opts?.hasOwnProperty('reservedNames')
+    optsReservedNames = undefined
+  else
+    invalidArgValue 'opts.reservedNames', opts.reservedNames unless Array.isArray(optsReservedNames = opts.reservedNames)
+
   res = {}
 
   list = []
@@ -119,6 +124,12 @@ sortedMap = (result, value, opts) ->
 
         v = fixedName if typeof fixedName == 'string'
 
+        if optsReservedNames and optsReservedNames.indexOf(v) != -1
+
+          result.error 'dsc.reservedName', value: v
+
+          continue
+
         if res.hasOwnProperty v
 
           result.error (Result.index i), 'dsc.duplicatedName', value: v
@@ -149,6 +160,12 @@ sortedMap = (result, value, opts) ->
 
             v.name = fixedName if typeof fixedName == 'string'
 
+            if optsReservedNames and optsReservedNames.indexOf(v.name) != -1
+
+              result.error 'dsc.reservedName', value: v.name
+
+              continue
+
             res[v] = clone = {name: v}
 
           else
@@ -172,6 +189,10 @@ sortedMap = (result, value, opts) ->
               continue
 
             v.name = fixedName if typeof fixedName == 'string'
+
+            if optsReservedNames and optsReservedNames.indexOf(v.name) != -1
+
+              result.error 'dsc.reservedName', value: v.name
 
             unless not res.hasOwnProperty v.name
 
@@ -203,7 +224,15 @@ sortedMap = (result, value, opts) ->
 
             result.error 'dsc.invalidName', value: k
 
+            continue
+
           k = fixedName if typeof fixedName == 'string'
+
+          if optsReservedNames and optsReservedNames.indexOf(k) != -1
+
+            result.error 'dsc.reservedName', value: k
+
+            continue
 
           res[k] = clone = {name: k}
 

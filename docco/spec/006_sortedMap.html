@@ -155,6 +155,11 @@
                 </a>
               
                 
+                <a class="source" href="073_config_system_fields_and_actions.html">
+                  spec/073_config_system_fields_and_actions.litcoffee
+                </a>
+              
+                
                 <a class="source" href="300\300_ConfigContainer.html">
                   spec/300/300_ConfigContainer.litcoffee
                 </a>
@@ -793,7 +798,6 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
       index: <span class="hljs-literal">true</span>
       before: [
         {
-          system: <span class="hljs-literal">true</span>,
           name: <span class="hljs-string">'id'</span>,
           type: <span class="hljs-string">'string'</span>,
           length: <span class="hljs-number">40</span>,
@@ -801,12 +805,10 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
       ]
       after: [
         {
-          system: <span class="hljs-literal">true</span>,
           name: <span class="hljs-string">'created'</span>,
           type: <span class="hljs-string">'timestamp'</span>,
         }
         {
-          system: <span class="hljs-literal">true</span>,
           name: <span class="hljs-string">'modified'</span>,
           type: <span class="hljs-string">'timestamp'</span>,
         }
@@ -816,7 +818,6 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
 
     expect(res).toEqual
       id: id = {name: <span class="hljs-string">'id'</span>, $$src: {
-        system: <span class="hljs-literal">true</span>,
         name: <span class="hljs-string">'id'</span>,
         type: <span class="hljs-string">'string'</span>,
         length: <span class="hljs-number">40</span>,
@@ -824,12 +825,10 @@ describe <span class="hljs-string">'006_sortedMap:'</span>, <span class="hljs-fu
       field1: field1 = {name: <span class="hljs-string">'field1'</span>, $$src: {}, $$index: <span class="hljs-number">1</span>}
       field2: field2 = {name: <span class="hljs-string">'field2'</span>, $$src: {}, $$index: <span class="hljs-number">2</span>}
       created: created = {name: <span class="hljs-string">'created'</span>, $$src: {
-        system: <span class="hljs-literal">true</span>,
         name: <span class="hljs-string">'created'</span>,
         type: <span class="hljs-string">'timestamp'</span>,
       }, $$index: <span class="hljs-number">3</span>}
       modified: modified = {name: <span class="hljs-string">'modified'</span>, $$src: {
-        system: <span class="hljs-literal">true</span>,
         name: <span class="hljs-string">'modified'</span>,
         type: <span class="hljs-string">'timestamp'</span>,
       }, $$index: <span class="hljs-number">4</span>}

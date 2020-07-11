@@ -5,7 +5,7 @@
 
     reservedTypes = compileType._reservedTypes
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '040_types:', ->
@@ -292,7 +292,7 @@ enum может быть задан несколькими способами:
 
         res = compileType (result = new Result), {type: 'enum', enum: ['v1', 'v2', 'v3']}, {}
 
-        expect(result.messages).sameStructure []
+        expect(result.messages).toEqual []
 
         expect(res).sameStructure
           type: 'enum'

@@ -82,7 +82,7 @@ config
 
 Документы задаются в виде sortedMap в элементе docs.  Namespace'ы документов, указываются в именах элементов.
 
-        res = compileConfig (result = new Result), @config
+        res = compileConfig (result = new Result), @config, true
 
         expect(result.messages).toEqual []
 
@@ -100,13 +100,13 @@ config
 
       check 'unlink', ->
 
-        res = compileConfig (result = new Result), @config
+        res = compileConfig (result = new Result), @config, true
 
         expect(result.messages).toEqual []
 
       check 'link', ->
 
-        res = compileConfig (result = new Result), @config
+        res = compileConfig (result = new Result), @config, true
 
         expect(result.messages).toEqual []
 

@@ -10,19 +10,18 @@ processAPI = require './_processAPI'
 
 # TODO: Add opts - to add DSValue implementations
 
-compile = (result, sourceConfig) ->
+compile = (result, sourceConfig, noSystemItems) ->
 
   invalidArg 'result', result unless isResult result
   invalidArg 'sourceConfig', sourceConfig unless typeof sourceConfig == 'object' && sourceConfig != null
-  tooManyArgs() unless arguments.length <= 2
 
   config = $$src: sourceConfig
 
   processUdtypes result, config
 
-  processDocs result, config
+  processDocs result, config, noSystemItems
 
-  processAPI result, config
+  processAPI result, config, noSystemItems
 
   unless result.isError
 

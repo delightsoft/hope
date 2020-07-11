@@ -69,7 +69,7 @@ config
 
       check '$$calc', ->
 
-        res = compileConfig (result = new Result), @config
+        res = compileConfig (result = new Result), @config, true
 
         expect(result.messages).toEqual []
 
@@ -93,7 +93,7 @@ config
 
       check '$$new', ->
 
-        res = compileConfig (result = new Result), @config
+        res = compileConfig (result = new Result), @config, true
 
         expect(result.messages).toEqual []
 

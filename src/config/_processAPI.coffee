@@ -12,7 +12,7 @@ copyExtra = require './_copyExtra'
 
 {compile: compileTags} = require '../tags'
 
-processAPI = (result, config) ->
+processAPI = (result, config, noSystemItems) ->
 
   unless config.$$src.hasOwnProperty('api')
 
@@ -58,7 +58,7 @@ processAPI = (result, config) ->
 
                       else
 
-                        method[prop] = processFields result, method, config, prop
+                        method[prop] = processFields result, method, config, prop, true
 
                   return # result.context
 
