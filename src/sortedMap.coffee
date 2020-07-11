@@ -75,9 +75,29 @@ sortedMap = (result, value, opts) ->
   else
     invalidArgValue 'opts.index', opts.index unless typeof (optsIndex = opts.index) == 'boolean'
 
+  unless opts?.hasOwnProperty('before')
+    optsBefore = []
+  else
+    invalidArgValue 'opts.before', opts.before unless Array.isArray(optsBefore = opts.before)
+
+  unless opts?.hasOwnProperty('after')
+    optsAfter = []
+  else
+    invalidArgValue 'opts.after', opts.after unless Array.isArray(optsAfter = opts.after)
+
   res = {}
 
   list = []
+
+  for item in optsBefore
+
+    newItem = {name: item.name, $$src: item}
+
+    newItem.$$index = list.length if optsIndex
+
+    res[item.name] = newItem
+
+    list.push newItem
 
   if optsString && typeof value == 'string' && value.length > 0 # на вход дали строку
 
@@ -224,6 +244,16 @@ sortedMap = (result, value, opts) ->
     result.error 'dsc.invalidValue', value: value
 
   unless result.isError
+
+    for item in optsAfter
+
+      newItem = {name: item.name, $$src: item}
+
+      newItem.$$index = list.length if optsIndex
+
+      res[item.name] = newItem
+
+      list.push newItem
 
     res.$$list = list
 

@@ -105,13 +105,18 @@
                 </a>
               
                 
-                <a class="source" href="043_tags_calc.html">
-                  spec/043_tags_calc.litcoffee
+                <a class="source" href="044_tags_namespace.html">
+                  spec/044_tags_namespace.litcoffee
                 </a>
               
                 
-                <a class="source" href="044_tags_calc_tokenizer.html">
-                  spec/044_tags_calc_tokenizer.litcoffee
+                <a class="source" href="046_tags_calc.html">
+                  spec/046_tags_calc.litcoffee
+                </a>
+              
+                
+                <a class="source" href="048_tags_calc_tokenizer.html">
+                  spec/048_tags_calc_tokenizer.litcoffee
                 </a>
               
                 
@@ -183,6 +188,15 @@
 
             </div>
             
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
+utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
         </li>
         
         
@@ -191,27 +205,6 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>{Result,
-config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
-utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">''</span>
-<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Модель документов, состоит из следующих элементов:</p>
 <ul>
@@ -275,11 +268,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>TODO: Validate</p>
 
@@ -299,11 +292,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-5">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>После линкиовки доступен метод $$calc на всех sortedMap у которых есть теги</p>
 
@@ -320,11 +313,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-6">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Ответы кешируются</p>
 
@@ -355,11 +348,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>subtale с признаком required создаются с одной новой пустой записью</p>
 
@@ -390,11 +383,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>записи для subtable можно создавать через $$new в поле типа subtable</p>
 

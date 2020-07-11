@@ -3,7 +3,7 @@ sorted map
 
     {Result, sortedMap, utils: {checkItemName, deepClone, combineMsg, err: {isResult, invalidArg, tooManyArgs}}} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '006_sortedMap:', ->
@@ -374,3 +374,53 @@ sortedMap из списка или массива делает map (object):
             return true
 
           false
+
+Можно добавлять при обработке элемены в начало и конец списка
+
+      check "add items before and after", ->
+
+        res = sortedMap (result = new Result), {field1: {}, field2: {}},
+          index: true
+          before: [
+            {
+              system: true,
+              name: 'id',
+              type: 'string',
+              length: 40,
+            }
+          ]
+          after: [
+            {
+              system: true,
+              name: 'created',
+              type: 'timestamp',
+            }
+            {
+              system: true,
+              name: 'modified',
+              type: 'timestamp',
+            }
+          ]
+
+        expect(result.messages).toEqual []
+
+        expect(res).toEqual
+          id: id = {name: 'id', $$src: {
+            system: true,
+            name: 'id',
+            type: 'string',
+            length: 40,
+          }, $$index: 0}
+          field1: field1 = {name: 'field1', $$src: {}, $$index: 1}
+          field2: field2 = {name: 'field2', $$src: {}, $$index: 2}
+          created: created = {name: 'created', $$src: {
+            system: true,
+            name: 'created',
+            type: 'timestamp',
+          }, $$index: 3}
+          modified: modified = {name: 'modified', $$src: {
+            system: true,
+            name: 'modified',
+            type: 'timestamp',
+          }, $$index: 4}
+          $$list: [id, field1, field2, created, modified]
