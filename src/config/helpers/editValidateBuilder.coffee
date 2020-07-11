@@ -1,5 +1,7 @@
 Result = require '../../result'
 
+{invalidArg, unknownOption} = require '../../utils/_err'
+
 $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
   ->
@@ -8,9 +10,27 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
     prevBusinessResult = undefined
 
-    (fields) =>
+    (fields, options) =>
 
-      prevBusinessResult = undefined if fields != prevModel
+      beforeSubmit = false
+
+      if options != undefined
+
+        invalidArg 'options', options unless typeof options == 'object' and options != null and not Array.isArray(options)
+
+        for optName, optValue of options
+
+          switch optName
+
+            when 'beforeSubmit' then beforeSubmit = !!optValue
+
+            else unknownOption optName
+
+      if fields != prevModel
+
+        prevBusinessResult = undefined
+
+        prevModel = fields
 
       validate = type["#{fieldsProp}Validate"]
 
@@ -36,14 +56,9 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
         return # localResult.error = () ->
 
-      validate localResult, fields, r.view, r.required, fields.$$touched
+      validate localResult, fields, r.view, r.required, if beforeSubmit then fields.$$touched else undefined
 
       oldSave = save
-
-      localResult.messages.forEach (msg) ->
-        if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-        else (messages[''] or (messages[''] = [])).push Object.freeze(msg)
-        return
 
       if localResult.isError
 
@@ -51,24 +66,30 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
           prevBusinessResult.messages.forEach (msg) ->
             if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-            else (messages[''] or (messages[''] = [])).push Object.freeze(msg)
+            else (messages[''] or (messages[''] = [])).push msg
             return
-      else
+
+        localResult.messages.forEach (msg) ->
+          if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
+          else (messages[''] or (messages[''] = [])).push msg
+          return
+
+      else unless beforeSubmit
 
         if typeof businessValidate == 'function'
 
           localResult.messages.length = 0
 
-          businessValidate localResult, fields
+          businessValidate.call this, localResult, fields
 
           localResult.messages.forEach (msg) ->
             if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-            else (messages[''] or (messages[''] = [])).push Object.freeze(msg)
+            else (messages[''] or (messages[''] = [])).push msg
             return
 
           prevBusinessResult = localResult
 
-      Object.freeze({save: oldSave, submit, messages: Object.freeze(messages)}) # (fields) ->  # ->
+      {save: oldSave, submit, messages} # (fields) ->  # ->
 
 # ----------------------------
 

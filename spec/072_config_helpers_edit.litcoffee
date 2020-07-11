@@ -37,14 +37,22 @@ config
           docs:
             'doc.Doc1':
               access: (fields) -> view: this.fields.$$tags.t1, update: this.fields.$$tags.t1
-              validate: (result, fields) -> result.error 'err1' if fields.f1 == 20; return
+              validate: (result, fields) ->
+                result.error 'err1' if fields.f1 == 20
+                result.error (-> 'f2.f3[0]'), 'err2' if fields.f1 == 30
+                result.error (-> 'f1'), 'err3' if fields.f1 == 40
+                result.error (-> 'f2'), 'err4' if fields.f1 == 40
+                return
 
           api:
             api1:
-              argAccess: (fields) -> view: fields.$$tags.t1, update: fields.$$tags.t1
-              argValidate: (result, fields) -> result.error 'err2' if fields.a == 12; return
-              resultAccess: (fields) -> view: fields.$$tags.t1, update: fields.$$tags.t1
-              resultValidate: (result, fields) -> result.error 'err3' if fields.r2 == 2.4; return
+              method1:
+                argAccess: (fields) ->
+                  # console.info 51, this
+                  view: this.$$tags.t1, update: this.$$tags.t1
+                argValidate: (result  , fields) -> result.error 'err2' if fields.a == 12; return
+                resultAccess: (fields) -> view: this.$$tags.t1, update: this.$$tags.t1
+                resultValidate: (result, fields) -> result.error 'err3' if fields.r2 == 2.4; return
 
       check 'general', ->
 
@@ -89,11 +97,6 @@ config
           {type: 'error', code: 'validate.requiredField', value: 'f2'}
         ]
 
-        # TODO: method arg validate
-        # TODO: method arg access
-        # TODO: method result validate
-        # TODO: method result access
-
       check 'edit validate builder', ->
 
         res = compileConfig (result = new Result), @config
@@ -111,4 +114,96 @@ config
             '': [{type: 'error', code: 'validate.requiredField', value: 'f2'}]
             f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
 
+        expect(-> linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 'wrong'}, {test: 12, beforeBuild: false}).toThrow new Error "Unknown option; 'test'"
 
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          f1: 'wrong'
+          f2: 12
+          $$touched: {f2: true}
+        }, {beforeSubmit: true}).toEqual
+          save: false, submit: false, messages:
+            f2: {type: 'error', path: 'f2', code: 'validate.invalidValue', value: 12}
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          f1: 'wrong'
+          f2: 12
+          $$touched: {f2: true}
+        }, {beforeSubmit: false}).toEqual
+          save: false, submit: false, messages:
+            f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
+            f2: {type: 'error', path: 'f2', code: 'validate.invalidValue', value: 12}
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          f1: 20
+          f2: 'right'
+          $$touched: {f1: true}
+        }, {beforeSubmit: true}).toEqual
+          save: true, submit: true, messages: {}
+
+        editValidate = linkedConfig.docs['doc.Doc1'].$$editValidateBuilder()
+
+        model =
+          f1: 20
+          f2: 'right'
+          $$touched: {f1: true}
+
+        expect(editValidate model, {beforeSubmit: false}).toEqual
+          save: true, submit: false, messages:
+            '': [{type: 'error', code: 'err1'}]
+
+        model.f1 = 'wrong'
+
+        expect(editValidate model, {beforeSubmit: false}).toEqual
+          save: false, submit: false, messages:
+            '': [{type: 'error', code: 'err1'}]
+            f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
+
+        expect(editValidate deepClone model, {beforeSubmit: false}).toEqual
+          save: false, submit: false, messages:
+            f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          f1: 30
+          f2: 'right'
+        }, {beforeSubmit: false}).toEqual
+          save: true, submit: false, messages:
+            'f2.f3[0]': {type: 'error', path: 'f2.f3[0]', code: 'err2'}
+
+        editValidate = linkedConfig.docs['doc.Doc1'].$$editValidateBuilder()
+
+        model =
+          f1: 40
+          f2: 'right'
+          $$touched: {f1: true}
+
+        expect(editValidate model, {beforeSubmit: false}).toEqual
+        save: false, submit: false, messages:
+          f1: {type: 'error', code: 'err3'}
+          f2: {type: 'error', code: 'err4'}
+
+        model.f1 = 'wrong'
+
+        expect(editValidate model, {beforeSubmit: false}).toEqual
+        save: false, submit: false, messages:
+          f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
+          f2: {type: 'error', code: 'err4'}
+
+        model.f1 = 20
+
+        expect(editValidate model, {beforeSubmit: false}).toEqual
+        save: false, submit: false, messages:
+          '': [{type: 'error', code: 'err1'}]
+
+      check 'edit validate builder on methods', ->
+
+        res = compileConfig (result = new Result), @config
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = deepClone unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig, @code
+
+        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidateBuilder() {a: 12}).toEqual save: true, submit: true, messages: {}
+
+        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r1: 12}).toEqual save: true, submit: true, messages: {}
