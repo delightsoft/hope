@@ -42,7 +42,7 @@ config
 
         linkedConfig = linkConfig unlinkedConfig, @code
 
-        expect(Object.keys(deepClone(linkedConfig.docs['doc.Doc1'].fields))).toEqual ['id', 'rev', 'f1', 'f2', 'f3', 'created', 'modified', 'deleted']
+        expect(Object.keys(deepClone(linkedConfig.docs['doc.Doc1'].fields))).toEqual ['id', 'rev', 'f1', 'f2', 'f3', 'options', 'created', 'modified', 'deleted']
 
         expect(Object.keys(deepClone(linkedConfig.docs['doc.Doc1'].actions))).toEqual ['create', 'retrieve', 'update', 'delete', 'restore']
 

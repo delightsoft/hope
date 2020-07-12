@@ -18,7 +18,9 @@ $$validateBuilder = require('./helpers/validate')
 
 $$editValidateBuilderBuilder = require('./helpers/editValidateBuilder')
 
-link = (config, noHelpers) ->
+snakeCase = require('lodash/snakeCase')
+
+link = (config, noHelpers, opts) ->
 
   if typeof noHelpers == 'object' and noHelpers != null
 
@@ -180,7 +182,7 @@ link = (config, noHelpers) ->
 
     return # linkTags =
 
-  linkFieldsWithHelpers = (obj, prop, prefix) ->
+  linkFieldsWithHelpers = (obj, prop, prefix, isDoc) ->
 
     obj[prop] = linkFlatMap obj[prop], 'fields', false, false, true
 
@@ -211,6 +213,10 @@ link = (config, noHelpers) ->
       obj[prop].$$new = $$newBuilder obj[prop]
 
     for field in obj[prop].$$flat.$$list
+
+      if opts and opts.server and isDoc
+
+        field.$$field = snakeCase field.name
 
       field.enum.$$list.forEach ((i) -> freeze i; return) if field.hasOwnProperty('enum')
 
@@ -255,6 +261,10 @@ link = (config, noHelpers) ->
     unless noHelpers
 
       doc.$$key = docKey = doc.name
+
+    if opts and opts.server
+
+      doc.$$table = snakeCase doc.name
 
     linkFieldsWithHelpers doc, 'fields', docKey
 

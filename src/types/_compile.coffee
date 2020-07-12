@@ -15,6 +15,7 @@ typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueC
 extraProps = ['min', 'max', 'regexp', 'init']
 
 builtInTypes = [
+  'nanoid',
   'string', 'text', 'boolean',
   'integer', 'double'
   'decimal'
