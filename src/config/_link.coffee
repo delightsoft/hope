@@ -214,7 +214,7 @@ link = (config, noHelpers, opts) ->
 
     for field in obj[prop].$$flat.$$list
 
-      if opts and opts.server and isDoc
+      if opts?.server and isDoc
 
         field.$$field = snakeCase field.name
 
@@ -266,7 +266,7 @@ link = (config, noHelpers, opts) ->
 
       doc.$$table = snakeCase doc.name
 
-    linkFieldsWithHelpers doc, 'fields', docKey
+    linkFieldsWithHelpers doc, 'fields', docKey, true
 
     doc.actions = linkSortedMap doc.actions, false, true
 
