@@ -183,6 +183,8 @@ validate = (fieldDesc) ->
               return
           err # (result, value, mask) ->
 
+    else (result, value, viewMask, requiredMask, strict) -> {}
+
   if fieldDesc.null
     do (pf = f) ->
       f = (result, value) ->

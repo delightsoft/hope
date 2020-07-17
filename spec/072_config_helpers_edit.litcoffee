@@ -207,3 +207,17 @@ config
         expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidateBuilder() {a: 12}).toEqual save: true, submit: true, messages: {}
 
         expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r1: 12}).toEqual save: true, submit: true, messages: {}
+
+      check 'required em[ty string in before edit', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            Doc1:
+              fields:
+                f1: type: 'string(40)'
+                f2: type: 'string(20)', required: true
+        }, true
+
+        expect(result.messages).toEqual []
+
+        # TODO:
