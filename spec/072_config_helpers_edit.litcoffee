@@ -26,7 +26,7 @@ config
               methods:
                 method1:
                   arguments:
-                    a: type: 'int', tags: 't1', required: true
+                    a: type: 'int', tags: 't1', required: true\
                     b: type: 'date', required: true
                   result:
                     r1: type: 'int', tags: 't1'
@@ -208,7 +208,7 @@ config
 
         expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r1: 12}).toEqual save: true, submit: true, messages: {}
 
-      check 'required em[ty string in before edit', ->
+      check 'required emty string in before edit', ->
 
         res = compileConfig (result = new Result), {
           docs:
@@ -218,6 +218,36 @@ config
                 f2: type: 'string(20)', required: true
         }, true
 
+        unlinkedConfig = deepClone unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig
+
         expect(result.messages).toEqual []
 
-        # TODO:
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: '', f2: ''}).toEqual save: true, submit: false, messages: {
+          f2: {type: 'error', path: 'f2', code: 'validate.requiredField', name: ''}
+        }
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          f1: '',
+          f2: '',
+          $$touched: f1: true, f2: true
+        }, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
+          f2: {type: 'error', path: 'f2', code: 'validate.requiredField', name: ''}
+        }
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          f1: '',
+          f2: '',
+          $$touched: f1: false, f2: false
+        }, {beforeSubmit: true}).toEqual save: true, submit: true, messages: {}
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          $$touched: f1: false, f2: false
+        }, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
+          '': [{type: 'error', code: 'validate.requiredField', value: 'f2'}]
+        }
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          $$touched: f1: false, f2: false
+        }, {beforeSubmit: true}).toEqual save: true, submit: true, messages: {}
