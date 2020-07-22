@@ -4,6 +4,8 @@ Result = require '../../result'
 
 $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
+  # TODO: Подумать как привязать сообщения к subtable записям.  В самой модели хранить плохо - зациклют валидацию
+
   ->
 
     prevModel = undefined
@@ -62,15 +64,13 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
       if localResult.isError
 
-        if prevBusinessResult
-
-          prevBusinessResult.messages.forEach (msg) ->
-            if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-            else (messages[''] or (messages[''] = [])).push msg
-            return
-
         localResult.messages.forEach (msg) ->
-          if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
+          if (path = msg.path) then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
+          else (messages[''] or (messages[''] = [])).push msg
+          return
+
+        prevBusinessResult?.messages.forEach (msg) ->
+          if (path = msg.path) then (messages[path] = msg unless messages[path])
           else (messages[''] or (messages[''] = [])).push msg
           return
 
@@ -87,7 +87,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
             else (messages[''] or (messages[''] = [])).push msg
             return
 
-          prevBusinessResult = localResult
+          prevBusinessResult = if localResult.messages.length > 0 then localResult else undefined
 
       {save: oldSave, submit, messages} # (fields) ->  # ->
 

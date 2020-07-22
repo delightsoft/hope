@@ -290,3 +290,58 @@ config
           'st[1].f1': {type: 'error', path: 'st[1].f1', code: 'validate.invalidValue', value: null}
           'st[1].f2': {type: 'error', path: 'st[1].f2', code: 'validate.invalidValue', value: 12}
         }
+
+      check 'remember prev business msgs', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            Doc1:
+              fields:
+                st: type: 'subtable', fields:
+                  f1: type: 'string(40)'
+                  f2: type: 'string(20)', required: true
+                  f3: type: 'int', required: true
+        }, true
+
+        unlinkedConfig = deepClone unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig, docs: 'doc.Doc1': validate: (result, doc) ->
+          unless doc.st[0].f2 == 'ok'
+            result.error (-> 'st[0].f2'), 'business err'
+            result.warn (-> 'st[0].f1'), 'business warn'
+
+        expect(result.messages).toEqual []
+
+        $$editValidate = linkedConfig.docs['doc.Doc1'].$$editValidateBuilder()
+
+        expect($$editValidate {
+          st: [{f1: '', f2: 123, $$touched: f1: true, f2: true}]
+        }, {beforeSubmit: true}).toEqual save: false, submit: false, messages: {
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.invalidValue', value: 123}
+        }
+
+        expect($$editValidate {
+          st: [{f1: '', f2: '', $$touched: f1: true, f2: true}]
+        }, {beforeSubmit: true}).toEqual save: true, submit: false, messages: {
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
+        }
+
+        model = { # если модель меняется между вызовами $$editValidate, то бизнес ошибки сбрасываются
+          st: [{f1: 'ok1', f2: 'ok2', $$touched: f1: true, f2: true}]
+        }
+
+        expect($$editValidate model, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
+          'st[0].f1': { type: 'warn', path: 'st[0].f1', code: 'business warn'}
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'business err'}
+        }
+
+        model.st[0].f2 = 123
+
+        expect($$editValidate model, {beforeSubmit: false}).toEqual save: false, submit: false, messages: {
+          'st[0].f1': {type: 'warn', path: 'st[0].f1', code: 'business warn'}
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.invalidValue', value: 123}
+        }
+
+        model.st[0].f2 = 'ok'
+
+        expect($$editValidate model, {beforeSubmit: false}).toEqual save: true, submit: true, messages: {}
