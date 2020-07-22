@@ -26,7 +26,7 @@ config
               methods:
                 method1:
                   arguments:
-                    a: type: 'int', tags: 't1', required: true\
+                    a: type: 'int', tags: 't1', required: true
                     b: type: 'date', required: true
                   result:
                     r1: type: 'int', tags: 't1'
@@ -48,7 +48,6 @@ config
             api1:
               method1:
                 argAccess: (fields) ->
-                  # console.info 51, this
                   view: this.$$tags.t1, update: this.$$tags.t1
                 argValidate: (result  , fields) -> result.error 'err2' if fields.a == 12; return
                 resultAccess: (fields) -> view: this.$$tags.t1, update: this.$$tags.t1
@@ -71,7 +70,7 @@ config
         expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 12, f2: 'test', f3: true}, {strict: true}).toEqual save: false, submit: false
 
         expect(result.messages).toEqual [
-          {type: 'error', code: 'validate.unexpectedField', name: 'f3', value: true}
+          {type: 'error', code: 'validate.unexpectedField', path: 'f3', value: true}
         ]
 
         expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 12, f2: 'test', f3: true}).toEqual save: true, submit: true
@@ -87,14 +86,14 @@ config
         expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 'wrong'}).toEqual save: false, submit: false
 
         expect(result.messages).toEqual [
-          {type: 'error', code: 'validate.invalidValue', value: 'wrong'}
-          {type: 'error', code: 'validate.requiredField', value: 'f2'}
+          {type: 'error', code: 'validate.invalidValue', path: 'f1', value: 'wrong'}
+          {type: 'error', code: 'validate.requiredField', path: 'f2'}
         ]
 
         expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 20}).toEqual save: true, submit: false
 
         expect(result.messages).toEqual [
-          {type: 'error', code: 'validate.requiredField', value: 'f2'}
+          {type: 'error', code: 'validate.requiredField', path: 'f2'}
         ]
 
       check 'edit validate builder', ->
@@ -111,8 +110,8 @@ config
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 'wrong'}).toEqual
           save: false, submit: false, messages:
-            '': [{type: 'error', code: 'validate.requiredField', value: 'f2'}]
             f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
+            f2: {type: 'error', code: 'validate.requiredField', path: 'f2'}
 
         expect(-> linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 'wrong'}, {test: 12, beforeBuild: false}).toThrow new Error "Unknown option; 'test'"
 
@@ -225,7 +224,7 @@ config
         expect(result.messages).toEqual []
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: '', f2: ''}).toEqual save: true, submit: false, messages: {
-          f2: {type: 'error', path: 'f2', code: 'validate.requiredField', name: ''}
+          f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
         }
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
@@ -233,7 +232,7 @@ config
           f2: '',
           $$touched: f1: true, f2: true
         }, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
-          f2: {type: 'error', path: 'f2', code: 'validate.requiredField', name: ''}
+          f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
         }
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
@@ -245,9 +244,49 @@ config
         expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
           $$touched: f1: false, f2: false
         }, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
-          '': [{type: 'error', code: 'validate.requiredField', value: 'f2'}]
+          f2: {type: 'error', code: 'validate.requiredField', path: 'f2'}
         }
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
           $$touched: f1: false, f2: false
         }, {beforeSubmit: true}).toEqual save: true, submit: true, messages: {}
+
+      check 'subtable in before edit', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            Doc1:
+              fields:
+                st: type: 'subtable', fields:
+                  f1: type: 'string(40)'
+                  f2: type: 'string(20)', required: true
+                  f3: type: 'int', required: true
+        }, true
+
+        unlinkedConfig = deepClone unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig
+
+        expect(result.messages).toEqual []
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() st: [{f1: '', f2: ''}]).toEqual save: true, submit: false, messages: {
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
+          'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
+        }
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          st: [{f1: '', f2: ''}]
+          $$touched: f1: true, f2: true
+        }, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
+          'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
+        }
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          st: [{f1: '', f2: '', $$touched: f1: true, f2: true}, {f1: null, f2: 12, $$touched: f1: true, f2: true}]
+          $$touched: {}
+        }, {beforeSubmit: true}).toEqual save: false, submit: false, messages: {
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
+          'st[1].f1': {type: 'error', path: 'st[1].f1', code: 'validate.invalidValue', value: null}
+          'st[1].f2': {type: 'error', path: 'st[1].f2', code: 'validate.invalidValue', value: 12}
+        }

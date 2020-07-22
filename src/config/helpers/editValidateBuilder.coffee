@@ -38,15 +38,15 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
       r = access.call this, fields
 
-      localResult = new Result
-
       save = true
 
       submit = true
 
+      localResult = new Result
+
       localResult.error = () -> # перехватываем сообщения об ошибках
 
-        msg = Result::error.apply this, arguments
+        msg = Result::error.apply localResult, arguments
 
         if msg.type == 'error'
 

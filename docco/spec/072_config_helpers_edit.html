@@ -230,7 +230,7 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
           methods:
             method1:
               arguments:
-                a: type: <span class="hljs-string">'int'</span>, tags: <span class="hljs-string">'t1'</span>, required: <span class="hljs-literal">true</span>\
+                a: type: <span class="hljs-string">'int'</span>, tags: <span class="hljs-string">'t1'</span>, required: <span class="hljs-literal">true</span>
                 b: type: <span class="hljs-string">'date'</span>, required: <span class="hljs-literal">true</span>
               result:
                 r1: type: <span class="hljs-string">'int'</span>, tags: <span class="hljs-string">'t1'</span>
@@ -251,22 +251,8 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
       api:
         api1:
           method1:
-            argAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>console.info 51, this</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>              view: <span class="hljs-keyword">this</span>.$$tags.t1, update: <span class="hljs-keyword">this</span>.$$tags.t1
+            argAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span>
+              view: <span class="hljs-keyword">this</span>.$$tags.t1, update: <span class="hljs-keyword">this</span>.$$tags.t1
             argValidate: <span class="hljs-function"><span class="hljs-params">(result  , fields)</span> -&gt;</span> result.error <span class="hljs-string">'err2'</span> <span class="hljs-keyword">if</span> fields.a == <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
             resultAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span> view: <span class="hljs-keyword">this</span>.$$tags.t1, update: <span class="hljs-keyword">this</span>.$$tags.t1
             resultValidate: <span class="hljs-function"><span class="hljs-params">(result, fields)</span> -&gt;</span> result.error <span class="hljs-string">'err3'</span> <span class="hljs-keyword">if</span> fields.r2 == <span class="hljs-number">2.4</span>; <span class="hljs-keyword">return</span>
@@ -288,7 +274,7 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}, {strict: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual [
-      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.unexpectedField'</span>, name: <span class="hljs-string">'f3'</span>, value: <span class="hljs-literal">true</span>}
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.unexpectedField'</span>, path: <span class="hljs-string">'f3'</span>, value: <span class="hljs-literal">true</span>}
     ]
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>
@@ -304,14 +290,14 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-string">'wrong'</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual [
-      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
-      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f2'</span>}
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, path: <span class="hljs-string">'f1'</span>, value: <span class="hljs-string">'wrong'</span>}
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
     ]
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">20</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual [
-      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f2'</span>}
+      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
     ]
 
   check <span class="hljs-string">'edit validate builder'</span>, <span class="hljs-function">-&gt;</span>
@@ -328,8 +314,8 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">'wrong'</span>}).toEqual
       save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
-        <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f2'</span>}]
         f1: type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>
+        f2: {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
 
     expect(<span class="hljs-function">-&gt;</span> linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">'wrong'</span>}, {test: <span class="hljs-number">12</span>, beforeBuild: <span class="hljs-literal">false</span>}).toThrow <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Unknown option; 'test'"</span>
 
@@ -442,7 +428,7 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
     expect(result.messages).toEqual []
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, name: <span class="hljs-string">''</span>}
+      f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
     }
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
@@ -450,7 +436,7 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
       f2: <span class="hljs-string">''</span>,
       $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>
     }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, name: <span class="hljs-string">''</span>}
+      f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
     }
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
@@ -462,12 +448,52 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       $$touched: f1: <span class="hljs-literal">false</span>, f2: <span class="hljs-literal">false</span>
     }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f2'</span>}]
+      f2: {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
     }
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       $$touched: f1: <span class="hljs-literal">false</span>, f2: <span class="hljs-literal">false</span>
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}</pre></div></div>
+    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+
+  check <span class="hljs-string">'subtable in before edit'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), {
+      docs:
+        Doc1:
+          fields:
+            st: type: <span class="hljs-string">'subtable'</span>, fields:
+              f1: type: <span class="hljs-string">'string(40)'</span>
+              f2: type: <span class="hljs-string">'string(20)'</span>, required: <span class="hljs-literal">true</span>
+              f3: type: <span class="hljs-string">'int'</span>, required: <span class="hljs-literal">true</span>
+    }, <span class="hljs-literal">true</span>
+
+    unlinkedConfig = deepClone unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig
+
+    expect(result.messages).toEqual []
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}]).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
+      <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+    }
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
+      st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}]
+      $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>
+    }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
+      <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+    }
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
+      st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}, {f1: <span class="hljs-literal">null</span>, f2: <span class="hljs-number">12</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
+      $$touched: {}
+    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages: {
+      <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+      <span class="hljs-string">'st[1].f1'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[1].f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">null</span>}
+      <span class="hljs-string">'st[1].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[1].f2'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">12</span>}
+    }</pre></div></div>
             
         </li>
         

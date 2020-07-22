@@ -18,6 +18,10 @@ $$validateBuilder = require('./helpers/validate')
 
 $$editValidateBuilderBuilder = require('./helpers/editValidateBuilder')
 
+$$getUpdateBuilder = require('./helpers/getUpdate')
+
+$$applyUpdateBuilder = require('./helpers/applyUpdate')
+
 snakeCase = require('lodash/snakeCase')
 
 link = (config, noHelpers, opts) ->
@@ -287,6 +291,10 @@ link = (config, noHelpers, opts) ->
       doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
 
       doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
+
+      doc.$$getUpdate = $$getUpdateBuilder doc
+
+      doc.$$applyUpdate = $$applyUpdateBuilder doc
 
     for state in doc.states.$$list
 

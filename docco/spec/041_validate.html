@@ -255,7 +255,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
             
             <div class="content"><div class='highlight'><pre> typesDesc =
 
-   string: strVal = {right: [<span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">0</span>, <span class="hljs-number">12</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, [], {}]}
+   string: strVal = {length: <span class="hljs-number">20</span>, right: [<span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">0</span>, <span class="hljs-number">12</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, [], {}]}
 
    text: strVal
 
@@ -331,6 +331,8 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
    type = {type: typeName}
 
+   type.length = typeTestDesc.length <span class="hljs-keyword">if</span> typeTestDesc.length
+
    type.enum = typeTestDesc.enum <span class="hljs-keyword">if</span> typeTestDesc.enum
 
    <span class="hljs-keyword">if</span> typeTestDesc.fields
@@ -394,8 +396,8 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
    validate (result = <span class="hljs-keyword">new</span> Result), {f3: <span class="hljs-literal">false</span>}, fields.$$tags.all
 
    expect(result.messages).sameStructure [
-     {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f1'</span>},
-     {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-string">'f2'</span>},
+     {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f1'</span>},
+     {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>},
    ]</pre></div></div>
             
         </li>

@@ -3,10 +3,8 @@ Result = require './result'
 _moment = undefined
 momentLdr = -> _moment or (_moment = require 'moment')
 
-# type - structure или subtable
 validateStructureBuilder = (type, fieldsProp = 'fields') ->
-  # mask - поля, которые нужно прверять
-  # onlyFields - необязательный map, только поля которые нужно проверять
+
   (result, value, viewMask, requiredMask, onlyFields, strict) ->
 
     unless typeof value == 'object' and value != null and not Array.isArray value
@@ -18,20 +16,23 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
     result.context ((path) -> (Result.prop fieldName) path), ->
       for fieldName, fieldValue of value when not fieldName.startsWith '$$'
         unless type[fieldsProp].hasOwnProperty(fieldName)
-          err = (result.error 'validate.unknownField', name: fieldName, value: fieldValue) or err
+          err = (result.error 'validate.unknownField', value: fieldValue) or err
         else
           field = type[fieldsProp][fieldName]
+          alwaysValidate = field.type == 'structure' or field.type == 'subtable'
           if not viewMask.get(field.$$index)
-            err = (result.error 'validate.unexpectedField', name: fieldName, value: fieldValue) or err if strict
-          else if not onlyFields or onlyFields[field.name]
+            err = (result.error 'validate.unexpectedField', value: fieldValue) or err if strict
+          else if not onlyFields or onlyFields[field.name] or alwaysValidate
             err = (field.validate result, fieldValue, viewMask, requiredMask, (if typeof field == 'object' and field != null and not Array.isArray(field) then field.$$touched), strict) or err
 
-    for field in type[fieldsProp].$$list when (
-      viewMask.get(field.$$index) and
-      (field.required or (requiredMask and requiredMask.get(field.$$index))) and
-      not value.hasOwnProperty(field.name) and
-      (not onlyFields or onlyFields[field.name]))
-        err = (result.error 'validate.requiredField', value: field.name) or err
+    field = undefined
+    result.context ((path) -> (Result.prop field.name) path), ->
+      for field in type[fieldsProp].$$list when (
+        viewMask.get(field.$$index) and
+        (field.required or (requiredMask and requiredMask.get(field.$$index))) and
+        not value.hasOwnProperty(field.name) and
+        (not onlyFields or onlyFields[field.name]))
+          err = (result.error 'validate.requiredField') or err
 
     err # (result, value, mask, onlyFields) ->
 
@@ -52,10 +53,12 @@ validate = (fieldDesc) ->
   f = switch fieldDesc.type
 
     when 'string'
-      f = (result, value, viewMask, requiredMask) ->
-        return result.error 'validate.invalidValue', value: value unless typeof value == 'string'
-        return result.error 'validate.requiredField', name: value if value.length == 0 and (fieldDesc.required or ((requiredMask and requiredMask.get(fieldDesc.$$index))))
-        return
+      do (len = fieldDesc.length) ->
+        f = (result, value, viewMask, requiredMask) ->
+          return result.error 'validate.invalidValue', value: value unless typeof value == 'string'
+          return result.error 'validate.tooLong', value: value, max: len unless value.length <= len
+          return result.error 'validate.requiredField' if value.length == 0 and (fieldDesc.required or ((requiredMask and requiredMask.get(fieldDesc.$$index))))
+          return
       if fieldDesc.hasOwnProperty('min')
         do (pf = f) ->
           min = fieldDesc.min
@@ -76,8 +79,8 @@ validate = (fieldDesc) ->
 
     when 'text'
       f = (result, value, viewMask, requiredMask) ->
-        result.error 'validate.invalidValue', value: value unless typeof value == 'string'
-        return result.error 'validate.requiredField', name: value if fieldDesc.required or ((requiredMask and requiredMask.get(fieldDesc.$$index)))
+        return result.error 'validate.invalidValue', value: value unless typeof value == 'string'
+        return result.error 'validate.requiredField' if value.length == 0 and (fieldDesc.required or ((requiredMask and requiredMask.get(fieldDesc.$$index))))
         return
       if fieldDesc.hasOwnProperty('min')
         do (pf = f) ->
@@ -180,7 +183,6 @@ validate = (fieldDesc) ->
           result.context ((path) -> (Result.index i) path), ->
             for row, i in value
               err = (validateStructure result, row, viewMask, requiredMask, row.$$touched, strict) or err
-              return
           err # (result, value, mask) ->
 
     else (result, value, viewMask, requiredMask, strict) -> {}

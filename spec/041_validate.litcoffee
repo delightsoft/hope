@@ -45,7 +45,7 @@
 
      typesDesc =
 
-       string: strVal = {right: ['', 'test'], wrong: [undefined, null, 0, 12, true, false, [], {}]}
+       string: strVal = {length: 20, right: ['', 'test'], wrong: [undefined, null, 0, 12, true, false, [], {}]}
 
        text: strVal
 
@@ -98,6 +98,8 @@
      for typeName, typeTestDesc of typesDesc
 
        type = {type: typeName}
+
+       type.length = typeTestDesc.length if typeTestDesc.length
 
        type.enum = typeTestDesc.enum if typeTestDesc.enum
 
@@ -162,8 +164,8 @@
        validate (result = new Result), {f3: false}, fields.$$tags.all
 
        expect(result.messages).sameStructure [
-         {type: 'error', code: 'validate.requiredField', value: 'f1'},
-         {type: 'error', code: 'validate.requiredField', value: 'f2'},
+         {type: 'error', code: 'validate.requiredField', path: 'f1'},
+         {type: 'error', code: 'validate.requiredField', path: 'f2'},
        ]
 
 null

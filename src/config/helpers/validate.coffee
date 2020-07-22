@@ -2,21 +2,41 @@ Result = require '../../result'
 
 {structure: validateStructure} = require '../../validate'
 
-$$validateBuilder = (type, fieldsProp, access, businessValidate) ->
+$$validateBuilder = (type, fieldsProp, $$access, businessValidate) ->
 
   validate = type["#{fieldsProp}Validate"] = validateStructure type, fieldsProp
 
   (result, fields, options) ->
 
-    localResult = Object.create result
+    access = undefined
+
+    strict = true
+
+    if options != undefined
+
+      invalidArg 'options', options unless typeof options == 'object' and options != null and not Array.isArray(options)
+
+      for optName, optValue of options
+
+        switch optName
+
+          when 'access' then access = optValue
+
+          when 'strict' then strict = optValue
+
+          else unknownOption optName
+
+    access = $$access.call @, fields unless access
 
     save = true
 
     submit = true
 
+    localResult = Object.create result
+
     localResult.error = () -> # перехватываем сообщения об ошибках
 
-      msg = Result::error.apply result, arguments
+      msg = Result::error.apply localResult, arguments
 
       if msg.type == 'error'
 
@@ -26,9 +46,7 @@ $$validateBuilder = (type, fieldsProp, access, businessValidate) ->
 
       return # localResult.error = () ->
 
-    r = access.call this, fields
-
-    validate localResult, fields, r.view, r.required, fields.$$touched, typeof options == 'object' && options != null and options.strict
+    validate localResult, fields, access.view, access.required, fields.$$touched, typeof options == 'object' && options != null and options.strict
 
     oldSave = save
 

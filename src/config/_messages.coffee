@@ -63,9 +63,11 @@ messages =
 
     invalidValue: (args) -> "Invalid value: #{args.value}"
 
-    requiredField: (args) -> "Required field: #{args.value}"
+    requiredField: (args) -> "Required field"
 
-    unexpectedField: (args) -> "Unexpected field: #{args.value}"
+    unknownField: (args) -> "Unknown field (value: #{args.value})"
+
+    unexpectedField: (args) -> "Unexpected field (value: #{args.value})"
 
     tooShort: (args) -> "Value too short (min length: #{args.min}): '#{args.value}'"
 
