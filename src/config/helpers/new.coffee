@@ -7,10 +7,9 @@ defaultInit =
   integer: 0
   double: 0
 #  decimal: '0'
-#  time:
-#  date:
-#  dateonly:
-#  timestamp:
+  time: ''
+  date: ''
+  timestamp: ''
 #  json:
 #  blob:
 #  uuid:
