@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>050_config_udtypes.litcoffee</title>
+  <title>051_config_udtypes_extraProps.litcoffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="..\docco.css" />
@@ -188,7 +188,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>050_config_udtypes.litcoffee</h1>
+                  <h1>051_config_udtypes_extraProps.litcoffee</h1>
               </div>
           </li>
         
@@ -204,111 +204,52 @@
 
             </div>
             
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
             <div class="content"><div class='highlight'><pre>{Result,
 config: {compile: {_processUdtypes: processUdtypes}}
 types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span><span class="hljs-function">
-<span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
+focusOnCheck = <span class="hljs-string">''</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+<span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
 
-describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hljs-function">-&gt;</span>
+describe <span class="hljs-string">'051_config_udtypes_extraProps:'</span>, <span class="hljs-function">-&gt;</span>
 
-  check <span class="hljs-string">"correct"</span>, <span class="hljs-function">-&gt;</span>
+  check <span class="hljs-string">"general"</span>, <span class="hljs-function">-&gt;</span>
 
-    conf = $$src:
+    processUdtypes (result = <span class="hljs-keyword">new</span> Result), res = $$src:
 
       udtypes:
 
-        strBased: type: <span class="hljs-string">'string(20)'</span>
+        type1: type: <span class="hljs-string">'string(20)'</span>, min: <span class="hljs-number">10</span>
 
-        intBased: type: <span class="hljs-string">'int'</span>
-
-        currency: type: <span class="hljs-string">'intBased'</span>
-
-    processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
+        type2: type: <span class="hljs-string">'type1'</span>, length: <span class="hljs-number">15</span>, min: <span class="hljs-number">8</span>
 
     expect(result.messages).toEqual []
 
-    expect(conf.udtypes).sameStructure
+    expect(res.udtypes.type1).toEqual
+      name: <span class="hljs-string">'type1'</span>
+      type: <span class="hljs-string">'string'</span>
+      length: <span class="hljs-number">20</span>
+      min: <span class="hljs-number">10</span>
 
-      strBased: strBased = name: <span class="hljs-string">'strBased'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>
-
-      intBased: intBased = name: <span class="hljs-string">'intBased'</span>, type: <span class="hljs-string">'integer'</span>
-
-      currency: currency = name: <span class="hljs-string">'currency'</span>, type: <span class="hljs-string">'integer'</span>, udType: <span class="hljs-string">'intBased'</span>
-
-      $$list: [strBased, intBased, currency]
-
-  check <span class="hljs-string">"cycled"</span>, <span class="hljs-function">-&gt;</span>
-
-    conf = $$src:
-
-      udtypes:
-
-        one: type: <span class="hljs-string">'two'</span>
-
-        two: type: <span class="hljs-string">'one'</span>
-
-        a: type: <span class="hljs-string">'c'</span>
-
-        b: type: <span class="hljs-string">'a'</span>
-
-        c: type: <span class="hljs-string">'b'</span>
-
-    processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
-
-    expect(result.messages).toEqual [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'one'</span>, <span class="hljs-string">'two'</span>]}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'b'</span>]}]
-
-    expect(conf.udtypes).<span class="hljs-keyword">not</span>.toBeDefined()
-
-  check <span class="hljs-string">'dsvalue'</span>, <span class="hljs-function">-&gt;</span>
-
-    conf = $$src:
-
-      udtypes:
-
-        one: type: <span class="hljs-string">'value'</span>
-
-        two: type: <span class="hljs-string">'dsvalue'</span>
-
-    processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
-
-    expect(result.messages).toEqual []
-
-    expect(conf.udtypes).sameStructure
-
-      one: one = name: <span class="hljs-string">'one'</span>, type: <span class="hljs-string">'dsvalue'</span>
-
-      two: two = name: <span class="hljs-string">'two'</span>, type: <span class="hljs-string">'dsvalue'</span>
-
-      $$list: [one, two]
-
-  <span class="hljs-keyword">for</span> type <span class="hljs-keyword">in</span> builtInTypes
-
-    <span class="hljs-keyword">do</span> (type) -&gt; check <span class="hljs-string">"error: built-in type name: '<span class="hljs-subst">#{type}</span>'"</span>, <span class="hljs-function">-&gt;</span>
-
-      (((conf = {}).$$src = {}).udtypes = {})[type] = type: <span class="hljs-string">'int'</span>
-
-      processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
-
-      expect(result.messages).toEqual [{type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">"udtypes.<span class="hljs-subst">#{type}</span>"</span>, code: <span class="hljs-string">'dsc.builtInTypeName'</span>}]
-
-      expect(conf.udtypes).<span class="hljs-keyword">not</span>.toBeDefined()
-
-  <span class="hljs-keyword">for</span> type <span class="hljs-keyword">in</span> reservedTypes
-
-    <span class="hljs-keyword">do</span> (type) -&gt; check <span class="hljs-string">"error: reserved type name: '<span class="hljs-subst">#{type}</span>'"</span>, <span class="hljs-function">-&gt;</span>
-
-      (((conf = {}).$$src = {}).udtypes = {})[type] = type: <span class="hljs-string">'int'</span>
-
-      processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
-
-      expect(result.messages).toEqual [{type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">"udtypes.<span class="hljs-subst">#{type}</span>"</span>, code: <span class="hljs-string">'dsc.reservedTypeName'</span>}]
-
-      expect(conf.udtypes).<span class="hljs-keyword">not</span>.toBeDefined()</pre></div></div>
+    expect(res.udtypes.type2).toEqual
+      name: <span class="hljs-string">'type2'</span>
+      udType: <span class="hljs-string">'type1'</span>
+      type: <span class="hljs-string">'string'</span>
+      length: <span class="hljs-number">15</span>
+      min: <span class="hljs-number">8</span></pre></div></div>
             
         </li>
         

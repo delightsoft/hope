@@ -75,17 +75,23 @@ processUdtypes = (result, config) ->
 
         if parent.hasOwnProperty('type') # processed successfully
 
-          udt.type = parent.type
+          src = Object.assign {}, parent
+
+          delete src.udType
+
+          for prop in typeProps when udt.$$src.hasOwnProperty(prop) # derive type props
+
+            src[prop] = udt.$$src[prop]
+
+          for prop in extraProps when udt.$$src.hasOwnProperty(prop) # derive type props
+
+            src[prop] = udt.$$src[prop]
+
+          delete udt[prop] for prop of udt when not ~['name', 'extra'].indexOf(prop)
+
+          compileType result, src, udt, context: 'udtype' # перекомпилируем, на случай если переопределены свойства базового типа
 
           udt.udType = parent.name
-
-          for prop in typeProps when parent.hasOwnProperty(prop) # derive type props
-
-            udt[prop] = parent[prop]
-
-          for prop in extraProps when parent.hasOwnProperty(prop) # derive type props
-
-            udt[prop] = parent[prop]
 
           if parent.hasOwnProperty('extra')
 
