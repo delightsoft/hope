@@ -31,7 +31,7 @@ config
                 fldQ:
                   tags: 'c'
                   fields:
-                    sa: type: 'date'
+                    sa: type: 'timestamp'
                     sb: type: 't1', required: true, null: true
                     sc: type: 't3', required: true
                     sd:
@@ -58,7 +58,7 @@ config
                 methodA:
                   arguments:
                     a1: type: 'double', tags: 'x, y'
-                    a2: type: 'dateonly', tags: 'y'
+                    a2: type: 'date', tags: 'y'
                   result:
                     r:
                       fields:

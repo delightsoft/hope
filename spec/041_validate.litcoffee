@@ -1,4 +1,5 @@
     {Result, sortedMap, utils: {prettyPrint}} = require '../src'
+    {Result, sortedMap, utils: {prettyPrint}} = require '../src'
 
     flatMap = require '../src/flatMap'
 
@@ -8,7 +9,7 @@
 
     validateBuilder = require '../src/validate'
 
-    focusOnCheck = 'structure'
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     compileFields = (result, fields) ->
@@ -59,7 +60,7 @@
 
        date: {right: ['2020-11-15'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
-       dateonly: {right: ['2020-11-15T09:15Z'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
+       timestamp: {right: ['2020-11-15T09:15Z'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
        enum: {enum: {a: {name: 'a'}, b: {name: 'b'}}, right: ['a', 'b'], wrong: wrongVal = [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]}
 
@@ -382,7 +383,56 @@ structure, subtable: not init
         {type: 'error', path: 'structure3', code: 'dsc.unexpectedProp', value: 'init'}
       ]
 
-date, time
+date, time, timestamp
+
+    check "date", ->
+
+      compileFields (result = new Result),
+        date1: type: 'date', init: '2020-07-23'
+        date2: type: 'date', init: 123
+        date3: type: 'date', init: 'wrong'
+        date4: type: 'date', init: false
+        date5: type: 'date', init: null
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'date2.init', code: 'validate.invalidValue', value: 123}
+        {type: 'error', path: 'date3.init', code: 'validate.invalidValue', value: 'wrong'}
+        {type: 'error', path: 'date4.init', code: 'validate.invalidValue', value: false}
+        {type: 'error', path: 'date5.init', code: 'validate.invalidValue', value: null}
+      ]
+
+    check "time", ->
+
+      compileFields (result = new Result),
+        time1: type: 'time', init: '10:12'
+        time2: type: 'time', init: 123
+        time3: type: 'time', init: 'wrong'
+        time4: type: 'time', init: false
+        time5: type: 'time', init: null
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'time2.init', code: 'validate.invalidValue', value: 123}
+        {type: 'error', path: 'time3.init', code: 'validate.invalidValue', value: 'wrong'}
+        {type: 'error', path: 'time4.init', code: 'validate.invalidValue', value: false}
+        {type: 'error', path: 'time5.init', code: 'validate.invalidValue', value: null}
+      ]
+
+    check "timestamp", ->
+
+      compileFields (result = new Result),
+        timestamp1: type: 'timestamp', init: '2020-07-23 10:12'
+        timestamp2: type: 'timestamp', init: 123
+        timestamp3: type: 'timestamp', init: 'wrong'
+        timestamp4: type: 'timestamp', init: false
+        timestamp5: type: 'timestamp', init: null
+        timestamp6: type: 'timestamp', null: true, init: null
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'timestamp2.init', code: 'validate.invalidValue', value: 123}
+        {type: 'error', path: 'timestamp3.init', code: 'validate.invalidValue', value: 'wrong'}
+        {type: 'error', path: 'timestamp4.init', code: 'validate.invalidValue', value: false}
+        {type: 'error', path: 'timestamp5.init', code: 'validate.invalidValue', value: null}
+      ]
 
 refers
 

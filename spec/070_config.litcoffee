@@ -32,7 +32,7 @@ config
                 fldG: type: 'string(20)', tags: 'a'
                 fldQ:
                   fields:
-                    sa: type: 'date'
+                    sa: type: 'timestamp'
                     sb: type: 't4', required: true, null: true, extra: {b:2}
                     sc: type: 't3', required: true
                     sd:
@@ -69,7 +69,7 @@ config
                   extra: a: 12, b: '123'
                   arguments:
                     a1: type: 'double', tags: 'x, y'
-                    a2: type: 'dateonly', tags: 'y'
+                    a2: type: 'date', tags: 'y'
                   result:
                     r:
                       fields:

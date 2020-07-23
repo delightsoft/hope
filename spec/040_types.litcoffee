@@ -92,7 +92,8 @@ C decimal тоже пока повременим
 
         {name: 'time', null: true}
         {name: 'date', null: true}
-        {name: 'dateonly', null: true}
+        {name: 'timestamp', null: true}
+#        {name: 'datetime', null: true}
         {name: 'now'}
 
         {name: 'json', null: true}

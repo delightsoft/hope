@@ -155,14 +155,16 @@ validate = (fieldDesc) ->
           return
       f # when 'double'
 
+    when 'date'
+      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and momentLdr()(value, 'YYYY-MM-DD').isValid()
+
     when 'time'
       (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and momentLdr()(value, 'HH:mm', true).isValid()
 
-    when 'date'
+    when 'timestamp'
       (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and momentLdr()(value, 'YYYY-MM-DD HH:mm').isValid()
 
-    when 'dateonly'
-      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and momentLdr()(value, 'YYYY-MM-DD').isValid()
+    # TODO: Add timetz, timestamptz
 
     when 'enum'
       (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' && fieldDesc.enum.hasOwnProperty(value)

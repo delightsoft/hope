@@ -22,7 +22,7 @@ general
               fld3:
                 fields:
                   a: type: 'json', tags: 'tag2'
-                  b: type: 'date'
+                  b: type: 'timestamp'
 
         $$src = deepClone doc.$$src
 

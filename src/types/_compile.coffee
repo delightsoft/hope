@@ -19,14 +19,14 @@ builtInTypes = [
   'string', 'text', 'boolean',
   'integer', 'double'
   'decimal'
-  'time', 'date', 'dateonly', 'timestamp'
+  'time', 'date', 'timestamp'
   'json', 'blob', 'uuid', 'enum'
   'structure', 'subtable'
   'refers'
   'dsvalue'
 ]
 
-reservedTypes = ['long', 'float']
+reservedTypes = ['long', 'float', 'timetz', 'timestamptz']
 
 compile = (result, fieldDesc, res, opts) ->
   invalidArg 'result', result unless isResult result
@@ -172,7 +172,7 @@ compile = (result, fieldDesc, res, opts) ->
 
           if optsContext == null || optsContext == 'field'
 
-            if (ok = not (type == 'timestamp' || type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
+            if (ok = not (type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
 
           else
 

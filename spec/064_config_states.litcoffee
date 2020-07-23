@@ -24,7 +24,7 @@ general
               fld3:
                 fields:
                   a: type: 'json', tags: 'tag2'
-                  b: type: 'date'
+                  b: type: 'timestamp'
             actions:
               open: ->
               close: ->
@@ -63,7 +63,7 @@ general
               fld3:
                 fields:
                   a: type: 'json', tags: 'tag2'
-                  b: type: 'date'
+                  b: type: 'timestamp'
             actions:
               open: ->
               close: ->

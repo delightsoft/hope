@@ -199,6 +199,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>{Result, sortedMap, utils: {prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+{Result, sortedMap, utils: {prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
 flatMap = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/flatMap'</span>
 
@@ -208,7 +209,7 @@ flatMap = <span class="hljs-built_in">require</span> <span class="hljs-string">'
 
 validateBuilder = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate'</span>
 
-focusOnCheck = <span class="hljs-string">'structure'</span>
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function">
 <span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
@@ -280,7 +281,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
    date: {right: [<span class="hljs-string">'2020-11-15'</span>], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, [], {}]},
 
-   dateonly: {right: [<span class="hljs-string">'2020-11-15T09:15Z'</span>], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, [], {}]},
+   timestamp: {right: [<span class="hljs-string">'2020-11-15T09:15Z'</span>], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, [], {}]},
 
    enum: {enum: {a: {name: <span class="hljs-string">'a'</span>}, b: {name: <span class="hljs-string">'b'</span>}}, right: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>], wrong: wrongVal = [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, [], {}]}
 
@@ -721,11 +722,58 @@ check <span class="hljs-string">"required: ok"</span>, <span class="hljs-functio
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>date, time</p>
-<p>refers</p>
-<p>TODO:</p>
+              <p>date, time, timestamp</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>check <span class="hljs-string">"date"</span>, <span class="hljs-function">-&gt;</span>
+
+  compileFields (result = <span class="hljs-keyword">new</span> Result),
+    date1: type: <span class="hljs-string">'date'</span>, init: <span class="hljs-string">'2020-07-23'</span>
+    date2: type: <span class="hljs-string">'date'</span>, init: <span class="hljs-number">123</span>
+    date3: type: <span class="hljs-string">'date'</span>, init: <span class="hljs-string">'wrong'</span>
+    date4: type: <span class="hljs-string">'date'</span>, init: <span class="hljs-literal">false</span>
+    date5: type: <span class="hljs-string">'date'</span>, init: <span class="hljs-literal">null</span>
+
+  expect(result.messages).sameStructure [
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'date2.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">123</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'date3.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'date4.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">false</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'date5.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">null</span>}
+  ]
+
+check <span class="hljs-string">"time"</span>, <span class="hljs-function">-&gt;</span>
+
+  compileFields (result = <span class="hljs-keyword">new</span> Result),
+    time1: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-string">'10:12'</span>
+    time2: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-number">123</span>
+    time3: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-string">'wrong'</span>
+    time4: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-literal">false</span>
+    time5: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-literal">null</span>
+
+  expect(result.messages).sameStructure [
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'time2.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">123</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'time3.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'time4.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">false</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'time5.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">null</span>}
+  ]
+
+check <span class="hljs-string">"timestamp"</span>, <span class="hljs-function">-&gt;</span>
+
+  compileFields (result = <span class="hljs-keyword">new</span> Result),
+    timestamp1: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-string">'2020-07-23 10:12'</span>
+    timestamp2: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-number">123</span>
+    timestamp3: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-string">'wrong'</span>
+    timestamp4: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-literal">false</span>
+    timestamp5: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-literal">null</span>
+    timestamp6: type: <span class="hljs-string">'timestamp'</span>, null: <span class="hljs-literal">true</span>, init: <span class="hljs-literal">null</span>
+
+  expect(result.messages).sameStructure [
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'timestamp2.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">123</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'timestamp3.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'timestamp4.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">false</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'timestamp5.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">null</span>}
+  ]</pre></div></div>
             
         </li>
         
@@ -736,8 +784,8 @@ check <span class="hljs-string">"required: ok"</span>, <span class="hljs-functio
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>Кастомный валидатор</p>
-<p>TODO: С проверкой других полей</p>
+              <p>refers</p>
+<p>TODO:</p>
 
             </div>
             
@@ -749,6 +797,20 @@ check <span class="hljs-string">"required: ok"</span>, <span class="hljs-functio
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Кастомный валидатор</p>
+<p>TODO: С проверкой других полей</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Валидатор документ</p>
 <p>init</p>

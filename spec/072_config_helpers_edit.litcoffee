@@ -27,7 +27,7 @@ config
                 method1:
                   arguments:
                     a: type: 'int', tags: 't1', required: true
-                    b: type: 'date', required: true
+                    b: type: 'timestamp', required: true
                   result:
                     r1: type: 'int', tags: 't1'
                     r2: type: 'double', required: true
