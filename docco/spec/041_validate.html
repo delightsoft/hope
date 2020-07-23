@@ -208,12 +208,12 @@ flatMap = <span class="hljs-built_in">require</span> <span class="hljs-string">'
 
 validateBuilder = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate'</span>
 
-focusOnCheck = <span class="hljs-string">''</span>
+focusOnCheck = <span class="hljs-string">'structure'</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function">
 <span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
 
-  map = sortedMap result, fields, index: <span class="hljs-literal">true</span>
+  map = flatMap result, fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
 
   name = <span class="hljs-literal">undefined</span>
 
@@ -669,12 +669,22 @@ check <span class="hljs-string">"required: ok"</span>, <span class="hljs-functio
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>enum: init</p>
-<p>structure, subtable: not init</p>
-<p>date, time</p>
-<p>refers</p>
-<p>TODO:</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>check <span class="hljs-string">"enum"</span>, <span class="hljs-function">-&gt;</span>
+
+  compileFields (result = <span class="hljs-keyword">new</span> Result),
+    enum1: enum: <span class="hljs-string">'a,b,c'</span>, init: <span class="hljs-string">'a'</span>
+    enum2: enum: <span class="hljs-string">'a,b,c'</span>, init: <span class="hljs-string">'wrong'</span>
+    enum3: enum: <span class="hljs-string">'a,b,c'</span>, init: <span class="hljs-number">12</span>
+    enum4: enum: <span class="hljs-string">'a,b,c'</span>, init: <span class="hljs-literal">false</span>
+
+  expect(result.messages).sameStructure [
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'enum2.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'enum3.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">12</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'enum4.init'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">false</span>}
+  ]</pre></div></div>
             
         </li>
         
@@ -685,10 +695,22 @@ check <span class="hljs-string">"required: ok"</span>, <span class="hljs-functio
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Кастомный валидатор</p>
-<p>TODO: С проверкой других полей</p>
+              <p>structure, subtable: not init</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>check <span class="hljs-string">"structure"</span>, <span class="hljs-function">-&gt;</span>
+
+  compileFields (result = <span class="hljs-keyword">new</span> Result),
+    structure1: fields: {f1: {type: <span class="hljs-string">'string(20)'</span>}, f2: {type: <span class="hljs-string">'string(20)'</span>}}, init: <span class="hljs-string">'wrong'</span>
+    structure2: fields: {f1: {type: <span class="hljs-string">'string(20)'</span>}, f2: {type: <span class="hljs-string">'string(20)'</span>}}, init: <span class="hljs-number">123</span>
+    structure3: fields: {f1: {type: <span class="hljs-string">'string(20)'</span>}, f2: {type: <span class="hljs-string">'string(20)'</span>}}, init: <span class="hljs-literal">true</span>
+
+  expect(result.messages).sameStructure [
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure1'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'init'</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure2'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'init'</span>}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure3'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'init'</span>}
+  ]</pre></div></div>
             
         </li>
         
@@ -698,6 +720,35 @@ check <span class="hljs-string">"required: ok"</span>, <span class="hljs-functio
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>date, time</p>
+<p>refers</p>
+<p>TODO:</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Кастомный валидатор</p>
+<p>TODO: С проверкой других полей</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Валидатор документ</p>
 <p>init</p>

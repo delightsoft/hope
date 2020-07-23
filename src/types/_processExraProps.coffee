@@ -82,7 +82,9 @@ processExtraProps = (result, fieldDesc, res) ->
 
   validator = undefined
 
-  copyAndValidateProp 'init' if fieldDesc.hasOwnProperty('init') and not result.isError and not ~['structure', 'subtable'].indexOf(fieldDesc.type)
+  if fieldDesc.hasOwnProperty('init') and not result.isError and not ~['structure', 'subtable'].indexOf(res.type)
+
+    copyAndValidateProp 'init'
 
   res # processExtraProps =
 

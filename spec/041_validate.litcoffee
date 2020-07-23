@@ -8,12 +8,12 @@
 
     validateBuilder = require '../src/validate'
 
-    focusOnCheck = ''
+    focusOnCheck = 'structure'
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     compileFields = (result, fields) ->
 
-      map = sortedMap result, fields, index: true
+      map = flatMap result, fields, 'fields', index: true, mask: true
 
       name = undefined
 
@@ -353,7 +353,34 @@ boolean: init
 
 enum: init
 
+    check "enum", ->
+
+      compileFields (result = new Result),
+        enum1: enum: 'a,b,c', init: 'a'
+        enum2: enum: 'a,b,c', init: 'wrong'
+        enum3: enum: 'a,b,c', init: 12
+        enum4: enum: 'a,b,c', init: false
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'enum2.init', code: 'validate.invalidValue', value: 'wrong'}
+        {type: 'error', path: 'enum3.init', code: 'validate.invalidValue', value: 12}
+        {type: 'error', path: 'enum4.init', code: 'validate.invalidValue', value: false}
+      ]
+
 structure, subtable: not init
+
+    check "structure", ->
+
+      compileFields (result = new Result),
+        structure1: fields: {f1: {type: 'string(20)'}, f2: {type: 'string(20)'}}, init: 'wrong'
+        structure2: fields: {f1: {type: 'string(20)'}, f2: {type: 'string(20)'}}, init: 123
+        structure3: fields: {f1: {type: 'string(20)'}, f2: {type: 'string(20)'}}, init: true
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'structure1', code: 'dsc.unexpectedProp', value: 'init'}
+        {type: 'error', path: 'structure2', code: 'dsc.unexpectedProp', value: 'init'}
+        {type: 'error', path: 'structure3', code: 'dsc.unexpectedProp', value: 'init'}
+      ]
 
 date, time
 
