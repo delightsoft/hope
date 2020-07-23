@@ -42,6 +42,8 @@ compile = (result, fieldDesc, res, opts) ->
 
   throw new Error "fieldDesc was already process by tags/compile()" unless not fieldDesc.hasOwnProperty '$$tags'
 
+  result.isError = false
+
   # Определяем тип.  То что в скобках выделяем в options.
 
   if fieldDesc.hasOwnProperty('type')

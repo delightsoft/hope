@@ -10,11 +10,11 @@ processExtraProps = (result, fieldDesc, res) ->
 
     result.context ((path) -> (Result.prop prop) path), ->
 
-      (validator || (validator = validateBuilder res)) result, fieldDesc.init
+      (validator || (validator = validateBuilder res)) result, fieldDesc[prop]
 
     res[prop] = fieldDesc[prop]
 
-  if fieldDesc.type in ['string', 'text']
+  if ~['string', 'text'].indexOf(res.type)
 
      if fieldDesc.hasOwnProperty('regexp') then do ->
 
@@ -70,7 +70,7 @@ processExtraProps = (result, fieldDesc, res) ->
 
         res.max = fieldDesc.max
 
-  else if fieldDesc.type in ['integer', 'double', 'decimal']
+  else if ~['integer', 'double', 'decimal'].indexOf(res.type)
 
     copyAndValidateProp 'min' if fieldDesc.hasOwnProperty('min')
 
@@ -80,7 +80,9 @@ processExtraProps = (result, fieldDesc, res) ->
 
       result.error ((path) -> (Result.prop 'max') path), 'dsc.tooSmall', value: fieldDesc.max
 
-  copyAndValidateProp 'init' if fieldDesc.hasOwnProperty('init') and not result.isError and not (fieldDesc.type in ['structure', 'subtable'])
+  validator = undefined
+
+  copyAndValidateProp 'init' if fieldDesc.hasOwnProperty('init') and not result.isError and not ~['structure', 'subtable'].indexOf(fieldDesc.type)
 
   res # processExtraProps =
 

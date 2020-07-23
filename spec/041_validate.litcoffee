@@ -23,19 +23,17 @@
 
           name = field.name
 
-          result.isError = false;
-
           compileType result, field.$$src, field, context: 'field'
 
           return
 
-      compileTags (result = new Result), map
+      compileTags result, map
 
       map = validateBuilder.addValidate map
 
       sortedMap.finish result, map
 
-      map # do ->
+      map # (result, fields) ->
 
     describe '041_validate:', ->
 
@@ -43,7 +41,7 @@
 
 Простые типы
 
-     typesDesc =
+    typesDesc =
 
        string: strVal = {length: 20, right: ['', 'test'], wrong: [undefined, null, 0, 12, true, false, [], {}]}
 
@@ -129,7 +127,7 @@
              {type: 'error', code: 'validate.invalidValue', value}
            ]
 
-     check "required: ok", ->
+    check "required: ok", ->
 
        validate = validateBuilder
 
@@ -208,77 +206,154 @@ null
          {type: 'error', path: 'f3', code: 'validate.invalidValue', value: null}
        ]
 
-string: min, max, regexp, init
+string: min, regexp, init
 
-     check "string: wrong", ->
+    check "string", ->
 
-       compileFields (result = new Result),
-         f1: type: 'string', length: 20, min: 40, init: ''
-         ft1: type: 'text', min: 40, max: 30, init: ''
+      compileFields (result = new Result),
+        string1: type: 'string(10)', min: 5, init: '12'
+        string2: type: 'string(10)', min: 5, init: '123456'
+        string3: type: 'string(10)', min: 5, init: '123456789012'
 
-       expect(result.messages).sameStructure [
-         {type: 'error', path: 'f1.min', code: 'dsc.tooBig', value: 40}
-         {type: 'error', path: 'ft1.max', code: 'dsc.tooSmall', value: 30}
-       ]
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'string1.init', code: 'validate.tooShort', value: '12', min: 5}
+        {type: 'error', path: 'string3.init', code: 'validate.tooLong', value: '123456789012', max: 10}
+      ]
 
-       compileFields (result = new Result),
-         f1a: type: 'string', length: 20, min: 10, init: ''
-         ft1a: type: 'text', min: 10, max: 5, init: ''
+      compileFields (result = new Result), # unexpected тестируем отдельно.  при наличии других ошибок эта ошибка не возвращается
+        string4: type: 'string(10)', min: 5, max: 20
 
-       expect(result.messages).sameStructure [
-         {type: 'error', path: 'f1a.init', code: 'validate.tooShort', value: '', min: 10 }
-         {type: 'error', path: 'ft1a.max', code: 'dsc.tooSmall', value: 5}
-       ]
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'string4', code: 'dsc.unexpectedProp', value: 'max'}
+      ]
 
-       compileFields (result = new Result),
-         f1b: type: 'string', length: 20, min: 10, init: ''
-         ft1b: type: 'text', min: 10, max: 5, init: ''
+      compileFields (result = new Result),
+        string5: type: 'string(10)', regexp: /\d{2,5}/i, init: '1'
+        string6: type: 'string(10)', regexp: /\d{2,5}/i, init: '123'
+        string7: type: 'string(10)', regexp: /\d{2,5}/i, init: '123456'
 
-       expect(result.messages).sameStructure [
-         {type: 'error', path: 'f1b.init', code: 'validate.tooShort', value: '', min: 10 }
-         {type: 'error', path: 'ft1b.max', code: 'dsc.tooSmall', value: 5}
-       ]
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'string5.init', code: 'validate.invalidValue', value: '1', regexp: '/\\d{2,5}/i'}
+      ]
 
-       compileFields (result = new Result),
-         f2: type: 'string', length: 20, min: 10, max: 5
-         ft2: type: 'text', min: 10, max: 5
+      compileFields (result = new Result),
+        string10: type: 'string(10)', init: null
+        string11: type: 'string(10)', init: 123
+        string12: type: 'string(10)', init: true
 
-       expect(result.messages).sameStructure [
-         {type: 'error', path: 'ft2.max', code: 'dsc.tooSmall', value: 5}
-       ]
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'string10.init', code: 'validate.invalidValue', value: null}
+        {type: 'error', path: 'string11.init', code: 'validate.invalidValue', value: 123}
+        {type: 'error', path: 'string12.init', code: 'validate.invalidValue', value: true}
+      ]
 
-       compileFields (result = new Result),
-         f1: type: 'string', length: 20, min: '10', init: ''
-         ft1: type: 'text', min: false, max: null, init: ''
+      compileFields (result = new Result),
+        string20: type: 'string(10)', min: 20
 
-       expect(result.messages).sameStructure [
-         {type: 'error', path: 'f1.min', code: 'dsc.invalidValue', value: '10'}
-         {type: 'error', path: 'ft1.min', code: 'dsc.invalidValue', value: false}
-         {type: 'error', path: 'ft1.max', code: 'dsc.invalidValue', value: null }
-       ]
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'string20.min', code: 'dsc.tooBig', value: 20}
+      ]
+
+text: min, max, regexp, init
+
+    check "text", ->
+
+      compileFields (result = new Result),
+        text1: type: 'text', min: 5, init: '12'
+        text2: type: 'text', min: 5, init: '123456'
+        text3: type: 'text', min: 5, max: 10, init: '123456789012'
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'text1.init', code: 'validate.tooShort', value: '12', min: 5}
+        {type: 'error', path: 'text3.init', code: 'validate.tooLong', value: '123456789012', max: 10}
+      ]
+
+      compileFields (result = new Result),
+        text5: type: 'text', regexp: /\d{2,5}/i, init: '1'
+        text6: type: 'text', regexp: /\d{2,5}/i, init: '123'
+        text7: type: 'text', regexp: /\d{2,5}/i, init: '123456'
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'text5.init', code: 'validate.invalidValue', value: '1', regexp: '/\\d{2,5}/i'}
+      ]
+
+      compileFields (result = new Result),
+        text10: type: 'text', init: null
+        text11: type: 'text', init: 123
+        text12: type: 'text', init: true
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'text10.init', code: 'validate.invalidValue', value: null}
+        {type: 'error', path: 'text11.init', code: 'validate.invalidValue', value: 123}
+        {type: 'error', path: 'text12.init', code: 'validate.invalidValue', value: true}
+      ]
+
+      compileFields (result = new Result),
+        text20: type: 'text', min: 20, max: 10
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'text20.max', code: 'dsc.tooSmall', value: 10}
+      ]
 
 int: min, max
 
+    check "int", ->
+
+      compileFields (result = new Result),
+        int1: type: 'int', min: 10, max: 20, init: 5
+        int2: type: 'int', min: 10, max: 20, init: 15
+        int3: type: 'int', min: 10, max: 20, init: 25
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'int1.init', code: 'validate.tooSmall', value: 5, min: 10}
+        {type: 'error', path: 'int3.init', code: 'validate.tooBig', value: 25, max: 20 }
+      ]
+
 double: min, max
+
+    check "double", ->
+
+      compileFields (result = new Result),
+        double1: type: 'double', min: 10.0, max: 20.2, init: 5.12
+        double2: type: 'double', min: 10.0, max: 20.2, init: 15.12
+        double3: type: 'double', min: 10.0, max: 20.2, init: 25.12
+
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'double1.init', code: 'validate.tooSmall', value: 5.12, min: 10}
+        {type: 'error', path: 'double3.init', code: 'validate.tooBig', value: 25.12, max: 20.2 }
+      ]
 
 decimal: precision, scale, min, max
 
     # TODO:
 
-RegExp
+boolean: init
 
-      check "regexp: right", ->
+    check "boolean", ->
 
-       fields = compileFields (result = new Result),
-         f1: type: 'string', length: 20, regexp: /.*/gi
-         ft1: type: 'text', regexp: '/.*/gi'
+      compileFields (result = new Result),
+        boolean1: type: 'boolean', init: true
+        boolean2: type: 'boolean', min: 10, max: 20
 
-       expect(fields.f1.regexp instanceof RegExp).toBe true
-       expect(fields.ft1.regexp instanceof RegExp).toBe true
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'boolean2', code: 'dsc.unexpectedProp', value: 'min'}
+        {type: 'error', path: 'boolean2', code: 'dsc.unexpectedProp', value: 'max'}
+      ]
 
-enum
+      compileFields (result = new Result),
+        boolean10: type: 'boolean', init: 123.45
+        boolean11: type: 'boolean', init: 'wrong'
+        boolean12: type: 'boolean', init: {}
 
-structure, subtable
+      expect(result.messages).sameStructure [
+        {type: 'error', path: 'boolean10.init', code: 'validate.invalidValue', value: 123.45}
+        {type: 'error', path: 'boolean11.init', code: 'validate.invalidValue', value: 'wrong'}
+        {type: 'error', path: 'boolean12.init', code: 'validate.invalidValue', value: {}}
+      ]
+
+enum: init
+
+structure, subtable: not init
 
 date, time
 
@@ -288,7 +363,7 @@ refers
 
 Кастомный валидатор
 
-    # TODO:  С проверкой других полей
+    # TODO: С проверкой других полей
 
 Валидатор документ
 
