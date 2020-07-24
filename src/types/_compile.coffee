@@ -340,6 +340,8 @@ takeStringOrArrayOfStrings = (result, value) ->
 
 takeEnum = (result, value) ->
 
+  return value if typeof value == 'object' and value != null and value.hasOwnProperty('$$list') # это случается при использовании enum в udTypes
+
   res = sortedMap result, value, string: true, boolean: true
 
   copyExtra result, res unless result.isError

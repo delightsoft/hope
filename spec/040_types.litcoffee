@@ -33,7 +33,7 @@ fit, для задачи указанной в focusOnCheck
         valEmptyMap = {}
         valEmptyStr = ''
         valArrayOfDocTypes = ['Doc1', 'Doc2']
-        valArrayOfEnumObjects = [{name: 'Field1'}, {name: 'Field2'}, {name: 'Field3'}]
+          valArrayOfEnumObjects = [{name: 'Field1'}, {name: 'Field2'}, {name: 'Field3'}]
         valArrayOfFieldsDesc = [{name: 'field1', type: 'string', length: 10}, {name: 'field2', type: 'int'}, {name: 'field3', type: 'bool'}]
         valStr = 'str'
       ]

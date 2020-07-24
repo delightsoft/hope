@@ -64,11 +64,21 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
                 udt = config.udtypes[field.udType]
 
-                field.type = udt.type
+                src = Object.assign {}, udt
 
-                field[prop] = udt[prop] for prop in typeProps when udt.hasOwnProperty(prop)
+                delete src.udType
 
-                field[prop] = udt[prop] for prop in extraProps when udt.hasOwnProperty(prop)
+                for prop in typeProps when field.$$src.hasOwnProperty(prop) # derive type props
+
+                  src[prop] = field.$$src[prop]
+
+                for prop in extraProps when field.$$src.hasOwnProperty(prop) # derive type props
+
+                  src[prop] = field.$$src[prop]
+
+                delete field[prop] for prop of field when not ~['name', 'extra'].indexOf(prop) and not prop.startsWith('$$')
+
+                compileType result, src, field, context: 'field' # перекомпилируем, на случай если переопределены свойства базового типа
 
                 udtList = [udt.name]
 

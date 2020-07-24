@@ -220,6 +220,8 @@
 config: {compile: {_processUdtypes: processUdtypes}}
 types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
+processDocs = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/config/_processDocs'</span>
+
 focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
@@ -249,7 +251,55 @@ describe <span class="hljs-string">'051_config_udtypes_extraProps:'</span>, <spa
       udType: <span class="hljs-string">'type1'</span>
       type: <span class="hljs-string">'string'</span>
       length: <span class="hljs-number">15</span>
-      min: <span class="hljs-number">8</span></pre></div></div>
+      min: <span class="hljs-number">8</span>
+
+  check <span class="hljs-string">"field with udt type"</span>, <span class="hljs-function">-&gt;</span>
+
+    config = $$src:
+
+      udtypes:
+
+        type1: type: <span class="hljs-string">'string(20)'</span>, min: <span class="hljs-number">10</span>
+
+        type2: type: <span class="hljs-string">'type1'</span>, length: <span class="hljs-number">15</span>, min: <span class="hljs-number">8</span>, init: <span class="hljs-string">'12345678'</span>
+
+        type3: enum: <span class="hljs-string">'a, b, c'</span>, extra: {b: <span class="hljs-number">2</span>}
+
+      docs:
+
+        Doc1:
+
+          fields:
+
+            f1: type: <span class="hljs-string">'type2'</span>, min: <span class="hljs-number">12</span>, length: <span class="hljs-number">40</span>, init: <span class="hljs-string">'123456789012'</span>
+
+            f2: type: <span class="hljs-string">'type3'</span>, init: <span class="hljs-string">'b'</span>, extra: {a: <span class="hljs-number">1</span>}
+
+    result = <span class="hljs-keyword">new</span> Result
+
+    processUdtypes result, config
+
+    processDocs result, config, <span class="hljs-literal">true</span>
+
+    expect(result.messages).toEqual []
+
+    expect(config.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.f1).toEqual
+      name: <span class="hljs-string">'f1'</span>
+      $$index: <span class="hljs-number">0</span>
+      udType: [<span class="hljs-string">'type2'</span>, <span class="hljs-string">'type1'</span>]
+      type: <span class="hljs-string">'string'</span>
+      length: <span class="hljs-number">40</span>
+      min: <span class="hljs-number">12</span>
+      init: <span class="hljs-string">'123456789012'</span>
+
+    expect(config.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.f2).toEqual
+      name: <span class="hljs-string">'f2'</span>
+      $$index: <span class="hljs-number">1</span>
+      type: <span class="hljs-string">'enum'</span>
+      enum: {a: {name: <span class="hljs-string">'a'</span>}, b: {name: <span class="hljs-string">'b'</span>}, c: {name: <span class="hljs-string">'c'</span>}, $$list: [{name: <span class="hljs-string">'a'</span>}, {name: <span class="hljs-string">'b'</span>}, {name: <span class="hljs-string">'c'</span>}]}
+      init: <span class="hljs-string">'b'</span>
+      udType: [<span class="hljs-string">'type3'</span>]
+      extra: {b: <span class="hljs-number">2</span>, a: <span class="hljs-number">1</span>}</pre></div></div>
             
         </li>
         

@@ -109,7 +109,7 @@ config
 
           fldG: ''
 
-          fldQ: sa: '', sb: 0, sc: 'a', sd: 'x'
+          fldQ: sa: '', sb: null, sc: 'a', sd: 'x'
 
 subtale с признаком required создаются с одной новой пустой записью
 
