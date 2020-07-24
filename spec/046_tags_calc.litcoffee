@@ -59,25 +59,25 @@ Tags.Calc
 
         expect(result.messages).toEqual []
 
-      check 'ok', ->
-
-        expect((calcTags (result = new Result), @fields, 'fld1, fld2, fld4').valueOf()).toEqual [0, 1, 8]
-
-        expect((calcTags (result = new Result), @fields, 'fld3').valueOf()).toEqual [2, 3, 4, 5, 6, 7]
-
-        expect((calcTags (result = new Result), @fields, 'fld3.fld3c, fld4').valueOf()).toEqual [2, 5, 6, 7, 8]
-
-        expect((calcTags (result = new Result), @fields, '#a, #test.b').valueOf()).toEqual [0, 2, 3, 8]
-
-        expect((calcTags (result = new Result), @fields, '#all').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7, 8]
-
-        expect((calcTags (result = new Result), @fields, '!fld2').valueOf()).toEqual [0, 2, 3, 4, 5, 6, 7, 8]
-
-        expect((calcTags (result = new Result), @fields, 'fld1,fld2,fld4 & fld2,fld4').valueOf()).toEqual [1, 8]
-
-        expect((calcTags (result = new Result), @fields, '(fld1,(fld2,fld4) & (fld2,fld4))').valueOf()).toEqual [1, 8]
-
-        expect((calcTags (result = new Result), @fields, '#all - #a + fld1').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7]
+    #      check 'ok', ->
+    #
+    #        expect((calcTags (result = new Result), @fields, 'fld1, fld2, fld4').valueOf()).toEqual [0, 1, 8]
+    #
+    #        expect((calcTags (result = new Result), @fields, 'fld3').valueOf()).toEqual [2, 3, 4, 5, 6, 7]
+    #
+    #        expect((calcTags (result = new Result), @fields, 'fld3.fld3c, fld4').valueOf()).toEqual [2, 5, 6, 7, 8]
+    #
+    #        expect((calcTags (result = new Result), @fields, '#a, #test.b').valueOf()).toEqual [0, 2, 3, 8]
+    #
+    #        expect((calcTags (result = new Result), @fields, '#all').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    #
+    #        expect((calcTags (result = new Result), @fields, '!fld2').valueOf()).toEqual [0, 2, 3, 4, 5, 6, 7, 8]
+    #
+    #        expect((calcTags (result = new Result), @fields, 'fld1,fld2,fld4 & fld2,fld4').valueOf()).toEqual [1, 8]
+    #
+    #        expect((calcTags (result = new Result), @fields, '(fld1,(fld2,fld4) & (fld2,fld4))').valueOf()).toEqual [1, 8]
+    #
+    #        expect((calcTags (result = new Result), @fields, '#all - #a + fld1').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7]
 
       check 'error: unbalanced parenthesises', ->
 

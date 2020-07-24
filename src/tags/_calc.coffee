@@ -184,7 +184,7 @@ calc = (result, collection, expression) ->
 
   res = _calcExpr expr
 
-  res.clearVertical() if isFlat
+  # res.clearVertical() if isFlat
 
   res # calc =
 
