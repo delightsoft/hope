@@ -58,7 +58,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
         return # localResult.error = () ->
 
-      validate localResult, fields, r.view, r.required, if beforeSubmit then fields.$$touched else undefined
+      validate localResult, fields, undefined, r.view, r.required, if beforeSubmit then fields.$$touched else undefined
 
       oldSave = save
 

@@ -47,8 +47,7 @@ config
           api:
             api1:
               method1:
-                argAccess: (fields) ->
-                  view: this.$$tags.t1, update: this.$$tags.t1
+                argAccess: (fields) -> view: this.$$tags.t1, update: this.$$tags.t1
                 argValidate: (result  , fields) -> result.error 'err2' if fields.a == 12; return
                 resultAccess: (fields) -> view: this.$$tags.t1, update: this.$$tags.t1
                 resultValidate: (result, fields) -> result.error 'err3' if fields.r2 == 2.4; return
@@ -203,9 +202,17 @@ config
 
         linkedConfig = linkConfig unlinkedConfig, @code
 
-        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidateBuilder() {a: 12}).toEqual save: true, submit: true, messages: {}
+        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidateBuilder() {a: 12}).toEqual save: true, submit: false, messages: {
+          '': [{type: 'error', code: 'err2'}]
+        }
 
-        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r1: 12}).toEqual save: true, submit: true, messages: {}
+        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r2: 2.4}).toEqual save: true, submit: false, messages: {
+          '': [{type: 'error', code: 'err3'}]
+        }
+
+        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidateBuilder() {a: 0}).toEqual save: true, submit: true, messages: {}
+
+        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r1: 1}).toEqual save: true, submit: true, messages: {}
 
       check 'required emty string in before edit', ->
 

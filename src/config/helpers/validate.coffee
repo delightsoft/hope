@@ -46,7 +46,7 @@ $$validateBuilder = (type, fieldsProp, $$access, businessValidate) ->
 
       return # localResult.error = () ->
 
-    validate localResult, fields, access.view, access.required, fields.$$touched, typeof options == 'object' && options != null and options.strict
+    validate localResult, fields, undefined, access.view, access.required, fields.$$touched, typeof options == 'object' && options != null and options.strict
 
     oldSave = save
 

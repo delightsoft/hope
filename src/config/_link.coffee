@@ -350,11 +350,11 @@ link = (config, noHelpers, opts) ->
 
         method.arguments.$$access = $$accessBuilder method, 'arguments', methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].argAccess
         method.arguments.$$validate = $$validateBuilder method, 'arguments', method.arguments.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].argValidE
-        method.arguments.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'arguments', method.arguments.$$access, method.arguments.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].argValidE
+        method.arguments.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'arguments', method.arguments.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].argValidate
 
         method.result.$$access = $$accessBuilder method, 'result', methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].resultAccess
         method.result.$$validate = $$validateBuilder method, 'result', method.result.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].resultValidate
-        method.result.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'result', method.arguments.$$access, method.arguments.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].resultValidate
+        method.result.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'result', method.arguments.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].resultValidate
 
       freeze method
 

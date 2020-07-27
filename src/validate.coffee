@@ -5,7 +5,7 @@ momentLdr = -> _moment or (_moment = require 'moment')
 
 validateStructureBuilder = (type, fieldsProp = 'fields') ->
 
-  (result, value, viewMask, requiredMask, onlyFields, strict) ->
+  (result, value, fieldsLevel, viewMask, requiredMask, onlyFields, strict) ->
 
     unless typeof value == 'object' and value != null and not Array.isArray value
       return result.error 'validate.invalidValue', value: value
@@ -23,7 +23,7 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
           if not viewMask.get(field.$$index)
             err = (result.error 'validate.unexpectedField', value: fieldValue) or err if strict
           else if not onlyFields or onlyFields[field.name] or alwaysValidate
-            err = (field.validate result, fieldValue, viewMask, requiredMask, (if typeof field == 'object' and field != null and not Array.isArray(field) then field.$$touched), strict) or err
+            err = (field.validate result, fieldValue, value , viewMask, requiredMask, (if typeof field == 'object' and field != null and not Array.isArray(field) then field.$$touched), strict) or err
 
     field = undefined
     result.context ((path) -> (Result.prop field.name) path), ->
@@ -54,7 +54,7 @@ validate = (fieldDesc) ->
 
     when 'string'
       do (len = fieldDesc.length) ->
-        f = (result, value, viewMask, requiredMask) ->
+        f = (result, value, fieldsLevel, viewMask, requiredMask) ->
           return result.error 'validate.invalidValue', value: value unless typeof value == 'string'
           return result.error 'validate.tooLong', value: value, max: len unless value.length <= len
           return result.error 'validate.requiredField' if value.length == 0 and (fieldDesc.required or ((requiredMask and requiredMask.get(fieldDesc.$$index))))
@@ -62,47 +62,47 @@ validate = (fieldDesc) ->
       if fieldDesc.hasOwnProperty('min')
         do (pf = f) ->
           min = fieldDesc.min
-          f = (result, value, viewMask, requiredMask) ->
-            return r if r = pf(result, value, viewMask, requiredMask)
+          f = (result, value, fieldsLevel, viewMask, requiredMask) ->
+            return r if r = pf(result, value, fieldsLevel, viewMask, requiredMask)
             return result.error 'validate.tooShort', value: value, min: min unless min <= value.length
             return
           return
       if fieldDesc.hasOwnProperty('regexp')
         do (pf = f) ->
           regexp = fieldDesc.regexp
-          f = (result, value, viewMask, requiredMask) ->
-            return r if r = pf(result, value, viewMask, requiredMask)
+          f = (result, value, fieldsLevel, viewMask, requiredMask) ->
+            return r if r = pf(result, value, fieldsLevel, viewMask, requiredMask)
             return result.error 'validate.invalidValue', value: value, regexp: regexp.toString() unless regexp.test value
             return
           return
       f # when 'string'
 
     when 'text'
-      f = (result, value, viewMask, requiredMask) ->
+      f = (result, value, fieldsLevel, viewMask, requiredMask) ->
         return result.error 'validate.invalidValue', value: value unless typeof value == 'string'
         return result.error 'validate.requiredField' if value.length == 0 and (fieldDesc.required or ((requiredMask and requiredMask.get(fieldDesc.$$index))))
         return
       if fieldDesc.hasOwnProperty('min')
         do (pf = f) ->
           min = fieldDesc.min
-          f = (result, value, viewMask, requiredMask) ->
-            return r if r = pf(result, value, viewMask, requiredMask)
+          f = (result, value, fieldsLevel, viewMask, requiredMask) ->
+            return r if r = pf(result, value, fieldsLevel, viewMask, requiredMask)
             return result.error 'validate.tooShort', value: value, min: min unless min <= value.length
             return
           return
       if fieldDesc.hasOwnProperty('max')
         do (pf = f) ->
           max = fieldDesc.max
-          f = (result, value, viewMask, requiredMask) ->
-            return r if r = pf(result, value, viewMask, requiredMask)
+          f = (result, value, fieldsLevel, viewMask, requiredMask) ->
+            return r if r = pf(result, value, fieldsLevel, viewMask, requiredMask)
             return result.error 'validate.tooLong', value: value, max: max unless value.length <= max
             return
           return
       if fieldDesc.hasOwnProperty('regexp')
         do (pf = f) ->
           regexp = fieldDesc.regexp
-          f = (result, value, viewMask, requiredMask) ->
-            return r if r = pf(result, value, viewMask, requiredMask)
+          f = (result, value, fieldsLevel, viewMask, requiredMask) ->
+            return r if r = pf(result, value, fieldsLevel, viewMask, requiredMask)
             return result.error 'validate.invalidValue', value: value, regexp: regexp.toString() unless regexp.test value
             return
           return
@@ -175,7 +175,7 @@ validate = (fieldDesc) ->
     when 'subtable'
       do ->
         validateStructure = validateStructureBuilder fieldDesc
-        (result, value, viewMask, requiredMask, strict) ->
+        (result, value, fieldsLevel, viewMask, requiredMask, strict) ->
           unless Array.isArray value
             return result.error 'validate.invalidValue', value: value
           return result.error 'validate.invalidValue', value: value if (fieldDesc.required or (requiredMask and requiredMask.get(fieldDesc.$$index))) and value.length == 0
@@ -184,8 +184,8 @@ validate = (fieldDesc) ->
           err = undefined
           result.context ((path) -> (Result.index i) path), ->
             for row, i in value
-              err = (validateStructure result, row, viewMask, requiredMask, row.$$touched, strict) or err
-          err # (result, value, mask) ->
+              err = (validateStructure result, row, undefined, viewMask, requiredMask, row.$$touched, strict) or err
+          err # (result, value, fieldsLevel, mask) ->
 
     else (result, value, viewMask, requiredMask, strict) -> {}
 
