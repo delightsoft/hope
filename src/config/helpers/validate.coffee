@@ -4,7 +4,7 @@ Result = require '../../result'
 
 $$validateBuilder = (type, fieldsProp, $$access, businessValidate) ->
 
-  validate = type["#{fieldsProp}Validate"] = validateStructure type, fieldsProp
+  validate = type["_#{fieldsProp}Validate"] = validateStructure type, fieldsProp
 
   (result, fields, options) ->
 

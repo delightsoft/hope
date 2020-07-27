@@ -34,7 +34,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
         prevModel = fields
 
-      validate = type["#{fieldsProp}Validate"]
+      validate = type["_#{fieldsProp}Validate"]
 
       messages = {}
 

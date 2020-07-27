@@ -1,4 +1,4 @@
-Result = require './result'
+Result = require '../result/index'
 
 _moment = undefined
 momentLdr = -> _moment or (_moment = require 'moment')
@@ -23,7 +23,7 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
           if not viewMask.get(field.$$index)
             err = (result.error 'validate.unexpectedField', value: fieldValue) or err if strict
           else if not onlyFields or onlyFields[field.name] or alwaysValidate
-            err = (field.validate result, fieldValue, value , viewMask, requiredMask, (if typeof field == 'object' and field != null and not Array.isArray(field) then field.$$touched), strict) or err
+            err = (field._validate result, fieldValue, value , viewMask, requiredMask, (if typeof field == 'object' and field != null and not Array.isArray(field) then field.$$touched), strict) or err
 
     field = undefined
     result.context ((path) -> (Result.prop field.name) path), ->
@@ -40,7 +40,7 @@ addValidate = (fields) ->
 
   fields.$$list.forEach (f) ->
 
-    f.validate = validate f
+    f._validate = validate f
 
     addValidate f.fields if f.fields
 
@@ -197,7 +197,7 @@ validate = (fieldDesc) ->
         return
       return
 
-  f # validate =
+  f # index =
 
 # ----------------------------
 
