@@ -352,3 +352,47 @@ config
         model.st[0].f2 = 'ok'
 
         expect($$editValidate model, {beforeSubmit: false}).toEqual save: true, submit: true, messages: {}
+
+      check 'subtable in before edit with reqired mask', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            Doc1:
+              fields:
+                st: type: 'subtable', fields:
+                  f1: type: 'string(40)'
+                  f2: type: 'string(20)'
+                  f3: type: 'int'
+        }, true
+
+        unlinkedConfig = deepClone unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig, docs: 'doc.Doc1': access: ->
+          view: this.fields.$$tags.all
+          update: this.fields.$$tags.all
+          actions: this.actions.$$tags.all
+          required: this.fields.$$calc('st.f2, st.f3')
+
+        expect(result.messages).toEqual []
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() st: [{f1: '', f2: ''}]).toEqual save: true, submit: false, messages: {
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
+          'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
+        }
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          st: [{f1: '', f2: ''}]
+          $$touched: f1: true, f2: true
+        }, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
+          'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
+        }
+
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+          st: [{f1: '', f2: '', $$touched: f1: true, f2: true}, {f1: null, f2: 12, $$touched: f1: true, f2: true}]
+          $$touched: {}
+        }, {beforeSubmit: true}).toEqual save: false, submit: false, messages: {
+          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
+          'st[1].f1': {type: 'error', path: 'st[1].f1', code: 'validate.invalidValue', value: null}
+          'st[1].f2': {type: 'error', path: 'st[1].f2', code: 'validate.invalidValue', value: 12}
+        }
