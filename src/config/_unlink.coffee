@@ -60,6 +60,8 @@ unlinkField = (field) ->
 
   field.enum = unlinkSortedMap field.enum if field.hasOwnProperty('enum')
 
+  delete field._validate
+
   return
 
 unlinkUDType = (type) ->

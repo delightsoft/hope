@@ -8,6 +8,8 @@ copyExtra = require './_copyExtra'
 
 {compile: compileTags} = require '../tags'
 
+processCustomValidate = require '../validate/processCustomValidate'
+
 processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
   unless doc.$$src.hasOwnProperty(fieldsProp)
@@ -109,6 +111,8 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
                 result.context (Result.prop 'fields'), ->
 
                   _processLevel field.fields
+
+            field.validate = field.$$src.validate if processCustomValidate result, field.$$src, level, config.$$src?.validators
 
           return # result.context
 

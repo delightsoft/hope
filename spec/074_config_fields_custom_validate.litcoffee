@@ -7,7 +7,6 @@ config
 
     processCustomValidate = require '../src/validate/processCustomValidate'
 
-    #focusOnCheck = 'processCustomValidate'
     focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
@@ -15,13 +14,16 @@ config
 
       beforeEach ->
 
+Билдер валидатора. В него передаются result, field, плюс все параметры единой строкой из func(param1, param2, ...) из аттрибута validate.
+this - модель fields. field - описание поля
+
         @greaterThanNumber = (result, field, params, attrValue) ->
 
           n = parseFloat params
 
           if isNaN(n)
 
-            result.error('dsc.invalidArgument', {value: attrValue})
+            result.error('dsc.invalidArguments', {value: attrValue})
 
             return
 
@@ -36,6 +38,10 @@ config
         @fields =
 
           f1: name: 'f1', type: 'double', validate: 'greaterThanNumber(0)'
+          f2: name: 'f2', type: 'double', validate: 'greaterThanNumber(abc)'
+          f3: name: 'f3', type: 'double', validate: 'greaterThanNumber'
+          f4: name: 'f4', type: 'double', validate: 'wrong(321)'
+          f5: name: 'f5', type: 'double', validate: 'wrong'
 
       check 'processCustomValidate', ->
 
@@ -59,36 +65,43 @@ config
           {type: 'error', code: 'validate.mustBeGraterThen', value: -1, n: 0}
         ]
 
+      check 'processCustomValidate: wrong', ->
+
+        customValidate = processCustomValidate (result = new Result), @fields.f2, @fields, {@greaterThanNumber}
+
+        expect(result.messages).toEqual [
+          {type: 'error', path: 'validate', code: 'dsc.invalidArguments', value: 'greaterThanNumber(abc)'}
+        ]
+
+        customValidate = processCustomValidate (result = new Result), @fields.f3, @fields, {@greaterThanNumber}
+
+        expect(result.messages).toEqual [
+          {type: 'error', path: 'validate', code: 'dsc.invalidArguments', value: 'greaterThanNumber'}
+        ]
+
+        customValidate = processCustomValidate (result = new Result), @fields.f4, @fields, {@greaterThanNumber}
+
+        expect(result.messages).toEqual [
+          {type: 'error', path: 'validate', code: 'dsc.unknownValidator', value: 'wrong(321)'}
+        ]
+
+        customValidate = processCustomValidate (result = new Result), @fields.f5, @fields, {@greaterThanNumber}
+
+        expect(result.messages).toEqual [
+          {type: 'error', path: 'validate', code: 'dsc.unknownValidator', value: 'wrong'}
+        ]
+
       check 'general', ->
 
         config =
 
-          validate:
+          validators:
 
-Билдер валидатора. В него передаются result, field, плюс все параметры единой строкой из func(param1, param2, ...) из аттрибута validate.
-this - модель fields. field - описание поля
-
-            greaterThanNumber = (result, field, params, attrValue) ->
-
-              n = parseFloat params
-
-              if isNaN(n)
-
-                result.error('dsc.invalidArgument', {value: attrValue})
-
-                return
-
-Возвращает валидатор, где fieldsLevel это уровень полей, в котором находится поле.
-
-              (result, value, fieldsLevel) ->
-
-                result.error 'validate.mustBeGraterThen', value: n unless value > n
-
-                return
+            greaterThanNumber: @greaterThanNumber
 
           docs: Doc1: fields:
 
-            f1: type: 'double' #, validate: 'greaterThanNumber(0)'
+            f1: type: 'double', validate: 'greaterThanNumber(0)'
 
         res = compileConfig (result = new Result), config
 
@@ -96,4 +109,4 @@ this - модель fields. field - описание поля
 
         unlinkedConfig = deepClone unlinkConfig res
 
-        linkedConfig = linkConfig unlinkedConfig
+        linkedConfig = linkConfig unlinkedConfig, docs: {}, validators: {@greaterThanNumber}

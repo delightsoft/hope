@@ -1,9 +1,11 @@
 Result = require '../result/index'
 
+processCustomValidate = require './processCustomValidate'
+
 _moment = undefined
 momentLdr = -> _moment or (_moment = require 'moment')
 
-validateStructureBuilder = (type, fieldsProp = 'fields') ->
+validateStructureBuilder = (type, fieldsProp = 'fields', validators) ->
 
   (result, value, fieldsLevel, viewMask, requiredMask, onlyFields, strict) ->
 
@@ -36,11 +38,11 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
 
     err # (result, value, mask, onlyFields) ->
 
-addValidate = (fields) ->
+addValidate = (fields, validators) ->
 
   fields.$$list.forEach (f) ->
 
-    f._validate = validate f
+    f._validate = validate f, fields, validators
 
     addValidate f.fields if f.fields
 
@@ -48,7 +50,9 @@ addValidate = (fields) ->
 
   fields # addValidate =
 
-validate = (fieldDesc) ->
+cvResult = new Result
+
+validate = (fieldDesc, fields, validators) ->
 
   f = switch fieldDesc.type
 
@@ -196,6 +200,17 @@ validate = (fieldDesc) ->
           return pf result, value
         return
       return
+
+  customValidator = processCustomValidate cvResult, fieldDesc, fields, validators
+  cvResult.throwIfError()
+
+  if customValidator
+    do (pf = f) ->
+      f = (result, value, fieldsLevel, viewMask, requiredMask, onlyFields, strict) ->
+        return r if r= pf(result, value, fieldsLevel, viewMask, requiredMask, onlyFields, strict)
+        result.isError = false;
+        customValidator result, value, fieldsLevel, viewMask, requiredMask, onlyFields, strict
+        return result.isError;
 
   f # index =
 

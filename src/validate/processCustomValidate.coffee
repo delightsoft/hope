@@ -26,7 +26,7 @@ processCustomValidate = (result, field, fields, validators) ->
 
       name = validate
 
-    unless validators.hasOwnProperty(name)
+    unless typeof validators?[name] == 'function'
 
       result.error ((path) -> (Result.prop 'validate') path), 'dsc.unknownValidator', value: validate
 

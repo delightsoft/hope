@@ -12,7 +12,7 @@ copyExtra = require '../config/_copyExtra'
 
 typeProps = ['length', 'enum', 'precision', 'scale', 'fields', 'refers', 'valueClass', 'null', 'required']
 
-extraProps = ['min', 'max', 'regexp', 'init']
+extraProps = ['min', 'max', 'regexp', 'init', 'validate']
 
 builtInTypes = [
   'nanoid',

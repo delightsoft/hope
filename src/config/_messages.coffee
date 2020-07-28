@@ -55,6 +55,10 @@ messages =
 
     unmatchParenthesis: (args) -> "Unmatch parenthesis at position #{args.position}: #{args.value}"
 
+    invalidArguments: (args) -> "Invalid arguments: #{args.value}"
+
+    unknownValidator: (args) -> "Unknown validator: #{args.value}"
+
 # DSDocument
 
     fieldIsReadonly: (args) -> "Field is read-only: #{args.value}"

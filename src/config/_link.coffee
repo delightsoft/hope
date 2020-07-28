@@ -208,7 +208,7 @@ link = (config, noHelpers, opts) ->
 
       assignKey obj[prop], prefix
 
-      addValidate obj[prop]
+      addValidate obj[prop], methods?.validators
 
       for field in obj[prop].$$flat.$$list when field.hasOwnProperty('fields')
 
@@ -286,11 +286,11 @@ link = (config, noHelpers, opts) ->
 
         return
 
-      doc.$$access = $$accessBuilder doc, 'fields', methods and methods.docs[doc.name] and methods.docs[doc.name].access, true
+      doc.$$access = $$accessBuilder doc, 'fields', methods?.docs[doc.name]?.access, true
 
-      doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
+      doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
 
-      doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods and methods.docs[doc.name] and methods.docs[doc.name].validate
+      doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
 
       doc.$$getUpdate = $$getUpdateBuilder doc
 
@@ -348,13 +348,13 @@ link = (config, noHelpers, opts) ->
 
       unless noHelpers
 
-        method.arguments.$$access = $$accessBuilder method, 'arguments', methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].argAccess
-        method.arguments.$$validate = $$validateBuilder method, 'arguments', method.arguments.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].argValidE
-        method.arguments.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'arguments', method.arguments.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].argValidate
+        method.arguments.$$access = $$accessBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argAccess
+        method.arguments.$$validate = $$validateBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidE
+        method.arguments.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
 
-        method.result.$$access = $$accessBuilder method, 'result', methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].resultAccess
-        method.result.$$validate = $$validateBuilder method, 'result', method.result.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].resultValidate
-        method.result.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'result', method.arguments.$$access, methods and methods.api[api.name] and methods.api[api.name][method.name] and methods.api[api.name][method.name].resultValidate
+        method.result.$$access = $$accessBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultAccess
+        method.result.$$validate = $$validateBuilder method, 'result', method.result.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
+        method.result.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'result', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
 
       freeze method
 
