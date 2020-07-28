@@ -174,11 +174,11 @@ validate = (fieldDesc, fields, validators) ->
       (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' && fieldDesc.enum.hasOwnProperty(value)
 
     when 'structure'
-      validateStructureBuilder(fieldDesc)
+      validateStructureBuilder fieldDesc, 'fields', validators
 
     when 'subtable'
       do ->
-        validateStructure = validateStructureBuilder fieldDesc
+        validateStructure = validateStructureBuilder fieldDesc, 'fields', validators
         (result, value, fieldsLevel, viewMask, requiredMask, strict) ->
           unless Array.isArray value
             return result.error 'validate.invalidValue', value: value
