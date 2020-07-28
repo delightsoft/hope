@@ -17,6 +17,7 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
 
     result.context ((path) -> (Result.prop fieldName) path), ->
       for fieldName, fieldValue of value when not fieldName.startsWith '$$'
+
         unless type[fieldsProp].hasOwnProperty(fieldName)
           err = (result.error 'validate.unknownField', value: fieldValue) or err
         else
@@ -25,7 +26,7 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
           if not viewMask.get(field.$$index)
             err = (result.error 'validate.unexpectedField', value: fieldValue) or err if strict
           else if not onlyFields or onlyFields[field.name] or alwaysValidate
-            err = (field._validate result, fieldValue, value , viewMask, requiredMask, (if typeof field == 'object' and field != null and not Array.isArray(field) then field.$$touched), strict) or err
+            err = (field._validate result, fieldValue, value, viewMask, requiredMask, (if onlyFields then if typeof fieldValue == 'object' and fieldValue != null and not Array.isArray(fieldValue) then fieldValue.$$touched else {}), strict) or err
 
     field = undefined
     result.context ((path) -> (Result.prop field.name) path), ->
@@ -179,7 +180,7 @@ validate = (fieldDesc, fields, validators) ->
     when 'subtable'
       do ->
         validateStructure = validateStructureBuilder fieldDesc
-        (result, value, fieldsLevel, viewMask, requiredMask, strict) ->
+        (result, value, fieldsLevel, viewMask, requiredMask, onlyFields, strict) ->
           unless Array.isArray value
             return result.error 'validate.invalidValue', value: value
           return result.error 'validate.invalidValue', value: value if (fieldDesc.required or (requiredMask and requiredMask.get(fieldDesc.$$index))) and value.length == 0
@@ -188,7 +189,7 @@ validate = (fieldDesc, fields, validators) ->
           err = undefined
           result.context ((path) -> (Result.index i) path), ->
             for row, i in value
-              err = (validateStructure result, row, undefined, viewMask, requiredMask, row.$$touched, strict) or err
+              err = (validateStructure result, row, undefined, viewMask, requiredMask, (if onlyFields then row.$$touched else undefined), strict) or err
           err # (result, value, fieldsLevel, mask) ->
 
     else (result, value, viewMask, requiredMask, strict) -> {}

@@ -532,18 +532,21 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     expect($$editValidate {
       st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-number">123</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
+      $$touched: {}
     }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">123</span>}
     }
 
     expect($$editValidate {
       st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
+      $$touched: {}
     }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
     }
 
     model = { <span class="hljs-comment"># если модель меняется между вызовами $$editValidate, то бизнес ошибки сбрасываются</span>
-      st: [{f1: <span class="hljs-string">'ok1'</span>, f2: <span class="hljs-string">'ok2'</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
+      st: [{f1: <span class="hljs-string">'ok1'</span>, f2: <span class="hljs-string">'ok2'</span>, f3: <span class="hljs-number">12</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
+      $$touched: {}
     }
 
     expect($$editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
@@ -590,8 +593,8 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
     }
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
-      st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}]
-      $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>
+      st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
+      $$touched: {}
     }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
       <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}

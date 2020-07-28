@@ -323,18 +323,21 @@ config
 
         expect($$editValidate {
           st: [{f1: '', f2: 123, $$touched: f1: true, f2: true}]
+          $$touched: {}
         }, {beforeSubmit: true}).toEqual save: false, submit: false, messages: {
           'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.invalidValue', value: 123}
         }
 
         expect($$editValidate {
           st: [{f1: '', f2: '', $$touched: f1: true, f2: true}]
+          $$touched: {}
         }, {beforeSubmit: true}).toEqual save: true, submit: false, messages: {
           'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
         }
 
         model = { # если модель меняется между вызовами $$editValidate, то бизнес ошибки сбрасываются
-          st: [{f1: 'ok1', f2: 'ok2', $$touched: f1: true, f2: true}]
+          st: [{f1: 'ok1', f2: 'ok2', f3: 12, $$touched: f1: true, f2: true}]
+          $$touched: {}
         }
 
         expect($$editValidate model, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
@@ -381,8 +384,8 @@ config
         }
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
-          st: [{f1: '', f2: ''}]
-          $$touched: f1: true, f2: true
+          st: [{f1: '', f2: '', $$touched: f1: true, f2: true}]
+          $$touched: {}
         }, {beforeSubmit: false}).toEqual save: true, submit: false, messages: {
           'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
           'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
