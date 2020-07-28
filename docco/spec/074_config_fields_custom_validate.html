@@ -340,7 +340,14 @@ this - модель fields. field - описание поля</p>
 
     unlinkedConfig = deepClone unlinkConfig res
 
-    linkedConfig = linkConfig unlinkedConfig, docs: {}, validators: {@greaterThanNumber}</pre></div></div>
+    linkedConfig = linkConfig unlinkedConfig, docs: {}, validators: {@greaterThanNumber}
+
+    linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">0</span>}
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.mustBeGraterThen'</span>, value: <span class="hljs-number">0</span>, n: <span class="hljs-number">0</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'id'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+    ]</pre></div></div>
             
         </li>
         
