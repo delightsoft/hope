@@ -74,7 +74,7 @@ loader = (result, sourceDir) ->
 
     res.api = api if (api = loadFile 'api', false)
 
-    res.validators = api if (api = loadFile 'validators', false)
+    res.validators = validators if (validators = loadFile 'validators', false)
 
     resolve res
 
