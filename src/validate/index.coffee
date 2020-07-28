@@ -5,7 +5,7 @@ processCustomValidate = require './processCustomValidate'
 _moment = undefined
 momentLdr = -> _moment or (_moment = require 'moment')
 
-validateStructureBuilder = (type, fieldsProp = 'fields', validators) ->
+validateStructureBuilder = (type, fieldsProp = 'fields') ->
 
   (result, value, fieldsLevel, viewMask, requiredMask, onlyFields, strict) ->
 
@@ -44,7 +44,7 @@ addValidate = (fields, validators) ->
 
     f._validate = validate f, fields, validators
 
-    addValidate f.fields if f.fields
+    addValidate f.fields, validators if f.fields
 
     return
 
@@ -174,11 +174,11 @@ validate = (fieldDesc, fields, validators) ->
       (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' && fieldDesc.enum.hasOwnProperty(value)
 
     when 'structure'
-      validateStructureBuilder fieldDesc, 'fields', validators
+      validateStructureBuilder fieldDesc
 
     when 'subtable'
       do ->
-        validateStructure = validateStructureBuilder fieldDesc, 'fields', validators
+        validateStructure = validateStructureBuilder fieldDesc
         (result, value, fieldsLevel, viewMask, requiredMask, strict) ->
           unless Array.isArray value
             return result.error 'validate.invalidValue', value: value
