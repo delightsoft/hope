@@ -5,6 +5,8 @@ processCustomValidate = require './processCustomValidate'
 _moment = undefined
 momentLdr = -> _moment or (_moment = require 'moment')
 
+emptyOnlyFields = Object.freeze({})
+
 validateStructureBuilder = (type, fieldsProp = 'fields') ->
 
   (result, value, fieldsLevel, viewMask, requiredMask, onlyFields, strict) ->
@@ -26,7 +28,7 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
           if not viewMask.get(field.$$index)
             err = (result.error 'validate.unexpectedField', value: fieldValue) or err if strict
           else if not onlyFields or onlyFields[field.name] or alwaysValidate
-            err = (field._validate result, fieldValue, value, viewMask, requiredMask, (if onlyFields then if typeof fieldValue == 'object' and fieldValue != null and not Array.isArray(fieldValue) then fieldValue.$$touched else {}), strict) or err
+            err = (field._validate result, fieldValue, value, viewMask, requiredMask, (if onlyFields then if typeof fieldValue == 'object' and fieldValue != null and not Array.isArray(fieldValue) then fieldValue.$$touched else emptyOnlyFields), strict) or err
 
     field = undefined
     result.context ((path) -> (Result.prop field.name) path), ->
