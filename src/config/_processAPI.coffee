@@ -14,7 +14,7 @@ copyExtra = require './_copyExtra'
 
 processAPI = (result, config, noSystemItems) ->
 
-  unless config.$$src.hasOwnProperty('api')
+  unless config.$$src.api
 
     config.api = $$list: []
 

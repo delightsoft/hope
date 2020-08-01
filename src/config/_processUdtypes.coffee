@@ -13,7 +13,7 @@ copyExtra = require './_copyExtra'
 
 processUdtypes = (result, config) ->
 
-  unless config.$$src.hasOwnProperty('udtypes')
+  unless config.$$src.udtypes
 
     config.udtypes = {$$list: []}
 
