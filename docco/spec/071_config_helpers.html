@@ -349,7 +349,7 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
             <div class="content"><div class='highlight'><pre>
   check <span class="hljs-string">'$$new'</span>, <span class="hljs-function">-&gt;</span>
 
-    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config, <span class="hljs-literal">true</span>
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config, <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual []
 

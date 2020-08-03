@@ -93,7 +93,7 @@ config
 
       check '$$new', ->
 
-        res = compileConfig (result = new Result), @config, true
+        res = compileConfig (result = new Result), @config, false
 
         expect(result.messages).toEqual []
 
