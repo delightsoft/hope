@@ -50,7 +50,7 @@ unlinkTags = (tags) ->
 
   res = {}
 
-  res[k] = v._mask for k, v of tags when k != 'all'
+  res[k] = v._mask for k, v of tags when not ~['all', 'none'].indexOf(k)
 
   res # unlinkTags =
 
@@ -63,26 +63,6 @@ unlinkField = (field) ->
   delete field._validate
 
   return
-
-unlinkUDType = (type) ->
-
-  type.refers = (ref.name for ref in type.refers) if type.hasOwnProperty('refers')
-
-  type.enum = unlinkSortedMap type.enum if type.hasOwnProperty('enum')
-
-  return
-
-unlinkMethods = (methods) ->
-
-  for method in methods.$$list
-
-    res = lightClone method
-
-    res.arguments = unlinkMap method.arguments if res.arguments.$$list.length > 0
-
-    res.result = unlinkMap method.result if res.result.$$list.length > 0
-
-    res
 
 unlink = (config) ->
 

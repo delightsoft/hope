@@ -28,8 +28,6 @@ processStates = (result, doc, fields, actions) ->
 
             unless state.$$src.hasOwnProperty('view')
 
-              # TODO: Make all tag
-
               state.view = fields.$$tags.all
 
             else unless typeof state.$$src.view == 'string'
@@ -68,13 +66,13 @@ processStates = (result, doc, fields, actions) ->
 
               state.transitions = sortedMap result, state.$$src.transitions
 
-              , getValue: (result, value, res) ->
+                , getValue: (result, value, res) ->
 
-                if typeof value == 'string'
+                    if typeof value == 'string'
 
-                  res.next = value
+                      res.next = value
 
-                  return true
+                      return true
 
               unless result.isError
 

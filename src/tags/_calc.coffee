@@ -127,9 +127,7 @@ calc = (result, collection, expression) ->
           expr = levels.pop()
       else
         if token.startsWith('#') # tag
-          if token == '#all'
-            expr.push collection.$$tags.all
-          else if collection.$$tags.hasOwnProperty(tag = token.substr 1)
+          if collection.$$tags.hasOwnProperty(tag = token.substr 1)
             expr.push collection.$$tags[tag]
           else
             result.error 'dsc.unknownTag', value: tag, position: nextToken.position
@@ -183,6 +181,8 @@ calc = (result, collection, expression) ->
     return expr[0]
 
   res = _calcExpr expr
+
+  res.list
 
   # res.clearVertical() if isFlat
 

@@ -48,17 +48,23 @@ link = (config, noHelpers, opts) ->
 
     deepFreeze fld for fldName, fld of obj when typeof fld == 'object' && fld != null
 
+  freezeBitArray = (ba) ->
+
+    ba.list
+
+    freeze ba # (ba) ->
+
   EMPTY_LIST = freeze []
 
-  EMPTY_MAP_WITH_TAGS = freeze ({$$list: EMPTY_LIST, $$tags: EMPTY_TAGS})
+  EMPTY_MAP_WITH_TAGS = freeze {$$list: EMPTY_LIST, $$tags: EMPTY_TAGS}
 
-  EMPTY_MAP = freeze ({$$list: EMPTY_LIST})
+  EMPTY_MAP = freeze {$$list: EMPTY_LIST}
 
-  EMPTY_MASK = freeze (new BitArray EMPTY_MAP)
+  EMPTY_MASK = freezeBitArray new BitArray EMPTY_MAP
 
-  EMPTY_TAGS = freeze {all: EMPTY_MASK}
+  EMPTY_TAGS = freeze {all: EMPTY_MASK, none: EMPTY_MASK}
 
-  EMPTY_FLAT_MAP = freeze ({$$list: EMPTY_LIST, $$flat: freeze {$$list: EMPTY_LIST}, $$tags: EMPTY_TAGS})
+  EMPTY_FLAT_MAP = freeze {$$list: EMPTY_LIST, $$flat: freeze {$$list: EMPTY_LIST}, $$tags: EMPTY_TAGS}
 
   EMPTY_MAP_WITH_TAGS = Object.freeze {$$list: [], $$tags: EMPTY_TAGS}
 
@@ -142,9 +148,11 @@ link = (config, noHelpers, opts) ->
 
     tags =
 
-      all: freeze (new BitArray res).invert()
+      all: freezeBitArray (new BitArray res).invert()
 
-    tags[k] = freeze (new BitArray res.$$flat?.$$list || res.$$list, v) for k, v of collection.tags
+      none: freezeBitArray new BitArray res
+
+    tags[k] = freezeBitArray (new BitArray res.$$flat?.$$list || res.$$list, v) for k, v of collection.tags
 
     tags = res.$$tags = freeze tags
 
@@ -156,11 +164,11 @@ link = (config, noHelpers, opts) ->
 
         unless typeof result == 'object' && result != null && result.hasOwnProperty('isError')
 
+          expr = result
+
           localResult = true
 
           result = new Result()
-
-          expr = result
 
         r = calc result, res, expr
 
@@ -174,11 +182,7 @@ link = (config, noHelpers, opts) ->
 
           expr = result
 
-          result = undefined
-
         return cache[expr] if hasOwnProperty.call cache, expr
-
-        result = new Result() unless result
 
         cache[expr] = noCache result, expr # res.$$calc =
 
@@ -210,7 +214,7 @@ link = (config, noHelpers, opts) ->
 
       addValidate obj[prop], methods?.validators
 
-      for field in obj[prop].$$flat.$$list when field.hasOwnProperty('fields')
+      for field in obj[prop].$$flat.$$list when field.type == 'subtable'
 
         field.fields.$$new = $$newBuilder field.fields
 
@@ -302,9 +306,9 @@ link = (config, noHelpers, opts) ->
 
         state.$$key = "#{docKey}.state.#{state.name}"
 
-      state.view = freeze (new BitArray doc.fields.$$flat.$$list, state.view)
+      state.view = freezeBitArray new BitArray doc.fields.$$flat.$$list, state.view
 
-      state.update = freeze (new BitArray doc.fields.$$flat.$$list, state.update)
+      state.update = freezeBitArray new BitArray doc.fields.$$flat.$$list, state.update
 
       state.transitions = linkSortedMap state.transitions, true, false
 

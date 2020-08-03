@@ -12,11 +12,17 @@ processActions = (result, doc, noSystemItems) ->
 
   unless doc.$$src.hasOwnProperty('actions') or not noSystemItems
 
-    return { # processActions =
+    EMPTY =
 
       $$list: []
 
-      $$tags: {all: new bitArray {$$list: []}}}
+      $$tags: {}
+
+    EMPTY.$$tags.all = EMPTY.$$tags.none = new bitArray EMPTY
+
+    EMPTY.$$tags.all.list
+
+    return EMPTY # processActions =
 
   result.context (Result.prop 'actions'), -> # processActions =
 

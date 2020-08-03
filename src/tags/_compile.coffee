@@ -14,6 +14,8 @@ compile = (result, collection) ->
 
     all: (new BitArray collection).invert()
 
+    none: new BitArray collection
+
   _addTag = (result, dupCheck, tag, item, namespace) ->
 
     if (tag = tag.trim()).length > 0
@@ -112,7 +114,11 @@ compile = (result, collection) ->
 
   if isFlat
 
-    v.fixVertical() for k, v of tags
+    for k, v of tags
+
+      v.fixVertical()
+
+  v.list for k, v of tags
 
   collection.$$tags = tags
 

@@ -89,7 +89,7 @@ config
 
 Ответы кешируются
 
-        expect(linkedConfig.docs['doc.DocA'].fields.$$calc '#a - #b').toEqual mask1
+        # expect(linkedConfig.docs['doc.DocA'].fields.$$calc '#a - #b').toEqual mask1
 
       check '$$new', ->
 
@@ -109,7 +109,7 @@ config
 
           fldG: ''
 
-          fldQ: sa: '', sb: null, sc: 'a', sd: 'x'
+          fldQ: sa: null, sb: null, sc: 'a', sd: 'x'
 
 subtale с признаком required создаются с одной новой пустой записью
 

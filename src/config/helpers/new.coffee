@@ -7,9 +7,9 @@ defaultInit =
   integer: 0
   double: 0
 #  decimal: '0'
-  time: ''
-  date: ''
-  timestamp: ''
+  time: null
+  date: null
+  timestamp: null
 #  json:
 #  blob:
 #  uuid:
@@ -17,9 +17,11 @@ defaultInit =
 
 $$newBuilder = (fields) ->
 
+  tagSystem = fields.$$tags?.system
+
   newFuncs = []
 
-  for field in fields.$$list
+  for field in fields.$$list when not tagSystem or not tagSystem.get(field.$$index)
 
     do ->
 
@@ -35,11 +37,11 @@ $$newBuilder = (fields) ->
 
         if field.required
 
-          do ->
+          do (fields = field.fields) ->
 
-            $$new = field.fields.$$new
+            init = (options) -> [fields.$$new options]
 
-            init = (options) -> [$$new options]
+            return
 
         else
 
