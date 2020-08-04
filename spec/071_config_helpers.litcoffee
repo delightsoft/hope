@@ -5,7 +5,7 @@ config
     config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
     utils: {deepClone, prettyPrint}} = require '../src'
 
-    focusOnCheck = ''
+    focusOnCheck = 'fix subtable $$new'
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '071_config_helpers', ->
@@ -154,3 +154,45 @@ subtale с признаком required создаются с одной ново
           f2: 'tralala'
 
           $$touched: {}
+
+      check 'fix subtable $$new', ->
+
+        res = compileConfig (result = new Result),
+          docs:
+            DocA:
+              fields:
+                str: fields:
+                  f1: type: 'string(20)'
+                  f2: type: 'string(20)', null: true
+                sf: type: 'subtable', required: true, fields:
+                  f1: type: 'string(20)'
+                  f2: type: 'string(20)', null: true
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = unlinkConfig(res)
+
+        linkedConfig = linkConfig unlinkedConfig, false
+
+        newDoc = linkedConfig.docs['doc.DocA'].fields.$$new()
+
+        newDoc.str.f1 = 'a'
+        newDoc.str.f2 = 'b'
+
+        newDoc.sf[0].f1 = '123'
+        newDoc.sf[0].f2 = '321'
+
+        newDoc2 = linkedConfig.docs['doc.DocA'].fields.$$new()
+
+        expect(newDoc2).toEqual
+          str:
+            f1: ''
+            f2: null
+          sf: [{
+            f1: ''
+            f2: null
+          }]
+
+        expect(linkedConfig.docs['doc.DocA'].fields.sf.fields.$$new()).toEqual
+          f1: ''
+          f2: null
