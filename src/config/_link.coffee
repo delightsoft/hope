@@ -8,6 +8,8 @@ hasOwnProperty = Object::hasOwnProperty
 
 {isResult} = require '../utils/_err'
 
+$$fixBuilder = require './helpers/fix'
+
 $$newBuilder = require './helpers/new'
 
 {structure: validateStructure, addValidate} = require '../validate'
@@ -216,7 +218,11 @@ link = (config, noHelpers, opts) ->
 
       for field in obj[prop].$$flat.$$list when field.type == 'subtable'
 
+        field.fields.$$fix = $$fixBuilder field.fields
+
         field.fields.$$new = $$newBuilder field.fields
+
+      obj[prop].$$fix = $$fixBuilder obj[prop]
 
       obj[prop].$$new = $$newBuilder obj[prop]
 

@@ -321,7 +321,7 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
         f1: type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>
         f2: {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
 
-    expect(<span class="hljs-function">-&gt;</span> linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">'wrong'</span>}, {test: <span class="hljs-number">12</span>, beforeBuild: <span class="hljs-literal">false</span>}).toThrow <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Unknown option; 'test'"</span>
+    expect(<span class="hljs-function">-&gt;</span> linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">'wrong'</span>}, {test: <span class="hljs-number">12</span>, beforeBuild: <span class="hljs-literal">false</span>}).toThrow <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Unknown option: 'test'"</span>
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       f1: <span class="hljs-string">'wrong'</span>

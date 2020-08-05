@@ -112,7 +112,7 @@ config
             f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
             f2: {type: 'error', code: 'validate.requiredField', path: 'f2'}
 
-        expect(-> linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 'wrong'}, {test: 12, beforeBuild: false}).toThrow new Error "Unknown option; 'test'"
+        expect(-> linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 'wrong'}, {test: 12, beforeBuild: false}).toThrow new Error "Unknown option: 'test'"
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
           f1: 'wrong'

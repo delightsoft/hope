@@ -14,7 +14,7 @@ module.exports =
   invalidArg: invalidArg = (name, value) -> throw _argError 'Invalid argument', name, value; return
   invalidArgValue: (name, value) -> throw _argError 'Invalid value of argument', name, value; return
 
-  unknownOption: (name) -> throw new Error "Unknown option; '#{name}'"; return
+  unknownOption: (name) -> throw new Error "Unknown option: '#{name}'"; return
   missingRequiredOption: (name) -> throw new Error "Missing required option; '#{name}'"; return
 
   invalidProp: (name) -> throw new Error "Invalid property #{name}"; return

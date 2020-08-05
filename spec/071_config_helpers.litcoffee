@@ -5,7 +5,7 @@ config
     config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
     utils: {deepClone, prettyPrint}} = require '../src'
 
-    focusOnCheck = 'fix subtable $$new'
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '071_config_helpers', ->
@@ -196,3 +196,71 @@ subtale с признаком required создаются с одной ново
         expect(linkedConfig.docs['doc.DocA'].fields.sf.fields.$$new()).toEqual
           f1: ''
           f2: null
+
+      check '$$fix', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            DocA:
+              fields:
+                f1: type: 'string(20)', tags: 'a'
+                f2: type: 'string(20)', null: true
+                str: fields:
+                  f3: type: 'string(20)', tags: 'a'
+                  f4: type: 'string(20)', null: true
+                sf: type: 'subtable', required: true, fields:
+                  f5: type: 'string(20)', tags: 'a'
+                  f6: type: 'string(20)', null: true
+        }, true
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig
+
+        res = linkedConfig.docs['doc.DocA'].fields.$$fix {
+          f1: '123'
+          f2: '321'
+          str:
+            f3: 'a'
+            f4: 'b'
+          sf: [
+            {f5: 'c', f6: null}
+            {f5: 'd', f6: 'e'}
+          ]}, mask: linkedConfig.docs['doc.DocA'].fields.$$tags.a
+
+        expect(res).toEqual
+          f1: '123'
+          str:
+            f3: 'a'
+          sf: [
+            {f5: 'c'}
+            {f5: 'd'}
+          ]
+
+        res = linkedConfig.docs['doc.DocA'].fields.$$fix {
+          f1: '123'
+          # missing - f2: '321'
+          extra: '987'
+          str:
+            f3: 'a'
+            # missing - f4: 'b'
+            extra: '987'
+          sf: [
+            {f5: 'c', extra: '987'}
+            {f5: 'd', extra: '987'}
+          ]}, edit: true
+
+        expect(res).toEqual
+          f1: '123'
+          f2: null
+          $$touched: {}
+          str:
+            f3: 'a'
+            f4: null
+            $$touched: {}
+          sf: [
+            {f5: 'c', f6: null, $$touched: {}}
+            {f5: 'd', f6: null, $$touched: {}}
+          ]
