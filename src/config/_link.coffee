@@ -12,6 +12,10 @@ $$fixBuilder = require './helpers/fix'
 
 $$newBuilder = require './helpers/new'
 
+$$getBuilder = require './helpers/get'
+
+$$setBuilder = require './helpers/set'
+
 {structure: validateStructure, addValidate} = require '../validate'
 
 $$accessBuilder = require('./helpers/access')
@@ -222,9 +226,17 @@ link = (config, noHelpers, opts) ->
 
         field.fields.$$new = $$newBuilder field.fields
 
+        field.fields.$$get = $$getBuilder field.fields
+
+        field.fields.$$set = $$setBuilder field.fields
+
       obj[prop].$$fix = $$fixBuilder obj[prop]
 
       obj[prop].$$new = $$newBuilder obj[prop]
+
+      obj[prop].$$get = $$getBuilder obj[prop]
+
+      obj[prop].$$set = $$setBuilder obj[prop]
 
     for field in obj[prop].$$flat.$$list
 

@@ -1,4 +1,4 @@
-{invalidArg, unknownOption} = require '../../utils/_err'
+{invalidArg, invalidOption, unknownOption} = require '../../utils/_err'
 
 defaultInit =
   string: ''
@@ -21,7 +21,7 @@ hasOwnProperty = Object::hasOwnProperty
 
 $$fixBuilder = (fields) ->
 
-  newFuncs = []
+  fixFuncs = []
 
   for field in fields.$$list
 
@@ -73,11 +73,11 @@ $$fixBuilder = (fields) ->
 
       if typeof init == 'function'
 
-        newVal = ((res, options) -> res[name] = init(options); return)
+        initVal = ((res, options) -> res[name] = init(options); return)
 
       else
 
-        newVal = ((res) -> res[name] = init; return)
+        initVal = ((res) -> res[name] = init; return)
 
       if field.type == 'structure'
 
@@ -85,7 +85,9 @@ $$fixBuilder = (fields) ->
 
         copyVal = (res, fieldsLevel, options) ->
 
-          res[name] = fix(fieldsLevel[name], options)
+          update = options.update
+
+          res[name] = fix fieldsLevel[name], if update then Object.assign {}, options, {update: update[name]} else options
 
           return
 
@@ -95,9 +97,13 @@ $$fixBuilder = (fields) ->
 
         copyVal = (res, fieldsLevel, options) ->
 
+          update = options.update
+
+          opts = if update then Object.assign {}, options, {update: update[name]} else options
+
           res[name] = for row in fieldsLevel[name]
 
-            fix(row, options)
+            fix row, opts
 
           return
 
@@ -107,23 +113,31 @@ $$fixBuilder = (fields) ->
 
           res[name] = fieldsLevel[name]
 
-      newFuncs.push (res, fieldsLevel, mask, options) ->
+      fixFuncs.push (res, fieldsLevel, mask, update, newVal, options) ->
 
         if not mask or mask.get(index)
 
-          if hasOwnProperty.call fieldsLevel, name
+          if update and hasOwnProperty.call update, name
+
+            copyVal res, update, options
+
+          else if hasOwnProperty.call fieldsLevel, name
 
             copyVal res, fieldsLevel, options
 
           else
 
-            newVal res, options
+            initVal res, options if newVal
 
   (fieldsLevel, options) ->
 
     edit = false
 
     mask = undefined
+
+    update = undefined
+
+    newVal = true
 
     if options != undefined
 
@@ -133,15 +147,37 @@ $$fixBuilder = (fields) ->
 
         switch optName
 
-          when 'edit' then edit = optValue
+          # TODO: check options type
 
-          when 'mask' then mask = optValue
+          when 'edit'
+
+            invalidOption 'edit', optValue unless optValue == undefined or typeof optValue == 'boolean'
+
+            edit = optValue
+
+          when 'mask'
+
+            invalidOption 'mask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection != fields)
+
+            mask = optValue
+
+          when 'update'
+
+            invalidOption 'update', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and not Array.isArray(optValue))
+
+            update = optValue
+
+          when 'newVal'
+
+            invalidOption 'newVal', optValue unless optValue == undefined or typeof optValue == 'boolean'
+
+            newVal = optValue
 
           else unknownOption optName
 
     res = {}
 
-    newFuncs.forEach ((f) -> f(res, fieldsLevel, mask, options); return)
+    fixFuncs.forEach ((f) -> f(res, fieldsLevel, mask, update, newVal, options); return)
 
     res.$$touched = {} if edit
 
