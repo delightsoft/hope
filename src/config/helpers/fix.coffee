@@ -83,11 +83,15 @@ $$fixBuilder = (fields) ->
 
         fix = $$fixBuilder(field.fields)
 
-        copyVal = (res, fieldsLevel, options) ->
+        copyVal = (res, update, options, fieldsLevel) ->
 
-          update = options.update
+          if fieldsLevel and fieldsLevel.hasOwnProperty(name)
 
-          res[name] = fix fieldsLevel[name], if update then Object.assign {}, options, {update: update[name]} else options
+            res[name] = fix fieldsLevel[name], if update then Object.assign {}, options, {update: update[name]} else options
+
+          else
+
+            res[name] = fix update[name], Object.assign {}, options, {update: undefined}
 
           return
 
@@ -95,15 +99,31 @@ $$fixBuilder = (fields) ->
 
         fix = field.fields.$$fix
 
-        copyVal = (res, fieldsLevel, options) ->
+        copyVal = (res, update, options, fieldsLevel) ->
 
-          update = options.update
+          opts = Object.assign {}, options, {update: undefined}
 
-          opts = if update then Object.assign {}, options, {update: update[name]} else options
+          res[name] = unless fieldsLevel and fieldsLevel.hasOwnProperty(name)
 
-          res[name] = for row in fieldsLevel[name]
+            fix row, opts for row in update[name]
 
-            fix row, opts
+          else
+
+            src = fieldsLevel[name]
+
+            for row in update[name]
+
+              if Number.isInteger(row._i) and 0 <= row._i < src.length
+
+                fix src[row._i], Object.assign {}, options, {update: row}
+
+              else
+
+                fix row, opts
+
+          if options.edit
+
+            row._i = i for row, i in res[name]
 
           return
 
@@ -119,7 +139,7 @@ $$fixBuilder = (fields) ->
 
           if update and hasOwnProperty.call update, name
 
-            copyVal res, update, options
+            copyVal res, update, options, fieldsLevel
 
           else if hasOwnProperty.call fieldsLevel, name
 
