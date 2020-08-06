@@ -99,27 +99,35 @@ $$fixBuilder = (fields) ->
 
         fix = field.fields.$$fix
 
-        copyVal = (res, update, options, fieldsLevel) ->
+        copyVal = (res, update, options, fieldsLevel, copyIndex) ->
 
           opts = Object.assign {}, options, {update: undefined}
 
-          res[name] = unless fieldsLevel and fieldsLevel.hasOwnProperty(name)
+          res[name] =
 
-            fix row, opts for row in update[name]
+            if fieldsLevel and fieldsLevel.hasOwnProperty(name)
 
-          else
+              src = fieldsLevel[name]
 
-            src = fieldsLevel[name]
+              for row in update[name]
 
-            for row in update[name]
+                if Number.isInteger(row._i) and 0 <= row._i < src.length
 
-              if Number.isInteger(row._i) and 0 <= row._i < src.length
+                  fix src[row._i], Object.assign {}, options, {update: row}
 
-                fix src[row._i], Object.assign {}, options, {update: row}
+                else
 
-              else
+                  fix row, opts
 
-                fix row, opts
+            else
+
+              for row in update[name]
+
+                r = fix row, opts
+
+                r._i = row._i  if copyIndex and row.hasOwnProperty('_i') and not options.noIndex
+
+                r
 
           if options.edit
 
@@ -143,7 +151,7 @@ $$fixBuilder = (fields) ->
 
           else if hasOwnProperty.call fieldsLevel, name
 
-            copyVal res, fieldsLevel, options
+            copyVal res, fieldsLevel, options, undefined, true
 
           else
 
@@ -167,31 +175,33 @@ $$fixBuilder = (fields) ->
 
         switch optName
 
-          # TODO: check options type
-
-          when 'edit'
+          when 'edit' # true, добавить в результат $$touched и _i в строках subtable
 
             invalidOption 'edit', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
             edit = optValue if optValue != undefined
 
-          when 'mask'
+          when 'mask' # маска полей, которые надо оставить в результате (по умолчанию undefined - все поля)
 
             invalidOption 'mask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection != fields)
 
             mask = optValue
 
-          when 'update'
+          when 'update' # обновление накладываемле поверх данных (по умолчанию undefined)
 
             invalidOption 'update', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and not Array.isArray(optValue))
 
             update = optValue
 
-          when 'newVal'
+          when 'newVal' # true, создавать недостающие поля с начальными значениями (по умолчанию true)
 
             invalidOption 'newVal', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
             newVal = optValue if optValue != undefined
+
+          when 'noIndex' # true, не копировать свойство _i в строках subtable (по умолчанию false)
+
+            invalidOption 'noIndex', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
           else unknownOption optName
 

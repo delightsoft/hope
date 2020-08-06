@@ -414,3 +414,51 @@ subtale с признаком required создаются с одной ново
             {f5: '', f6: 'test'}
             {f5: '', f6: 'f'}
           ]
+
+      check '$$get: _i', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            DocA:
+              fields:
+                f1: type: 'string(20)', tags: 'a'
+                sf: type: 'subtable', required: true, fields:
+                  f5: type: 'string(20)', tags: 'a'
+                  f6: type: 'string(20)', null: true
+        }, true
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig
+
+        res = linkedConfig.docs['doc.DocA'].fields.$$get
+          f1: '123'
+          sf: [
+            {f5: 'c', f6: null, $$touched: {}}
+            {f5: 'd', f6: null, _i: 1, $$touched: {}}
+          ]
+          $$touched: {}
+
+        expect(res).toEqual
+          f1: '123'
+          sf: [
+            {f5: 'c', f6: null}
+            {f5: 'd', f6: null, _i: 1}
+          ]
+
+        res = linkedConfig.docs['doc.DocA'].fields.$$get {
+          f1: '123'
+          sf: [
+            {f5: 'c', f6: null, $$touched: {}}
+            {f5: 'd', f6: null, _i: 1, $$touched: {}}
+          ]
+          $$touched: {}}, undefined, noIndex: true
+
+        expect(res).toEqual
+          f1: '123'
+          sf: [
+            {f5: 'c', f6: null}
+            {f5: 'd', f6: null}
+          ]
