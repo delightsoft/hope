@@ -27,7 +27,7 @@ Tags.Calc
 
     {Result, sortedMap, flatMap, tags: {calc: calcTags, compile: compileTags}} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '046_tags_calc', ->
@@ -106,3 +106,8 @@ Tags.Calc
           {type: 'error', code: 'dsc.unknownTag', value: 'ui.a123', position: 21}
         ]
 
+      check 'error: unknown names: not strict', ->
+
+        calcTags (result = new Result), @fields, expr = 'fld1, aaa, fld2, bbb', strict: false
+
+        expect(result.messages).sameStructure []

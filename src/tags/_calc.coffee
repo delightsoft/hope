@@ -97,12 +97,28 @@ _tokenizer = (result, expression) ->
 
   nextToken # _tokenizer =
 
-calc = (result, collection, expression) ->
+calc = (result, collection, expression, options) ->
 
   invalidArg 'result', result unless isResult result
   invalidArg 'collection', collection unless typeof collection == 'object' && collection != null && collection.hasOwnProperty('$$list')
   invalidArg 'expression', expression unless typeof expression == 'string'
-  tooManyArgs() unless arguments.length <= 3
+  tooManyArgs() unless arguments.length <= 4
+
+  strict = true
+
+  if options != undefined
+
+    invalidArg 'options', options unless typeof options == 'object' and options != null and not Array.isArray(options)
+
+    for optName, optValue of options
+
+      switch optName
+
+        when 'strict'
+
+          invalidOption 'strict', optValue unless optValue == undefined or typeof optValue == 'boolean'
+
+          strict = optValue if optValue != undefined
 
   nextToken = _tokenizer result, expression
 
@@ -129,11 +145,16 @@ calc = (result, collection, expression) ->
         if token.startsWith('#') # tag
           if collection.$$tags.hasOwnProperty(tag = token.substr 1)
             expr.push collection.$$tags[tag]
-          else
+          else if strict
             result.error 'dsc.unknownTag', value: tag, position: nextToken.position
+          else
+            expr.push collection.$$tags.none
         else # field
           unless map.hasOwnProperty(token)
-            result.error 'dsc.unknownItem', value: token, position: nextToken.position
+            if strict
+              result.error 'dsc.unknownItem', value: token, position: nextToken.position
+            else
+              expr.push collection.$$tags.none
           else if map[token].hasOwnProperty('$$mask')
             expr.push map[token].$$mask
           else

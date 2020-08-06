@@ -234,7 +234,7 @@
             
             <div class="content"><div class='highlight'><pre>{Result, sortedMap, flatMap, tags: {calc: calcTags, compile: compileTags}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">""</span>
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'046_tags_calc'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
@@ -334,7 +334,13 @@ describe <span class="hljs-string">'046_tags_calc'</span>, <span class="hljs-fun
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'f'</span>, position: <span class="hljs-number">4</span>}
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'q'</span>, position: <span class="hljs-number">17</span>}
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'ui.a123'</span>, position: <span class="hljs-number">21</span>}
-    ]</pre></div></div>
+    ]
+
+  check <span class="hljs-string">'error: unknown names: not strict'</span>, <span class="hljs-function">-&gt;</span>
+
+    calcTags (result = <span class="hljs-keyword">new</span> Result), @fields, expr = <span class="hljs-string">'fld1, aaa, fld2, bbb'</span>, strict: <span class="hljs-literal">false</span>
+
+    expect(result.messages).sameStructure []</pre></div></div>
             
         </li>
         

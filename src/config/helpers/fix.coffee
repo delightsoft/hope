@@ -173,7 +173,7 @@ $$fixBuilder = (fields) ->
 
             invalidOption 'edit', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
-            edit = optValue
+            edit = optValue if optValue != undefined
 
           when 'mask'
 
@@ -191,7 +191,7 @@ $$fixBuilder = (fields) ->
 
             invalidOption 'newVal', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
-            newVal = optValue
+            newVal = optValue if optValue != undefined
 
           else unknownOption optName
 

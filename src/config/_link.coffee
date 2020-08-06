@@ -166,9 +166,11 @@ link = (config, noHelpers, opts) ->
 
       cache = Object.create(null)
 
-      noCache = (result, expr) ->
+      noCache = (result, expr, options) ->
 
         unless typeof result == 'object' && result != null && result.hasOwnProperty('isError')
+
+          options = expr
 
           expr = result
 
@@ -176,21 +178,19 @@ link = (config, noHelpers, opts) ->
 
           result = new Result()
 
-        r = calc result, res, expr
+        r = calc result, res, expr, options
 
         result.throwIfError() if localResult
 
         r # noCache =
 
-      res.$$calc = (result, expr) ->
+      res.$$calc = (result, expr, options) ->
 
-        unless typeof result == 'object' && result != null && result.hasOwnProperty('isError')
+        cacheExpr = if typeof result == 'object' && result != null && result.hasOwnProperty('isError') then expr else result
 
-          expr = result
+        return cache[expr] if hasOwnProperty.call cache, cacheExpr
 
-        return cache[expr] if hasOwnProperty.call cache, expr
-
-        cache[expr] = noCache result, expr # res.$$calc =
+        cache[expr] = noCache result, expr, options # res.$$calc =
 
       res.$$calc.noCache = noCache
 
