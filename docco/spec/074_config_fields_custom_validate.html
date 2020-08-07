@@ -198,26 +198,14 @@
 
             </div>
             
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              
-            </div>
-            
             <div class="content"><div class='highlight'><pre>{Result,
 config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
 utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
 processCustomValidate = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate/processCustomValidate'</span>
 
-focusOnCheck = <span class="hljs-string">''</span>
-<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'074_config_fields_custom_validate'</span>, <span class="hljs-function">-&gt;</span>
 
@@ -226,11 +214,11 @@ describe <span class="hljs-string">'074_config_fields_custom_validate'</span>, <
         </li>
         
         
-        <li id="section-3">
+        <li id="section-2">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
               <p>Билдер валидатора. В него передаются result, field, плюс все параметры единой строкой из func(param1, param2, …) из аттрибута validate.
 this - модель fields. field - описание поля</p>
@@ -250,11 +238,11 @@ this - модель fields. field - описание поля</p>
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Возвращает валидатор, где fieldsLevel это уровень полей, в котором находится поле.</p>
 
@@ -350,11 +338,11 @@ this - модель fields. field - описание поля</p>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <pre><code>     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'id'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}</code></pre>
 
