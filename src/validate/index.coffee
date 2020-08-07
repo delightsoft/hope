@@ -2,8 +2,7 @@ Result = require '../result/index'
 
 processCustomValidate = require './processCustomValidate'
 
-_moment = undefined
-momentLdr = -> _moment or (_moment = require 'moment')
+moment = require 'moment'
 
 emptyOnlyFields = Object.freeze({})
 
@@ -163,13 +162,13 @@ validate = (fieldDesc, fields, validators) ->
       f # when 'double'
 
     when 'date'
-      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and momentLdr()(value, 'YYYY-MM-DD').isValid()
+      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and moment(value, 'YYYY-MM-DD').isValid()
 
     when 'time'
-      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and momentLdr()(value, 'HH:mm', true).isValid()
+      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and moment(value, ['HH:mm', 'HH:mm:ss', 'HH:mm:ss.SSS'], true).isValid()
 
     when 'timestamp'
-      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and momentLdr()(value, 'YYYY-MM-DD HH:mm').isValid()
+      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and moment(value, ['YYYY-MM-DDTHH:mm', 'YYYY-MM-DDTHH:mm:ss', 'YYYY-MM-DDTHH:mm:ss.SSS']).isValid()
 
     # TODO: Add timetz, timestamptz
 

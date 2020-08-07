@@ -1,5 +1,7 @@
 {invalidArg, invalidOption, unknownOption} = require '../../utils/_err'
 
+moment = require 'moment'
+
 defaultInit =
   string: ''
   text: ''
@@ -137,9 +139,26 @@ $$fixBuilder = (fields) ->
 
       else
 
-        copyVal = (res, fieldsLevel) ->
+        copyVal = switch field.type
 
-          res[name] = fieldsLevel[name]
+          when 'date'
+            (res, fieldsLevel) ->
+              res[name] = moment(fieldsLevel[name]).format('YYYY-MM-DD')
+              return
+
+          when 'time'
+            (res, fieldsLevel) ->
+              res[name] = "#{moment(fieldsLevel[name]).utc().format('HH:mm:ss.SSS')}Z"
+              return
+
+          when 'timestamp'
+            (res, fieldsLevel) ->
+              res[name] = "#{moment(fieldsLevel[name]).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}Z"
+              return
+
+          else
+            (res, fieldsLevel) ->
+              res[name] = fieldsLevel[name]
 
       fixFuncs.push (res, fieldsLevel, mask, update, newVal, options) ->
 

@@ -26,14 +26,14 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
       flatMapOpts.before = [
         {name: 'id', type: 'nanoid', tags: 'field, system, index, unique'}
-        {name: 'rev', type: 'int', tags: 'field, system'}
+        {name: 'rev', type: 'int', init: 0, tags: 'field, system'}
       ]
 
       flatMapOpts.after = [
         {name: 'options', type: 'json', tags: 'field, system, index'}
         {name: 'created', type: 'timestamp', tags: 'field, system, index'}
         {name: 'modified', type: 'timestamp', tags: 'field, system, index'}
-        {name: 'deleted', type: 'boolean', tags: 'field, system'}
+        {name: 'deleted', type: 'boolean', init: false, tags: 'field, system'}
       ]
 
       flatMapOpts.reservedNames = ['id', 'rev', 'options', 'created', 'modified', 'deleted']

@@ -462,3 +462,32 @@ subtale с признаком required создаются с одной ново
             {f5: 'c', f6: null}
             {f5: 'd', f6: null}
           ]
+
+      check '$$fix: normolize date, time and timestamp', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            DocA:
+              fields:
+                f1: type: 'date'
+                f2: type: 'time'
+                f3: type: 'timestamp'
+        }, true
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig
+
+        res = linkedConfig.docs['doc.DocA'].fields.$$get
+          f1: new Date('2020-08-31T17:15:00Z')
+          f2: new Date('2020-08-31T17:15:00Z')
+          f3: new Date('2020-08-31T17:15:00Z')
+
+        expect(res).toEqual
+          f1: '2020-08-31'
+          f2: '17:15:00.000Z'
+          f3: '2020-08-31T17:15:00.000Z'
+
+          # TODO: check for unexpected fields

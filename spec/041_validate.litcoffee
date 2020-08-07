@@ -63,7 +63,7 @@
 
   #       decimal: {right: ['123.456'], wrong: wrongVal = [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
-         time: {right: ['12:15'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
+         time: {right: ['12:15:00.000'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
          date: {right: ['2020-11-15'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
