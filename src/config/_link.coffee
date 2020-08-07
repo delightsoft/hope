@@ -270,7 +270,7 @@ link = (config, noHelpers, opts) ->
 
       if field.hasOwnProperty('regexp')
 
-        i = regexp.lastIndexOf('/')
+        i = field.regexp.lastIndexOf('/')
 
         field.regexp = new RegExp (field.regexp.substr 0, i - 1), (field.regexp.substr i + 1)
 
