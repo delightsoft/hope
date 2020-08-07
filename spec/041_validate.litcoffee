@@ -218,22 +218,22 @@ string: min, regexp, init
 
       check "string", ->
 
-    #        compileFields (result = new Result),
-    #          string1: type: 'string(10)', min: 5, init: '12'
-    #          string2: type: 'string(10)', min: 5, init: '123456'
-    #          string3: type: 'string(10)', min: 5, init: '123456789012'
-    #
-    #        expect(result.messages).sameStructure [
-    #          {type: 'error', path: 'string1.init', code: 'validate.tooShort', value: '12', min: 5}
-    #          {type: 'error', path: 'string3.init', code: 'validate.tooLong', value: '123456789012', max: 10}
-    #        ]
-    #
-    #        compileFields (result = new Result), # unexpected тестируем отдельно.  при наличии других ошибок эта ошибка не возвращается
-    #          string4: type: 'string(10)', min: 5, max: 20
-    #
-    #        expect(result.messages).sameStructure [
-    #          {type: 'error', path: 'string4', code: 'dsc.unexpectedProp', value: 'max'}
-    #        ]
+        compileFields (result = new Result),
+          string1: type: 'string(10)', min: 5, init: '12'
+          string2: type: 'string(10)', min: 5, init: '123456'
+          string3: type: 'string(10)', min: 5, init: '123456789012'
+
+        expect(result.messages).sameStructure [
+          {type: 'error', path: 'string1.init', code: 'validate.tooShort', value: '12', min: 5}
+          {type: 'error', path: 'string3.init', code: 'validate.tooLong', value: '123456789012', max: 10}
+        ]
+
+        compileFields (result = new Result), # unexpected тестируем отдельно.  при наличии других ошибок эта ошибка не возвращается
+          string4: type: 'string(10)', min: 5, max: 20
+
+        expect(result.messages).sameStructure [
+          {type: 'error', path: 'string4', code: 'dsc.unexpectedProp', value: 'max'}
+        ]
 
         compileFields (result = new Result),
           string5: type: 'string(10)', regexp: /\d{2,5}/i, init: '1'
@@ -244,23 +244,23 @@ string: min, regexp, init
           {type: 'error', path: 'string5.init', code: 'validate.invalidValue', value: '1', regexp: '/\\d{2,5}/i'}
         ]
 
-    #        compileFields (result = new Result),
-    #          string10: type: 'string(10)', init: null
-    #          string11: type: 'string(10)', init: 123
-    #          string12: type: 'string(10)', init: true
-    #
-    #        expect(result.messages).sameStructure [
-    #          {type: 'error', path: 'string10.init', code: 'validate.invalidValue', value: null}
-    #          {type: 'error', path: 'string11.init', code: 'validate.invalidValue', value: 123}
-    #          {type: 'error', path: 'string12.init', code: 'validate.invalidValue', value: true}
-    #        ]
-    #
-    #        compileFields (result = new Result),
-    #          string20: type: 'string(10)', min: 20
-    #
-    #        expect(result.messages).sameStructure [
-    #          {type: 'error', path: 'string20.min', code: 'dsc.tooBig', value: 20}
-    #        ]
+        compileFields (result = new Result),
+          string10: type: 'string(10)', init: null
+          string11: type: 'string(10)', init: 123
+          string12: type: 'string(10)', init: true
+
+        expect(result.messages).sameStructure [
+          {type: 'error', path: 'string10.init', code: 'validate.invalidValue', value: null}
+          {type: 'error', path: 'string11.init', code: 'validate.invalidValue', value: 123}
+          {type: 'error', path: 'string12.init', code: 'validate.invalidValue', value: true}
+        ]
+
+        compileFields (result = new Result),
+          string20: type: 'string(10)', min: 20
+
+        expect(result.messages).sameStructure [
+          {type: 'error', path: 'string20.min', code: 'dsc.tooBig', value: 20}
+        ]
 
 text: min, max, regexp, init
 
