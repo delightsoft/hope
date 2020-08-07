@@ -345,9 +345,22 @@ this - модель fields. field - описание поля</p>
     linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">0</span>}
 
     expect(result.messages).toEqual [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.mustBeGraterThen'</span>, value: <span class="hljs-number">0</span>, n: <span class="hljs-number">0</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'id'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
-    ]</pre></div></div>
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.mustBeGraterThen'</span>, value: <span class="hljs-number">0</span>, n: <span class="hljs-number">0</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <pre><code>     {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'id'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    ]</pre></div></div>
             
         </li>
         

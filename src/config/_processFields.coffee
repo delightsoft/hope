@@ -25,7 +25,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
     unless noSystemItems
 
       flatMapOpts.before = [
-        {name: 'id', type: 'nanoid', tags: 'field, system, index, unique', required: true}
+        {name: 'id', type: 'nanoid', tags: 'field, system, index, unique'}
         {name: 'rev', type: 'int', tags: 'field, system'}
       ]
 

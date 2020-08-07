@@ -115,5 +115,5 @@ this - модель fields. field - описание поля
 
         expect(result.messages).toEqual [
           {type: 'error', path: 'f1', code: 'validate.mustBeGraterThen', value: 0, n: 0}
-          {type: 'error', path: 'id', code: 'validate.requiredField'}
+    #          {type: 'error', path: 'id', code: 'validate.requiredField'}
         ]
