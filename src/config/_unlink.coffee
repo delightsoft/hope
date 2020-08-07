@@ -60,6 +60,8 @@ unlinkField = (field) ->
 
   field.enum = unlinkSortedMap field.enum if field.hasOwnProperty('enum')
 
+  field.regex = field.regex.toString() if field.regexp
+
   delete field._validate
 
   return

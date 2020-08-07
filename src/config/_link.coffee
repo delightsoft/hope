@@ -268,7 +268,7 @@ link = (config, noHelpers, opts) ->
 
         freeze field.enum.$$list
 
-      if field.hasOwnProperty('regexp') and typeof field == 'string'
+      if field.hasOwnProperty('regexp')
 
         i = field.regexp.lastIndexOf('/')
 
