@@ -28,7 +28,7 @@ processExtraProps = (result, fieldDesc, res) ->
 
            try
 
-             res.regexp = new RegExp (regexp.substr 0, i - 1), (regexp.substr i + 1)
+             res.regexp = new RegExp (regexp.substr 1, i - 1), (regexp.substr i + 1)
 
              ok = true
 

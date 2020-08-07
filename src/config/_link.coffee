@@ -272,7 +272,7 @@ link = (config, noHelpers, opts) ->
 
         i = field.regexp.lastIndexOf('/')
 
-        field.regexp = new RegExp (field.regexp.substr 0, i - 1), (field.regexp.substr i + 1)
+        field.regexp = new RegExp (field.regexp.substr 1, i - 1), (field.regexp.substr i + 1)
 
     return # linkFields =
 
