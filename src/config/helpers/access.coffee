@@ -10,9 +10,11 @@ $$accessBuilder = (type, fieldsProp, access, addActions) ->
 
     do ->
 
+      exceptSystem = if type[fieldsProp].$$tags.hasOwnProperty('system') then type[fieldsProp].$$tags.system.invert() else type[fieldsProp].$$tags.all
+
       allAccess =
-        view: type[fieldsProp].$$tags.all
-        update: type[fieldsProp].$$tags.all
+        view: exceptSystem
+        update: exceptSystem
 
       allAccess.actions = type.actions.$$tags.all if addActions
 

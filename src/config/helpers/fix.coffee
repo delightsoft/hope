@@ -178,6 +178,8 @@ $$fixBuilder = (fields) ->
 
   (fieldsLevel, options) ->
 
+    invalidArg 'fieldsLevel', fieldsLevel unless typeof fieldsLevel == 'object' and fieldsLevel != null and not Array.isArray(fieldsLevel)
+
     edit = false
 
     mask = undefined
