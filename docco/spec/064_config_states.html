@@ -214,7 +214,7 @@
 config: {compile: {_processStates: processStates, _processFields: processFields, _processActions: processActions}},
 utils: {deepClone}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">'general'</span>
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
@@ -257,8 +257,8 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
               a: type: <span class="hljs-string">'json'</span>, tags: <span class="hljs-string">'tag2'</span>
               b: type: <span class="hljs-string">'timestamp'</span>
         actions:
-          open: <span class="hljs-function">-&gt;</span>
-          close: <span class="hljs-function">-&gt;</span>
+          open: {}
+          close: {}
         states:
           opened:
             view: <span class="hljs-string">'fld1, fld2'</span>
@@ -275,7 +275,7 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
 
     (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>
     res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc, <span class="hljs-literal">true</span>
-    res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions
+    res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions <span class="hljs-keyword">unless</span> result.isError
 
     expect(result.messages).toEqual []</pre></div></div>
             
@@ -307,8 +307,8 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
               a: type: <span class="hljs-string">'json'</span>, tags: <span class="hljs-string">'tag2'</span>
               b: type: <span class="hljs-string">'timestamp'</span>
         actions:
-          open: <span class="hljs-function">-&gt;</span>
-          close: <span class="hljs-function">-&gt;</span>
+          open: {}
+          close: {}
         states:
           opened:
             view: <span class="hljs-string">'fld1, fld2, notAField'</span>
@@ -324,7 +324,7 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
 
     (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>, <span class="hljs-literal">true</span>
     res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc, <span class="hljs-literal">true</span>
-    res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions
+    res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions <span class="hljs-keyword">unless</span> result.isError
 
     expect(result.messages).sameStructure [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.opened.view'</span>, code: <span class="hljs-string">'dsc.unknownItem'</span>, value: <span class="hljs-string">'notAField'</span>, position: <span class="hljs-number">12</span> }
@@ -332,248 +332,6 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.opened.transitions.notAnAction.next'</span>, code: <span class="hljs-string">'dsc.unknownState'</span>, value: <span class="hljs-string">'tralala'</span> }
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.closed.view'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'invalidTag'</span>, position: <span class="hljs-number">16</span> }
     ]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>//      check “general”, -&gt;
-//
-//        doc =
-//          name: ‘Doc1’
-//          states:
-//            opened:
-//              view: ‘#all’
-//              update: ‘’
-//              transitions:
-//                open: ‘’
-//
-//        doc =
-//          name: doc.name
-//          $$src: doc
-//
-//        processStates (result = new Result), doc
-//
-//        expect(result.messages).sameStructure []
-//
-//        delete doc.$$src
-//
-//        expect(doc).sameStructure
-//          name: ‘Doc1’
-//          states: states =
-//            opened: stateOpened =
-//              name: ‘opened’
-//              view: ‘#all’
-//              update: ‘’
-//              transitions:
-//                open: transitionOpen =
-//                  name: ‘open’
-//                  next: ‘’
-//                $$list: [transitionOpen]
-//            $$list: [stateOpened]
-//
-//missing props
-//——————————
-//
-//      check “‘states’ is missing”, -&gt;
-//
-//        doc = name: ‘Doc1’
-//
-//        doc = name: doc.name, $$src: doc
-//
-//        processStates (new Result (result = new Result)), doc
-//
-//        expect(result.messages).sameStructure []
-//
-//        delete doc.$$src
-//
-//        expect(doc).sameStructure
-//
-//          name: ‘Doc1’
-//
-//          states: {$$list: []}
-//
-//      check “error: state.transition.next missing”, -&gt;
-//
-//        doc =
-//
-//          name: ‘Doc1’
-//
-//          states:
-//
-//            opened:
-//
-//              transitions:
-//
-//                close: {}
-//
-//        doc = name: doc.name, $$src: doc
-//
-//        processStates (new Result (result = new Result)), doc
-//
-//        expect(result.messages).sameStructure [
-//          {type: ‘error’, path: ‘states[opened].transitions[close]’, code: ‘dsc.missingProp’, value: ‘next’}
-//        ]
-//
-//wrong values
-//——————————
-//
-//      for errValue in [undefined, null, true, false, 12, {}]
-//
-//        do (errValue) -&gt; check “error: wrong state.view value: #{errValue}”, -&gt;
-//
-//          doc =
-//
-//            name: ‘Doc1’
-//
-//            states:
-//
-//              opened:
-//
-//                view: errValue
-//
-//          doc = name: doc.name, $$src: doc
-//
-//          processStates (new Result (result = new Result)), doc
-//
-//          expect(result.messages).sameStructure [
-//            {type: ‘error’, path: ‘states[opened].view’, code: ‘dsc.invalidValue’, value: errValue}
-//          ]
-//
-//      for errValue in [undefined, null, true, false, 12, {}]
-//
-//        do (errValue) -&gt; check “error: wrong state.update value: #{errValue}”, -&gt;
-//
-//          doc =
-//
-//            name: ‘Doc1’
-//
-//            states:
-//
-//              opened:
-//
-//                update: errValue
-//
-//          doc = name: doc.name, $$src: doc
-//
-//          processStates (new Result (result = new Result)), doc
-//
-//          expect(result.messages).sameStructure [
-//            {type: ‘error’, path: ‘states[opened].update’, code: ‘dsc.invalidValue’, value: errValue}
-//          ]
-//
-//      for errValue in [undefined, null, true, false, 12, [], {}]
-//
-//        do (errValue) -&gt; check “error: wrong state.transition.next value: #{errValue}”, -&gt;
-//
-//          doc =
-//
-//            name: ‘Doc1’
-//
-//            states:
-//
-//              opened:
-//
-//                transitions:
-//
-//                  close:
-//
-//                    next: errValue
-//
-//          doc = name: doc.name, $$src: doc
-//
-//          processStates (new Result (result = new Result)), doc
-//
-//          expect(result.messages).sameStructure [
-//            {type: ‘error’, path: ‘states[opened].transitions[close].next’, code: ‘dsc.invalidValue’, value: errValue}
-//          ]
-//
-//      for errValue in [undefined, null, true, false, 12, []]
-//
-//        do (errValue) -&gt; check “error: wrong state.transition inline value: #{errValue}”, -&gt;
-//
-//          doc =
-//
-//            name: ‘Doc1’
-//
-//            states:
-//
-//              opened:
-//
-//                transitions:
-//
-//                  close: errValue
-//
-//          doc = name: doc.name, $$src: doc
-//
-//          processStates (new Result (result = new Result)), doc
-//
-//          expect(result.messages).sameStructure [
-//            {type: ‘error’, path: ‘states[opened].transitions.close’, code: ‘dsc.invalidValue’, value: errValue}
-//          ]
-//
-//unexpected props
-//——————————
-//
-//      check “error: unexpect prop in state”, -&gt;
-//
-//        doc =
-//
-//          name: ‘Doc1’
-//
-//          states:
-//
-//            opened:
-//
-//              unexpectedProp: {}
-//
-//              transitions:
-//
-//                close:
-//
-//                  next: ‘closed’
-//
-//        doc = name: doc.name, $$src: doc
-//
-//        processStates (new Result (result = new Result)), doc
-//
-//        expect(result.messages).sameStructure [
-//          {type: ‘error’, path: ‘states[opened]’, code: ‘dsc.unexpectedProp’, value: ‘unexpectedProp’}
-//        ]
-//
-//      check “error: unexpect prop in state[stateName].transitions[transitionName]”, -&gt;
-//
-//        doc =
-//
-//          name: ‘Doc1’
-//
-//          states:
-//
-//            opened:
-//
-//
-//              transitions:
-//
-//                close:
-//
-//                  next: ‘closed’
-//
-//                  unexpectedProp: {}
-//
-//        doc = name: doc.name, $$src: doc
-//
-//        processStates (new Result (result = new Result)), doc
-//
-//        expect(result.messages).sameStructure [
-//          {type: ‘error’, path: ‘states[opened].transitions[close]’, code: ‘dsc.unexpectedProp’, value: ‘unexpectedProp’}
-//        ]</p>
-
-            </div>
             
         </li>
         

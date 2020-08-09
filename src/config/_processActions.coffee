@@ -30,18 +30,6 @@ processActions = (result, doc, config, noSystemItems) ->
 
     sortedMapOpts = index: true
 
-      , getValue: (result, value, res) ->
-
-        if typeof value == 'function'
-
-          # TODO: Check number of parameters in given function
-
-          res.value = value
-
-          return true
-
-        false
-
     unless noSystemItems
 
       sortedMapOpts.before = [
