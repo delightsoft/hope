@@ -276,8 +276,13 @@ describe <span class="hljs-string">'070_config'</span>, <span class="hljs-functi
                     x: extra: {a:<span class="hljs-number">12</span>}
                     y: {}
           actions:
-            close: <span class="hljs-function">-&gt;</span> a = <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
-            open: <span class="hljs-function">-&gt;</span> <span class="hljs-keyword">return</span>
+            close: {}
+            open: {}
+            list:
+              arguments:
+                z: type: <span class="hljs-string">'int'</span>, tags: <span class="hljs-string">'a'</span>
+                x: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
+
           states:
             opened:
               update: <span class="hljs-string">'fldA'</span>
@@ -379,13 +384,7 @@ describe <span class="hljs-string">'070_config'</span>, <span class="hljs-functi
 
     expect(res.docs[<span class="hljs-string">'doc.DocA'</span>].fields[<span class="hljs-string">'fldQ'</span>].fields[<span class="hljs-string">'sb'</span>].extra).toEqual {a: <span class="hljs-number">1</span>, b: <span class="hljs-number">2</span>}
 
-  check <span class="hljs-string">'unlink'</span>, <span class="hljs-function">-&gt;</span>
-
-    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config, <span class="hljs-literal">true</span>
-
-    expect(result.messages).toEqual []
-
-  check <span class="hljs-string">'link'</span>, <span class="hljs-function">-&gt;</span>
+  check <span class="hljs-string">'unlink/link'</span>, <span class="hljs-function">-&gt;</span>
 
     res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config, <span class="hljs-literal">true</span>
 

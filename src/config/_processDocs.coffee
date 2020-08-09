@@ -45,7 +45,7 @@ processDocs = (result, config, noSystemItems) ->
 
           doc.fields = processFields result, doc, config, 'fields', noSystemItems
 
-          doc.actions = processActions result, doc, noSystemItems
+          doc.actions = processActions result, doc, config, noSystemItems
 
           unless result.isError
 

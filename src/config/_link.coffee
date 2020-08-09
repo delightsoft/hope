@@ -296,13 +296,23 @@ link = (config, noHelpers, opts) ->
 
     doc.actions = linkSortedMap doc.actions, false, true
 
+    doc.actions.$$list.forEach (action) ->
+
+      linkFieldsWithHelpers action, 'arguments' if action.arguments
+
+      return
+
     doc.states = linkSortedMap doc.states, true, true
 
     unless noHelpers
 
+      actions = methods?.docs[doc.name]?.actions
+
       doc.actions.$$list.forEach (action) ->
 
         action.$$key = "#{docKey}.action.#{action.name}"
+
+        action.$$code = actions[action.name] if actions and actions[action.name]
 
         freeze action
 

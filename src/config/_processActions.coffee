@@ -8,7 +8,9 @@ bitArray = require '../bitArray'
 
 copyExtra = require './_copyExtra'
 
-processActions = (result, doc, noSystemItems) ->
+processFields = require './_processFields'
+
+processActions = (result, doc, config, noSystemItems) ->
 
   unless doc.$$src.hasOwnProperty('actions') or not noSystemItems
 
@@ -44,11 +46,11 @@ processActions = (result, doc, noSystemItems) ->
 
       sortedMapOpts.before = [
         # TODO: Think of replacement of 'value'
-        {name: 'create', tags: 'system', value: ->}
-        {name: 'retrieve', tags: 'system', value: ->}
-        {name: 'update', tags: 'system', value: ->}
-        {name: 'delete', tags: 'system', value: ->}
-        {name: 'restore', tags: 'system', value: ->}
+        {name: 'create', tags: 'system'}
+        {name: 'retrieve', tags: 'system'}
+        {name: 'update', tags: 'system'}
+        {name: 'delete', tags: 'system'}
+        {name: 'restore', tags: 'system'}
       ]
 
       sortedMapOpts.reservedName = ['create', 'retrieve', 'update', 'delete', 'restore']
@@ -63,19 +65,9 @@ processActions = (result, doc, noSystemItems) ->
 
         for action in res.$$list when action.hasOwnProperty('$$src')
 
-          unless action.$$src.hasOwnProperty('value')
+          if action.$$src.hasOwnProperty('arguments')
 
-            result.error 'dsc.missingProp', value: 'value'
-
-          else unless typeof action.$$src.value == 'function'
-
-            result.error 'dsc.invalidValue', value: action.$$src.value
-
-          else
-
-            # TODO: Check number of parameters in given function
-
-            action.value = action.$$src.value
+            action.arguments = processFields result, action, config, 'arguments', true
 
         return # result.context
 

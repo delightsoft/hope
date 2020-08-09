@@ -198,13 +198,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, config: {compile: {_processActions: processActions}}, utils: {deepClone}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">"062_config_actions"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
         </li>
         
         
@@ -214,25 +207,15 @@ describe <span class="hljs-string">"062_config_actions"</span>, <span class="hlj
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2 id="general">general</h2>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"general"</span>, <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>{Result, config: {compile: {_processActions: processActions}}, utils: {deepClone}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-    doc =
-      name: <span class="hljs-string">'Doc1'</span>
-      $$src:
-        actions:
-          actionA: {value: <span class="hljs-function">-&gt;</span>}
-          actionB: <span class="hljs-function">-&gt;</span>
-          actionC: {name: <span class="hljs-string">'actionC'</span>, value: (<span class="hljs-function">-&gt;</span>), tags: <span class="hljs-string">'a, b'</span>}
+focusOnCheck = <span class="hljs-string">''</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
-    $$src = deepClone doc.$$src
-
-    (res = {}).fields = processActions (result = <span class="hljs-keyword">new</span> Result), doc
-
-    expect(result.messages).toEqual []</pre></div></div>
+describe <span class="hljs-string">"062_config_actions"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
             
         </li>
         
@@ -243,11 +226,9 @@ describe <span class="hljs-string">"062_config_actions"</span>, <span class="hlj
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Исходный документ не изменяется</p>
+              <h2 id="general">general</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    expect(doc.$$src).sameStructure $$src</pre></div></div>
             
         </li>
         
@@ -258,10 +239,94 @@ describe <span class="hljs-string">"062_config_actions"</span>, <span class="hlj
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h2 id="missing-props">missing props</h2>
-<h2 id="wrong-values">wrong values</h2>
-<h2 id="unexpected-props">unexpected props</h2>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"general"</span>, <span class="hljs-function">-&gt;</span>
 
+    doc =
+      name: <span class="hljs-string">'Doc1'</span>
+      $$src:
+        actions:
+          actionA: {}
+          actionB:
+            arguments:
+              f1: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>, tags: <span class="hljs-string">'a'</span>
+              f2: type: <span class="hljs-string">'subtable'</span>, fields:
+                fa: type: <span class="hljs-string">'int'</span>
+                fb: type: <span class="hljs-string">'double'</span>, null: <span class="hljs-literal">true</span>, tags: <span class="hljs-string">'a'</span>
+          actionC: {name: <span class="hljs-string">'actionC'</span>, tags: <span class="hljs-string">'a, b'</span>}
+
+    $$src = deepClone doc.$$src
+
+    (res = {}).actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc, {}
+
+    expect(result.messages).toEqual []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Исходный документ не изменяется</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expect(doc.$$src).sameStructure $$src</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h2 id="missing-props">missing props</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h2 id="wrong-values">wrong values</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h2 id="unexpected-props">unexpected props</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              
             </div>
             
         </li>

@@ -41,8 +41,13 @@ config
                         x: extra: {a:12}
                         y: {}
               actions:
-                close: -> a = 12; return
-                open: -> return
+                close: {}
+                open: {}
+                list:
+                  arguments:
+                    z: type: 'int', tags: 'a'
+                    x: type: 'string(20)', null: true
+
               states:
                 opened:
                   update: 'fldA'
@@ -98,13 +103,7 @@ config
 
         expect(res.docs['doc.DocA'].fields['fldQ'].fields['sb'].extra).toEqual {a: 1, b: 2}
 
-      check 'unlink', ->
-
-        res = compileConfig (result = new Result), @config, true
-
-        expect(result.messages).toEqual []
-
-      check 'link', ->
+      check 'unlink/link', ->
 
         res = compileConfig (result = new Result), @config, true
 

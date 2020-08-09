@@ -491,7 +491,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
       string4: type: <span class="hljs-string">'string(10)'</span>, min: <span class="hljs-number">5</span>, max: <span class="hljs-number">20</span>
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'string4'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'max'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'string4.max'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
     ]
 
     compileFields (result = <span class="hljs-keyword">new</span> Result),
@@ -657,8 +657,8 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
       boolean2: type: <span class="hljs-string">'boolean'</span>, min: <span class="hljs-number">10</span>, max: <span class="hljs-number">20</span>
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'boolean2'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'min'</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'boolean2'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'max'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'boolean2.min'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'boolean2.max'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
     ]
 
     compileFields (result = <span class="hljs-keyword">new</span> Result),
@@ -720,9 +720,9 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
       structure3: fields: {f1: {type: <span class="hljs-string">'string(20)'</span>}, f2: {type: <span class="hljs-string">'string(20)'</span>}}, init: <span class="hljs-literal">true</span>
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure1'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'init'</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure2'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'init'</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure3'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'init'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure1.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure2.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure3.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
     ]</pre></div></div>
             
         </li>

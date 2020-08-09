@@ -66,6 +66,12 @@ unlinkField = (field) ->
 
   return
 
+unlinkAction = (field, process) ->
+
+  field.arguments = unlinkSortedMap field.arguments, process if field.hasOwnProperty('arguments')
+
+  return
+
 unlink = (config) ->
 
   newConfig = lightClone config
@@ -82,7 +88,7 @@ unlink = (config) ->
 
       newDoc.fields = unlinkFlatMap newDoc.fields, 'fields', unlinkField
 
-      newDoc.actions = unlinkSortedMap newDoc.actions
+      newDoc.actions = unlinkSortedMap newDoc.actions, unlinkAction
 
       newDoc.states = unlinkSortedMap newDoc.states
 

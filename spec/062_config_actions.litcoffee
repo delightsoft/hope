@@ -3,7 +3,7 @@ config.docs.Doc.fields
 
     {Result, config: {compile: {_processActions: processActions}}, utils: {deepClone}} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe "062_config_actions", ->
@@ -17,13 +17,18 @@ general
           name: 'Doc1'
           $$src:
             actions:
-              actionA: {value: ->}
-              actionB: ->
-              actionC: {name: 'actionC', value: (->), tags: 'a, b'}
+              actionA: {}
+              actionB:
+                arguments:
+                  f1: type: 'string(20)', null: true, tags: 'a'
+                  f2: type: 'subtable', fields:
+                    fa: type: 'int'
+                    fb: type: 'double', null: true, tags: 'a'
+              actionC: {name: 'actionC', tags: 'a, b'}
 
         $$src = deepClone doc.$$src
 
-        (res = {}).fields = processActions (result = new Result), doc
+        (res = {}).actions = processActions (result = new Result), doc, {}
 
         expect(result.messages).toEqual []
 

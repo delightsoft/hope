@@ -31,9 +31,15 @@ finish = (result, resValue, opts) ->
 
         if optsValidate && item.hasOwnProperty('$$src')
 
-          for k of item.$$src when not (item.hasOwnProperty(k) || k.startsWith('$') || optsSkipProps?.indexOf(k) >= 0)
+          k = undefined
 
-            result.error 'dsc.unexpectedProp', value: k
+          result.context ((path) -> (Result.prop k) path), ->
+
+            for k of item.$$src when not (item.hasOwnProperty(k) || k.startsWith('$') || optsSkipProps?.indexOf(k) >= 0)
+
+              result.error 'dsc.unexpectedProp'
+
+            return
 
         delete item.$$src
 
