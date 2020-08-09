@@ -214,7 +214,7 @@
 config: {compile: {_processStates: processStates, _processFields: processFields, _processActions: processActions}},
 utils: {deepClone}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">''</span>
+focusOnCheck = <span class="hljs-string">'general'</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
@@ -273,7 +273,7 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
 
     $$src = deepClone doc.$$src
 
-    (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>, <span class="hljs-literal">true</span>
+    (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>
     res.actions = processActions (result = <span class="hljs-keyword">new</span> Result), doc, <span class="hljs-literal">true</span>
     res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions
 

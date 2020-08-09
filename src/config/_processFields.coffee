@@ -36,7 +36,9 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
         {name: 'deleted', type: 'boolean', init: false, tags: 'field, system'}
       ]
 
-      flatMapOpts.reservedNames = ['id', 'rev', 'options', 'created', 'modified', 'deleted']
+      flatMapOpts.after.unshift name: 'state', type: 'string(100)', init: 'new', tags: 'field, system, index' if doc.$$src.states
+
+      flatMapOpts.reservedNames = ['id', 'rev', 'state', 'options', 'created', 'modified', 'deleted']
 
     res = flatMap result, doc.$$src[fieldsProp], 'fields', flatMapOpts
 

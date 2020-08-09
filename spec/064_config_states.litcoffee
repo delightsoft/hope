@@ -5,7 +5,7 @@ config.docs.Doc.states
     config: {compile: {_processStates: processStates, _processFields: processFields, _processActions: processActions}},
     utils: {deepClone}} = require '../src'
 
-    focusOnCheck = ''
+    focusOnCheck = 'general'
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe "064_config_states", ->
@@ -42,7 +42,7 @@ general
 
         $$src = deepClone doc.$$src
 
-        (res = {}).fields = processFields (result = new Result), doc, {}, 'fields', true
+        (res = {}).fields = processFields (result = new Result), doc, {}, 'fields'
         res.actions = processActions (result = new Result), doc, true
         res.states = processStates (result = new Result), doc, res.fields, res.actions
 
