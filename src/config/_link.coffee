@@ -338,7 +338,7 @@ link = (config, noHelpers, opts) ->
 
       state.update = freezeBitArray new BitArray doc.fields.$$flat.$$list, state.update
 
-      state.transitions = linkSortedMap state.transitions, true, false
+      state.transitions = linkSortedMap state.transitions, true, true
 
       for transition in state.transitions.$$list
 
