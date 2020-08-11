@@ -8,7 +8,7 @@ $$getBuilder = (docDesc) ->
 
       mask = docDesc.fields.$$calc('id,rev,deleted').or(access.update)
 
-    docDesc.fields.$$fix fieldsLevel, Object.assign {}, options, {mask} # (options) ->
+    docDesc.fields.$$fix fieldsLevel, Object.assign {}, options, {mask, newVal: false} # (options) ->
 
 # ----------------------------
 

@@ -847,7 +847,32 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         {f5: <span class="hljs-string">'c'</span>, f6: <span class="hljs-literal">null</span>}
         {f5: <span class="hljs-string">'d'</span>, f6: <span class="hljs-literal">null</span>}
       ]
-      deleted: <span class="hljs-literal">true</span></pre></div></div>
+      deleted: <span class="hljs-literal">true</span>
+
+    res = linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$update {
+      f1: <span class="hljs-string">'123'</span>
+      $$touched: {}
+      str:
+        f3: <span class="hljs-string">'a'</span>
+        f4: <span class="hljs-literal">null</span>
+        $$touched: {}
+      sf: [
+        {f5: <span class="hljs-string">'c'</span>, f6: <span class="hljs-literal">null</span>, $$touched: {}}
+        {f5: <span class="hljs-string">'d'</span>, f6: <span class="hljs-literal">null</span>, $$touched: {}}
+      ]
+      created: <span class="hljs-string">'...'</span>
+      modified: <span class="hljs-string">'...'</span>
+    }
+
+    expect(res).toEqual
+      f1: <span class="hljs-string">'123'</span>
+      str:
+        f3: <span class="hljs-string">'a'</span>
+        f4: <span class="hljs-literal">null</span>
+      sf: [
+        {f5: <span class="hljs-string">'c'</span>, f6: <span class="hljs-literal">null</span>}
+        {f5: <span class="hljs-string">'d'</span>, f6: <span class="hljs-literal">null</span>}
+      ]</pre></div></div>
             
         </li>
         

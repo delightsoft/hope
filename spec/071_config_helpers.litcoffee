@@ -545,5 +545,30 @@ subtale с признаком required создаются с одной ново
           ]
           deleted: true
 
+        res = linkedConfig.docs['doc.DocA'].fields.$$update {
+          f1: '123'
+          $$touched: {}
+          str:
+            f3: 'a'
+            f4: null
+            $$touched: {}
+          sf: [
+            {f5: 'c', f6: null, $$touched: {}}
+            {f5: 'd', f6: null, $$touched: {}}
+          ]
+          created: '...'
+          modified: '...'
+        }
+
+        expect(res).toEqual
+          f1: '123'
+          str:
+            f3: 'a'
+            f4: null
+          sf: [
+            {f5: 'c', f6: null}
+            {f5: 'd', f6: null}
+          ]
+
           # TODO: check for unexpected fields
 
