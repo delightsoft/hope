@@ -143,17 +143,17 @@ $$fixBuilder = (fields) ->
 
           when 'date'
             (res, fieldsLevel) ->
-              res[name] = moment(fieldsLevel[name]).format('YYYY-MM-DD')
+              res[name] = if fieldsLevel[name] == null then null else moment(fieldsLevel[name]).format('YYYY-MM-DD')
               return
 
           when 'time'
             (res, fieldsLevel) ->
-              res[name] = "#{moment(fieldsLevel[name]).utc().format('HH:mm:ss.SSS')}Z"
+              res[name] = if fieldsLevel[name] == null then null else "#{moment(fieldsLevel[name]).utc().format('HH:mm:ss.SSS')}Z"
               return
 
           when 'timestamp'
             (res, fieldsLevel) ->
-              res[name] = "#{moment(fieldsLevel[name]).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}Z"
+              res[name] = if fieldsLevel[name] == null then null else "#{moment(fieldsLevel[name]).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}Z"
               return
 
           else
