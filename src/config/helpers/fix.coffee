@@ -131,7 +131,7 @@ $$fixBuilder = (fields) ->
 
                 r
 
-          if options.edit
+          if options?.edit
 
             row._i = i for row, i in res[name]
 
