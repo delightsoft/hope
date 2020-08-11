@@ -212,7 +212,7 @@
             
             <div class="content"><div class='highlight'><pre>{Result, tags: {compile: compileTags}, sortedMap, flatMap} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">""</span>
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
@@ -323,12 +323,12 @@ describe <span class="hljs-string">'042_tags_compile'</span>, <span class="hljs-
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>При этом теги нормализуются методом BitArray.fixVertical()</p>
+              <p>– При этом теги нормализуются методом BitArray.fixVertical() –</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    expect(fields.$$tags.admin.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
-    expect(fields.$$tags.user.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    expect(fields.$$tags.admin.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">3</span>]
+    expect(fields.$$tags.user.valueOf()).toEqual [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>]</pre></div></div>
             
         </li>
         

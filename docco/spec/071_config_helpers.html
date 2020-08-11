@@ -483,10 +483,10 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
           fields:
             f1: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
             f2: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
-            str: fields:
+            str: tags: <span class="hljs-string">'a'</span>, fields:
               f3: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
               f4: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
-            sf: type: <span class="hljs-string">'subtable'</span>, required: <span class="hljs-literal">true</span>, fields:
+            sf: tags: <span class="hljs-string">'a'</span>, type: <span class="hljs-string">'subtable'</span>, required: <span class="hljs-literal">true</span>, fields:
               f5: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
               f6: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
     }, <span class="hljs-literal">true</span>

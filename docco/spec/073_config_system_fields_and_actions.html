@@ -253,7 +253,7 @@ describe <span class="hljs-string">'073_config_system_fields_and_actions'</span>
 
     expect(Object.keys(deepClone(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields))).toEqual [<span class="hljs-string">'id'</span>, <span class="hljs-string">'rev'</span>, <span class="hljs-string">'f1'</span>, <span class="hljs-string">'f2'</span>, <span class="hljs-string">'f3'</span>, <span class="hljs-string">'options'</span>, <span class="hljs-string">'created'</span>, <span class="hljs-string">'modified'</span>, <span class="hljs-string">'deleted'</span>]
 
-    expect(Object.keys(deepClone(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].actions))).toEqual [<span class="hljs-string">'create'</span>, <span class="hljs-string">'retrieve'</span>, <span class="hljs-string">'update'</span>, <span class="hljs-string">'delete'</span>, <span class="hljs-string">'restore'</span>]
+    expect(Object.keys(deepClone(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].actions))).toEqual [<span class="hljs-string">'create'</span>, <span class="hljs-string">'retrieve'</span>, <span class="hljs-string">'update'</span>, <span class="hljs-string">'delete'</span>, <span class="hljs-string">'restore'</span>, <span class="hljs-string">'list'</span>]
 
     expect(Object.keys(deepClone(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].arguments))).toEqual [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>]
 

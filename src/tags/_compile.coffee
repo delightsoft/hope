@@ -112,12 +112,6 @@ compile = (result, collection) ->
 
           result.error 'dsc.invalidValue', value: srcTags
 
-  if isFlat
-
-    for k, v of tags
-
-      v.fixVertical()
-
   v.list for k, v of tags
 
   collection.$$tags = tags

@@ -205,10 +205,10 @@ subtale с признаком required создаются с одной ново
               fields:
                 f1: type: 'string(20)', tags: 'a'
                 f2: type: 'string(20)', null: true
-                str: fields:
+                str: tags: 'a', fields:
                   f3: type: 'string(20)', tags: 'a'
                   f4: type: 'string(20)', null: true
-                sf: type: 'subtable', required: true, fields:
+                sf: tags: 'a', type: 'subtable', required: true, fields:
                   f5: type: 'string(20)', tags: 'a'
                   f6: type: 'string(20)', null: true
         }, true

@@ -58,6 +58,18 @@ class BitArray
 
     (@_mask[Math.trunc index / 32] & (1 << index % 32)) != 0 # get:
 
+  equal: (bitArray) ->
+
+    invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')
+    tooManyArgs() unless arguments.length <= 1
+
+    throw new Error 'given bitArray is different collection' unless @_collection == (collection = bitArray._collection)
+
+    leftMask = @_mask
+    rightMask = bitArray._mask
+
+    @_mask.every (v, i) -> rightMask[i] == v # equal:
+
   and: (bitArray) ->
 
     invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')

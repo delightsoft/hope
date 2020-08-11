@@ -39,6 +39,7 @@ processActions = (result, doc, config, noSystemItems) ->
         {name: 'update', tags: 'system'}
         {name: 'delete', tags: 'system'}
         {name: 'restore', tags: 'system'}
+        {name: 'list', tags: 'system'}
       ]
 
       sortedMapOpts.reservedName = ['create', 'retrieve', 'update', 'delete', 'restore']

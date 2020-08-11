@@ -3,7 +3,7 @@ Tags.Compile
 
     {Result, tags: {compile: compileTags}, sortedMap, flatMap} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '042_tags_compile', ->
@@ -85,10 +85,10 @@ Tags.Compile
 
         flatMap.finish result, fields, 'fields', skipProps: ['tags'], validate: false
 
-При этом теги нормализуются методом BitArray.fixVertical()
+-- При этом теги нормализуются методом BitArray.fixVertical() --
 
-        expect(fields.$$tags.admin.valueOf()).toEqual [0, 1, 2, 3]
-        expect(fields.$$tags.user.valueOf()).toEqual [0, 1, 2, 3, 4]
+        expect(fields.$$tags.admin.valueOf()).toEqual [0, 3]
+        expect(fields.$$tags.user.valueOf()).toEqual [0, 2]
 
 Если поле tag одного из элементов содержит недопустимое значение.  Возвращается ошибка с указанием неправильного
 значения.  К какому элементу односится значение и к какому свойству элемента - указано в контексте ошибки.
