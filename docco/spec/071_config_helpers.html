@@ -349,7 +349,7 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
             <div class="content"><div class='highlight'><pre>
   check <span class="hljs-string">'$$new'</span>, <span class="hljs-function">-&gt;</span>
 
-    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config, <span class="hljs-literal">false</span>
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), @config
 
     expect(result.messages).toEqual []
 
@@ -792,7 +792,62 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
     expect(res).toEqual
       f1: <span class="hljs-string">'2020-08-31'</span>
       f2: <span class="hljs-string">'17:15:00.000Z'</span>
-      f3: <span class="hljs-string">'2020-08-31T17:15:00.000Z'</span></pre></div></div>
+      f3: <span class="hljs-string">'2020-08-31T17:15:00.000Z'</span>
+
+  check <span class="hljs-string">'$$update'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), {
+      docs:
+        DocA:
+          fields:
+            f1: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
+            f2: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
+            str: fields:
+              f3: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
+              f4: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
+            sf: type: <span class="hljs-string">'subtable'</span>, required: <span class="hljs-literal">true</span>, fields:
+              f5: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
+              f6: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
+    }
+
+    expect(result.messages).toEqual []
+
+    unlinkedConfig = unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig
+
+    res = linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$update {
+      id: <span class="hljs-string">'xyz'</span>
+      rev: <span class="hljs-number">12</span>
+      f1: <span class="hljs-string">'123'</span>
+      f2: <span class="hljs-literal">null</span>
+      $$touched: {}
+      str:
+        f3: <span class="hljs-string">'a'</span>
+        f4: <span class="hljs-literal">null</span>
+        $$touched: {}
+      sf: [
+        {f5: <span class="hljs-string">'c'</span>, f6: <span class="hljs-literal">null</span>, $$touched: {}}
+        {f5: <span class="hljs-string">'d'</span>, f6: <span class="hljs-literal">null</span>, $$touched: {}}
+      ]
+      created: <span class="hljs-string">'...'</span>
+      modified: <span class="hljs-string">'...'</span>
+      deleted: <span class="hljs-literal">true</span>
+    }
+
+    expect(res).toEqual
+      id: <span class="hljs-string">'xyz'</span>
+      rev: <span class="hljs-number">12</span>
+      f1: <span class="hljs-string">'123'</span>
+      f2: <span class="hljs-literal">null</span>
+      str:
+        f3: <span class="hljs-string">'a'</span>
+        f4: <span class="hljs-literal">null</span>
+      sf: [
+        {f5: <span class="hljs-string">'c'</span>, f6: <span class="hljs-literal">null</span>}
+        {f5: <span class="hljs-string">'d'</span>, f6: <span class="hljs-literal">null</span>}
+      ]
+      deleted: <span class="hljs-literal">true</span></pre></div></div>
             
         </li>
         

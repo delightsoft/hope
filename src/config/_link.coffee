@@ -16,6 +16,8 @@ $$getBuilder = require './helpers/get'
 
 $$setBuilder = require './helpers/set'
 
+$$updateBuilder = require './helpers/update'
+
 {structure: validateStructure, addValidate} = require '../validate'
 
 $$accessBuilder = require('./helpers/access')
@@ -23,10 +25,6 @@ $$accessBuilder = require('./helpers/access')
 $$validateBuilder = require('./helpers/validate')
 
 $$editValidateBuilderBuilder = require('./helpers/editValidateBuilder')
-
-$$getUpdateBuilder = require('./helpers/getUpdate')
-
-$$applyUpdateBuilder = require('./helpers/applyUpdate')
 
 snakeCase = require('lodash/snakeCase')
 
@@ -238,6 +236,8 @@ link = (config, noHelpers, opts) ->
 
       obj[prop].$$set = $$setBuilder obj[prop]
 
+      obj[prop].$$update = $$updateBuilder obj
+
     for field in obj[prop].$$flat.$$list
 
       if opts?.server and isDoc
@@ -323,10 +323,6 @@ link = (config, noHelpers, opts) ->
       doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
 
       doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
-
-      doc.$$getUpdate = $$getUpdateBuilder doc
-
-      doc.$$applyUpdate = $$applyUpdateBuilder doc
 
     for state in doc.states.$$list
 

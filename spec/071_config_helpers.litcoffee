@@ -93,7 +93,7 @@ config
 
       check '$$new', ->
 
-        res = compileConfig (result = new Result), @config, false
+        res = compileConfig (result = new Result), @config
 
         expect(result.messages).toEqual []
 
@@ -490,4 +490,60 @@ subtale с признаком required создаются с одной ново
           f2: '17:15:00.000Z'
           f3: '2020-08-31T17:15:00.000Z'
 
+      check '$$update', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            DocA:
+              fields:
+                f1: type: 'string(20)', tags: 'a'
+                f2: type: 'string(20)', null: true
+                str: fields:
+                  f3: type: 'string(20)', tags: 'a'
+                  f4: type: 'string(20)', null: true
+                sf: type: 'subtable', required: true, fields:
+                  f5: type: 'string(20)', tags: 'a'
+                  f6: type: 'string(20)', null: true
+        }
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig
+
+        res = linkedConfig.docs['doc.DocA'].fields.$$update {
+          id: 'xyz'
+          rev: 12
+          f1: '123'
+          f2: null
+          $$touched: {}
+          str:
+            f3: 'a'
+            f4: null
+            $$touched: {}
+          sf: [
+            {f5: 'c', f6: null, $$touched: {}}
+            {f5: 'd', f6: null, $$touched: {}}
+          ]
+          created: '...'
+          modified: '...'
+          deleted: true
+        }
+
+        expect(res).toEqual
+          id: 'xyz'
+          rev: 12
+          f1: '123'
+          f2: null
+          str:
+            f3: 'a'
+            f4: null
+          sf: [
+            {f5: 'c', f6: null}
+            {f5: 'd', f6: null}
+          ]
+          deleted: true
+
           # TODO: check for unexpected fields
+
