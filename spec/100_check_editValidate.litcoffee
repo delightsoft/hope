@@ -7,7 +7,7 @@ config
 
     processCustomValidate = require '../src/validate/processCustomValidate'
 
-    focusOnCheck = 'general'
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '100_check_editValidate', ->
@@ -56,7 +56,7 @@ config
             phone:
               type: 'string'
               length: 15
-              regexp: /^\+?[\s\d\(\)-]*$/g
+              regexp: /^\+?[\s\d\(\)-]*$/
             email:
               type: 'string'
               length: 320
@@ -176,7 +176,7 @@ config
           $$touched:
             priorityCommunicationChannel: true
             email: true
-        }, beforeSubmit: true
+        }, beforeSubmit: false
 
         expect(res).toEqual
           save: false
@@ -193,7 +193,7 @@ config
           contactPersonId: "5a1a26a8-cb3d-11ea-8184-00155d0a5000"
           # photo: null,
           contactName: "Анна Князева"
-          email: "knyazeva"
+          email: "knyazeva2"
           phone: "222"
           mobile: "333"
           position: "222"
@@ -202,7 +202,7 @@ config
           $$touched:
             priorityCommunicationChannel: true
             email: true
-        }, beforeSubmit: true
+        }, beforeSubmit: false
 
         expect(res).toEqual
           save: false
@@ -212,31 +212,5 @@ config
               type: 'error'
               path: 'email'
               code: 'validate.invalidValue'
-              value: 'knyazeva'
-              regexp: /^((?:[a-z0-9!#$%&'*+/=?^_'{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_'{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))?$/i.toString()
-
-        res = validate {
-          contactPersonId: "5a1a26a8-cb3d-11ea-8184-00155d0a5000"
-          # photo: null,
-          contactName: "Анна Князева"
-          email: "knyazeva"
-          phone: "222"
-          mobile: "333"
-          position: "222"
-          priorityCommunicationChannel: "email"
-          photoExtension: null
-          $$touched:
-            priorityCommunicationChannel: true
-            email: true
-        }, beforeSubmit: true
-
-        expect(res).toEqual
-          save: false
-          submit: false
-          messages:
-            email:
-              type: 'error'
-              path: 'email'
-              code: 'validate.invalidValue'
-              value: 'knyazeva'
+              value: 'knyazeva2'
               regexp: /^((?:[a-z0-9!#$%&'*+/=?^_'{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_'{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))?$/i.toString()

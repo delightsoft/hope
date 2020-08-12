@@ -221,7 +221,7 @@ utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <s
 
 processCustomValidate = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate/processCustomValidate'</span>
 
-focusOnCheck = <span class="hljs-string">'general'</span>
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'100_check_editValidate'</span>, <span class="hljs-function">-&gt;</span>
@@ -270,7 +270,7 @@ describe <span class="hljs-string">'100_check_editValidate'</span>, <span class=
         phone:
           type: <span class="hljs-string">'string'</span>
           length: <span class="hljs-number">15</span>
-          regexp: <span class="hljs-regexp">/^\+?[\s\d\(\)-]*$/g</span>
+          regexp: <span class="hljs-regexp">/^\+?[\s\d\(\)-]*$/</span>
         email:
           type: <span class="hljs-string">'string'</span>
           length: <span class="hljs-number">320</span>
@@ -416,7 +416,7 @@ describe <span class="hljs-string">'100_check_editValidate'</span>, <span class=
       $$touched:
         priorityCommunicationChannel: <span class="hljs-literal">true</span>
         email: <span class="hljs-literal">true</span>
-    }, beforeSubmit: <span class="hljs-literal">true</span>
+    }, beforeSubmit: <span class="hljs-literal">false</span>
 
     expect(res).toEqual
       save: <span class="hljs-literal">false</span>
@@ -446,7 +446,7 @@ describe <span class="hljs-string">'100_check_editValidate'</span>, <span class=
             </div>
             
             <div class="content"><div class='highlight'><pre>      contactName: <span class="hljs-string">"Анна Князева"</span>
-      email: <span class="hljs-string">"knyazeva"</span>
+      email: <span class="hljs-string">"knyazeva2"</span>
       phone: <span class="hljs-string">"222"</span>
       mobile: <span class="hljs-string">"333"</span>
       position: <span class="hljs-string">"222"</span>
@@ -455,7 +455,7 @@ describe <span class="hljs-string">'100_check_editValidate'</span>, <span class=
       $$touched:
         priorityCommunicationChannel: <span class="hljs-literal">true</span>
         email: <span class="hljs-literal">true</span>
-    }, beforeSubmit: <span class="hljs-literal">true</span>
+    }, beforeSubmit: <span class="hljs-literal">false</span>
 
     expect(res).toEqual
       save: <span class="hljs-literal">false</span>
@@ -465,46 +465,7 @@ describe <span class="hljs-string">'100_check_editValidate'</span>, <span class=
           type: <span class="hljs-string">'error'</span>
           path: <span class="hljs-string">'email'</span>
           code: <span class="hljs-string">'validate.invalidValue'</span>
-          value: <span class="hljs-string">'knyazeva'</span>
-          regexp: <span class="hljs-regexp">/^((?:[a-z0-9!#$%&amp;'*+/</span>=?^_<span class="hljs-string">'{|}~-]+(?:\.[a-z0-9!#$%&amp;'</span>*+<span class="hljs-regexp">/=?^_'{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))?$/i</span>.toString()
-
-    res = validate {
-      contactPersonId: <span class="hljs-string">"5a1a26a8-cb3d-11ea-8184-00155d0a5000"</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>photo: null,</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      contactName: <span class="hljs-string">"Анна Князева"</span>
-      email: <span class="hljs-string">"knyazeva"</span>
-      phone: <span class="hljs-string">"222"</span>
-      mobile: <span class="hljs-string">"333"</span>
-      position: <span class="hljs-string">"222"</span>
-      priorityCommunicationChannel: <span class="hljs-string">"email"</span>
-      photoExtension: <span class="hljs-literal">null</span>
-      $$touched:
-        priorityCommunicationChannel: <span class="hljs-literal">true</span>
-        email: <span class="hljs-literal">true</span>
-    }, beforeSubmit: <span class="hljs-literal">true</span>
-
-    expect(res).toEqual
-      save: <span class="hljs-literal">false</span>
-      submit: <span class="hljs-literal">false</span>
-      messages:
-        email:
-          type: <span class="hljs-string">'error'</span>
-          path: <span class="hljs-string">'email'</span>
-          code: <span class="hljs-string">'validate.invalidValue'</span>
-          value: <span class="hljs-string">'knyazeva'</span>
+          value: <span class="hljs-string">'knyazeva2'</span>
           regexp: <span class="hljs-regexp">/^((?:[a-z0-9!#$%&amp;'*+/</span>=?^_<span class="hljs-string">'{|}~-]+(?:\.[a-z0-9!#$%&amp;'</span>*+<span class="hljs-regexp">/=?^_'{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))?$/i</span>.toString()</pre></div></div>
             
         </li>
