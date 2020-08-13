@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>flat map</title>
+  <title>config</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="..\docco.css" />
@@ -204,16 +204,9 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="flat-map">flat map</h1>
+              <h1 id="config">config</h1>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>{Result, flatMap, utils: {checkItemName, deepClone, combineMsg, err: {isResult, invalidArg, tooManyArgs}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'007_flatMap:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
             
         </li>
         
@@ -224,20 +217,116 @@ describe <span class="hljs-string">'007_flatMap:'</span>, <span class="hljs-func
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Флетмап (flatMap) - это соглашению по работе с иерархическими коллекциями.  Флетмап это расширение
-соглашения - сортедмап (sortedMap).</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>  beforeEach -&gt;
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
+utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-    @src =
-      item1: <span class="hljs-literal">true</span>
-      item2:
-        subitems:
-          item2a: <span class="hljs-literal">true</span>
-          item2b: <span class="hljs-literal">true</span>
-      item3: <span class="hljs-literal">true</span></pre></div></div>
+focusOnCheck = <span class="hljs-string">''</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'90_vueDebugWatchBuilder'</span>, <span class="hljs-function">-&gt;</span>
+
+  check <span class="hljs-string">'general'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), {
+      docs: Doc1: fields:
+        a: type: <span class="hljs-string">'string(20)'</span>
+        b: type: <span class="hljs-string">'int'</span>, null: <span class="hljs-literal">true</span>
+        st: type: <span class="hljs-string">'subtable'</span>, fields:
+          c: type: <span class="hljs-string">'boolean'</span>
+          d: type: <span class="hljs-string">'structure'</span>, fields:
+            e: type: <span class="hljs-string">'double'</span>
+        str: type: <span class="hljs-string">'structure'</span>, fields:
+          e: type: <span class="hljs-string">'date'</span>
+          s: type: <span class="hljs-string">'subtable'</span>, fields:
+            s2: fields:
+              f1: type: <span class="hljs-string">'int'</span>
+    }, <span class="hljs-literal">true</span>
+
+    expect(result.messages).toEqual []
+
+    unlinkedConfig = unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig, <span class="hljs-literal">false</span>
+
+    watchFunc = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$vueDebugWatchBuilder <span class="hljs-string">'model'</span>
+
+    model =
+      a: <span class="hljs-string">'123'</span>
+      b: <span class="hljs-literal">null</span>
+      st: [
+        {c: <span class="hljs-literal">true</span>, d: e: <span class="hljs-number">12.21</span>}
+        {c: <span class="hljs-literal">false</span>, d: e: <span class="hljs-number">24</span>}
+      ]
+      str:
+        e: <span class="hljs-string">'2020-08-22'</span>
+        s: [
+          {s2: f1: <span class="hljs-number">12</span>}
+          {s2: f1: <span class="hljs-number">24</span>}
+          {s2: f1: <span class="hljs-number">36</span>}
+        ]
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual []
+
+    model.a = <span class="hljs-string">'test'</span>
+    model.st[<span class="hljs-number">0</span>] = {c: <span class="hljs-literal">false</span>, d: e: <span class="hljs-number">12.21</span>}
+    model.st[<span class="hljs-number">1</span>].d = e: <span class="hljs-number">112</span>
+    model.str = e: <span class="hljs-string">'2020-08-21'</span>, s: [
+      {s2: f1: <span class="hljs-number">12</span>}
+      {s2: f1: <span class="hljs-number">24</span>}
+      {s2: f1: <span class="hljs-number">36</span>}
+    ]
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st[0]'</span>, code: <span class="hljs-string">'changed'</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st[1].d'</span>, code: <span class="hljs-string">'changed'</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.str'</span>, code: <span class="hljs-string">'changed'</span> }
+    ]
+
+    model.st.push {c: <span class="hljs-literal">false</span>, d: e: <span class="hljs-number">20</span>}
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st[2]'</span>, code: <span class="hljs-string">'added'</span>}
+    ]
+
+
+    model.st.shift()
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st[0]'</span>, code: <span class="hljs-string">'changed'</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st[1]'</span>, code: <span class="hljs-string">'changed'</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st[2]'</span>, code: <span class="hljs-string">'removed'</span>}
+    ]
+
+    model.st = [
+      {c: <span class="hljs-literal">true</span>, d: e: <span class="hljs-number">12.21</span>}
+      {c: <span class="hljs-literal">false</span>, d: e: <span class="hljs-number">24</span>}
+    ]
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st'</span>, code: <span class="hljs-string">'changed'</span>}
+    ]
+
+    model.st[<span class="hljs-number">1</span>].d = e: <span class="hljs-number">121</span>
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st[1].d'</span>, code: <span class="hljs-string">'changed'</span>}
+    ]</pre></div></div>
             
         </li>
         
@@ -248,53 +337,12 @@ describe <span class="hljs-string">'007_flatMap:'</span>, <span class="hljs-func
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Флетмап добавляет в коллекцию sortedMap, коллекцию $$flat, которая содержит элементы всех уровней.  В качестве ключей
-в $$flat используются полные имена элементов, и есть полный список элементов, в порядке как они приходтся при
-обходе структуры, в $$flat.$$list.</p>
+              <h1 id="todo-remove">TODO: remove</h1>
+<h1 id="todo-change-root">TODO: change root</h1>
+<h1 id="todo-replace-subtable-array">TODO: replace subtable array</h1>
+<h1 id="todo-replace-subtable-array-1">TODO: replace subtable array</h1>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    @flatMap =
-      item1: @item1 = {name: <span class="hljs-string">'item1'</span>}
-      item2: @item2 =
-        name: <span class="hljs-string">'item2'</span>
-        subitems:
-          item2a: @item2a = {name: <span class="hljs-string">'item2a'</span>}
-          item2b: @item2b = {name: <span class="hljs-string">'item2b'</span>}
-          $$list: [@item2a, @item2b]
-      item3: @item3 = {name: <span class="hljs-string">'item3'</span>}
-      $$list: [@item1, @item2, @item3]
-      $$flat:
-        <span class="hljs-string">'item1'</span>: @item1
-        <span class="hljs-string">'item2'</span>: @item2
-        <span class="hljs-string">'item2.item2a'</span>: @item2a
-        <span class="hljs-string">'item2.item2b'</span>: @item2b
-        <span class="hljs-string">'item3'</span>: @item3
-        $$list: [@item1, @item2, @item2a, @item2b, @item3]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>Методу flatMap передается метод, который возвращает вложенную коллекцию элемента.  Так как в разных случаях
-это свойство может называтьcz по разному - fields, как пример.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'process subitems'</span>, <span class="hljs-function">-&gt;</span>
-
-    res = flatMap (result = <span class="hljs-keyword">new</span> Result), @src, <span class="hljs-string">'subitems'</span>, boolean: <span class="hljs-literal">true</span>
-
-    flatMap.finish result, res, <span class="hljs-string">'subitems'</span>
-
-    expect(result.messages).sameStructure []
-
-    expect(res).sameStructure @flatMap</pre></div></div>
             
         </li>
         

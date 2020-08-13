@@ -18,6 +18,8 @@ $$setBuilder = require './helpers/set'
 
 $$updateBuilder = require './helpers/update'
 
+$$vueDebugWatchBuilderBuilder = require './helpers/vueDebugWatchBuilder'
+
 {structure: validateStructure, addValidate} = require '../validate'
 
 $$accessBuilder = require('./helpers/access')
@@ -238,6 +240,8 @@ link = (config, noHelpers, opts) ->
 
       obj[prop].$$update = $$updateBuilder obj
 
+      obj[prop].$$vueDebugWatchBuilder = $$vueDebugWatchBuilderBuilder obj[prop] unless opts?.server
+
     for field in obj[prop].$$flat.$$list
 
       if opts?.server and isDoc
@@ -323,6 +327,10 @@ link = (config, noHelpers, opts) ->
       doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
 
       doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
+
+      doc.fields.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
+
+      doc.fields.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
 
     for state in doc.states.$$list
 
