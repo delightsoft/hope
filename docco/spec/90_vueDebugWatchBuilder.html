@@ -326,23 +326,65 @@ describe <span class="hljs-string">'90_vueDebugWatchBuilder'</span>, <span class
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st[1].d'</span>, code: <span class="hljs-string">'changed'</span>}
-    ]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <h1 id="todo-remove">TODO: remove</h1>
-<h1 id="todo-change-root">TODO: change root</h1>
-<h1 id="todo-replace-subtable-array">TODO: replace subtable array</h1>
-<h1 id="todo-replace-subtable-array-1">TODO: replace subtable array</h1>
+    ]
 
-            </div>
+    model.st = <span class="hljs-literal">null</span>
+    model.str = <span class="hljs-literal">undefined</span>
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st'</span>, code: <span class="hljs-string">'removed'</span>, value: <span class="hljs-literal">null</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.str'</span>, code: <span class="hljs-string">'removed'</span>, value: <span class="hljs-literal">undefined</span>}
+    ]
+
+    model.st = [
+      {c: <span class="hljs-literal">true</span>, d: e: <span class="hljs-number">12.21</span>}
+      {c: <span class="hljs-literal">false</span>, d: e: <span class="hljs-number">24</span>}
+    ]
+    model.str =
+      e: <span class="hljs-string">'2020-08-22'</span>
+      s: [
+        {s2: f1: <span class="hljs-number">12</span>}
+        {s2: f1: <span class="hljs-number">24</span>}
+        {s2: f1: <span class="hljs-number">36</span>}
+      ]
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st'</span>, code: <span class="hljs-string">'added'</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.str'</span>, code: <span class="hljs-string">'added'</span>}
+    ]
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), <span class="hljs-number">12</span>
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model'</span>, code: <span class="hljs-string">'removed'</span>}
+    ]
+
+    watchFunc = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$vueDebugWatchBuilder <span class="hljs-string">'model'</span>
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), <span class="hljs-number">24</span>
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model'</span>, code: <span class="hljs-string">'missing'</span>}
+    ]
+
+    watchFunc = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$vueDebugWatchBuilder <span class="hljs-string">'model'</span>
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), {}
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.st'</span>, code: <span class="hljs-string">'missing'</span>, value: <span class="hljs-literal">undefined</span>}
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model.str'</span>, code: <span class="hljs-string">'missing'</span>, value: <span class="hljs-literal">undefined</span>}
+    ]
+
+    watchFunc (result = <span class="hljs-keyword">new</span> Result()), model
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'model'</span>, code: <span class="hljs-string">'changed'</span>}
+    ]</pre></div></div>
             
         </li>
         

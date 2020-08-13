@@ -109,9 +109,60 @@ config
           {type: 'warn', path: 'model.st[1].d', code: 'changed'}
         ]
 
-# TODO: remove
-# TODO: change root
-# TODO: replace subtable array
-# TODO: replace subtable array
+        model.st = null
+        model.str = undefined
 
+        watchFunc (result = new Result()), model
 
+        expect(result.messages).toEqual [
+          {type: 'warn', path: 'model.st', code: 'removed', value: null}
+          {type: 'warn', path: 'model.str', code: 'removed', value: undefined}
+        ]
+
+        model.st = [
+          {c: true, d: e: 12.21}
+          {c: false, d: e: 24}
+        ]
+        model.str =
+          e: '2020-08-22'
+          s: [
+            {s2: f1: 12}
+            {s2: f1: 24}
+            {s2: f1: 36}
+          ]
+
+        watchFunc (result = new Result()), model
+
+        expect(result.messages).toEqual [
+          {type: 'warn', path: 'model.st', code: 'added'}
+          {type: 'warn', path: 'model.str', code: 'added'}
+        ]
+
+        watchFunc (result = new Result()), 12
+
+        expect(result.messages).toEqual [
+          {type: 'warn', path: 'model', code: 'removed'}
+        ]
+
+        watchFunc = linkedConfig.docs['doc.Doc1'].fields.$$vueDebugWatchBuilder 'model'
+
+        watchFunc (result = new Result()), 24
+
+        expect(result.messages).toEqual [
+          {type: 'warn', path: 'model', code: 'missing'}
+        ]
+
+        watchFunc = linkedConfig.docs['doc.Doc1'].fields.$$vueDebugWatchBuilder 'model'
+
+        watchFunc (result = new Result()), {}
+
+        expect(result.messages).toEqual [
+          {type: 'warn', path: 'model.st', code: 'missing', value: undefined}
+          {type: 'warn', path: 'model.str', code: 'missing', value: undefined}
+        ]
+
+        watchFunc (result = new Result()), model
+
+        expect(result.messages).toEqual [
+          {type: 'warn', path: 'model', code: 'changed'}
+        ]

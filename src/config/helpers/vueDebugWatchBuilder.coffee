@@ -26,7 +26,7 @@ $$vueDebugWatchBuilderBuilder = (fieldsDesc) ->
 
             else
 
-              result.warn Result.prop(name), 'missing', value: prevValue if check
+              result.warn 'missing', value: prevValue
 
             (result, newFields) ->
 
@@ -58,7 +58,6 @@ $$vueDebugWatchBuilderBuilder = (fieldsDesc) ->
 
           else
 
-
             prevArr = fields[name]
 
             if Array.isArray fields[name]
@@ -69,7 +68,7 @@ $$vueDebugWatchBuilderBuilder = (fieldsDesc) ->
 
             else
 
-              result.warn Result.prop(name), 'missing', value: prevValue if check
+              result.warn 'missing', value: prevValue
 
             (result, newFields) ->
 
@@ -83,13 +82,13 @@ $$vueDebugWatchBuilderBuilder = (fieldsDesc) ->
 
                   prevArr = newFields[name]
 
-                  result.warn 'added'
+                  result.warn Result.prop(name), 'added'
 
               else if not Array.isArray newFields[name]
 
                 check = undefined
 
-                result.warn 'removed', value: newFields[name]
+                result.warn Result.prop(name), 'removed', value: newFields[name]
 
               else if prevArr != newFields[name]
 
@@ -150,11 +149,11 @@ $$vueDebugWatchBuilderBuilder = (fieldsDesc) ->
     invalidArg 'propName', propName unless typeof propName == 'string'
     tooManyArgs() unless arguments.length <= 2
 
+    firstTime = true
     check = undefined
+    prevValue = undefined
 
     (result, value) ->
-
-      # todo: check value totally changed
 
       unless isResult result
         value = result
@@ -163,19 +162,53 @@ $$vueDebugWatchBuilderBuilder = (fieldsDesc) ->
 
       result.context Result.prop(propName), ->
 
-        if not check
+        if firstTime
 
-          result.context (Result.prop propName), ->
+          if isObject value
 
-          check = buildLevel result, fieldsDesc, value
+            prevValue = value
+
+            check = buildLevel result, fieldsDesc, value
+
+          else
+
+            result.warn 'missing'
+
+        else if isObject value
+
+          if check
+
+            if value != prevValue
+
+              result.warn 'changed'
+
+              prevValue = value
+
+              check = buildLevel result, fieldsDesc, value
+
+            else
+
+              check result, value
+
+          else
+
+            prevValue = value
+
+            check = buildLevel result, fieldsDesc, value
+
+            result.warn 'added'
 
         else
 
-          check result, value
+          result.warn 'removed'
 
-          if newResult
+          check = undefined
 
-            console.warn "#{row.path}: #{message}" for row in result.messages
+       if newResult
+
+          console.warn "#{row.path}: #{row.code}" for row in result.messages
+
+        firstTime = false
 
         return
 
