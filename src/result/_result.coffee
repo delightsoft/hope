@@ -2,7 +2,7 @@
 
 # ----------------------------
 
-reservedAttrs = ['type', 'path', 'code', 'context', 'text']
+reservedAttrs = ['type', 'path', 'code', 'text']
 
 _combineMsg = (type, path, code, args) ->
 
