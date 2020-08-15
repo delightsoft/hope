@@ -170,6 +170,11 @@
                 </a>
               
                 
+                <a class="source" href="075_config_fields_required_validate.html">
+                  spec/075_config_fields_required_validate.litcoffee
+                </a>
+              
+                
                 <a class="source" href="100_check_editValidate.html">
                   spec/100_check_editValidate.litcoffee
                 </a>
@@ -414,7 +419,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
         f3: type: <span class="hljs-string">'boolean'</span>
 
-    validate (result = <span class="hljs-keyword">new</span> Result), {f3: <span class="hljs-literal">false</span>}, <span class="hljs-literal">undefined</span>, fields.$$tags.all
+    validate (result = <span class="hljs-keyword">new</span> Result), {f3: <span class="hljs-literal">false</span>}, <span class="hljs-literal">undefined</span>, fields.$$tags.all, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">true</span>
 
     expect(result.messages).sameStructure [
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f1'</span>},

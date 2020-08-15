@@ -2,7 +2,7 @@ Result = require '../../result'
 
 {structure: validateStructure} = require '../../validate'
 
-$$validateBuilder = (type, fieldsProp, $$access, businessValidate) ->
+$$validateBuilder = (type, fieldsProp, $$access, docLevelValidate) ->
 
   validate = type["_#{fieldsProp}Validate"] = validateStructure type, fieldsProp
 
@@ -11,6 +11,8 @@ $$validateBuilder = (type, fieldsProp, $$access, businessValidate) ->
     access = undefined
 
     strict = true
+
+    beforeAction = false
 
     if options != undefined
 
@@ -24,13 +26,15 @@ $$validateBuilder = (type, fieldsProp, $$access, businessValidate) ->
 
           when 'strict' then strict = optValue
 
+          when 'beforeAction' then beforeAction = optValue
+
           else unknownOption optName
 
     access = $$access.call @, fields unless access
 
     save = true
 
-    submit = true
+    goodForAction = beforeAction
 
     localResult = Object.create result
 
@@ -40,19 +44,23 @@ $$validateBuilder = (type, fieldsProp, $$access, businessValidate) ->
 
       if msg.type == 'error'
 
-        submit = false
+        goodForAction = false
 
         save = false unless msg.code == 'validate.requiredField'
 
       return # localResult.error = () ->
 
-    validate localResult, fields, undefined, access.view, access.required, fields.$$touched, typeof options == 'object' && options != null and options.strict
+    validate localResult, fields, undefined, access.view, access.required, fields.$$touched, strict, beforeAction
 
     oldSave = save
 
-    if submit && typeof businessValidate == 'function' then businessValidate localResult, fields
+    if goodForAction and beforeAction and typeof docLevelValidate == 'function'
 
-    return {save: oldSave, submit}
+       docLevelValidate localResult, fields # TODO: processs results
+
+       goodForAction = false if localResult.isError
+
+    return {save: oldSave, goodForAction}
 
 # ----------------------------
 

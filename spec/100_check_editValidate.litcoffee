@@ -176,11 +176,11 @@ config
           $$touched:
             priorityCommunicationChannel: true
             email: true
-        }, beforeSubmit: false
+        }, beforeAction: false
 
         expect(res).toEqual
           save: false
-          submit: false
+          goodForAction: false
           messages:
             email:
               type: 'error'
@@ -202,11 +202,11 @@ config
           $$touched:
             priorityCommunicationChannel: true
             email: true
-        }, beforeSubmit: false
+        }, beforeAction: false
 
         expect(res).toEqual
           save: false
-          submit: false
+          goodForAction: false
           messages:
             email:
               type: 'error'

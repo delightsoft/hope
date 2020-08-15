@@ -170,6 +170,11 @@
                 </a>
               
                 
+                <a class="source" href="075_config_fields_required_validate.html">
+                  spec/075_config_fields_required_validate.litcoffee
+                </a>
+              
+                
                 <a class="source" href="100_check_editValidate.html">
                   spec/100_check_editValidate.litcoffee
                 </a>
@@ -281,34 +286,36 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     linkedConfig = linkConfig unlinkedConfig, @code
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$access f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>).toEqual
+    access = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$access f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>
+
+    expect(access).toEqual
       view: linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$tags.t1
       update: linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$tags.t1
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}, {strict: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}, {access, strict: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.unexpectedField'</span>, path: <span class="hljs-string">'f3'</span>, value: <span class="hljs-literal">true</span>}
     ]
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}, {beforeAction: <span class="hljs-literal">true</span>, strict: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">true</span>
 
     expect(result.messages).toEqual []
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">20</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">20</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}, {beforeAction: <span class="hljs-literal">true</span>, strict: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err1'</span>}
     ]
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-string">'wrong'</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-string">'wrong'</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, path: <span class="hljs-string">'f1'</span>, value: <span class="hljs-string">'wrong'</span>}
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
     ]
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">20</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">20</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
@@ -324,10 +331,10 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     linkedConfig = linkConfig unlinkedConfig, @code
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {}
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">'wrong'</span>}).toEqual
-      save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">'wrong'</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual
+      save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
         f1: type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>
         f2: {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
 
@@ -337,25 +344,26 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
       f1: <span class="hljs-string">'wrong'</span>
       f2: <span class="hljs-number">12</span>
       $$touched: {f2: <span class="hljs-literal">true</span>}
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual
-      save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual
+      save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
+        f1: type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>
         f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">12</span>}
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       f1: <span class="hljs-string">'wrong'</span>
       f2: <span class="hljs-number">12</span>
       $$touched: {f2: <span class="hljs-literal">true</span>}
-    }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
-      save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
-        f1: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
+    }, {beforeAction: <span class="hljs-literal">false</span>}).toEqual
+      save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
         f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">12</span>}
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       f1: <span class="hljs-number">20</span>
       f2: <span class="hljs-string">'right'</span>
       $$touched: {f1: <span class="hljs-literal">true</span>}
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual
-      save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual
+      save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
+        <span class="hljs-string">''</span>: [{ type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err1'</span> }]
 
     editValidate = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder()
 
@@ -364,26 +372,26 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
       f2: <span class="hljs-string">'right'</span>
       $$touched: {f1: <span class="hljs-literal">true</span>}
 
-    expect(editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
-      save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages:
+    expect(editValidate model, {beforeAction: <span class="hljs-literal">true</span>}).toEqual
+      save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
         <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err1'</span>}]
 
     model.f1 = <span class="hljs-string">'wrong'</span>
 
-    expect(editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
-      save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
+    expect(editValidate model, {beforeAction: <span class="hljs-literal">false</span>}).toEqual
+      save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
         <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err1'</span>}]
         f1: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
 
-    expect(editValidate deepClone model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
-      save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
+    expect(editValidate deepClone model, {beforeAction: <span class="hljs-literal">false</span>}).toEqual
+      save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
         f1: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       f1: <span class="hljs-number">30</span>
       f2: <span class="hljs-string">'right'</span>
-    }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
-      save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages:
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual
+      save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
         <span class="hljs-string">'f2.f3[0]'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2.f3[0]'</span>, code: <span class="hljs-string">'err2'</span>}
 
     editValidate = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder()
@@ -393,22 +401,22 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
       f2: <span class="hljs-string">'right'</span>
       $$touched: {f1: <span class="hljs-literal">true</span>}
 
-    expect(editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
-    save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
+    expect(editValidate model, {beforeAction: <span class="hljs-literal">false</span>}).toEqual
+    save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
       f1: {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err3'</span>}
       f2: {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err4'</span>}
 
     model.f1 = <span class="hljs-string">'wrong'</span>
 
-    expect(editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
-    save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
+    expect(editValidate model, {beforeAction: <span class="hljs-literal">false</span>}).toEqual
+    save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
       f1: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-string">'wrong'</span>}
       f2: {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err4'</span>}
 
     model.f1 = <span class="hljs-number">20</span>
 
-    expect(editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual
-    save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages:
+    expect(editValidate model, {beforeAction: <span class="hljs-literal">false</span>}).toEqual
+    save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
       <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err1'</span>}]
 
   check <span class="hljs-string">'edit validate builder on methods'</span>, <span class="hljs-function">-&gt;</span>
@@ -421,19 +429,19 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     linkedConfig = linkConfig unlinkedConfig, @code
 
-    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].arguments.$$editValidateBuilder() {a: <span class="hljs-number">12</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
+    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].arguments.$$editValidateBuilder() {a: <span class="hljs-number">12</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err2'</span>}]
     }
 
-    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].result.$$editValidateBuilder() {r2: <span class="hljs-number">2.4</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
+    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].result.$$editValidateBuilder() {r2: <span class="hljs-number">2.4</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">''</span>: [{type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'err3'</span>}]
     }
 
-    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].arguments.$$editValidateBuilder() {a: <span class="hljs-number">0</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].arguments.$$editValidateBuilder() {a: <span class="hljs-number">0</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">true</span>, messages: {}
 
-    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].result.$$editValidateBuilder() {r1: <span class="hljs-number">1</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+    expect(linkedConfig.api[<span class="hljs-string">'api1'</span>].methods[<span class="hljs-string">'method1'</span>].result.$$editValidateBuilder() {r1: <span class="hljs-number">1</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">true</span>, messages: {}
 
-  check <span class="hljs-string">'required emty string in before edit'</span>, <span class="hljs-function">-&gt;</span>
+  check <span class="hljs-string">'required empty string'</span>, <span class="hljs-function">-&gt;</span>
 
     res = compileConfig (result = <span class="hljs-keyword">new</span> Result), {
       docs:
@@ -449,7 +457,7 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     expect(result.messages).toEqual []
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
       f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
     }
 
@@ -457,25 +465,24 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
       f1: <span class="hljs-string">''</span>,
       f2: <span class="hljs-string">''</span>,
       $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>
-    }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
-    }
+    }, {beforeAction: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {}
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       f1: <span class="hljs-string">''</span>,
       f2: <span class="hljs-string">''</span>,
       $$touched: f1: <span class="hljs-literal">false</span>, f2: <span class="hljs-literal">false</span>
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
+      f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       $$touched: f1: <span class="hljs-literal">false</span>, f2: <span class="hljs-literal">false</span>
-    }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      f2: {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>}
-    }
+    }, {beforeAction: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {}
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       $$touched: f1: <span class="hljs-literal">false</span>, f2: <span class="hljs-literal">false</span>
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages:
+      f2: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+
 
   check <span class="hljs-string">'subtable in before edit'</span>, <span class="hljs-function">-&gt;</span>
 
@@ -495,26 +502,24 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     expect(result.messages).toEqual []
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}]).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
-      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}]).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
     }
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}]
       $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>
-    }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
-      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+    }, {beforeAction: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
     }
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}, {f1: <span class="hljs-literal">null</span>, f2: <span class="hljs-number">12</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
       $$touched: {}
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages: {
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
       <span class="hljs-string">'st[1].f1'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[1].f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">null</span>}
       <span class="hljs-string">'st[1].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[1].f2'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">12</span>}
+      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+      <span class="hljs-string">'st[1].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[1].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
     }
 
   check <span class="hljs-string">'remember prev business msgs'</span>, <span class="hljs-function">-&gt;</span>
@@ -543,15 +548,17 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
     expect($$editValidate {
       st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-number">123</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
       $$touched: {}
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages: {
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">123</span>}
+      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
     }
 
     expect($$editValidate {
       st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
       $$touched: {}
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
     }
 
     model = { <span class="hljs-comment"># если модель меняется между вызовами $$editValidate, то бизнес ошибки сбрасываются</span>
@@ -559,23 +566,23 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
       $$touched: {}
     }
 
-    expect($$editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      <span class="hljs-string">'st[0].f1'</span>: { type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'st[0].f1'</span>, code: <span class="hljs-string">'business warn'</span>}
+    expect($$editValidate model, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
+      <span class="hljs-string">'st[0].f1'</span>: {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'st[0].f1'</span>, code: <span class="hljs-string">'business warn'</span>}
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'business err'</span>}
     }
 
     model.st[<span class="hljs-number">0</span>].f2 = <span class="hljs-number">123</span>
 
-    expect($$editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages: {
+    expect($$editValidate model, {beforeAction: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">'st[0].f1'</span>: {type: <span class="hljs-string">'warn'</span>, path: <span class="hljs-string">'st[0].f1'</span>, code: <span class="hljs-string">'business warn'</span>}
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">123</span>}
     }
 
     model.st[<span class="hljs-number">0</span>].f2 = <span class="hljs-string">'ok'</span>
 
-    expect($$editValidate model, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">true</span>, messages: {}
+    expect($$editValidate model, {beforeAction: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {}
 
-  check <span class="hljs-string">'subtable in before edit with reqired mask'</span>, <span class="hljs-function">-&gt;</span>
+  check <span class="hljs-string">'subtable in edit validator with required mask'</span>, <span class="hljs-function">-&gt;</span>
 
     res = compileConfig (result = <span class="hljs-keyword">new</span> Result), {
       docs:
@@ -597,26 +604,24 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     expect(result.messages).toEqual []
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}]).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
-      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>}]).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
     }
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
       $$touched: {}
-    }, {beforeSubmit: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, submit: <span class="hljs-literal">false</span>, messages: {
-      <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
-      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+    }, {beforeAction: <span class="hljs-literal">false</span>}).toEqual save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
     }
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$editValidateBuilder() {
       st: [{f1: <span class="hljs-string">''</span>, f2: <span class="hljs-string">''</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}, {f1: <span class="hljs-literal">null</span>, f2: <span class="hljs-number">12</span>, $$touched: f1: <span class="hljs-literal">true</span>, f2: <span class="hljs-literal">true</span>}]
       $$touched: {}
-    }, {beforeSubmit: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, submit: <span class="hljs-literal">false</span>, messages: {
+    }, {beforeAction: <span class="hljs-literal">true</span>}).toEqual save: <span class="hljs-literal">false</span>, goodForAction: <span class="hljs-literal">false</span>, messages: {
       <span class="hljs-string">'st[0].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f2'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
       <span class="hljs-string">'st[1].f1'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[1].f1'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">null</span>}
       <span class="hljs-string">'st[1].f2'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[1].f2'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">12</span>}
+      <span class="hljs-string">'st[0].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[0].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+      <span class="hljs-string">'st[1].f3'</span>: {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'st[1].f3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
     }</pre></div></div>
             
         </li>

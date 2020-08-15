@@ -167,7 +167,7 @@
 
             f3: type: 'boolean'
 
-        validate (result = new Result), {f3: false}, undefined, fields.$$tags.all
+        validate (result = new Result), {f3: false}, undefined, fields.$$tags.all, undefined, undefined, undefined, true
 
         expect(result.messages).sameStructure [
           {type: 'error', code: 'validate.requiredField', path: 'f1'},

@@ -1,10 +1,10 @@
 Result = require '../../result'
 
+cloneDeep = require 'lodash/cloneDeep'
+
 {invalidArg, unknownOption} = require '../../utils/_err'
 
-$$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
-
-  # TODO: Подумать как привязать сообщения к subtable записям.  В самой модели хранить плохо - зациклют валидацию
+$$editValidatorBuilderBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
   ->
 
@@ -14,7 +14,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
     (fields, options) =>
 
-      beforeSubmit = false
+      beforeAction = false
 
       if options != undefined
 
@@ -24,7 +24,9 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
           switch optName
 
-            when 'beforeSubmit' then beforeSubmit = !!optValue
+            when 'beforeAction' then beforeAction = !!optValue
+
+
 
             else unknownOption optName
 
@@ -42,7 +44,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
       save = true
 
-      submit = true
+      goodForAction = beforeAction
 
       localResult = new Result
 
@@ -52,13 +54,13 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
         if msg.type == 'error'
 
-          submit = false
+          goodForAction = false
 
           save = false unless msg.code == 'validate.requiredField'
 
         return # localResult.error = () ->
 
-      validate localResult, fields, undefined, r.view, r.required, if beforeSubmit then fields.$$touched else undefined
+      validate localResult, fields, undefined, r.update, r.required, (if beforeAction then undefined else fields.$$touched), false, beforeAction
 
       oldSave = save
 
@@ -70,17 +72,21 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
           return
 
         prevBusinessResult?.messages.forEach (msg) ->
-          if (path = msg.path) then (messages[path] = msg unless messages[path])
-          else (messages[''] or (messages[''] = [])).push msg
+          if (path = msg.path)
+            (messages[path] = msg unless messages[path])
+          else
+            (messages[''] or (messages[''] = [])).push msg
           return
 
-      else unless beforeSubmit
+      else if beforeAction
 
-        if typeof businessValidate == 'function'
+        if typeof docLevelValidate == 'function'
 
           localResult.messages.length = 0
 
-          businessValidate.call this, localResult, fields
+          docLevelValidate.call this, localResult, fields
+
+          goodForAction = false if localResult.isError
 
           localResult.messages.forEach (msg) ->
             if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
@@ -89,7 +95,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, businessValidate) ->
 
           prevBusinessResult = if localResult.messages.length > 0 then localResult else undefined
 
-      {save: oldSave, submit, messages} # (fields) ->  # ->
+      {save: oldSave, goodForAction, messages} # (fields) ->  # ->
 
 # ----------------------------
 

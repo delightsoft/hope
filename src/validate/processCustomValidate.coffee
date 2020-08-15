@@ -14,6 +14,8 @@ processCustomValidate = (result, field, fields, validators) ->
 
     result.error ((path) -> (Result.prop 'validate') path), 'dsc.invalidValue', value: validate
 
+    return
+
   else
 
     if ~si
@@ -29,6 +31,8 @@ processCustomValidate = (result, field, fields, validators) ->
     unless typeof validators?[name] == 'function'
 
       result.error ((path) -> (Result.prop 'validate') path), 'dsc.unknownValidator', value: validate
+
+      return
 
     else
 
