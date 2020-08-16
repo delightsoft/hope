@@ -68,7 +68,7 @@ config
           view: linkedConfig.docs['doc.Doc1'].fields.$$tags.t1
           update: linkedConfig.docs['doc.Doc1'].fields.$$tags.t1
 
-        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 12, f2: 'test', f3: true}, {access, strict: true}).toEqual save: false, goodForAction: false
+        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 12, f2: 'test', f3: true}, {mask: access.update, strict: true}).toEqual save: false, goodForAction: false
 
         expect(result.messages).toEqual [
           {type: 'error', code: 'validate.unexpectedField', path: 'f3', value: true}
@@ -84,14 +84,14 @@ config
           {type: 'error', code: 'err1'}
         ]
 
-        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 'wrong'}, {beforeAction: true}).toEqual save: false, goodForAction: false
+        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 'wrong'}, {beforeAction: true, mask: access.update}).toEqual save: false, goodForAction: false
 
         expect(result.messages).toEqual [
           {type: 'error', code: 'validate.invalidValue', path: 'f1', value: 'wrong'}
           {type: 'error', code: 'validate.requiredField', path: 'f2'}
         ]
 
-        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 20}, {beforeAction: true}).toEqual save: true, goodForAction: false
+        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 20}, {beforeAction: true, mask: access.update}).toEqual save: true, goodForAction: false
 
         expect(result.messages).toEqual [
           {type: 'error', code: 'validate.requiredField', path: 'f2'}

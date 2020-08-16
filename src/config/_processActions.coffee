@@ -54,9 +54,23 @@ processActions = (result, doc, config, noSystemItems) ->
 
         for action in res.$$list when action.hasOwnProperty('$$src')
 
+          if action.$$src.hasOwnProperty('skipValidate')
+
+            unless typeof action.$$src.skipValidate == 'boolean'
+
+              result.context (Result.prop 'skipValidate'), ->
+
+                result.error 'validate.invalidValue', value: action.$$src.skipValidate
+
+            else
+
+              res.skipValidate = true if action.$$src.skipValidate
+
           if action.$$src.hasOwnProperty('arguments')
 
-            action.arguments = processFields result, action, config, 'arguments', true
+            result.context (Result.prop 'arguments'), ->
+
+              action.arguments = processFields result, action, config, 'arguments', true
 
         return # result.context
 
@@ -64,7 +78,7 @@ processActions = (result, doc, config, noSystemItems) ->
 
       compileTags result, res
 
-      sortedMap.finish result, res, skipProps: ['tags']
+      sortedMap.finish result, res, skipProps: ['tags', 'skipValidate']
 
       res unless result.isError # processActions =
 

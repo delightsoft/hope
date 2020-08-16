@@ -1,14 +1,17 @@
 Result = require '../../result'
+{unknownOption} = require '../../utils/_err'
 
 {structure: validateStructure} = require '../../validate'
 
-$$validateBuilder = (type, fieldsProp, $$access, docLevelValidate) ->
+$$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
   validate = type["_#{fieldsProp}Validate"] = validateStructure type, fieldsProp
 
   (result, fields, options) ->
 
-    access = undefined
+    mask = undefined
+
+    required = undefined
 
     strict = true
 
@@ -22,15 +25,15 @@ $$validateBuilder = (type, fieldsProp, $$access, docLevelValidate) ->
 
         switch optName
 
-          when 'access' then access = optValue
+          when 'mask' then mask = optValue
+
+          when 'required' then required = optValue
 
           when 'strict' then strict = optValue
 
           when 'beforeAction' then beforeAction = optValue
 
           else unknownOption optName
-
-    access = $$access.call @, fields unless access
 
     save = true
 
@@ -50,7 +53,7 @@ $$validateBuilder = (type, fieldsProp, $$access, docLevelValidate) ->
 
       return # localResult.error = () ->
 
-    validate localResult, fields, undefined, access.view, access.required, fields.$$touched, strict, beforeAction
+    validate localResult, fields, undefined, mask, required, fields.$$touched, strict, beforeAction
 
     oldSave = save
 

@@ -324,7 +324,7 @@ link = (config, noHelpers, opts) ->
 
       doc.$$access = $$accessBuilder doc, 'fields', methods?.docs[doc.name]?.access, true
 
-      doc.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
+      doc.$$validate = $$validateBuilder doc, 'fields', methods?.docs[doc.name]?.validate
 
       doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
 

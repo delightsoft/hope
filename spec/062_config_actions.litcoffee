@@ -24,7 +24,7 @@ general
                   f2: type: 'subtable', fields:
                     fa: type: 'int'
                     fb: type: 'double', null: true, tags: 'a'
-              actionC: {name: 'actionC', tags: 'a, b'}
+              actionC: {name: 'actionC', tags: 'a, b', skipValidate: true}
 
         $$src = deepClone doc.$$src
 
