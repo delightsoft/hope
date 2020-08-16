@@ -316,6 +316,14 @@ link = (config, noHelpers, opts) ->
 
         action.$$key = "#{docKey}.action.#{action.name}"
 
+        if action.arguments
+
+          action.arguments.$$access = $$accessBuilder action, 'arguments', actions?["#{action.name}Access"]
+
+          action.arguments.$$validate = $$validateBuilder action, 'arguments', actions?["#{action.name}Validate"]
+
+          action.arguments.$$editValidateBuilder = $$editValidateBuilderBuilder action, 'arguments', action.arguments.$$access, actions?["#{action.name}Validate"]
+
         action.$$code = actions[action.name] if actions and actions[action.name]
 
         freeze action
@@ -328,7 +336,7 @@ link = (config, noHelpers, opts) ->
 
       doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
 
-      doc.fields.$$validate = $$validateBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
+      doc.fields.$$validate = $$validateBuilder doc, 'fields', methods?.docs[doc.name]?.validate
 
       doc.fields.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
 
@@ -385,11 +393,11 @@ link = (config, noHelpers, opts) ->
       unless noHelpers
 
         method.arguments.$$access = $$accessBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argAccess
-        method.arguments.$$validate = $$validateBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidE
+        method.arguments.$$validate = $$validateBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argValidE
         method.arguments.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
 
         method.result.$$access = $$accessBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultAccess
-        method.result.$$validate = $$validateBuilder method, 'result', method.result.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
+        method.result.$$validate = $$validateBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultValidate
         method.result.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'result', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
 
       freeze method
