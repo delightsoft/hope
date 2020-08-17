@@ -2,11 +2,11 @@ Result = require '../result'
 
 BitArray = require '../bitArray'
 
-calc = require '../tags/_calc'
-
 hasOwnProperty = Object::hasOwnProperty
 
 {isResult} = require '../utils/_err'
+
+$$calcBuilder = require './helpers/calc'
 
 $$fixBuilder = require './helpers/fix'
 
@@ -162,38 +162,6 @@ link = (config, noHelpers, opts) ->
 
     tags = res.$$tags = freeze tags
 
-    unless noHelpers
-
-      cache = Object.create(null)
-
-      noCache = (result, expr, options) ->
-
-        unless typeof result == 'object' && result != null && result.hasOwnProperty('isError')
-
-          options = expr
-
-          expr = result
-
-          localResult = true
-
-          result = new Result()
-
-        r = calc result, res, expr, options
-
-        result.throwIfError() if localResult
-
-        r # noCache =
-
-      res.$$calc = (result, expr, options) ->
-
-        cacheExpr = if typeof result == 'object' && result != null && result.hasOwnProperty('isError') then expr else result
-
-        return cache[expr] if hasOwnProperty.call cache, cacheExpr
-
-        cache[expr] = noCache result, expr, options # res.$$calc =
-
-      res.$$calc.noCache = noCache
-
     return # linkTags =
 
   linkFieldsWithHelpers = (obj, prop, prefix, isDoc) ->
@@ -229,6 +197,8 @@ link = (config, noHelpers, opts) ->
         field.fields.$$get = $$getBuilder field.fields
 
         field.fields.$$set = $$setBuilder field.fields
+
+      obj[prop].$$calc = $$calcBuilder obj[prop]
 
       obj[prop].$$fix = $$fixBuilder obj[prop]
 
