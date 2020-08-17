@@ -14,6 +14,8 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
     (fields, options) =>
 
+      beforeSave = false
+
       beforeAction = false
 
       if options != undefined
@@ -24,9 +26,9 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
           switch optName
 
+            when 'beforeSave' then beforeSave = !!optValue
+
             when 'beforeAction' then beforeAction = !!optValue
-
-
 
             else unknownOption optName
 
@@ -60,7 +62,7 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
         return # localResult.error = () ->
 
-      validate localResult, fields, undefined, r.update, r.required, (if beforeAction then undefined else fields.$$touched), false, beforeAction
+      validate localResult, fields, undefined, r.update, r.required, (if beforeSave or beforeAction then undefined else fields.$$touched), false, beforeAction
 
       oldSave = save
 
