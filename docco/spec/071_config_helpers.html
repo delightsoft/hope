@@ -902,6 +902,79 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
 
             </div>
             
+            <div class="content"><div class='highlight'><pre>
+  check <span class="hljs-string">'$$wasTouched'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), {
+      docs:
+        DocA:
+          fields:
+            f1: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
+            f2: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
+            str: fields:
+              f3: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
+              f4: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
+            sf: type: <span class="hljs-string">'subtable'</span>, required: <span class="hljs-literal">true</span>, fields:
+              f5: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'a'</span>
+              f6: type: <span class="hljs-string">'string(20)'</span>, null: <span class="hljs-literal">true</span>
+    }
+
+    expect(result.messages).toEqual []
+
+    unlinkedConfig = unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig
+
+    doc =
+      id: <span class="hljs-string">'xyz'</span>
+      rev: <span class="hljs-number">12</span>
+      f1: <span class="hljs-string">'123'</span>
+      f2: <span class="hljs-literal">null</span>
+      str:
+        f3: <span class="hljs-string">'a'</span>
+        f4: <span class="hljs-literal">null</span>
+      sf: [
+        {f5: <span class="hljs-string">'c'</span>, f6: <span class="hljs-literal">null</span>}
+        {f5: <span class="hljs-string">'d'</span>, f6: <span class="hljs-literal">null</span>}
+      ]
+      created: <span class="hljs-string">'2020-08-18 07:55'</span>
+      modified: <span class="hljs-string">'2020-08-18 07:55'</span>
+      deleted: <span class="hljs-literal">true</span>
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$wasTouched doc).toBe(<span class="hljs-literal">true</span>) <span class="hljs-comment"># так как нет $$touched структур</span>
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.str.fields.$$wasTouched doc.str).toBe(<span class="hljs-literal">true</span>) <span class="hljs-comment"># так как нет $$touched структур</span>
+
+    doc.sf.push linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.sf.fields.$$<span class="hljs-keyword">new</span>()
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.sf.fields.$$wasTouched doc.sf).toBe(<span class="hljs-literal">true</span>) <span class="hljs-comment"># так как нет $$touched структур</span>
+
+
+    doc = linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$fix doc, edit: <span class="hljs-literal">true</span>
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$wasTouched doc).toBe(<span class="hljs-literal">false</span>) <span class="hljs-comment"># так как нет измененых полей в $$touched</span>
+
+
+    doc.$$touched.f1 = <span class="hljs-literal">true</span>
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$wasTouched doc).toBe <span class="hljs-literal">true</span>
+
+    <span class="hljs-keyword">delete</span> doc.$$touched.f1
+
+
+    doc.str.$$touched.f3 = <span class="hljs-literal">true</span>
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$wasTouched doc).toBe <span class="hljs-literal">true</span>
+
+    <span class="hljs-keyword">delete</span> doc.str.$$touched.f3
+
+
+    doc.sf[<span class="hljs-number">0</span>].$$touched.f5 = <span class="hljs-literal">true</span>
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.DocA'</span>].fields.$$wasTouched doc).toBe <span class="hljs-literal">true</span>
+
+    <span class="hljs-keyword">delete</span> doc.sf[<span class="hljs-number">0</span>].$$touched.f5</pre></div></div>
+            
         </li>
         
     </ul>

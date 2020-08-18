@@ -1,4 +1,4 @@
-$$getBuilder = (docDesc) ->
+$$updateBuilder = (docDesc) ->
 
   (fieldsLevel, updateMask, options) -> # (fields) ->
 
@@ -6,10 +6,14 @@ $$getBuilder = (docDesc) ->
 
       access = docDesc.$$access(fieldsLevel)
 
-      mask = docDesc.fields.$$calc('id,rev,deleted').or(access.update)
+      mask = docDesc.fields.$$calc('id,rev,deleted', {strict: false}).or(access.update)
+
+    else
+
+      mask = updateMask
 
     docDesc.fields.$$fix fieldsLevel, Object.assign {}, options, {mask, newVal: false} # (options) ->
 
 # ----------------------------
 
-module.exports = $$getBuilder
+module.exports = $$updateBuilder

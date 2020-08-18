@@ -159,6 +159,7 @@ $$fixBuilder = (fields) ->
           else
             (res, fieldsLevel) ->
               res[name] = fieldsLevel[name]
+              return
 
       fixFuncs.push (res, fieldsLevel, mask, update, newVal, options) ->
 

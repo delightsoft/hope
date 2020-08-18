@@ -18,6 +18,8 @@ $$setBuilder = require './helpers/set'
 
 $$updateBuilder = require './helpers/update'
 
+$$wasTouchedBuilder = require './helpers/wasTouched'
+
 $$vueDebugWatchBuilderBuilder = require './helpers/vueDebugWatchBuilder'
 
 {structure: validateStructure, addValidate} = require '../validate'
@@ -188,15 +190,19 @@ link = (config, noHelpers, opts) ->
 
       addValidate obj[prop], methods?.validators
 
-      for field in obj[prop].$$flat.$$list when field.type == 'subtable'
+      for field in obj[prop].$$flat.$$list when ~['structure', 'subtable'].indexOf field.type
 
-        field.fields.$$fix = $$fixBuilder field.fields
+        if field.type == 'subtable'
 
-        field.fields.$$new = $$newBuilder field.fields
+          field.fields.$$fix = $$fixBuilder field.fields
 
-        field.fields.$$get = $$getBuilder field.fields
+          field.fields.$$new = $$newBuilder field.fields
 
-        field.fields.$$set = $$setBuilder field.fields
+          field.fields.$$get = $$getBuilder field.fields
+
+          field.fields.$$set = $$setBuilder field.fields
+
+        field.fields.$$wasTouched = $$wasTouchedBuilder field.fields
 
       obj[prop].$$calc = $$calcBuilder obj[prop]
 
@@ -209,6 +215,8 @@ link = (config, noHelpers, opts) ->
       obj[prop].$$set = $$setBuilder obj[prop]
 
       obj[prop].$$update = $$updateBuilder obj
+
+      obj[prop].$$wasTouched = $$wasTouchedBuilder obj[prop]
 
       obj[prop].$$vueDebugWatchBuilder = $$vueDebugWatchBuilderBuilder obj[prop] unless opts?.server
 

@@ -572,3 +572,74 @@ subtale с признаком required создаются с одной ново
 
           # TODO: check for unexpected fields
 
+      check '$$wasTouched', ->
+
+        res = compileConfig (result = new Result), {
+          docs:
+            DocA:
+              fields:
+                f1: type: 'string(20)', tags: 'a'
+                f2: type: 'string(20)', null: true
+                str: fields:
+                  f3: type: 'string(20)', tags: 'a'
+                  f4: type: 'string(20)', null: true
+                sf: type: 'subtable', required: true, fields:
+                  f5: type: 'string(20)', tags: 'a'
+                  f6: type: 'string(20)', null: true
+        }
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig
+
+        doc =
+          id: 'xyz'
+          rev: 12
+          f1: '123'
+          f2: null
+          str:
+            f3: 'a'
+            f4: null
+          sf: [
+            {f5: 'c', f6: null}
+            {f5: 'd', f6: null}
+          ]
+          created: '2020-08-18 07:55'
+          modified: '2020-08-18 07:55'
+          deleted: true
+
+        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe(true) # так как нет $$touched структур
+
+        expect(linkedConfig.docs['doc.DocA'].fields.str.fields.$$wasTouched doc.str).toBe(true) # так как нет $$touched структур
+
+        doc.sf.push linkedConfig.docs['doc.DocA'].fields.sf.fields.$$new()
+
+        expect(linkedConfig.docs['doc.DocA'].fields.sf.fields.$$wasTouched doc.sf).toBe(true) # так как нет $$touched структур
+
+
+        doc = linkedConfig.docs['doc.DocA'].fields.$$fix doc, edit: true
+
+        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe(false) # так как нет измененых полей в $$touched
+
+
+        doc.$$touched.f1 = true
+
+        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe true
+
+        delete doc.$$touched.f1
+
+
+        doc.str.$$touched.f3 = true
+
+        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe true
+
+        delete doc.str.$$touched.f3
+
+
+        doc.sf[0].$$touched.f5 = true
+
+        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe true
+
+        delete doc.sf[0].$$touched.f5
