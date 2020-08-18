@@ -127,7 +127,7 @@ $$fixBuilder = (fields) ->
 
                 r = fix row, opts
 
-                r._i = row._i  if copyIndex and row.hasOwnProperty('_i') and not options.noIndex
+                r._i = row._i  if copyIndex and row.hasOwnProperty('_i') and not options?.noIndex
 
                 r
 

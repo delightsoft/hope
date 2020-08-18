@@ -14,9 +14,11 @@ $$wasTouchedBuilder = (fieldsDesc) ->
 
         (fieldsLevel) ->
 
-          for row in fieldsLevel[name]
+          if Array.isArray fieldsLevel[name] # TODO: Убрать после того как сделаем $$fix для всех входящих данных
 
-            return true if $$wasTouched row
+            for row in fieldsLevel[name]
+
+              return true if $$wasTouched row
 
           return false # (fieldsLevel) ->
 
