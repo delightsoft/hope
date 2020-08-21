@@ -7,7 +7,7 @@ config
 
     processCustomValidate = require '../src/validate/processCustomValidate'
 
-    focusOnCheck = ''
+    focusOnCheck = 'general'
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '100_check_editValidate', ->

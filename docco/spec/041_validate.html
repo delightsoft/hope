@@ -231,9 +231,7 @@ validateBuilder = <span class="hljs-built_in">require</span> <span class="hljs-s
 focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function">
-<span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
-
-  map = flatMap result, fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
+<span class="hljs-title">processLevel</span> = <span class="hljs-params">(result, map)</span> -&gt;</span>
 
   name = <span class="hljs-literal">undefined</span>
 
@@ -245,15 +243,23 @@ focusOnCheck = <span class="hljs-string">''</span>
 
       compileType result, field.$$src, field, context: <span class="hljs-string">'field'</span>
 
+      processLevel result, field.fields <span class="hljs-keyword">if</span> field.fields
+
       <span class="hljs-keyword">return</span>
+<span class="hljs-function">
+<span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
+
+  map = flatMap result, fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
+
+  name = <span class="hljs-literal">undefined</span>
+
+  processLevel result, map
 
   compileTags result, map
 
-  map = validateBuilder.addValidate map
+  flatMap.finish result, map, <span class="hljs-string">'fields'</span>
 
-  compileTags result, map
-
-  sortedMap.finish result, map
+  validateBuilder.addValidate map
 
   doc = name: <span class="hljs-string">'doc.Doc1'</span>, fields: map, actions: {$$list: [], $$tags: {all: <span class="hljs-string">'...'</span>}}, states: {$$list: []}
 
@@ -727,7 +733,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"structure"</span>, <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">'structure'</span>, <span class="hljs-function">-&gt;</span>
 
     compileFields (result = <span class="hljs-keyword">new</span> Result),
       structure1: fields: {f1: {type: <span class="hljs-string">'string(20)'</span>}, f2: {type: <span class="hljs-string">'string(20)'</span>}}, init: <span class="hljs-string">'wrong'</span>

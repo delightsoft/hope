@@ -72,7 +72,7 @@ validate = (fieldDesc, fields, validators) ->
           min = fieldDesc.min
           f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
             return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
-            return result.error 'validate.tooShort', value: value, min: min unless min <= value.length
+            return result.error 'validate.tooShort', value: value, min: min if beforeAction and not (min <= value.length)
             return
           return
       if fieldDesc.hasOwnProperty('regexp')
@@ -80,7 +80,7 @@ validate = (fieldDesc, fields, validators) ->
           regexp = fieldDesc.regexp
           f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
             return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
-            return result.error 'validate.invalidValue', value: value, regexp: regexp.toString() unless regexp.test value
+            return result.error 'validate.invalidValue', value: value, regexp: regexp.toString() unless value.length == 0 or regexp.test value
             return
           return
       f # when 'string'
@@ -95,7 +95,7 @@ validate = (fieldDesc, fields, validators) ->
           min = fieldDesc.min
           f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
             return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
-            return result.error 'validate.tooShort', value: value, min: min unless min <= value.length
+            return result.error 'validate.tooShort', value: value, min: min if beforeAction and not (min <= value.length)
             return
           return
       if fieldDesc.hasOwnProperty('max')
@@ -103,7 +103,7 @@ validate = (fieldDesc, fields, validators) ->
           max = fieldDesc.max
           f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
             return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
-            return result.error 'validate.tooLong', value: value, max: max unless value.length <= max
+            return result.error 'validate.tooLong', value: value, max: max if beforeAction and not (value.length <= max)
             return
           return
       if fieldDesc.hasOwnProperty('regexp')
@@ -111,7 +111,7 @@ validate = (fieldDesc, fields, validators) ->
           regexp = fieldDesc.regexp
           f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
             return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
-            return result.error 'validate.invalidValue', value: value, regexp: regexp.toString() unless regexp.test value
+            return result.error 'validate.invalidValue', value: value, regexp: regexp.toString() unless value.length == 0 or regexp.test value
             return
           return
       f # when 'text'
@@ -120,45 +120,45 @@ validate = (fieldDesc, fields, validators) ->
       (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'boolean'
 
     when 'integer'
-      f = (result, value) ->
+      f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
         return result.error 'validate.invalidValue', value: value unless typeof value == 'number' && Number.isInteger(value)
         return
       if fieldDesc.hasOwnProperty('min')
         do (pf = f) ->
           min = fieldDesc.min
-          f = (result, value) ->
-            return r if r = pf(result, value)
-            return result.error 'validate.tooSmall', value: value, min: min unless min <= value
+          f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
+            return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
+            return result.error 'validate.tooSmall', value: value, min: min if beforeAction and not (min <= value)
             return
           return
       if fieldDesc.hasOwnProperty('max')
         do (pf = f) ->
           max = fieldDesc.max
-          f = (result, value) ->
-            return r if r = pf(result, value)
-            return result.error 'validate.tooBig', value: value, max: max unless value <= max
+          f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
+            return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
+            return result.error 'validate.tooBig', value: value, max: max if beforeAction and not (value <= max)
             return
           return
       f # when 'integer'
 
     when 'double'
-      f = (result, value) ->
+      f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
         result.error 'validate.invalidValue', value: value unless typeof value == 'number'
         return
       if fieldDesc.hasOwnProperty('min')
         do (pf = f) ->
           min = fieldDesc.min
-          f = (result, value) ->
-            return r if r = pf(result, value)
-            return result.error 'validate.tooSmall', value: value, min: min unless min <= value
+          f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
+            return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
+            return result.error 'validate.tooSmall', value: value, min: min if beforeAction and not (min <= value)
             return
           return
       if fieldDesc.hasOwnProperty('max')
         do (pf = f) ->
           max = fieldDesc.max
-          f = (result, value) ->
-            return r if r = pf(result, value)
-            return result.error 'validate.tooBig', value: value, max: max unless value <= max
+          f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
+            return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction)
+            return result.error 'validate.tooBig', value: value, max: max if beforeAction and not (value <= max)
             return
           return
       f # when 'double'
@@ -195,25 +195,37 @@ validate = (fieldDesc, fields, validators) ->
               err = (validateStructure result, row, undefined, mask, requiredMask, (if onlyFields then row.$$touched else undefined), strict, beforeAction) or err
           err # (result, value, fieldsLevel, mask) ->
 
-    else (result, value, mask, requiredMask, strict) -> {}
+    when 'nanoid'
+      (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and value.length == 21
+
+    when 'json'
+      (result, value) ->
+        return result.error 'validate.invalidValue', value: value unless typeof value == 'string'
+        try
+          JSON.parse value
+        catch
+          return result.error 'validate.invalidValue', value: value
+        return
+
+    else throw new Error("Unexpected type: #{JSON.stringify(fieldDesc)}")
 
   if fieldDesc.null
     do (pf = f) ->
-      f = (result, value) ->
+      f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
         if value != null
-          return pf result, value
-        return
-      return
+          pf result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction
+        else if beforeAction and (fieldDesc.required or requiredMask.get(fieldDesc.$$index))
+          result.error 'validate.requiredField', value: value
 
   customValidator = processCustomValidate cvResult, fieldDesc, fields, validators
   cvResult.throwIfError()
 
   if customValidator
     do (pf = f) ->
-      f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict) ->
+      f = (result, value, fieldsLevel, mask, requiredMask, onlyFields, strict, beforeAction) ->
         return r if r = pf(result, value, fieldsLevel, mask, requiredMask, onlyFields, strict)
         result.isError = false;
-        customValidator result, value, fieldsLevel
+        customValidator result, value, fieldsLevel, beforeAction if beforeAction or customValidator.basic
         return result.isError;
 
   f # index =

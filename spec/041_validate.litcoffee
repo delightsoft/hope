@@ -11,9 +11,7 @@
     focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
-    compileFields = (result, fields) ->
-
-      map = flatMap result, fields, 'fields', index: true, mask: true
+    processLevel = (result, map) ->
 
       name = undefined
 
@@ -25,15 +23,23 @@
 
           compileType result, field.$$src, field, context: 'field'
 
+          processLevel result, field.fields if field.fields
+
           return
 
+    compileFields = (result, fields) ->
+
+      map = flatMap result, fields, 'fields', index: true, mask: true
+
+      name = undefined
+
+      processLevel result, map
+
       compileTags result, map
 
-      map = validateBuilder.addValidate map
+      flatMap.finish result, map, 'fields'
 
-      compileTags result, map
-
-      sortedMap.finish result, map
+      validateBuilder.addValidate map
 
       doc = name: 'doc.Doc1', fields: map, actions: {$$list: [], $$tags: {all: '...'}}, states: {$$list: []}
 
@@ -377,7 +383,7 @@ enum: init
 
 structure, subtable: not init
 
-      check "structure", ->
+      check 'structure', ->
 
         compileFields (result = new Result),
           structure1: fields: {f1: {type: 'string(20)'}, f2: {type: 'string(20)'}}, init: 'wrong'

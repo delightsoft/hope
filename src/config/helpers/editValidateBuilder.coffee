@@ -6,11 +6,11 @@ cloneDeep = require 'lodash/cloneDeep'
 
 $$editValidatorBuilderBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
-  ->
+  => # TODO: Remove this level, if newer validation will succeed
 
-    prevModel = undefined
-
-    prevBusinessResult = undefined
+#    prevModel = undefined
+#
+#    prevBusinessResult = undefined
 
     (fields, options) =>
 
@@ -32,11 +32,11 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
             else unknownOption optName
 
-      if fields != prevModel
-
-        prevBusinessResult = undefined
-
-        prevModel = fields
+#      if fields != prevModel
+#
+#        prevBusinessResult = undefined
+#
+#        prevModel = fields
 
       validate = type["_#{fieldsProp}Validate"]
 
@@ -58,46 +58,50 @@ $$editValidatorBuilderBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
           goodForAction = false
 
-          save = false unless msg.code == 'validate.requiredField'
+          save = false unless msg.code == 'validate.invalidValue'
 
         return # localResult.error = () ->
 
       validate localResult, fields, undefined, r.update, r.required, (if beforeSave or beforeAction then undefined else fields.$$touched), false, beforeAction
 
-      oldSave = save
+      unless localResult.isError
 
-      if localResult.isError
+        docLevelValidate.call @, localResult, fields
 
-        localResult.messages.forEach (msg) ->
-          if (path = msg.path) then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-          else (messages[''] or (messages[''] = [])).push msg
-          return
+#      oldSave = save
+#
+#      if localResult.isError
+#
+#        localResult.messages.forEach (msg) ->
+#          if (path = msg.path) then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
+#          else (messages[''] or (messages[''] = [])).push msg
+#          return
+#
+#        prevBusinessResult?.messages.forEach (msg) ->
+#          if (path = msg.path)
+#            (messages[path] = msg unless messages[path])
+#          else
+#            (messages[''] or (messages[''] = [])).push msg
+#          return
+#
+#      else if beforeAction
+#
+#        if typeof docLevelValidate == 'function'
+#
+#          localResult.messages.length = 0
+#
+#          docLevelValidate.call this, localResult, fields
+#
+#          goodForAction = false if localResult.isError
+#
+#          localResult.messages.forEach (msg) ->
+#            if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
+#            else (messages[''] or (messages[''] = [])).push msg
+#            return
+#
+#          prevBusinessResult = if localResult.messages.length > 0 then localResult else undefined
 
-        prevBusinessResult?.messages.forEach (msg) ->
-          if (path = msg.path)
-            (messages[path] = msg unless messages[path])
-          else
-            (messages[''] or (messages[''] = [])).push msg
-          return
-
-      else if beforeAction
-
-        if typeof docLevelValidate == 'function'
-
-          localResult.messages.length = 0
-
-          docLevelValidate.call this, localResult, fields
-
-          goodForAction = false if localResult.isError
-
-          localResult.messages.forEach (msg) ->
-            if path = msg.path then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-            else (messages[''] or (messages[''] = [])).push msg
-            return
-
-          prevBusinessResult = if localResult.messages.length > 0 then localResult else undefined
-
-      {save: oldSave, goodForAction, messages} # (fields) ->  # ->
+      {save, goodForAction, messages} # (fields) ->  # ->
 
 # ----------------------------
 
