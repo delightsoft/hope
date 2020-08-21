@@ -111,7 +111,7 @@ this - модель fields. field - описание поля
 
         linkedConfig = linkConfig unlinkedConfig, docs: {}, validators: {@greaterThanNumber}
 
-        linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 0}
+        linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 0}, {beforeAction: true}
 
         expect(result.messages).toEqual [
           {type: 'error', path: 'f1', code: 'validate.mustBeGraterThen', value: 0, n: 0}

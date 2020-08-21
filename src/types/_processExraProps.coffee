@@ -10,7 +10,7 @@ processExtraProps = (result, fieldDesc, res) ->
 
     result.context ((path) -> (Result.prop prop) path), ->
 
-      (validator || (validator = validateBuilder res)) result, fieldDesc[prop]
+      (validator || (validator = validateBuilder res)) result, fieldDesc[prop], undefined, undefined, undefined, true, true
 
     res[prop] = fieldDesc[prop]
 

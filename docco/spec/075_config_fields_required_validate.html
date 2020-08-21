@@ -231,7 +231,7 @@ utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <s
 
 processCustomValidate = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate/processCustomValidate'</span>
 
-focusOnCheck = <span class="hljs-string">''</span>
+focusOnCheck = <span class="hljs-string">'required - not null with beforeAction flag = true'</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'075_config_fields_required_validate'</span>, <span class="hljs-function">-&gt;</span>
@@ -270,7 +270,9 @@ describe <span class="hljs-string">'075_config_fields_required_validate'</span>,
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {a: <span class="hljs-string">'test'</span>}, {beforeAction: <span class="hljs-literal">false</span>}).toEqual
       save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>
 
-    expect(result.messages).toEqual []
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'b'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+    ]
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {a: <span class="hljs-string">'test'</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual
       save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>
@@ -284,7 +286,7 @@ describe <span class="hljs-string">'075_config_fields_required_validate'</span>,
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'a'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
-        {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'b'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'b'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-literal">null</span>}
     ]
 
     expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {a: <span class="hljs-string">'test'</span>, b: <span class="hljs-number">12</span>, d: <span class="hljs-number">121</span>}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual
@@ -292,13 +294,24 @@ describe <span class="hljs-string">'075_config_fields_required_validate'</span>,
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'d'</span>, code: <span class="hljs-string">'validate.unknownField'</span>, value: <span class="hljs-number">121</span>}
-    ]
-
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {a: <span class="hljs-string">'test'</span>, b: <span class="hljs-number">12</span>, d: <span class="hljs-number">121</span>}, {beforeAction: <span class="hljs-literal">true</span>, strict: <span class="hljs-literal">false</span>}).toEqual
-      save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">true</span>
-
-    expect(result.messages).toEqual [
     ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <pre><code>   expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {a: <span class="hljs-string">'test'</span>, b: <span class="hljs-number">12</span>, d: <span class="hljs-number">121</span>}, {beforeAction: <span class="hljs-literal">true</span>, strict: <span class="hljs-literal">false</span>}).toEqual
+     save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">true</span>
+
+   expect(result.messages).toEqual [
+   ]</code></pre>
+
+            </div>
             
         </li>
         
