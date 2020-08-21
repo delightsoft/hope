@@ -231,7 +231,7 @@ utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <s
 
 processCustomValidate = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate/processCustomValidate'</span>
 
-focusOnCheck = <span class="hljs-string">''</span>
+focusOnCheck = <span class="hljs-string">'general'</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'074_config_fields_custom_validate'</span>, <span class="hljs-function">-&gt;</span>
@@ -252,7 +252,7 @@ this - модель fields. field - описание поля</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    @greaterThanNumber = <span class="hljs-function"><span class="hljs-params">(result, field, params, attrValue)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>    @greaterThanNumber = <span class="hljs-function"><span class="hljs-params">(result, field, params, fieldLevelDesc, docDesc,  attrValue)</span> -&gt;</span>
 
       n = parseFloat params
 
@@ -291,7 +291,7 @@ this - модель fields. field - описание поля</p>
 
   check <span class="hljs-string">'processCustomValidate'</span>, <span class="hljs-function">-&gt;</span>
 
-    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f1, @fields, {@greaterThanNumber}
+    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f1, @fields, @fields, {@greaterThanNumber}
 
     expect(result.messages).toEqual []
 
@@ -313,25 +313,25 @@ this - модель fields. field - описание поля</p>
 
   check <span class="hljs-string">'processCustomValidate: wrong'</span>, <span class="hljs-function">-&gt;</span>
 
-    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f2, @fields, {@greaterThanNumber}
+    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f2, @fields, @fields, {@greaterThanNumber}
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'validate'</span>, code: <span class="hljs-string">'dsc.invalidArguments'</span>, value: <span class="hljs-string">'greaterThanNumber(abc)'</span>}
     ]
 
-    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f3, @fields, {@greaterThanNumber}
+    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f3, @fields, @fields, {@greaterThanNumber}
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'validate'</span>, code: <span class="hljs-string">'dsc.invalidArguments'</span>, value: <span class="hljs-string">'greaterThanNumber'</span>}
     ]
 
-    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f4, @fields, {@greaterThanNumber}
+    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f4, @fields, @fields, {@greaterThanNumber}
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'validate'</span>, code: <span class="hljs-string">'dsc.unknownValidator'</span>, value: <span class="hljs-string">'wrong(321)'</span>}
     ]
 
-    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f5, @fields, {@greaterThanNumber}
+    customValidate = processCustomValidate (result = <span class="hljs-keyword">new</span> Result), @fields.f5, @fields, @fields, {@greaterThanNumber}
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'validate'</span>, code: <span class="hljs-string">'dsc.unknownValidator'</span>, value: <span class="hljs-string">'wrong'</span>}
@@ -349,13 +349,15 @@ this - модель fields. field - описание поля</p>
 
         f1: type: <span class="hljs-string">'double'</span>, validate: <span class="hljs-string">'greaterThanNumber(0)'</span>
 
-    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), config
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result), config, validators: {@greaterThanNumber}
 
     expect(result.messages).toEqual []
 
+    <span class="hljs-built_in">console</span>.info <span class="hljs-number">110</span>, result
+
     unlinkedConfig = deepClone unlinkConfig res
 
-    linkedConfig = linkConfig unlinkedConfig, docs: {}, validators: {@greaterThanNumber}
+    linkedConfig = linkConfig unlinkedConfig, validators: {@greaterThanNumber}
 
     linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">0</span>}, {beforeAction: <span class="hljs-literal">true</span>}
 

@@ -8,9 +8,9 @@ processExtraProps = (result, fieldDesc, res) ->
 
   copyAndValidateProp = (prop) ->
 
-    result.context ((path) -> (Result.prop prop) path), ->
+    result.context (Result.prop prop), ->
 
-      (validator || (validator = validateBuilder res)) result, fieldDesc[prop], undefined, undefined, undefined, true, true
+      (validator || (validator = validateBuilder res)) result, fieldDesc[prop], undefined, undefined, undefined, undefined, undefined, true, true
 
     res[prop] = fieldDesc[prop]
 

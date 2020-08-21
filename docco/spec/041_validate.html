@@ -391,46 +391,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
         expect(result.messages).sameStructure [
           {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value}
-        ]
-
-  check <span class="hljs-string">"required: ok"</span>, <span class="hljs-function">-&gt;</span>
-
-    validate = validateBuilder
-
-      type: <span class="hljs-string">'structure'</span>
-
-      fields: fields = compileFields (result = <span class="hljs-keyword">new</span> Result),
-
-        f1: type: <span class="hljs-string">'integer'</span>, required: <span class="hljs-literal">true</span>, validate: validateBuilder type: <span class="hljs-string">'integer'</span>
-
-        f2: type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>, required: <span class="hljs-literal">true</span>, validate: validateBuilder type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>
-
-        f3: type: <span class="hljs-string">'boolean'</span>, validate: validateBuilder type: <span class="hljs-string">'boolean'</span>
-
-    validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>}, <span class="hljs-literal">undefined</span>, fields.$$tags.all
-
-    expect(result.messages).sameStructure []
-
-  check <span class="hljs-string">"required: wrong"</span>, <span class="hljs-function">-&gt;</span>
-
-    validate = validateBuilder
-
-      type: <span class="hljs-string">'structure'</span>
-
-      fields: fields = compileFields (result = <span class="hljs-keyword">new</span> Result),
-
-        f1: type: <span class="hljs-string">'integer'</span>, required: <span class="hljs-literal">true</span>
-
-        f2: type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>, required: <span class="hljs-literal">true</span>
-
-        f3: type: <span class="hljs-string">'boolean'</span>
-
-    validate (result = <span class="hljs-keyword">new</span> Result), {f3: <span class="hljs-literal">false</span>}, <span class="hljs-literal">undefined</span>, fields.$$tags.all, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">true</span>
-
-    expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f1'</span>},
-      {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, path: <span class="hljs-string">'f2'</span>},
-    ]</pre></div></div>
+        ]</pre></div></div>
             
         </li>
         

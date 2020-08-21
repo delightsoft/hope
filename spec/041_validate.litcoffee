@@ -141,45 +141,6 @@
               {type: 'error', code: 'validate.invalidValue', value}
             ]
 
-      check "required: ok", ->
-
-        validate = validateBuilder
-
-          type: 'structure'
-
-          fields: fields = compileFields (result = new Result),
-
-            f1: type: 'integer', required: true, validate: validateBuilder type: 'integer'
-
-            f2: type: 'string', length: 20, required: true, validate: validateBuilder type: 'string', length: 20
-
-            f3: type: 'boolean', validate: validateBuilder type: 'boolean'
-
-        validate (result = new Result), {f1: 12, f2: 'test'}, undefined, fields.$$tags.all
-
-        expect(result.messages).sameStructure []
-
-      check "required: wrong", ->
-
-        validate = validateBuilder
-
-          type: 'structure'
-
-          fields: fields = compileFields (result = new Result),
-
-            f1: type: 'integer', required: true
-
-            f2: type: 'string', length: 20, required: true
-
-            f3: type: 'boolean'
-
-        validate (result = new Result), {f3: false}, undefined, fields.$$tags.all, undefined, undefined, undefined, true
-
-        expect(result.messages).sameStructure [
-          {type: 'error', code: 'validate.requiredField', path: 'f1'},
-          {type: 'error', code: 'validate.requiredField', path: 'f2'},
-        ]
-
 null
 
       check "null: ok", ->

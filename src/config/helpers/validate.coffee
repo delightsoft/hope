@@ -17,6 +17,8 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
     beforeAction = false
 
+    beforeSave = false
+
     if options != undefined
 
       invalidArg 'options', options unless typeof options == 'object' and options != null and not Array.isArray(options)
@@ -30,6 +32,8 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
           when 'required' then required = optValue
 
           when 'strict' then strict = optValue
+
+          when 'beforeSave' then beforeSave = optValue
 
           when 'beforeAction' then beforeAction = optValue
 
@@ -53,7 +57,7 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
       return # localResult.error = () ->
 
-    validate localResult, fields, undefined, mask, required, fields.$$touched, strict, beforeAction
+    validate localResult, fields, undefined, fields, mask, required, (if beforeSave and beforeAction then undefined else fields.$$touched), strict, beforeAction
 
     oldSave = save
 

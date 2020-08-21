@@ -1,10 +1,10 @@
 Result = require '../result'
 
-processCustomValidate = (result, field, fields, validators) ->
+processCustomValidate = (result, fieldDesc, fieldsLevel, docDesc, validators) ->
 
-  return unless field.hasOwnProperty('validate')
+  return unless fieldDesc.hasOwnProperty('validate')
 
-  validate = field.validate.trim()
+  validate = fieldDesc.validate.trim()
 
   si = validate.indexOf('(')
 
@@ -28,6 +28,8 @@ processCustomValidate = (result, field, fields, validators) ->
 
       name = validate
 
+    console.info 39, name, validators
+
     unless typeof validators?[name] == 'function'
 
       result.error ((path) -> (Result.prop 'validate') path), 'dsc.unknownValidator', value: validate
@@ -36,9 +38,9 @@ processCustomValidate = (result, field, fields, validators) ->
 
     else
 
-      result.context ((path) -> (Result.prop 'validate') path), ->
+      result.context ((path) -> (Result.prop 'validate') path), =>
 
-        validators[name].call fields, result, field, params, validate # processCustomValidate =
+        validators[name].call @, result, fieldDesc, params, fieldsLevel, docDesc, validate # processCustomValidate =
 
 # ----------------------------
 

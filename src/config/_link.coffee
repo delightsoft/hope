@@ -188,7 +188,7 @@ link = (config, noHelpers, opts) ->
 
       assignKey obj[prop], prefix
 
-      addValidate obj[prop], methods?.validators
+      addValidate obj[prop], obj[prop], methods?.validators
 
       for field in obj[prop].$$flat.$$list when ~['structure', 'subtable'].indexOf field.type
 

@@ -114,7 +114,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
                   _processLevel field.fields
 
-            field.validate = field.$$src.validate if processCustomValidate result, field.$$src, level, config.$$src?.validators
+            field.validate = field.$$src.validate if processCustomValidate result, field.$$src, level, undefined, config.$$src?.validators
 
           return # result.context
 
