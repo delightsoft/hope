@@ -161,11 +161,11 @@ $$fixBuilder = (fields) ->
               res[name] = fieldsLevel[name]
               return
 
-      fixFuncs.push (res, fieldsLevel, mask, update, newVal, options) ->
+      fixFuncs.push (res, fieldsLevel, mask, update, updateMask, newVal, options) ->
 
         if not mask or mask.get(index)
 
-          if update and hasOwnProperty.call update, name
+          if update and (hasOwnProperty.call update, name) and (not updateMask or updateMask.get(index))
 
             copyVal res, update, options, fieldsLevel
 
@@ -173,9 +173,9 @@ $$fixBuilder = (fields) ->
 
             copyVal res, fieldsLevel, options, undefined, true
 
-          else
+          else if newVal
 
-            initVal res, options if newVal
+            initVal res, options
 
   (fieldsLevel, options) ->
 
@@ -215,6 +215,12 @@ $$fixBuilder = (fields) ->
 
             update = optValue
 
+          when 'updateMask' # маска полей update
+
+            invalidOption 'updateMask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection != fields)
+
+            updateMask = optValue
+
           when 'newVal' # true, создавать недостающие поля с начальными значениями (по умолчанию true)
 
             invalidOption 'newVal', optValue unless optValue == undefined or typeof optValue == 'boolean'
@@ -229,7 +235,7 @@ $$fixBuilder = (fields) ->
 
     res = {}
 
-    fixFuncs.forEach ((f) -> f(res, fieldsLevel, mask, update, newVal, options); return)
+    fixFuncs.forEach ((f) -> f(res, fieldsLevel, mask, update, updateMask, newVal, options); return)
 
     res.$$touched = {} if edit
 
