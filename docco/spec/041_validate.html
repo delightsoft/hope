@@ -228,9 +228,9 @@ flatMap = <span class="hljs-built_in">require</span> <span class="hljs-string">'
 
 validateBuilder = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate'</span>
 
-focusOnCheck = <span class="hljs-string">''</span>
-<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-<span class="hljs-function">
+focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span><span class="hljs-function">
+
 <span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
 
   map = flatMap result, fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
