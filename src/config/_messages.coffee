@@ -59,6 +59,10 @@ messages =
 
     unknownValidator: (args) -> "Unknown validator: #{args.value}"
 
+    precisionOutOfRange: (args) -> "Precision is out of range [1 - 15]: #{args.value}"
+
+    scaleOutOfRange: (args) -> "Scale is out of range [0 - #{args.precision}]: #{args.value}"
+
 # DSDocument
 
     fieldIsReadonly: (args) -> "Field is read-only: #{args.value}"
@@ -80,6 +84,8 @@ messages =
     tooSmall: (args) -> "Out of range (min: #{args.min}): #{args.value}"
 
     tooBig: (args) -> "Out of range (max: #{args.max}): #{args.value}"
+
+    tooLongForThisPrecision: (args) -> "Too long for precision #{args.precision}: #{args.value}"
 
 # ----------------------------
 

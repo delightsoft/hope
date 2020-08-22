@@ -76,9 +76,33 @@ processExtraProps = (result, fieldDesc, res) ->
 
     copyAndValidateProp 'max' if fieldDesc.hasOwnProperty('max')
 
+    if res.type == 'decimal'
+
+      unless res.hasOwnProperty('max')
+
+        res.max = Math.pow(10, res.precision) - 1
+
+      else
+
+        if res.max > (Math.pow(10, res.precision) - 1)
+
+          result.error ((path) -> (Result.prop 'max') path), 'dsc.tooLongForThisPrecision', value: fieldDesc.max, precision: res.precision
+
+      unless res.hasOwnProperty('min')
+
+        res.min = -(Math.pow(10, res.precision) - 1)
+
+      else
+
+        if res.min < -(Math.pow(10, res.precision) - 1)
+
+          result.error ((path) -> (Result.prop 'min') path), 'dsc.tooLongForThisPrecision', value: fieldDesc.min, precision: res.precision
+
+      res.min = -(Math.pow(10, res.precision) - 1) unless res.hasOwnProperty('min')
+
     if not result.isError and res.hasOwnProperty('min') and res.hasOwnProperty('max') and res.min > res.max
 
-      result.error ((path) -> (Result.prop 'max') path), 'dsc.tooSmall', value: fieldDesc.max
+      result.error ((path) -> (Result.prop 'max') path), 'dsc.tooSmall', value: fieldDesc.max, min: res.min
 
   validator = undefined
 

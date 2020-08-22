@@ -259,15 +259,17 @@ focusOnCheck = <span class="hljs-string">''</span>
 
   flatMap.finish result, map, <span class="hljs-string">'fields'</span>
 
-  validateBuilder.addValidate map
+  <span class="hljs-keyword">unless</span> result.isError
 
-  doc = name: <span class="hljs-string">'doc.Doc1'</span>, fields: map, actions: {$$list: [], $$tags: {all: <span class="hljs-string">'...'</span>}}, states: {$$list: []}
+    validateBuilder.addValidate map
 
-  res = unlink docs: {<span class="hljs-string">'doc.Doc1'</span>: doc, $$list: [doc]}, api: {$$list: []}
+    doc = name: <span class="hljs-string">'doc.Doc1'</span>, fields: map, actions: {$$list: [], $$tags: {all: <span class="hljs-string">'...'</span>}}, states: {$$list: []}
 
-  res = link res
+    res = unlink docs: {<span class="hljs-string">'doc.Doc1'</span>: doc, $$list: [doc]}, api: {$$list: []}
 
-  res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields <span class="hljs-comment"># (result, fields) -&gt;</span>
+    res = link res
+
+    res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields <span class="hljs-comment"># (result, fields) -&gt;</span>
 
 describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
             
@@ -615,9 +617,64 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>decimal: precision, scale, min, max</p>
-<p>TODO:</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"decimal"</span>, <span class="hljs-function">-&gt;</span>
+
+    compileFields (result = <span class="hljs-keyword">new</span> Result),
+      decimal1: type: <span class="hljs-string">'decimal'</span>
+      decimal2: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">12</span>
+      decimal3: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">-5</span>
+      decimal4: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">0</span>
+      decimal5: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">20</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal3.precision'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-number">-5</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal4.precision'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-number">0</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal5.precision'</span>, code: <span class="hljs-string">'dsc.precisionOutOfRange'</span>, value: <span class="hljs-number">20</span>, min: <span class="hljs-number">1</span>, max: <span class="hljs-number">15</span>}
+    ]
+
+    compileFields (result = <span class="hljs-keyword">new</span> Result),
+      decimal2: type: <span class="hljs-string">'decimal'</span>, scale: <span class="hljs-number">12</span>
+      decimal3: type: <span class="hljs-string">'decimal'</span>, scale: <span class="hljs-number">-5</span>
+      decimal4: type: <span class="hljs-string">'decimal'</span>, scale: <span class="hljs-number">0</span>
+      decimal5: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">4</span>, scale: <span class="hljs-number">8</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal3.scale'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-number">-5</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal5.scale'</span>, code: <span class="hljs-string">'dsc.scaleOutOfRange'</span>, value: <span class="hljs-number">8</span>, min: <span class="hljs-number">0</span>, max: <span class="hljs-number">4</span>}
+    ]
+
+    compileFields (result = <span class="hljs-keyword">new</span> Result),
+      decimal5: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">4.5</span>
+      decimal6: type: <span class="hljs-string">'decimal'</span>, scale: <span class="hljs-number">1.5</span>
+
+    expect(result.messages).sameStructure [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal5.precision'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-number">4.5</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal6.scale'</span>, code: <span class="hljs-string">'dsc.invalidValue'</span>, value: <span class="hljs-number">1.5</span>}
+    ]
+
+    compileFields (result = <span class="hljs-keyword">new</span> Result),
+      decimal1: type: <span class="hljs-string">'decimal'</span>, min: <span class="hljs-number">10.0</span>, max: <span class="hljs-number">20.2</span>, init: <span class="hljs-number">5.12</span>
+      decimal2: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">9</span>, scale: <span class="hljs-number">2</span>, min: <span class="hljs-number">-1234567890</span>, max: <span class="hljs-number">9876543210</span>, init: <span class="hljs-number">0</span>
+      decimal3: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">9</span>, scale: <span class="hljs-number">2</span>, min: <span class="hljs-number">200</span>, max: <span class="hljs-number">100</span>
+      decimal4: type: <span class="hljs-string">'decimal'</span>, min: <span class="hljs-number">200</span>, max: <span class="hljs-number">100</span>
+      decimal5: type: <span class="hljs-string">'decimal'</span>, min: <span class="hljs-number">100</span>, max: <span class="hljs-number">200</span>, init: <span class="hljs-number">-100</span>
+      decimal6: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">4</span>, init: <span class="hljs-number">-123456</span>
+      decimal7: type: <span class="hljs-string">'decimal'</span>, precision: <span class="hljs-number">4</span>, init: <span class="hljs-number">1234567</span>
+
+    expect(result.messages).sameStructure [
+
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal1.max'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-number">20.2</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal2.max'</span>, code: <span class="hljs-string">'dsc.tooLongForThisPrecision'</span>, value: <span class="hljs-number">9876543210</span>, precision: <span class="hljs-number">9</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal2.min'</span>, code: <span class="hljs-string">'dsc.tooLongForThisPrecision'</span>, value: <span class="hljs-number">-1234567890</span>, precision: <span class="hljs-number">9</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal3.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">100</span>, min: <span class="hljs-number">200</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal4.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">100</span>, min: <span class="hljs-number">200</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal5.init'</span>, code: <span class="hljs-string">'validate.tooSmall'</span>, value: <span class="hljs-number">-100</span>, min: <span class="hljs-number">100</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal6.init'</span>, code: <span class="hljs-string">'validate.tooSmall'</span>, value: <span class="hljs-number">-123456</span>, min: <span class="hljs-number">-9999</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'decimal7.init'</span>, code: <span class="hljs-string">'validate.tooBig'</span>, value: <span class="hljs-number">1234567</span>, max: <span class="hljs-number">9999</span>}
+    ]</pre></div></div>
             
         </li>
         

@@ -66,9 +66,9 @@ unlinkField = (field) ->
 
   return
 
-unlinkAction = (field, process) ->
+unlinkAction = (field) ->
 
-  field.arguments = unlinkSortedMap field.arguments, process if field.hasOwnProperty('arguments')
+  field.arguments = unlinkFlatMap field.arguments, 'fields', unlinkField if field.hasOwnProperty('arguments')
 
   return
 

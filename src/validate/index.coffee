@@ -163,6 +163,28 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
           return
       f # when 'double'
 
+    when 'decimal'
+      f = (result, value, fieldsLevel, doc, mask, requiredMask, onlyFields, strict, beforeAction) ->
+        result.error 'validate.invalidValue', value: value unless typeof value == 'number' and Number.isInteger(value)
+        return
+      if fieldDesc.hasOwnProperty('min')
+        do (pf = f) ->
+          min = fieldDesc.min
+          f = (result, value, fieldsLevel, doc, mask, requiredMask, onlyFields, strict, beforeAction) ->
+            return r if r = pf.apply undefined, arguments
+            return result.error 'validate.tooSmall', value: value, min: min if beforeAction and not (min <= value)
+            return
+          return
+      if fieldDesc.hasOwnProperty('max')
+        do (pf = f) ->
+          max = fieldDesc.max
+          f = (result, value, fieldsLevel, doc, mask, requiredMask, onlyFields, strict, beforeAction) ->
+            return r if r = pf.apply undefined, arguments
+            return result.error 'validate.tooBig', value: value, max: max if beforeAction and not (value <= max)
+            return
+          return
+      f # when 'double'
+
     when 'date'
       (result, value) -> result.error 'validate.invalidValue', value: value unless typeof value == 'string' and moment(value, 'YYYY-MM-DD').isValid()
 

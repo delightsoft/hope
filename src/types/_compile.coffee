@@ -164,7 +164,7 @@ compile = (result, fieldDesc, res, opts) ->
 
         when 'precision' then if (ok = type == 'decimal') then precisionProp = takePositiveInt result, fieldDesc.precision
 
-        when 'scale' then if (ok = type == 'decimal') then scaleProp = takePositiveInt result, fieldDesc.scale
+        when 'scale' then if (ok = type == 'decimal') then scaleProp = takeNoneNegativeInt result, fieldDesc.scale
 
         when 'fields' then ok = (type == 'structure' || type == 'subtable') # this prop is already taken during flatMap
 
@@ -267,9 +267,35 @@ compile = (result, fieldDesc, res, opts) ->
 
     when 'decimal'
 
-      setRequiredProp result, res, 'precision', precisionProp
+      res.precision =
 
-      res.scale = scaleProp if typeof scaleProp == 'number'
+        if typeof precisionProp == 'number'
+
+          unless 1 <= precisionProp <= 15
+
+            result.error (Result.prop 'precision'), 'dsc.precisionOutOfRange', value: precisionProp, min: 1, max: 15
+
+          else
+
+            res.precision = precisionProp
+
+        else 15
+
+      unless result.isError
+
+        res.scale =
+
+          if typeof scaleProp == 'number'
+
+            unless 0 <= scaleProp <= res.precision
+
+              result.error (Result.prop 'scale'), 'dsc.scaleOutOfRange', value: scaleProp, min: 0, max: res.precision
+
+            else
+
+              res.scale = scaleProp
+
+          else 0
 
     when 'structure'
 
@@ -301,6 +327,14 @@ compile = (result, fieldDesc, res, opts) ->
 
 takePositiveInt = (result, value) ->
   unless typeof value == 'number' && !isNaN(value) && Number.isInteger(value) && value > 0
+
+    result.error 'dsc.invalidValue', value: value;
+    return
+
+  value # parseLength =
+
+takeNoneNegativeInt = (result, value) ->
+  unless typeof value == 'number' && !isNaN(value) && Number.isInteger(value) && value >= 0
 
     result.error 'dsc.invalidValue', value: value;
     return

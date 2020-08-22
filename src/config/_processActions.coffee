@@ -42,7 +42,7 @@ processActions = (result, doc, config, noSystemItems) ->
         {name: 'list', tags: 'system'}
       ]
 
-      sortedMapOpts.reservedName = ['create', 'retrieve', 'update', 'delete', 'restore']
+      sortedMapOpts.reservedName = ['create', 'retrieve', 'update', 'delete', 'restore', 'list']
 
     res = sortedMap result, doc.$$src.actions or {}, sortedMapOpts
 
