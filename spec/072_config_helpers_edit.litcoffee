@@ -107,16 +107,16 @@ config
 
         linkedConfig = linkConfig unlinkedConfig, @code
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 12, f2: 'test', f3: true}).toEqual save: true, goodForAction: false, messages: {}
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {f1: 12, f2: 'test', f3: true}).toEqual save: true, goodForAction: false, messages: {}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 'wrong'}, {beforeAction: true}).toEqual
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {f1: 'wrong'}, {beforeAction: true}).toEqual
           save: false, goodForAction: false, messages:
             f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
             f2: {type: 'error', code: 'validate.requiredField', path: 'f2'}
 
-        expect(-> linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: 'wrong'}, {test: 12, beforeBuild: false}).toThrow new Error "Unknown option: 'test'"
+        expect(-> linkedConfig.docs['doc.Doc1'].$$editValidate {f1: 'wrong'}, {test: 12, beforeBuild: false}).toThrow new Error "Unknown option: 'test'"
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: 'wrong'
           f2: 12
           $$touched: {f2: true}
@@ -125,7 +125,7 @@ config
             f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
             f2: {type: 'error', path: 'f2', code: 'validate.invalidValue', value: 12}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: 'wrong'
           f2: 12
           $$touched: {f2: true}
@@ -133,7 +133,7 @@ config
           save: false, goodForAction: false, messages:
             f2: {type: 'error', path: 'f2', code: 'validate.invalidValue', value: 12}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: 20
           f2: 'right'
           $$touched: {f1: true}
@@ -141,7 +141,7 @@ config
           save: true, goodForAction: false, messages:
             '': [{ type: 'error', code: 'err1' }]
 
-        editValidate = linkedConfig.docs['doc.Doc1'].$$editValidateBuilder()
+        editValidate = linkedConfig.docs['doc.Doc1'].$$editValidate
 
         model =
           f1: 20
@@ -156,21 +156,20 @@ config
 
         expect(editValidate model, {beforeAction: false}).toEqual
           save: false, goodForAction: false, messages:
-            '': [{type: 'error', code: 'err1'}]
             f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
 
         expect(editValidate deepClone model, {beforeAction: false}).toEqual
           save: false, goodForAction: false, messages:
             f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: 30
           f2: 'right'
         }, {beforeAction: true}).toEqual
           save: true, goodForAction: false, messages:
             'f2.f3[0]': {type: 'error', path: 'f2.f3[0]', code: 'err2'}
 
-        editValidate = linkedConfig.docs['doc.Doc1'].$$editValidateBuilder()
+        editValidate = linkedConfig.docs['doc.Doc1'].$$editValidate
 
         model =
           f1: 40
@@ -205,17 +204,17 @@ config
 
         linkedConfig = linkConfig unlinkedConfig, @code
 
-        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidateBuilder() {a: 12}, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
+        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidate {a: 12}, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
           '': [{type: 'error', code: 'err2'}]
         }
 
-        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r2: 2.4}, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
+        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidate {r2: 2.4}, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
           '': [{type: 'error', code: 'err3'}]
         }
 
-        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidateBuilder() {a: 0}, {beforeAction: true}).toEqual save: true, goodForAction: true, messages: {}
+        expect(linkedConfig.api['api1'].methods['method1'].arguments.$$editValidate {a: 0}, {beforeAction: true}).toEqual save: true, goodForAction: true, messages: {}
 
-        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidateBuilder() {r1: 1}, {beforeAction: true}).toEqual save: true, goodForAction: true, messages: {}
+        expect(linkedConfig.api['api1'].methods['method1'].result.$$editValidate {r1: 1}, {beforeAction: true}).toEqual save: true, goodForAction: true, messages: {}
 
       check 'required empty string', ->
 
@@ -233,32 +232,31 @@ config
 
         expect(result.messages).toEqual []
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {f1: '', f2: ''}, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {f1: '', f2: ''}, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
           f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
         }
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: '',
           f2: '',
           $$touched: f1: true, f2: true
         }, {beforeAction: false}).toEqual save: true, goodForAction: false, messages: {}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: '',
           f2: '',
           $$touched: f1: false, f2: false
         }, {beforeAction: true}).toEqual save: true, goodForAction: false, messages:
           f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           $$touched: f1: false, f2: false
         }, {beforeAction: false}).toEqual save: true, goodForAction: false, messages: {}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           $$touched: f1: false, f2: false
         }, {beforeAction: true}).toEqual save: true, goodForAction: false, messages:
           f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
-
 
       check 'subtable in before edit', ->
 
@@ -278,16 +276,16 @@ config
 
         expect(result.messages).toEqual []
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() st: [{f1: '', f2: ''}]).toEqual save: true, goodForAction: false, messages: {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate st: [{f1: '', f2: ''}]).toEqual save: true, goodForAction: false, messages: {
         }
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           st: [{f1: '', f2: ''}]
           $$touched: f1: true, f2: true
         }, {beforeAction: false}).toEqual save: true, goodForAction: false, messages: {
         }
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           st: [{f1: '', f2: '', $$touched: f1: true, f2: true}, {f1: null, f2: 12, $$touched: f1: true, f2: true}]
           $$touched: {}
         }, {beforeAction: true}).toEqual save: false, goodForAction: false, messages: {
@@ -298,67 +296,6 @@ config
           'st[1].f3': {type: 'error', path: 'st[1].f3', code: 'validate.requiredField'}
         }
 
-    # TODO: remove
-    #      check 'remember prev business msgs', ->
-    #
-    #        res = compileConfig (result = new Result), {
-    #          docs:
-    #            Doc1:
-    #              fields:
-    #                st: type: 'subtable', fields:
-    #                  f1: type: 'string(40)'
-    #                  f2: type: 'string(20)', required: true
-    #                  f3: type: 'int', required: true
-    #        }, true
-    #
-    #        unlinkedConfig = deepClone unlinkConfig res
-    #
-    #        linkedConfig = linkConfig unlinkedConfig, docs: 'doc.Doc1': validate: (result, doc) ->
-    #          unless doc.st[0].f2 == 'ok'
-    #            result.error (-> 'st[0].f2'), 'business err'
-    #            result.warn (-> 'st[0].f1'), 'business warn'
-    #
-    #        expect(result.messages).toEqual []
-    #
-    #        $$editValidate = linkedConfig.docs['doc.Doc1'].$$editValidateBuilder()
-    #
-    #        expect($$editValidate {
-    #          st: [{f1: '', f2: 123, $$touched: f1: true, f2: true}]
-    #          $$touched: {}
-    #        }, {beforeAction: true}).toEqual save: false, goodForAction: false, messages: {
-    #          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.invalidValue', value: 123}
-    #          'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
-    #        }
-    #
-    #        expect($$editValidate {
-    #          st: [{f1: '', f2: '', $$touched: f1: true, f2: true}]
-    #          $$touched: {}
-    #        }, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
-    #          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
-    #          'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
-    #        }
-    #
-    #        model = { # если модель меняется между вызовами $$editValidate, то бизнес ошибки сбрасываются
-    #          st: [{f1: 'ok1', f2: 'ok2', f3: 12, $$touched: f1: true, f2: true}]
-    #          $$touched: {}
-    #        }
-    #
-    #        expect($$editValidate model, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
-    #          'st[0].f1': {type: 'warn', path: 'st[0].f1', code: 'business warn'}
-    #          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'business err'}
-    #        }
-    #
-    #        model.st[0].f2 = 123
-    #
-    #        expect($$editValidate model, {beforeAction: false}).toEqual save: false, goodForAction: false, messages: {
-    #          'st[0].f1': {type: 'warn', path: 'st[0].f1', code: 'business warn'}
-    #          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.invalidValue', value: 123}
-    #        }
-    #
-    #        model.st[0].f2 = 'ok'
-    #
-    #        expect($$editValidate model, {beforeAction: false}).toEqual save: true, goodForAction: false, messages: {}
-
       check 'subtable in edit validator with required mask', ->
 
         res = compileConfig (result = new Result), {
@@ -368,7 +305,7 @@ config
                 st: type: 'subtable', fields:
                   f1: type: 'string(40)'
                   f2: type: 'string(20)'
-                  f3: type: 'int'
+                  f3: type: 'int', required: true
         }, true
 
         unlinkedConfig = deepClone unlinkConfig res
@@ -381,22 +318,28 @@ config
 
         expect(result.messages).toEqual []
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() st: [{f1: '', f2: ''}]).toEqual save: true, goodForAction: false, messages: {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate st: [{f1: '', f2: ''}]).toEqual save: true, goodForAction: false, messages: {
         }
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           st: [{f1: '', f2: '', $$touched: f1: true, f2: true}]
           $$touched: {}
         }, {beforeAction: false}).toEqual save: true, goodForAction: false, messages: {
         }
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidateBuilder() {
-          st: [{f1: '', f2: '', $$touched: f1: true, f2: true}, {f1: null, f2: 12, $$touched: f1: true, f2: true}]
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate
+          st: [
+            {f1: '', f2: '', $$touched: f1: true, f2: true}
+            {f1: null, f2: 12, $$touched: f1: true, f2: true}
+          ]
           $$touched: {}
-        }, {beforeAction: true}).toEqual save: false, goodForAction: false, messages: {
-          'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
-          'st[1].f1': {type: 'error', path: 'st[1].f1', code: 'validate.invalidValue', value: null}
-          'st[1].f2': {type: 'error', path: 'st[1].f2', code: 'validate.invalidValue', value: 12}
-          'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
-          'st[1].f3': {type: 'error', path: 'st[1].f3', code: 'validate.requiredField'}
-        }
+
+        , {beforeAction: true})
+
+          .toEqual save: false, goodForAction: false, messages: {
+            'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
+            'st[0].f3': {type: 'error', path: 'st[0].f3', code: 'validate.requiredField'}
+            'st[1].f1': {type: 'error', path: 'st[1].f1', code: 'validate.invalidValue', value: null}
+            'st[1].f2': {type: 'error', path: 'st[1].f2', code: 'validate.invalidValue', value: 12}
+            'st[1].f3': {type: 'error', path: 'st[1].f3', code: 'validate.requiredField'}
+          }

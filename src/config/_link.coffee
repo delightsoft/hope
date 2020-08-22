@@ -28,7 +28,7 @@ $$accessBuilder = require('./helpers/access')
 
 $$validateBuilder = require('./helpers/validate')
 
-$$editValidateBuilderBuilder = require('./helpers/editValidateBuilder')
+$$editValidateBuilder = require('./helpers/editValidate')
 
 snakeCase = require('lodash/snakeCase')
 
@@ -288,7 +288,7 @@ link = (config, noHelpers, opts) ->
 
     unless noHelpers
 
-      actions = methods?.docs[doc.name]?.actions
+      actions = methods?.docs?[doc.name]?.actions
 
       doc.actions.$$list.forEach (action) ->
 
@@ -300,7 +300,7 @@ link = (config, noHelpers, opts) ->
 
           action.arguments.$$validate = $$validateBuilder action, 'arguments', actions?["#{action.name}Validate"]
 
-          action.arguments.$$editValidateBuilder = $$editValidateBuilderBuilder action, 'arguments', action.arguments.$$access, actions?["#{action.name}Validate"]
+          action.arguments.$$editValidate = $$editValidateBuilder action, 'arguments', action.arguments.$$access, actions?["#{action.name}Validate"]
 
         action.$$code = actions[action.name] if actions and actions[action.name]
 
@@ -308,15 +308,15 @@ link = (config, noHelpers, opts) ->
 
         return
 
-      doc.$$access = $$accessBuilder doc, 'fields', methods?.docs[doc.name]?.access, true
+      doc.$$access = $$accessBuilder doc, 'fields', methods?.docs?[doc.name]?.access, true
 
-      doc.$$validate = $$validateBuilder doc, 'fields', methods?.docs[doc.name]?.validate
+      doc.$$validate = $$validateBuilder doc, 'fields', methods?.docs?[doc.name]?.validate
 
-      doc.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
+      doc.$$editValidate = $$editValidateBuilder doc, 'fields', doc.$$access, methods?.docs?[doc.name]?.validate
 
-      doc.fields.$$validate = $$validateBuilder doc, 'fields', methods?.docs[doc.name]?.validate
+      doc.fields.$$validate = $$validateBuilder doc, 'fields', methods?.docs?[doc.name]?.validate
 
-      doc.fields.$$editValidateBuilder = $$editValidateBuilderBuilder doc, 'fields', doc.$$access, methods?.docs[doc.name]?.validate
+      doc.fields.$$editValidate = $$editValidateBuilder doc, 'fields', doc.$$access, methods?.docs?[doc.name]?.validate
 
     for state in doc.states.$$list
 
@@ -372,11 +372,11 @@ link = (config, noHelpers, opts) ->
 
         method.arguments.$$access = $$accessBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argAccess
         method.arguments.$$validate = $$validateBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argValidE
-        method.arguments.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
+        method.arguments.$$editValidate = $$editValidateBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
 
         method.result.$$access = $$accessBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultAccess
         method.result.$$validate = $$validateBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultValidate
-        method.result.$$editValidateBuilder = $$editValidateBuilderBuilder method, 'result', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
+        method.result.$$editValidate = $$editValidateBuilder method, 'result', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
 
       freeze method
 

@@ -7,7 +7,7 @@ config
 
     processCustomValidate = require '../src/validate/processCustomValidate'
 
-    focusOnCheck = 'general'
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '074_config_fields_custom_validate', ->
@@ -106,8 +106,6 @@ this - модель fields. field - описание поля
         res = compileConfig (result = new Result), config, validators: {@greaterThanNumber}
 
         expect(result.messages).toEqual []
-
-        console.info 110, result
 
         unlinkedConfig = deepClone unlinkConfig res
 

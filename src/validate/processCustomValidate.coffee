@@ -28,8 +28,6 @@ processCustomValidate = (result, fieldDesc, fieldsLevel, docDesc, validators) ->
 
       name = validate
 
-    console.info 39, name, validators
-
     unless typeof validators?[name] == 'function'
 
       result.error ((path) -> (Result.prop 'validate') path), 'dsc.unknownValidator', value: validate
