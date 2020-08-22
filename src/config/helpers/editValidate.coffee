@@ -54,7 +54,7 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
     validate localResult, fields, undefined, fields, r.update, r.required, (if beforeSave or beforeAction then undefined else fields.$$touched), false, beforeAction
 
-    unless localResult.isError
+    if not localResult.isError and beforeAction
 
       docLevelValidate?.call type, localResult, fields
 
