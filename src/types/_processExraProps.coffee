@@ -10,7 +10,15 @@ processExtraProps = (result, fieldDesc, res) ->
 
     result.context (Result.prop prop), ->
 
-      (validator || (validator = validateBuilder res)) result, fieldDesc[prop], undefined, undefined, undefined, undefined, undefined, true, true
+      opts =
+
+        result: result
+
+        strict: true
+
+        beforeAction: true
+
+      (validator || (validator = validateBuilder res)).call opts, fieldDesc[prop], undefined, undefined, undefined
 
     res[prop] = fieldDesc[prop]
 

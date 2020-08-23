@@ -129,7 +129,7 @@
 
           do (typeName, type, validate, value) -> check "#{typeName}: simple types - ok: #{prettyPrint value}", ->
 
-            validate (result = new Result), value, undefined, type.fields?.$$tags.all
+            validate.call {result: result = new Result, mask: type.fields?.$$tags.all}, value
 
             expect(result.messages).sameStructure []
 
@@ -137,7 +137,7 @@
 
           do (typeName, type, validate, value) ->  check "#{typeName}: simple types - wrong: #{prettyPrint value}", ->
 
-            validate (result = new Result), value, undefined, type.fields?.$$tags.all
+            validate.call {result: result = new Result, mask: type.fields?.$$tags.all}, value
 
             expect(result.messages).sameStructure [
               {type: 'error', code: 'validate.invalidValue', value}
@@ -159,7 +159,7 @@ null
 
             f3: type: 'boolean'
 
-        validate (result = new Result), {f1: null, f2: 'test', f3: false}, undefined, fields.$$tags.all
+        validate.call {result: result = new Result, mask: fields.$$tags.all}, {f1: null, f2: 'test', f3: false}
 
         expect(result.messages).sameStructure []
 
@@ -177,7 +177,7 @@ null
 
             f3: type: 'boolean'
 
-        validate (result = new Result), {f1: null, f2: 'test', f3: null}, undefined, fields.$$tags.all
+        validate.call {result: result = new Result, mask: fields.$$tags.all}, {f1: null, f2: 'test', f3: null}
 
         expect(result.messages).sameStructure [
           {type: 'error', path: 'f3', code: 'validate.invalidValue', value: null}

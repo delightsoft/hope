@@ -9,15 +9,17 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
   (result, fields, options) ->
 
-    mask = undefined
+    opts =
 
-    required = undefined
+      mask: undefined
 
-    strict = true
+      requiredMask: undefined
 
-    beforeAction = false
+      strict: true
 
-    beforeSave = false
+      beforeAction: false
+
+      beforeSave: false
 
     if options != undefined
 
@@ -27,23 +29,23 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
         switch optName
 
-          when 'mask' then mask = optValue
+          when 'mask' then opts.mask = optValue
 
-          when 'required' then required = optValue
+          when 'required' then opts.requiredMask = optValue
 
-          when 'strict' then strict = optValue
+          when 'strict' then opts.strict = optValue
 
-          when 'beforeSave' then beforeSave = optValue
+          when 'beforeSave' then opts.beforeSave = optValue
 
-          when 'beforeAction' then beforeAction = optValue
+          when 'beforeAction' then opts.beforeAction = optValue
 
           else unknownOption optName
 
     save = true
 
-    goodForAction = beforeAction
+    goodForAction = opts.beforeAction
 
-    localResult = Object.create result
+    opts.result = localResult = Object.create result # inherit given result object, to intercept it's 'error' method calls
 
     localResult.error = () -> # перехватываем сообщения об ошибках
 
@@ -57,13 +59,13 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
       return # localResult.error = () ->
 
-    validate localResult, fields, undefined, fields, mask, required, (if beforeSave and beforeAction then undefined else fields.$$touched), strict, beforeAction
+    validate.call opts, fields, undefined, fields, (if opts.beforeSave and opts.beforeAction then undefined else fields.$$touched)
 
     oldSave = save
 
-    if goodForAction and beforeAction and typeof docLevelValidate == 'function'
+    if goodForAction and opts.beforeAction and typeof docLevelValidate == 'function'
 
-       docLevelValidate localResult, fields # TODO: processs results
+       docLevelValidate.call opts, localResult, fields
 
        goodForAction = false if localResult.isError
 

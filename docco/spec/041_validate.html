@@ -228,9 +228,9 @@ flatMap = <span class="hljs-built_in">require</span> <span class="hljs-string">'
 
 validateBuilder = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate'</span>
 
-focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span><span class="hljs-function">
-
+focusOnCheck = <span class="hljs-string">''</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+<span class="hljs-function">
 <span class="hljs-title">processLevel</span> = <span class="hljs-params">(result, map)</span> -&gt;</span>
 
   name = <span class="hljs-literal">undefined</span>
@@ -245,8 +245,8 @@ focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
 
       processLevel result, field.fields <span class="hljs-keyword">if</span> field.fields
 
-      <span class="hljs-keyword">return</span><span class="hljs-function">
-
+      <span class="hljs-keyword">return</span>
+<span class="hljs-function">
 <span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
 
   map = flatMap result, fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
@@ -381,7 +381,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
       <span class="hljs-keyword">do</span> (typeName, type, validate, value) -&gt; check <span class="hljs-string">"<span class="hljs-subst">#{typeName}</span>: simple types - ok: <span class="hljs-subst">#{prettyPrint value}</span>"</span>, <span class="hljs-function">-&gt;</span>
 
-        validate (result = <span class="hljs-keyword">new</span> Result), value, <span class="hljs-literal">undefined</span>, type.fields?.$$tags.all
+        validate.call {result: result = <span class="hljs-keyword">new</span> Result, mask: type.fields?.$$tags.all}, value
 
         expect(result.messages).sameStructure []
 
@@ -389,7 +389,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
       <span class="hljs-keyword">do</span> (typeName, type, validate, value) -&gt;  check <span class="hljs-string">"<span class="hljs-subst">#{typeName}</span>: simple types - wrong: <span class="hljs-subst">#{prettyPrint value}</span>"</span>, <span class="hljs-function">-&gt;</span>
 
-        validate (result = <span class="hljs-keyword">new</span> Result), value, <span class="hljs-literal">undefined</span>, type.fields?.$$tags.all
+        validate.call {result: result = <span class="hljs-keyword">new</span> Result, mask: type.fields?.$$tags.all}, value
 
         expect(result.messages).sameStructure [
           {type: <span class="hljs-string">'error'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value}
@@ -422,7 +422,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
         f3: type: <span class="hljs-string">'boolean'</span>
 
-    validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-literal">null</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">false</span>}, <span class="hljs-literal">undefined</span>, fields.$$tags.all
+    validate.call {result: result = <span class="hljs-keyword">new</span> Result, mask: fields.$$tags.all}, {f1: <span class="hljs-literal">null</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">false</span>}
 
     expect(result.messages).sameStructure []
 
@@ -440,7 +440,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
         f3: type: <span class="hljs-string">'boolean'</span>
 
-    validate (result = <span class="hljs-keyword">new</span> Result), {f1: <span class="hljs-literal">null</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">null</span>}, <span class="hljs-literal">undefined</span>, fields.$$tags.all
+    validate.call {result: result = <span class="hljs-keyword">new</span> Result, mask: fields.$$tags.all}, {f1: <span class="hljs-literal">null</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">null</span>}
 
     expect(result.messages).sameStructure [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'f3'</span>, code: <span class="hljs-string">'validate.invalidValue'</span>, value: <span class="hljs-literal">null</span>}

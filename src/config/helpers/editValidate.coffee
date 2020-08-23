@@ -10,9 +10,19 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
   (fields, options) ->
 
-    beforeSave = false
+    r = access.call typeDesc, fields
 
-    beforeAction = false
+    opts =
+
+      mask: r.update
+
+      requiredMask: r.required
+
+      strict: false
+
+      beforeSave: false
+
+      beforeAction: false
 
     if options != undefined
 
@@ -22,9 +32,9 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
         switch optName
 
-          when 'beforeSave' then beforeSave = !!optValue
+          when 'beforeSave' then opts.beforeSave = !!optValue
 
-          when 'beforeAction' then beforeAction = !!optValue
+          when 'beforeAction' then opts.beforeAction = !!optValue
 
           else unknownOption optName
 
@@ -32,13 +42,11 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
     messages = {}
 
-    r = access.call typeDesc, fields
-
     save = true
 
-    goodForAction = beforeAction
+    goodForAction = opts.beforeAction
 
-    localResult = new Result
+    opts.result = localResult = new Result
 
     localResult.error = () -> # перехватываем сообщения об ошибках
 
@@ -52,18 +60,25 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
       return # localResult.error = () ->
 
-    validate localResult, fields, undefined, fields, r.update, r.required, (if beforeSave or beforeAction then undefined else fields.$$touched), false, beforeAction
+    validate.call opts, fields, undefined, fields, (if opts.beforeSave or opts.beforeAction then undefined else fields.$$touched)
 
-    if not localResult.isError and beforeAction
+    oldSave = save
+
+    if not localResult.isError and opts.beforeAction
 
       docLevelValidate?.call type, localResult, fields
 
+      goodForAction = false if localResult.isError
+
     localResult.messages.forEach (msg) ->
-      if (path = msg.path) then (messages[path] = msg if not messages[path] or (msg.type == 'error' and messages[path].type != 'error'))
-      else (messages[''] or (messages[''] = [])).push msg
+      if (path = msg.path)
+        if not messages[path] or (msg.type == 'error' and messages[path].type != 'error')
+          messages[path] = msg
+      else
+        (messages[''] or (messages[''] = [])).push msg
       return
 
-    {save, goodForAction, messages} # (fields) ->  # ->
+    {save: oldSave, goodForAction, messages} # (fields) ->  # ->
 
 # ----------------------------
 
