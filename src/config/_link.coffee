@@ -160,6 +160,14 @@ link = (config, noHelpers, opts) ->
 
       none: freezeBitArray new BitArray res
 
+    if res.$$flat # only 'fields' are flatMap
+
+      requiredMask = tags.required = new BitArray res
+
+      requiredMask.set fld.$$index for fld in res.$$flat.$$list when fld.required
+
+      freezeBitArray(requiredMask)
+
     tags[k] = freezeBitArray (new BitArray res.$$flat?.$$list || res.$$list, v) for k, v of collection.tags
 
     tags = res.$$tags = freeze tags

@@ -35,7 +35,7 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
       @result.context ((path) -> (Result.prop field.name) path), =>
         for field in type[fieldsProp].$$list when (
           (not @mask or @mask.get(field.$$index)) and
-          (field.required or @requiredMask?.get(field.$$index)) and
+          @required?.get(field.$$index) and
           (not value.hasOwnProperty(field.name)) and
           (not onlyFields or onlyFields[field.name]))
             err = (@result.error 'validate.requiredField') or err
@@ -65,7 +65,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
         f = (value) ->
           return @result.error 'validate.invalidValue', value: value unless typeof value == 'string'
           return @result.error 'validate.tooLong', value: value, max: len unless value.length <= len
-          return @result.error 'validate.requiredField' if @beforeAction and value.length == 0 and (fieldDesc.required or @requiredMask?.get(fieldDesc.$$index))
+          return @result.error 'validate.requiredField' if @beforeAction and value.length == 0 and @required?.get(fieldDesc.$$index)
           return
       if fieldDesc.hasOwnProperty('min')
         do (pf = f) ->
@@ -88,7 +88,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
     when 'text'
       f = (value) ->
         return @result.error 'validate.invalidValue', value: value unless typeof value == 'string'
-        return @result.error 'validate.requiredField' if @beforeAction and value.length == 0 and (fieldDesc.required or @requiredMask?.get(fieldDesc.$$index))
+        return @result.error 'validate.requiredField' if @beforeAction and value.length == 0 and @required?.get(fieldDesc.$$index)
         return
       if fieldDesc.hasOwnProperty('min')
         do (pf = f) ->
@@ -165,25 +165,25 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
 
     when 'decimal'
       f = (value) ->
-        @result.error 'validate.invalidValue', value: value unless typeof value == 'number' and Number.isInteger(value)
-        return
-      if fieldDesc.hasOwnProperty('min')
-        do (pf = f) ->
-          min = fieldDesc.min
-          f = (value, fieldsLevel, doc, onlyFields) ->
-            return r if r = pf.apply @, arguments
-            return @result.error 'validate.tooSmall', value: value, min: min if @beforeAction and not (min <= value)
-            return
-          return
-      if fieldDesc.hasOwnProperty('max')
-        do (pf = f) ->
-          max = fieldDesc.max
-          f = (value, fieldsLevel, doc, onlyFields) ->
-            return r if r = pf.apply @, arguments
-            return @result.error 'validate.tooBig', value: value, max: max if @beforeAction and not (value <= max)
-            return
-          return
-      f # when 'double'
+#        @result.error 'validate.invalidValue', value: value unless typeof value == 'number' and Number.isInteger(value)
+#        return
+#      if fieldDesc.hasOwnProperty('min')
+#        do (pf = f) ->
+#          min = fieldDesc.min
+#          f = (value, fieldsLevel, doc, onlyFields) ->
+#            return r if r = pf.apply @, arguments
+#            return @result.error 'validate.tooSmall', value: value, min: min if @beforeAction and not (min <= value)
+#            return
+#          return
+#      if fieldDesc.hasOwnProperty('max')
+#        do (pf = f) ->
+#          max = fieldDesc.max
+#          f = (value, fieldsLevel, doc, onlyFields) ->
+#            return r if r = pf.apply @, arguments
+#            return @result.error 'validate.tooBig', value: value, max: max if @beforeAction and not (value <= max)
+#            return
+#          return
+#      f # when 'double'
 
     when 'date'
       (value) -> @result.error 'validate.invalidValue', value: value unless typeof value == 'string' and moment(value, 'YYYY-MM-DD').isValid()
@@ -208,8 +208,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
         (value, fieldsLevel, doc, onlyFields) ->
           unless Array.isArray value
             return @result.error 'validate.invalidValue', value: value
-          return @result.error 'validate.invalidValue', value: value if (fieldDesc.required or @requiredMask?.get(fieldDesc.$$index)) and value.length == 0
-          @result.isError = false
+          return @result.error 'validate.invalidValue', value: value if @required?.get(fieldDesc.$$index) and value.length == 0
           i = undefined
           err = undefined
           @result.context ((path) -> (Result.index i) path), =>
@@ -240,7 +239,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
      f = (value) ->
         if value != null
           pf.apply @, arguments
-        else if @beforeAction and (fieldDesc.required or @requiredMask?.get(fieldDesc.$$index))
+        else if @beforeAction and @required?.get(fieldDesc.$$index)
           @result.error 'validate.requiredField', value: value
 
   # если нет docDesc, значит это вызов из _processExtraProp, когда customValidator не используется
@@ -252,7 +251,6 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
     do (pf = f) ->
       f = (value, fieldsLevel, doc, onlyFields) ->
         return r if r = pf.apply @, arguments
-        @result.isError = false;
         if @beforeAction or customValidator.basic
           customValidator @result, value, fieldsLevel, doc, @beforeAction
         return @result.isError;

@@ -1,24 +1,39 @@
+freezeBitArray = (ba) ->
+
+  ba.list
+
+  ba # (ba) ->
+
 $$accessBuilder = (type, fieldsProp, access, addActions) ->
 
   if typeof access == 'function'
 
     # TODO: Wrap and check result
+    (fields) ->
 
-    access # (type, fieldsProp, access) ->
+      r = access.apply @, arguments # (type, fieldsProp, access) ->
+
+      if addActions
+        r.view = freezeBitArray if r.view then r.view.or(type[fieldsProp].$$calc('id,rev,deleted', strict: false)) else type[fieldsProp].$$tags.all
+        r.update = freezeBitArray if r.update then r.update.or(type[fieldsProp].$$calc('id,rev,deleted', strict: false)) else type[fieldsProp].$$tags.all
+        r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
+        r.actions = type.actions.$$tags.all
+      else
+        r.view = type[fieldsProp].$$tags.all unless r.view
+        r.update = type[fieldsProp].$$tags.all unless r.update
+
+      r # (fields) ->
 
   else
 
     do ->
 
-      exceptSystem = if type[fieldsProp].$$tags.hasOwnProperty('system') then type[fieldsProp].$$tags.system.invert() else type[fieldsProp].$$tags.all
-
       allAccess =
-        view: exceptSystem
-        update: exceptSystem
+        view: type[fieldsProp].$$tags.all
+        update: type[fieldsProp].$$calc '(#all-#system),id,rev,deleted', strict: false
 
-      allAccess.actions = type.actions.$$tags.all if addActions
-
-      if type.hasOwnProperty('actions')
+      if addActions
+        allAccess.required = type[fieldsProp].$$tags.required
         allAccess.actions = type.actions.$$tags.all
 
       (doc) -> allAccess # (type, fieldsProp, access) ->

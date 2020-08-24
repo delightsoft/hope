@@ -28,15 +28,25 @@ config
 
         unlinkedConfig = unlinkConfig(res)
 
-        linkedConfig = linkConfig unlinkedConfig, false
+        linkedConfig = linkConfig unlinkedConfig, docs: 'doc.Doc1': access: (fields) ->
+          view: @fields.$$tags.all
+          update: @fields.$$tags.all
+          required: @fields.$$tags.required
+          access: @actions.$$tags.all
 
-        expect(linkedConfig.docs['doc.Doc1'].fields.$$validate (result = new Result()), {a: 'test', b: 24, c: 36}, {beforeAction: false}).toEqual
-          save: true, goodForAction: false
+        expect(linkedConfig.docs['doc.Doc1'].fields.$$validate (result = new Result()), {a: 'test', b: 24, c: 36}, {
+          beforeAction: false
+        }).toEqual
+          save: true
+          goodForAction: false
 
         expect(result.messages).toEqual []
 
-        expect(linkedConfig.docs['doc.Doc1'].fields.$$validate (result = new Result()), {}, {beforeAction: true}).toEqual
-          save: true, goodForAction: false
+        expect(linkedConfig.docs['doc.Doc1'].fields.$$validate (result = new Result()), {}, {
+          beforeAction: true
+        }).toEqual
+          save: true
+          goodForAction: false
 
         expect(result.messages).toEqual [
           {type: 'error', path: 'a', code: 'validate.requiredField'}
@@ -76,5 +86,3 @@ config
 
         expect(result.messages).toEqual [
         ]
-
-

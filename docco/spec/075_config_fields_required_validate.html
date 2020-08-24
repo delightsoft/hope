@@ -252,15 +252,25 @@ describe <span class="hljs-string">'075_config_fields_required_validate'</span>,
 
     unlinkedConfig = unlinkConfig(res)
 
-    linkedConfig = linkConfig unlinkedConfig, <span class="hljs-literal">false</span>
+    linkedConfig = linkConfig unlinkedConfig, docs: <span class="hljs-string">'doc.Doc1'</span>: access: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span>
+      view: @fields.$$tags.all
+      update: @fields.$$tags.all
+      required: @fields.$$tags.required
+      access: @actions.$$tags.all
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {a: <span class="hljs-string">'test'</span>, b: <span class="hljs-number">24</span>, c: <span class="hljs-number">36</span>}, {beforeAction: <span class="hljs-literal">false</span>}).toEqual
-      save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {a: <span class="hljs-string">'test'</span>, b: <span class="hljs-number">24</span>, c: <span class="hljs-number">36</span>}, {
+      beforeAction: <span class="hljs-literal">false</span>
+    }).toEqual
+      save: <span class="hljs-literal">true</span>
+      goodForAction: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual []
 
-    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {}, {beforeAction: <span class="hljs-literal">true</span>}).toEqual
-      save: <span class="hljs-literal">true</span>, goodForAction: <span class="hljs-literal">false</span>
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$validate (result = <span class="hljs-keyword">new</span> Result()), {}, {
+      beforeAction: <span class="hljs-literal">true</span>
+    }).toEqual
+      save: <span class="hljs-literal">true</span>
+      goodForAction: <span class="hljs-literal">false</span>
 
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'a'</span>, code: <span class="hljs-string">'validate.requiredField'</span>}

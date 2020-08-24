@@ -50,7 +50,7 @@ unlinkTags = (tags) ->
 
   res = {}
 
-  res[k] = v._mask for k, v of tags when not ~['all', 'none'].indexOf(k)
+  res[k] = v._mask for k, v of tags when not ~['all', 'none', 'required'].indexOf(k)
 
   res # unlinkTags =
 

@@ -7,13 +7,17 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
   validate = type["_#{fieldsProp}Validate"] = validateStructure type, fieldsProp
 
+  access = undefined
+
   (result, fields, options) ->
 
     opts =
 
+      result: result
+
       mask: undefined
 
-      requiredMask: undefined
+      required: type.fields.$$tags.required
 
       strict: true
 
@@ -29,9 +33,9 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
         switch optName
 
-          when 'mask' then opts.mask = optValue
+          when 'access' then access = optValue
 
-          when 'required' then opts.requiredMask = optValue
+          when 'mask' then opts.mask = optValue
 
           when 'strict' then opts.strict = optValue
 
@@ -45,29 +49,39 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
     goodForAction = opts.beforeAction
 
-    opts.result = localResult = Object.create result # inherit given result object, to intercept it's 'error' method calls
+    access = type.$$access fields unless access
 
-    localResult.error = () -> # перехватываем сообщения об ошибках
+    opts.mask = (if opts.beforeAction then access.view.or(access.update) else access.update) unless opts.mask
 
-      msg = Result::error.apply localResult, arguments
+    opts.required = access.required
 
-      if msg.type == 'error'
+    try
 
-        goodForAction = false
+      result.error = () -> # перехватываем сообщения об ошибках
 
-        save = false unless msg.code == 'validate.requiredField'
+        msg = Result::error.apply result, arguments
 
-      return # localResult.error = () ->
+        if msg.type == 'error'
 
-    validate.call opts, fields, undefined, fields, (if opts.beforeSave and opts.beforeAction then undefined else fields.$$touched)
+          goodForAction = false
 
-    oldSave = save
+          save = false unless msg.code == 'validate.requiredField'
 
-    if goodForAction and opts.beforeAction and typeof docLevelValidate == 'function'
+        msg # result.error = () ->
 
-       docLevelValidate.call opts, localResult, fields
+      validate.call opts, fields, undefined, fields, (if opts.beforeSave and opts.beforeAction then undefined else fields.$$touched)
 
-       goodForAction = false if localResult.isError
+      oldSave = save
+
+      if goodForAction and opts.beforeAction and typeof docLevelValidate == 'function'
+
+         docLevelValidate.call opts, result, fields
+
+         goodForAction = false if result.isError
+
+    finally
+
+      result.error = Result::error
 
     return {save: oldSave, goodForAction}
 

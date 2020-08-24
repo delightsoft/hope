@@ -36,7 +36,10 @@ config
 
           docs:
             'doc.Doc1':
-              access: (fields) -> view: this.fields.$$tags.t1, update: this.fields.$$tags.t1
+              access: (fields) ->
+                view: @fields.$$tags.t1
+                update: @fields.$$tags.t1
+                required: @fields.$$tags.required
               validate: (result, fields) ->
                 result.error 'err1' if fields.f1 == 20
                 result.error (-> 'f2.f3[0]'), 'err2' if fields.f1 == 30
@@ -47,9 +50,15 @@ config
           api:
             api1:
               method1:
-                argAccess: (fields) -> view: this.$$tags.t1, update: this.$$tags.t1
+                argAccess: (fields) ->
+                  view: @$$tags.t1
+                  update: @$$tags.t1
+                  required: @$$tags.required
                 argValidate: (result  , fields) -> result.error 'err2' if fields.a == 12; return
-                resultAccess: (fields) -> view: this.$$tags.t1, update: this.$$tags.t1
+                resultAccess: (fields) ->
+                  view: @$$tags.t1
+                  update: @$$tags.t1
+                  required: @$$tags.required
                 resultValidate: (result, fields) -> result.error 'err3' if fields.r2 == 2.4; return
 
       check 'general', ->
@@ -67,8 +76,10 @@ config
         expect(access).toEqual
           view: linkedConfig.docs['doc.Doc1'].fields.$$tags.t1
           update: linkedConfig.docs['doc.Doc1'].fields.$$tags.t1
+          required: linkedConfig.docs['doc.Doc1'].fields.$$tags.required
+          actions: linkedConfig.docs['doc.Doc1'].actions.$$tags.all
 
-        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 12, f2: 'test', f3: true}, {mask: access.update, strict: true}).toEqual save: false, goodForAction: false
+        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 12, f2: 'test', f3: true}, {strict: true}).toEqual save: false, goodForAction: false
 
         expect(result.messages).toEqual [
           {type: 'error', code: 'validate.unexpectedField', path: 'f3', value: true}
@@ -84,14 +95,18 @@ config
           {type: 'error', code: 'err1'}
         ]
 
-        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 'wrong'}, {beforeAction: true, mask: access.update}).toEqual save: false, goodForAction: false
+        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 'wrong'}, {
+          beforeAction: true
+        }).toEqual save: false, goodForAction: false
 
         expect(result.messages).toEqual [
           {type: 'error', code: 'validate.invalidValue', path: 'f1', value: 'wrong'}
           {type: 'error', code: 'validate.requiredField', path: 'f2'}
         ]
 
-        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 20}, {beforeAction: true, mask: access.update}).toEqual save: true, goodForAction: false
+        expect(linkedConfig.docs['doc.Doc1'].$$validate (result = new Result), {f1: 20}, {
+          beforeAction: true
+        }).toEqual save: true, goodForAction: false
 
         expect(result.messages).toEqual [
           {type: 'error', code: 'validate.requiredField', path: 'f2'}
@@ -109,7 +124,9 @@ config
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidate {f1: 12, f2: 'test', f3: true}).toEqual save: true, goodForAction: false, messages: {}
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {f1: 'wrong'}, {beforeAction: true}).toEqual
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {f1: 'wrong'}, {
+          beforeAction: true
+        }).toEqual
           save: false, goodForAction: false, messages:
             f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
             f2: {type: 'error', code: 'validate.requiredField', path: 'f2'}
@@ -120,7 +137,9 @@ config
           f1: 'wrong'
           f2: 12
           $$touched: {f2: true}
-        }, {beforeAction: true}).toEqual
+        }, {
+          beforeAction: true
+        }).toEqual
           save: false, goodForAction: false, messages:
             f1: type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'
             f2: {type: 'error', path: 'f2', code: 'validate.invalidValue', value: 12}
@@ -129,7 +148,9 @@ config
           f1: 'wrong'
           f2: 12
           $$touched: {f2: true}
-        }, {beforeAction: false}).toEqual
+        }, {
+          beforeAction: false
+        }).toEqual
           save: false, goodForAction: false, messages:
             f2: {type: 'error', path: 'f2', code: 'validate.invalidValue', value: 12}
 
@@ -137,7 +158,9 @@ config
           f1: 20
           f2: 'right'
           $$touched: {f1: true}
-        }, {beforeAction: true}).toEqual
+        }, {
+          beforeAction: true
+        }).toEqual
           save: true, goodForAction: false, messages:
             '': [{ type: 'error', code: 'err1' }]
 
@@ -148,24 +171,33 @@ config
           f2: 'right'
           $$touched: {f1: true}
 
-        expect(editValidate model, {beforeAction: true}).toEqual
+        expect(editValidate model, {
+          beforeAction: true
+        })
+          .toEqual
           save: true, goodForAction: false, messages:
             '': [{type: 'error', code: 'err1'}]
 
         model.f1 = 'wrong'
 
-        expect(editValidate model, {beforeAction: false}).toEqual
+        expect(editValidate model, {
+          beforeAction: false
+        }).toEqual
           save: false, goodForAction: false, messages:
             f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
 
-        expect(editValidate deepClone model, {beforeAction: false}).toEqual
+        expect(editValidate deepClone model, {
+          beforeAction: false
+        }).toEqual
           save: false, goodForAction: false, messages:
             f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: 30
           f2: 'right'
-        }, {beforeAction: true}).toEqual
+        }, {
+          beforeAction: true
+        }).toEqual
           save: true, goodForAction: false, messages:
             'f2.f3[0]': {type: 'error', path: 'f2.f3[0]', code: 'err2'}
 
@@ -176,23 +208,34 @@ config
           f2: 'right'
           $$touched: {f1: true}
 
-        expect(editValidate model, {beforeAction: false}).toEqual
-        save: false, goodForAction: false, messages:
-          f1: {type: 'error', code: 'err3'}
-          f2: {type: 'error', code: 'err4'}
+        expect(editValidate model, {
+          beforeAction: true
+        }).toEqual
+          save: true,
+          goodForAction: false,
+          messages:
+            f1: {type: 'error', path: 'f1', code: 'err3'}
+            f2: {type: 'error', path: 'f2', code: 'err4'}
 
         model.f1 = 'wrong'
 
-        expect(editValidate model, {beforeAction: false}).toEqual
-        save: false, goodForAction: false, messages:
-          f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
-          f2: {type: 'error', code: 'err4'}
+        expect(editValidate model, {
+          beforeAction: true
+        }).toEqual
+          save: false,
+          goodForAction: false,
+          messages:
+            f1: {type: 'error', path: 'f1', code: 'validate.invalidValue', value: 'wrong'}
 
         model.f1 = 20
 
-        expect(editValidate model, {beforeAction: false}).toEqual
-        save: false, goodForAction: false, messages:
-          '': [{type: 'error', code: 'err1'}]
+        expect(editValidate model, {
+          beforeAction: true
+        }).toEqual
+          save: true,
+          goodForAction: false,
+          messages:
+            '': [{type: 'error', code: 'err1'}]
 
       check 'edit validate builder on methods', ->
 
@@ -228,35 +271,63 @@ config
 
         unlinkedConfig = deepClone unlinkConfig res
 
-        linkedConfig = linkConfig unlinkedConfig
+        linkedConfig = linkConfig unlinkedConfig, docs: 'doc.Doc1': access: (fields) ->
+          view: @fields.$$tags.all
+          update: @fields.$$tags.all
+          required: @fields.$$tags.required
+          access: @actions.$$tags.all
 
         expect(result.messages).toEqual []
 
-        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {f1: '', f2: ''}, {beforeAction: true}).toEqual save: true, goodForAction: false, messages: {
-          f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
-        }
+        expect(linkedConfig.docs['doc.Doc1'].$$editValidate {f1: '', f2: ''}, {
+          beforeAction: true
+        }).toEqual
+          save: true
+          goodForAction: false
+          messages:
+            f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: '',
           f2: '',
           $$touched: f1: true, f2: true
-        }, {beforeAction: false}).toEqual save: true, goodForAction: false, messages: {}
+        }, {
+          beforeAction: false
+        }).toEqual
+          save: true
+          goodForAction: false
+          messages: {}
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           f1: '',
           f2: '',
           $$touched: f1: false, f2: false
-        }, {beforeAction: true}).toEqual save: true, goodForAction: false, messages:
-          f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
+        }, {
+          beforeAction: true
+        }).toEqual
+          save: true
+          goodForAction: false
+          messages:
+            f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           $$touched: f1: false, f2: false
-        }, {beforeAction: false}).toEqual save: true, goodForAction: false, messages: {}
+        }, {
+          beforeAction: false
+        }).toEqual
+          save: true
+          goodForAction: false
+          messages: {}
 
         expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           $$touched: f1: false, f2: false
-        }, {beforeAction: true}).toEqual save: true, goodForAction: false, messages:
-          f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
+        }, {
+          beforeAction: true
+        }).toEqual
+          save: true
+          goodForAction: false
+          messages:
+            f2: {type: 'error', path: 'f2', code: 'validate.requiredField'}
 
       check 'subtable in before edit', ->
 
@@ -272,7 +343,11 @@ config
 
         unlinkedConfig = deepClone unlinkConfig res
 
-        linkedConfig = linkConfig unlinkedConfig
+        linkedConfig = linkConfig unlinkedConfig, docs: 'doc.Doc1': access: (fields) ->
+          view: @fields.$$tags.all
+          update: @fields.$$tags.all
+          required: @fields.$$tags.required
+          access: @actions.$$tags.all
 
         expect(result.messages).toEqual []
 
@@ -288,7 +363,10 @@ config
         expect(linkedConfig.docs['doc.Doc1'].$$editValidate {
           st: [{f1: '', f2: '', $$touched: f1: true, f2: true}, {f1: null, f2: 12, $$touched: f1: true, f2: true}]
           $$touched: {}
-        }, {beforeAction: true}).toEqual save: false, goodForAction: false, messages: {
+        }, {
+          beforeAction: true
+        })
+        .toEqual save: false, goodForAction: false, messages: {
           'st[0].f2': {type: 'error', path: 'st[0].f2', code: 'validate.requiredField'}
           'st[1].f1': {type: 'error', path: 'st[1].f1', code: 'validate.invalidValue', value: null}
           'st[1].f2': {type: 'error', path: 'st[1].f2', code: 'validate.invalidValue', value: 12}
@@ -311,10 +389,10 @@ config
         unlinkedConfig = deepClone unlinkConfig res
 
         linkedConfig = linkConfig unlinkedConfig, docs: 'doc.Doc1': access: ->
-          view: this.fields.$$tags.all
-          update: this.fields.$$tags.all
-          actions: this.actions.$$tags.all
-          required: this.fields.$$calc('st.f2, st.f3')
+          view: @fields.$$tags.all
+          update: @fields.$$tags.all
+          actions: @actions.$$tags.all
+          required: @fields.$$calc('st.f2, st.f3')
 
         expect(result.messages).toEqual []
 

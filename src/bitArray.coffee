@@ -70,6 +70,12 @@ class BitArray
 
     @_mask.every (v, i) -> rightMask[i] == v # equal:
 
+  clone: () ->
+
+    tooManyArgs() unless arguments.length <= 0
+
+    new BitArray @_collection, @_mask # clone:
+
   and: (bitArray) ->
 
     invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')

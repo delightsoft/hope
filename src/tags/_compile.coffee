@@ -16,6 +16,12 @@ compile = (result, collection) ->
 
     none: new BitArray collection
 
+  if collection.$$flat # only 'fields' are flatMap
+
+    requiredMask = tags.required = new BitArray collection
+
+    requiredMask.set(fld.$$index) for fld in collection.$$flat.$$list when fld.required
+
   _addTag = (result, dupCheck, tag, item, namespace) ->
 
     if (tag = tag.trim()).length > 0
@@ -42,9 +48,9 @@ compile = (result, collection) ->
 
           result.error 'dsc.invalidName', value: tag
 
-        else if tag == 'all'
+        else if ~['all', 'none', 'required'].indexOf(tag)
 
-          result.error 'dsc.reservedName', value: 'all'
+          result.error 'dsc.reservedName', value: tag
 
         else
 

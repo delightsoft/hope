@@ -10,13 +10,11 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
   (fields, options) ->
 
-    r = access.call typeDesc, fields
-
     opts =
 
-      mask: r.update
+      mask: undefined
 
-      requiredMask: r.required
+      required: undefined
 
       strict: false
 
@@ -32,6 +30,8 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
         switch optName
 
+          when 'strict' then opts.strict = optValue
+
           when 'beforeSave' then opts.beforeSave = !!optValue
 
           when 'beforeAction' then opts.beforeAction = !!optValue
@@ -46,6 +46,12 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
     goodForAction = opts.beforeAction
 
+    r = access.call typeDesc, fields
+
+    opts.mask = if opts.beforeAction then r.view.or(r.update) else r.update
+
+    opts.required = r.required
+
     opts.result = localResult = new Result
 
     localResult.error = () -> # перехватываем сообщения об ошибках
@@ -58,7 +64,7 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
         save = false if msg.code == 'validate.invalidValue'
 
-      return # localResult.error = () ->
+      msg # localResult.error = () ->
 
     validate.call opts, fields, undefined, fields, (if opts.beforeSave or opts.beforeAction then undefined else fields.$$touched)
 
