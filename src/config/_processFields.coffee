@@ -25,15 +25,15 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
     unless noSystemItems
 
       flatMapOpts.before = [
-        {name: 'id', type: 'nanoid', tags: 'field, system, index, unique'}
-        {name: 'rev', type: 'int', init: 0, tags: 'field, system'}
+        {name: 'id', type: 'nanoid', tags: 'field, system, index, unique, hide'}
+        {name: 'rev', type: 'int', init: 0, tags: 'field, system, hide'}
       ]
 
       flatMapOpts.after = [
-        {name: 'options', type: 'json', tags: 'field, system, index'}
-        {name: 'created', type: 'timestamp', tags: 'field, system, index'}
-        {name: 'modified', type: 'timestamp', tags: 'field, system, index'}
-        {name: 'deleted', type: 'boolean', init: false, tags: 'field, system'}
+        {name: 'options', type: 'json', tags: 'field, system, index, hide'}
+        {name: 'created', type: 'timestamp', tags: 'field, system, index, hide'}
+        {name: 'modified', type: 'timestamp', tags: 'field, system, index, hide'}
+        {name: 'deleted', type: 'boolean', init: false, tags: 'field, system, hide'}
       ]
 
       flatMapOpts.after.unshift name: 'state', type: 'string(100)', init: 'new', tags: 'field, system, index' if doc.$$src.states
