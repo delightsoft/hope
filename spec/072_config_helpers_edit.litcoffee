@@ -110,6 +110,7 @@ config
 
         expect(result.messages).toEqual [
           {type: 'error', code: 'validate.requiredField', path: 'f2'}
+          {type: 'error', code: 'err1'}
         ]
 
       check 'edit validate builder', ->

@@ -37,5 +37,3 @@ module.exports =
   checkResult: (result) ->
 
     invalidArg 'result', result unless isResult result
-
-    throw new Error "Argument 'result' already has error" unless !result.isError

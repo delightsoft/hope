@@ -62,7 +62,7 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
         goodForAction = false
 
-        save = false if msg.code == 'validate.invalidValue'
+        save = false if ~['validate.invalidValue', 'validate.unknownField', 'validate.unexpectedField'].indexOf(msg.code)
 
       msg # localResult.error = () ->
 
@@ -70,11 +70,9 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
     oldSave = save
 
-    if not localResult.isError and opts.beforeAction
+    if save and opts.beforeAction and typeof docLevelValidate == 'function'
 
       docLevelValidate?.call type, localResult, fields
-
-      goodForAction = false if localResult.isError
 
     localResult.messages.forEach (msg) ->
       if (path = msg.path)

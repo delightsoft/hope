@@ -74,7 +74,13 @@ class BitArray
 
     tooManyArgs() unless arguments.length <= 0
 
-    new BitArray @_collection, @_mask # clone:
+    resMask = new Array (len = (leftMask = @_mask).length)
+
+    for i in [0...len] by 1
+
+      resMask[i] = leftMask[i]
+
+    new BitArray @_collection, resMask # clone:
 
   and: (bitArray) ->
 

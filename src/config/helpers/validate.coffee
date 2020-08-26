@@ -65,7 +65,7 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
           goodForAction = false
 
-          save = false unless msg.code == 'validate.requiredField'
+          save = false if ~['validate.invalidValue', 'validate.unknownField', 'validate.unexpectedField'].indexOf(msg.code)
 
         msg # result.error = () ->
 
@@ -73,11 +73,9 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
       oldSave = save
 
-      if goodForAction and opts.beforeAction and typeof docLevelValidate == 'function'
+      if save and opts.beforeAction and typeof docLevelValidate == 'function'
 
          docLevelValidate.call opts, result, fields
-
-         goodForAction = false if result.isError
 
     finally
 
