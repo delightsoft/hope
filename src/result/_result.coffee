@@ -148,6 +148,8 @@ class Result
 
       err = new Error JSON.stringify @messages
 
+      err.code = 'dsc.result'
+
       @reset() # so global Result object could be reused in specs
 
       throw err # throwIfError:
