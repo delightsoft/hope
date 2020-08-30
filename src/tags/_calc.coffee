@@ -93,7 +93,45 @@ _tokenizer = (result, expression) ->
 
     return # return ->
 
+  Object.defineProperty nextToken, 'expr', get: -> expression
+
   Object.defineProperty nextToken, 'position', get: ->  if s == 1 then m else p
+
+  nextToken # _tokenizer =
+
+i = 0
+
+iNextToken = undefined
+
+_listTokenizer = (result, list) ->
+
+  nextToken = if list.length == 0
+
+    ->
+
+  else
+
+    iNextToken = _tokenizer result, list[0]
+
+    ->
+
+      if iNextToken
+
+        if (token = iNextToken())
+
+          return token
+
+        else if ++i < list.length
+
+          return if result.isError
+
+          iNextToken = _tokenizer result, list[i]
+
+          return '+'
+
+  Object.defineProperty nextToken, 'expr', get: -> list[i]
+
+  Object.defineProperty nextToken, 'position', get: -> iNextToken?.position
 
   nextToken # _tokenizer =
 
@@ -101,7 +139,7 @@ calc = (result, collection, expression, options) ->
 
   invalidArg 'result', result unless isResult result
   invalidArg 'collection', collection unless typeof collection == 'object' && collection != null && collection.hasOwnProperty('$$list')
-  invalidArg 'expression', expression unless typeof expression == 'string'
+  invalidArg 'expression', expression unless typeof expression == 'string' or (Array.isArray(expression) and expression.every((v) -> typeof v == 'string'))
   tooManyArgs() unless arguments.length <= 4
 
   strict = true
@@ -120,7 +158,8 @@ calc = (result, collection, expression, options) ->
 
           strict = optValue if optValue != undefined
 
-  nextToken = _tokenizer result, expression
+
+  nextToken = if Array.isArray(expression) then _listTokenizer(result, expression) else _tokenizer(result, expression)
 
   expr = []
   levels = []
@@ -138,7 +177,7 @@ calc = (result, collection, expression, options) ->
         expr = level
       when ')'
         unless levels.length > 0
-          result.error 'dsc.unmatchParenthesis', position: nextToken.position, value: expression
+          result.error 'dsc.unmatchParenthesis', position: nextToken.position, value: nextToken.expr
         else
           expr = levels.pop()
       else
@@ -146,17 +185,17 @@ calc = (result, collection, expression, options) ->
           if collection.$$tags.hasOwnProperty(tag = token.substr 1)
             expr.push collection.$$tags[tag]
           else if strict
-            result.error 'dsc.unknownTag', value: tag, position: nextToken.position
+            result.error 'dsc.unknownTag', expr: nextToken.expr, position: nextToken.position, value: tag
           else
             expr.push collection.$$tags.none
         else # field
           unless map.hasOwnProperty(token)
             if strict
-              result.error 'dsc.unknownItem', value: token, position: nextToken.position
+              result.error 'dsc.unknownItem', expr: nextToken.expr, position: nextToken.position, value: token
             else
               expr.push collection.$$tags.none
-          else if map[token].hasOwnProperty('$$mask')
-            expr.push map[token].$$mask
+#          else if map[token].hasOwnProperty('$$mask')
+#            expr.push map[token].$$mask
           else
             fieldMask = new BitArray collection
             fieldMask.set map[token].$$index
@@ -203,11 +242,17 @@ calc = (result, collection, expression, options) ->
 
   res = _calcExpr expr
 
-  res.list
+  if res # calc =
 
-  # res.clearVertical() if isFlat
+    res.list
 
-  res # calc =
+    # res.clearVertical() if isFlat
+
+    res
+
+  else
+
+    collection.$$tags.none
 
 # ----------------------------
 

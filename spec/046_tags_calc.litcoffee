@@ -94,16 +94,16 @@ Tags.Calc
         calcTags (result = new Result), @fields, expr = 'fld1, aaa, fld2, bbb'
 
         expect(result.messages).sameStructure [
-          {type: 'error', code: 'dsc.unknownItem', value: 'aaa', position: 6}
-          {type: 'error', code: 'dsc.unknownItem', value: 'bbb', position: 17}
+          {type: 'error', code: 'dsc.unknownItem', expr: 'fld1, aaa, fld2, bbb', value: 'aaa', position: 6}
+          {type: 'error', code: 'dsc.unknownItem', expr: 'fld1, aaa, fld2, bbb', value: 'bbb', position: 17}
         ]
 
         calcTags (result = new Result), @fields, expr = '#a, #f, #test.b, #q, #ui.a123'
 
         expect(result.messages).sameStructure [
-          {type: 'error', code: 'dsc.unknownTag', value: 'f', position: 4}
-          {type: 'error', code: 'dsc.unknownTag', value: 'q', position: 17}
-          {type: 'error', code: 'dsc.unknownTag', value: 'ui.a123', position: 21}
+          {type: 'error', code: 'dsc.unknownTag', expr: '#a, #f, #test.b, #q, #ui.a123', value: 'f', position: 4}
+          {type: 'error', code: 'dsc.unknownTag', expr: '#a, #f, #test.b, #q, #ui.a123', value: 'q', position: 17}
+          {type: 'error', code: 'dsc.unknownTag', expr: '#a, #f, #test.b, #q, #ui.a123', value: 'ui.a123', position: 21}
         ]
 
       check 'error: unknown names: not strict', ->
@@ -111,3 +111,23 @@ Tags.Calc
         calcTags (result = new Result), @fields, expr = 'fld1, aaa, fld2, bbb', strict: false
 
         expect(result.messages).sameStructure []
+
+      check 'list expr', ->
+
+    #        res = calcTags (result = new Result), @fields, ['fld1', 'fld2'], strict: false
+    #
+    #        expect(result.messages).sameStructure []
+    #
+    #        expect(res.valueOf()).sameStructure [0, 1]
+    #
+    #        res = calcTags (result = new Result), @fields, ['fld2,fld3'], strict: false
+    #
+    #        expect(result.messages).sameStructure []
+    #
+    #        expect(res.valueOf()).sameStructure [1, 2]
+
+        res = calcTags (result = new Result), @fields, [], strict: false
+
+        expect(result.messages).sameStructure []
+
+        expect(res.valueOf()).sameStructure []

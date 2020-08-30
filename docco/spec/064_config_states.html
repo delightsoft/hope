@@ -342,10 +342,10 @@ describe <span class="hljs-string">"064_config_states"</span>, <span class="hljs
     res.states = processStates (result = <span class="hljs-keyword">new</span> Result), doc, res.fields, res.actions <span class="hljs-keyword">unless</span> result.isError
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.opened.view'</span>, code: <span class="hljs-string">'dsc.unknownItem'</span>, value: <span class="hljs-string">'notAField'</span>, position: <span class="hljs-number">12</span> }
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.opened.view'</span>, code: <span class="hljs-string">'dsc.unknownItem'</span>, expr: <span class="hljs-string">'fld1, fld2, notAField'</span>, value: <span class="hljs-string">'notAField'</span>, position: <span class="hljs-number">12</span> }
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.opened.transitions.notAnAction'</span>, code: <span class="hljs-string">'dsc.unknownAction'</span>, value: <span class="hljs-string">'notAnAction'</span> }
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.opened.transitions.notAnAction.next'</span>, code: <span class="hljs-string">'dsc.unknownState'</span>, value: <span class="hljs-string">'tralala'</span> }
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.closed.view'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, value: <span class="hljs-string">'invalidTag'</span>, position: <span class="hljs-number">16</span> }
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'states.closed.view'</span>, code: <span class="hljs-string">'dsc.unknownTag'</span>, expr: <span class="hljs-string">'#tag1 - #tag2 + #invalidTag'</span>, value: <span class="hljs-string">'invalidTag'</span>, position: <span class="hljs-number">16</span> }
     ]</pre></div></div>
             
         </li>

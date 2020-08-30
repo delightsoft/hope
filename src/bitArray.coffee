@@ -65,7 +65,6 @@ class BitArray
 
     throw new Error 'given bitArray is different collection' unless @_collection == (collection = bitArray._collection)
 
-    leftMask = @_mask
     rightMask = bitArray._mask
 
     @_mask.every (v, i) -> rightMask[i] == v # equal:
