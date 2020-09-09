@@ -105,35 +105,41 @@ $$fixBuilder = (fields) ->
 
           opts = Object.assign {}, options, {update: undefined}
 
-          res[name] =
+          if update[name] == null or update[name] == undefined
 
-            if fieldsLevel and fieldsLevel.hasOwnProperty(name)
+            initVal res, options
 
-              src = fieldsLevel[name]
+          else
 
-              for row in update[name]
+            res[name] =
 
-                if Number.isInteger(row._i) and 0 <= row._i < src.length
+              if fieldsLevel and fieldsLevel.hasOwnProperty(name)
 
-                  fix src[row._i], Object.assign {}, options, {update: row}
+                src = fieldsLevel[name]
 
-                else
+                for row in update[name]
 
-                  fix row, opts
+                  if Number.isInteger(row._i) and 0 <= row._i < src.length
 
-            else
+                    fix src[row._i], Object.assign {}, options, {update: row}
 
-              for row in update[name]
+                  else
 
-                r = fix row, opts
+                    fix row, opts
 
-                r._i = row._i  if copyIndex and row.hasOwnProperty('_i') and not options?.noIndex
+              else
 
-                r
+                for row in update[name]
 
-          if options?.edit
+                  r = fix row, opts
 
-            row._i = i for row, i in res[name]
+                  r._i = row._i  if copyIndex and row.hasOwnProperty('_i') and not options?.noIndex
+
+                  r
+
+            if options?.edit
+
+              row._i = i for row, i in res[name]
 
           return
 
