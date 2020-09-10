@@ -4,21 +4,19 @@ $$wasTouchedBuilder = (fieldsDesc) ->
 
   checks = for fieldName, fieldDesc of fieldsDesc when ~['structure', 'subtable'].indexOf(fieldDesc.type)
 
-    do (name = fieldDesc.name, $$wasTouched = fieldDesc.fields.$$wasTouched) ->
+    do (name = fieldDesc.name, fields = fieldDesc.fields) ->
 
       if fieldDesc.type == 'structure'
 
-        (fieldsLevel) -> $$wasTouched fieldsLevel[name]
+        (fieldsLevel) -> fields.$$wasTouched fieldsLevel[name]
 
       else
 
         (fieldsLevel) ->
 
-          if Array.isArray fieldsLevel[name] # TODO: Убрать после того как сделаем $$fix для всех входящих данных
+          for row in fieldsLevel[name]
 
-            for row in fieldsLevel[name]
-
-              return true if $$wasTouched row
+            return true if fields.$$wasTouched row
 
           return false # (fieldsLevel) ->
 
