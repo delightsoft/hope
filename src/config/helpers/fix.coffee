@@ -147,6 +147,81 @@ $$fixBuilder = (fields) ->
 
         copyVal = switch field.type
 
+          # TODO: Add processing of 'decimal'
+
+          when 'boolean'
+            (res, fieldsLevel) ->
+              res[name] = !!fieldsLevel[name]
+              return
+
+          when 'integer'
+            (res, fieldsLevel) ->
+              res[name] =
+                if fieldsLevel[name] == null
+                  null
+                else if typeof fieldsLevel[name] == 'number'
+                  Math.trunc fieldsLevel[name]
+                else
+                  num = parseInt fieldsLevel[name]
+                  unless isNaN(num) then num else initVal res
+              return
+
+          when 'double'
+            (res, fieldsLevel) ->
+              res[name] =
+                if fieldsLevel[name] == null
+                  null
+                else if typeof fieldsLevel[name] == 'number'
+                  fieldsLevel[name]
+                else
+                  num = parseFloat fieldsLevel[name]
+                  unless isNaN(num) then num else initVal res
+              return
+
+          when 'string'
+            do (length = field.length) ->
+              (res, fieldsLevel) ->
+                res[name] =
+                  if fieldsLevel[name] == null
+                    null
+                  else
+                    if typeof fieldsLevel[name] == 'string'
+                      str = fieldsLevel[name]
+                    else
+                      str = "#{fieldsLevel[name]}"
+                    str.substr 0, length
+                return
+
+          when 'text'
+            if field.max
+              do (max = field.max) ->
+                (res, fieldsLevel) ->
+                  res[name] =
+                    if fieldsLevel[name] == null
+                      null
+                    else
+                      if typeof fieldsLevel[name] == 'string'
+                        str = fieldsLevel[name]
+                      else
+                        str = "#{fieldsLevel[name]}"
+                      str.substr 0, max
+                  return
+            else
+              (res, fieldsLevel) ->
+                res[name] =
+                  if fieldsLevel[name] == null
+                    null
+                  else if typeof fieldsLevel[name] == 'string'
+                      fieldsLevel[name]
+                  else
+                      "#{fieldsLevel[name]}"
+                return
+
+          when 'date'
+            (res, fieldsLevel) ->
+              res[name] = if fieldsLevel[name] == null then null else moment(fieldsLevel[name]).format('YYYY-MM-DD')
+              return
+
           when 'date'
             (res, fieldsLevel) ->
               res[name] = if fieldsLevel[name] == null then null else moment(fieldsLevel[name]).format('YYYY-MM-DD')

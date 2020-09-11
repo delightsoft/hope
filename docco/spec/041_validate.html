@@ -473,6 +473,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
     compileFields (result = <span class="hljs-keyword">new</span> Result), <span class="hljs-comment"># unexpected тестируем отдельно.  при наличии других ошибок эта ошибка не возвращается</span>
       string4: type: <span class="hljs-string">'string(10)'</span>, min: <span class="hljs-number">5</span>, max: <span class="hljs-number">20</span>
+      string5: type: <span class="hljs-string">'string(10)'</span>, required: <span class="hljs-literal">true</span>
 
     expect(result.messages).sameStructure [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'string4.max'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
@@ -552,6 +553,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
     compileFields (result = <span class="hljs-keyword">new</span> Result),
       text20: type: <span class="hljs-string">'text'</span>, min: <span class="hljs-number">20</span>, max: <span class="hljs-number">10</span>
+      text30: type: <span class="hljs-string">'text'</span>, required: <span class="hljs-literal">true</span>, max: <span class="hljs-number">10</span>
 
     expect(result.messages).sameStructure [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'text20.max'</span>, code: <span class="hljs-string">'dsc.tooSmall'</span>, value: <span class="hljs-number">10</span>}

@@ -72,7 +72,7 @@ processExtraProps = (result, fieldDesc, res) ->
 
           result.error ((path) -> (Result.prop 'max') path), 'dsc.invalidValue', value: fieldDesc.max
 
-        unless res.hasOwnProperty('min') and res.min <= fieldDesc.max
+        if res.hasOwnProperty('min') and res.min > fieldDesc.max
 
           result.error ((path) -> (Result.prop 'max') path), 'dsc.tooSmall', value: fieldDesc.max
 

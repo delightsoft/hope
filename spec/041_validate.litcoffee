@@ -199,6 +199,7 @@ string: min, regexp, init
 
         compileFields (result = new Result), # unexpected тестируем отдельно.  при наличии других ошибок эта ошибка не возвращается
           string4: type: 'string(10)', min: 5, max: 20
+          string5: type: 'string(10)', required: true
 
         expect(result.messages).sameStructure [
           {type: 'error', path: 'string4.max', code: 'dsc.unexpectedProp'}
@@ -267,6 +268,7 @@ text: min, max, regexp, init
 
         compileFields (result = new Result),
           text20: type: 'text', min: 20, max: 10
+          text30: type: 'text', required: true, max: 10
 
         expect(result.messages).sameStructure [
           {type: 'error', path: 'text20.max', code: 'dsc.tooSmall', value: 10}
