@@ -3,26 +3,33 @@ tooManyArgs = -> throw new Error "Too many arguments"; return
 
 class BitArray
 
-  constructor: (arg1, arg2) ->
+  constructor: (arg1, arg2, arg3) ->
 
     if Array.isArray arg1 # it's private constructor
 
-      throw new Error "Invalid arg2: #{arg2}" if !Array.isArray arg2
+      throw new Error "Invalid arg2: #{arg2}" unless Array.isArray arg2
+      throw new Error "Invalid arg3: #{arg3}" unless typeof arg3 == 'object' and arg3.$$list
 
-      @_collection = arg1
+      @_list = arg1
 
       @_mask = arg2
+
+      @_collection = arg3
 
     else
 
       invalidArg 'arg1', arg1 unless typeof arg1 == 'object' && arg1 != null && arg1.hasOwnProperty('$$list')
       tooManyArgs() unless arguments.length <= 1
 
-      @_collection = collection = if arg1.hasOwnProperty('$$flat') then arg1.$$flat.$$list else arg1.$$list
+      @_list = collection = if arg1.hasOwnProperty('$$flat') then arg1.$$flat.$$list else arg1.$$list
 
       @_mask = mask = new Array len = Math.trunc (collection.length + 31) / 32
 
+      @_collection = arg1
+
       mask[i] = 0 for i in [0...len]
+
+    @_edit = true
 
     return # constructor:
 
@@ -33,20 +40,31 @@ class BitArray
     else invalidArg 'value', value unless typeof value == 'boolean'
     tooManyArgs() unless arguments.length <= 2
 
-    throw new Error "set() is not allowed in this state" if @.hasOwnProperty('_list')
-    throw new Error "index out of range: #{index}" unless 0 <= index < @_collection.length
+    throw new Error "index out of range: #{index}" unless 0 <= index < @_list.length
+
+    mask =
+      if @_edit
+        @_mask
+      else
+        r = new Array @_mask.length
+        r[i] = v for v, i in @_mask
+        r
 
     m = 1 << index % 32
 
     if value
 
-      @_mask[Math.trunc index / 32] |= m
+      mask[Math.trunc index / 32] |= m
 
     else
 
-      @_mask[Math.trunc index / 32] &= ~m
+      mask[Math.trunc index / 32] &= ~m
 
-    @ # set:
+    if @_edit
+      delete @_listProp
+      @
+    else
+      new BitArray @_list, mask, @_collection # set:
 
   get: (index) ->
 
@@ -54,7 +72,7 @@ class BitArray
     if value == undefined then value = true
     tooManyArgs() unless arguments.length <= 1
 
-    throw new Error "index out of range: #{index}" unless 0 <= index < @_collection.length
+    throw new Error "index out of range: #{index}" unless 0 <= index < @_list.length
 
     (@_mask[Math.trunc index / 32] & (1 << index % 32)) != 0 # get:
 
@@ -63,7 +81,7 @@ class BitArray
     invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')
     tooManyArgs() unless arguments.length <= 1
 
-    throw new Error 'given bitArray is different collection' unless @_collection == (collection = bitArray._collection)
+    throw new Error 'given bitArray is different collection' unless @_list == (collection = bitArray._list)
 
     rightMask = bitArray._mask
 
@@ -79,71 +97,116 @@ class BitArray
 
       resMask[i] = leftMask[i]
 
-    new BitArray @_collection, resMask # clone:
+    new BitArray @_list, resMask, @_collection # clone:
 
   and: (bitArray) ->
 
-    invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')
-    tooManyArgs() unless arguments.length <= 1
+    if typeof bitArray == 'string'
 
-    throw new Error 'given bitArray is different collection' unless @_collection == (collection = bitArray._collection)
+      bitArray = @_collection.$$calc.apply undefined, arguments
 
-    resMask = new Array (len = (leftMask = @_mask).length)
+    else
+
+      invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')
+      tooManyArgs() unless arguments.length <= 1
+
+    throw new Error 'given bitArray is different collection' unless @_list == bitArray._list
+
+    len = (leftMask = @_mask).length
+    resMask = if @_edit then @_mask else new Array len
     rightMask = bitArray._mask
 
     for i in [0...len] by 1
 
       resMask[i] = leftMask[i] & rightMask[i]
 
-    new BitArray collection, resMask # and:
+    if @_edit # and:
+      delete @_listProp
+      @
+    else
+      new BitArray @_list, resMask, @_collection
 
   or: (bitArray) ->
 
-    invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')
-    tooManyArgs() unless arguments.length <= 1
+    if typeof bitArray == 'string'
 
-    throw new Error 'given bitArray is different collection' unless @_collection == (collection = bitArray._collection)
+      bitArray = @_collection.$$calc.apply undefined, arguments
 
-    resMask = new Array (len = (leftMask = @_mask).length)
+    else
+
+      invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')
+      tooManyArgs() unless arguments.length <= 1
+
+    throw new Error 'given bitArray is different collection' unless @_list == (collection = bitArray._list)
+
+    len = (leftMask = @_mask).length
+    resMask = if @_edit then @_mask else new Array len
     rightMask = bitArray._mask
 
     for i in [0...len] by 1
 
       resMask[i] = leftMask[i] | rightMask[i]
 
-    new BitArray collection, resMask # and:
+    if @_edit # or:
+      delete @_listProp
+      @
+    else
+      new BitArray @_list, resMask, @_collection
 
   subtract: (bitArray) ->
 
-    invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')
-    tooManyArgs() unless arguments.length <= 1
+    if typeof bitArray == 'string'
 
-    throw new Error 'given bitArray is different collection' unless @_collection == (collection = bitArray._collection)
+      bitArray = @_collection.$$calc.apply undefined, arguments
 
-    resMask = new Array (len = (leftMask = @_mask).length)
+    else
+
+      invalidArg 'bitArray', bitArray unless typeof bitArray == 'object' && bitArray != null && bitArray.hasOwnProperty('_mask')
+      tooManyArgs() unless arguments.length <= 1
+
+    throw new Error 'given bitArray is different collection' unless @_list == (collection = bitArray._list)
+
+    len = (leftMask = @_mask).length
+    resMask = if @_edit then @_mask else new Array len
     rightMask = bitArray._mask
 
     for i in [0...len] by 1
 
       resMask[i] = leftMask[i] & ~rightMask[i]
 
-    new BitArray collection, resMask # and:
+    if @_edit # subtract::
+      delete @_listProp
+      @
+    else
+      new BitArray @_list, resMask, @_collection
 
   invert: ->
 
     tooManyArgs() unless arguments.length == 0
 
-    resMask = new Array (len = (leftMask = @_mask).length)
+    if @_edit
 
-    for i in [0...len] by 1
+      mask[i] = ~mask[i] for i in [0...(len = (mask = @_mask).length)] by 1
 
-      resMask[i] = ~leftMask[i]
+      if (r = @_list.length % 32) > 0
 
-    if (r = @_collection.length % 32) > 0
+        mask[len - 1] &= ((1 << r) - 1)
 
-      resMask[len - 1] &= ((1 << r) - 1)
+      delete @_listProp
 
-    new BitArray @_collection, resMask # and:
+      @
+
+    else
+
+      resMask = new Array (len = (leftMask = @_mask).length)
+
+      resMask[i] = ~v for v, i in leftMask
+
+      if (r = @_list.length % 32) > 0
+
+        resMask[len - 1] &= ((1 << r) - 1)
+
+      new BitArray @_list, resMask, @_collection # invert:
 
   isEmpty: ->
 
@@ -153,13 +216,23 @@ class BitArray
 
     true # isEmpty:
 
+  lock: ->
+
+    delete @_edit
+
+    @ # lock:
+
+  locked: ->
+
+    not @_edit # locked:
+
   fixVertical: ->
 
-    for item in @_collection when item.hasOwnProperty('$$mask')
+    mask = if @_edit then @_mask else new Array @_mask.length
+
+    for item in @_list when item.hasOwnProperty('$$mask')
 
       itemMask = item.$$mask._mask
-
-      mask = @_mask
 
       noSubfields = true
 
@@ -179,15 +252,19 @@ class BitArray
 
         @set item.$$index
 
-    return # fixVertical:
+    if @_edit # fixVertical:
+      delete @_listProp
+      @
+    else
+      new BitArray @_list, mask, @_collection
 
   clearVertical: ->
 
-    for item in @_collection by -1 when item.hasOwnProperty('$$mask')
+    mask = if @_edit then @_mask else new Array @_mask.length
+
+    for item in @_list by -1 when item.hasOwnProperty('$$mask')
 
       itemMask = item.$$mask._mask
-
-      mask = @_mask
 
       noSubfields = true
 
@@ -199,13 +276,39 @@ class BitArray
 
       @set item.$$index, !noSubfields
 
-    return # clearVertical:
+    if @_edit # clearVertical:
+      delete @_listProp
+      @
+    else
+      new BitArray @_list, mask, @_collection # fixVertical:
+
+  _buildList: ->
+
+    @_listProp = list = []
+
+    len = (collection = @_list).length
+
+    m = 1
+
+    v = (mask = @_mask)[p = 0]
+
+    for i in [0...len] by 1
+
+      list.push collection[i] if (v & m) != 0
+
+      if (m <<= 1) == 0
+
+        m = 1
+
+        v = mask[++p]
+
+    @ # buildList:
 
   valueOf: ->
 
     res = []
 
-    len = (collection = @_collection).length
+    len = @_list.length
 
     m = 1
 
@@ -231,27 +334,13 @@ Object.defineProperty BitArray::, 'list',
 
   get: ->
 
-    unless @.hasOwnProperty('_list')
+    @_buildList() unless @.hasOwnProperty('_listProp')
 
-      @_list = list = []
+    @_listProp # get: ->
 
-      len = (collection = @_collection).length
+BitArray::add = BitArray::or
 
-      m = 1
-
-      v = (mask = @_mask)[p = 0]
-
-      for i in [0...len] by 1
-
-        list.push collection[i] if (v & m) != 0
-
-        if (m <<= 1) == 0
-
-          m = 1
-
-          v = mask[++p]
-
-    @_list # get: ->
+BitArray::remove = BitArray::subtract
 
 # ----------------------------
 

@@ -144,6 +144,10 @@ calc = (result, collection, expression, options) ->
 
   strict = true
 
+  fixVertical = false
+
+  clearVertical = false
+
   if options != undefined
 
     invalidArg 'options', options unless typeof options == 'object' and options != null and not Array.isArray(options)
@@ -158,6 +162,21 @@ calc = (result, collection, expression, options) ->
 
           strict = optValue if optValue != undefined
 
+        when 'fixVertical'
+
+          invalidOption 'fixVertical', optValue unless optValue == undefined or typeof optValue == 'boolean'
+
+          fixVertical = optValue if optValue != undefined
+
+        when 'clearVertical'
+
+          invalidOption 'clearVertical', optValue unless optValue == undefined or typeof optValue == 'boolean'
+
+          clearVertical = optValue if optValue != undefined
+
+        else
+
+          throw new Error "Unknown option '#{optName}': '#{optValue}'"
 
   nextToken = if Array.isArray(expression) then _listTokenizer(result, expression) else _tokenizer(result, expression)
 
@@ -244,9 +263,9 @@ calc = (result, collection, expression, options) ->
 
   if res # calc =
 
-    res.list
+    res.fixVertical() if isFlat and fixVertical
 
-    # res.clearVertical() if isFlat
+    res.clearVertical() if isFlat and clearVertical
 
     res
 

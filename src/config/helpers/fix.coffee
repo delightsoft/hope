@@ -21,7 +21,7 @@ EMPTY = {}
 
 hasOwnProperty = Object::hasOwnProperty
 
-$$fixBuilder = (fields) ->
+$$fixBuilder = (fields, collection) ->
 
   fixFuncs = []
 
@@ -83,7 +83,7 @@ $$fixBuilder = (fields) ->
 
       if field.type == 'structure'
 
-        fix = $$fixBuilder(field.fields)
+        fix = $$fixBuilder field.fields, collection
 
         copyVal = (res, update, options, fieldsLevel) ->
 
@@ -286,7 +286,7 @@ $$fixBuilder = (fields) ->
 
           when 'mask' # маска полей, которые надо оставить в результате (по умолчанию undefined - все поля)
 
-            invalidOption 'mask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection != fields)
+            invalidOption 'mask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection == collection)
 
             mask = optValue
 
@@ -298,7 +298,7 @@ $$fixBuilder = (fields) ->
 
           when 'updateMask' # маска полей update
 
-            invalidOption 'updateMask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection != fields)
+            invalidOption 'updateMask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection == collection)
 
             updateMask = optValue
 

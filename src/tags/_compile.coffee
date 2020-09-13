@@ -12,15 +12,17 @@ compile = (result, collection) ->
 
   tags =
 
-    all: (new BitArray collection).invert()
+    all: (new BitArray collection).invert().lock()
 
-    none: new BitArray collection
+    none: (new BitArray collection).lock()
 
   if collection.$$flat # only 'fields' are flatMap
 
     requiredMask = tags.required = new BitArray collection
 
     requiredMask.set(fld.$$index) for fld in collection.$$flat.$$list when fld.required
+
+    requiredMask.lock()
 
   _addTag = (result, dupCheck, tag, item, namespace) ->
 
@@ -118,7 +120,9 @@ compile = (result, collection) ->
 
           result.error 'dsc.invalidValue', value: srcTags
 
-  v.list for k, v of tags
+  for k, v of tags
+
+    v.lock()
 
   collection.$$tags = tags
 

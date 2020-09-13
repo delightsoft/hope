@@ -38,6 +38,8 @@ processStates = (result, doc, fields, actions) ->
 
               state.view = calcTags result, fields, state.$$src.view
 
+              state.view?.lock()
+
             return # result.context
 
           result.context (Result.prop 'update'), ->
@@ -53,6 +55,8 @@ processStates = (result, doc, fields, actions) ->
             else
 
               state.update = calcTags result, fields, state.$$src.update
+
+              state.update?.lock()
 
             return # result.context
 
@@ -129,4 +133,3 @@ processStates = (result, doc, fields, actions) ->
 # ----------------------------
 
 module.exports = processStates
-

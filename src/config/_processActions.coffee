@@ -22,7 +22,7 @@ processActions = (result, doc, config, noSystemItems) ->
 
     EMPTY.$$tags.all = EMPTY.$$tags.none = new bitArray EMPTY
 
-    EMPTY.$$tags.all.list
+    EMPTY.$$tags.all.lock()
 
     return EMPTY # processActions =
 

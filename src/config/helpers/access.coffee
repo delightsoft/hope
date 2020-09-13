@@ -1,8 +1,6 @@
 freezeBitArray = (ba) ->
 
-  ba.list
-
-  ba # (ba) ->
+  ba._buildList().lock() # (ba) ->
 
 $$accessBuilder = (type, fieldsProp, access, addActions) ->
 
@@ -29,8 +27,8 @@ $$accessBuilder = (type, fieldsProp, access, addActions) ->
     do ->
 
       allAccess =
-        view: type[fieldsProp].$$calc '#all-options', strict: false
-        update: type[fieldsProp].$$calc '(#all-#system),id,rev,deleted', strict: false
+        view: (type[fieldsProp].$$calc '#all-options', strict: false)._buildList()
+        update: (type[fieldsProp].$$calc '(#all-#system),id,rev,deleted', strict: false)._buildList()
 
       if addActions
         allAccess.required = type[fieldsProp].$$tags.required

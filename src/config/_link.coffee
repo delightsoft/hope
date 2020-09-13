@@ -46,7 +46,7 @@ link = (config, noHelpers, opts) ->
 
     if obj.hasOwnProperty('_mask')
 
-      obj.list # force mask to compute list
+      obj._buildList().lock()
 
     Object.freeze obj
 
@@ -58,23 +58,42 @@ link = (config, noHelpers, opts) ->
 
   freezeBitArray = (ba) ->
 
-    ba.list
+    ba.lock()
 
     freeze ba # (ba) ->
 
+
   EMPTY_LIST = freeze []
 
-  EMPTY_MAP_WITH_TAGS = freeze {$$list: EMPTY_LIST, $$tags: EMPTY_TAGS}
 
-  EMPTY_MAP = freeze {$$list: EMPTY_LIST}
+  EMPTY_MAP = {$$list: EMPTY_LIST}
 
   EMPTY_MASK = freezeBitArray new BitArray EMPTY_MAP
 
-  EMPTY_TAGS = freeze {all: EMPTY_MASK, none: EMPTY_MASK}
+  EMPTY_MAP.$$tags = freeze {all: EMPTY_MASK, none: EMPTY_MASK}
 
-  EMPTY_FLAT_MAP = freeze {$$list: EMPTY_LIST, $$flat: freeze {$$list: EMPTY_LIST}, $$tags: EMPTY_TAGS}
+  freeze EMPTY_MAP
 
-  EMPTY_MAP_WITH_TAGS = Object.freeze {$$list: [], $$tags: EMPTY_TAGS}
+
+  EMPTY_MAP_WITH_TAGS = {$$list: EMPTY_LIST}
+
+  EMPTY_MASK_WITH_TAGS = freezeBitArray new BitArray EMPTY_MAP_WITH_TAGS
+
+  EMPTY_MAP_WITH_TAGS.$$tags = freeze {all: EMPTY_MASK_WITH_TAGS, none: EMPTY_MASK_WITH_TAGS}
+
+  freeze EMPTY_MAP_WITH_TAGS
+
+
+  EMPTY_FLAT_MAP = $$list: EMPTY_LIST, $$flat: freeze {$$list: EMPTY_LIST}
+
+  EMPTY_FLAT_MAP_TAGS = freezeBitArray new BitArray EMPTY_MAP_WITH_TAGS
+
+  EMPTY_FLAT_MAP.$$tags = freeze {all: EMPTY_FLAT_MAP_TAGS, none: EMPTY_FLAT_MAP_TAGS}
+
+  freeze EMPTY_FLAT_MAP
+
+
+
 
   linkSortedMap = (collection, noIndex, noFreeze) ->
 
@@ -168,7 +187,7 @@ link = (config, noHelpers, opts) ->
 
       freezeBitArray(requiredMask)
 
-    tags[k] = freezeBitArray (new BitArray res.$$flat?.$$list || res.$$list, v) for k, v of collection.tags
+    tags[k] = freezeBitArray (new BitArray res.$$flat?.$$list or res.$$list, v, res) for k, v of collection.tags
 
     tags = res.$$tags = freeze tags
 
@@ -202,7 +221,7 @@ link = (config, noHelpers, opts) ->
 
         if field.type == 'subtable'
 
-          field.fields.$$fix = $$fixBuilder field.fields
+          field.fields.$$fix = $$fixBuilder field.fields, obj[prop]
 
           field.fields.$$new = $$newBuilder field.fields
 
@@ -214,7 +233,7 @@ link = (config, noHelpers, opts) ->
 
       obj[prop].$$calc = $$calcBuilder obj[prop]
 
-      obj[prop].$$fix = $$fixBuilder obj[prop]
+      obj[prop].$$fix = $$fixBuilder obj[prop], obj[prop]
 
       obj[prop].$$new = $$newBuilder obj[prop]
 
@@ -332,9 +351,9 @@ link = (config, noHelpers, opts) ->
 
         state.$$key = "#{docKey}.state.#{state.name}"
 
-      state.view = freezeBitArray new BitArray doc.fields.$$flat.$$list, state.view
+      state.view = freezeBitArray new BitArray doc.fields.$$flat.$$list, state.view, doc.fields
 
-      state.update = freezeBitArray new BitArray doc.fields.$$flat.$$list, state.update
+      state.update = freezeBitArray new BitArray doc.fields.$$flat.$$list, state.update, doc.fields
 
       state.transitions = linkSortedMap state.transitions, true, true
 
@@ -360,33 +379,39 @@ link = (config, noHelpers, opts) ->
 
       api.$$key = apiKey = "api.#{api.name}"
 
-    api.methods = linkSortedMap api.methods, false, true
+    unless api.methods
 
-    freeze api.methods
+      api.methods = EMPTY_MAP_WITH_TAGS
 
-    freeze api.methods.$$list
+    else
 
-    for method in api.methods.$$list
+      api.methods = linkSortedMap api.methods, false, true
 
-      unless noHelpers
+      freeze api.methods
 
-        method.$$key = "#{apiKey}.method.#{method.name}"
+      freeze api.methods.$$list
 
-      linkFieldsWithHelpers method, 'arguments', "#{apiKey}.method.#{method.name}.arg"
+      for method in api.methods.$$list
 
-      linkFieldsWithHelpers method, 'result', "#{apiKey}.method.#{method.name}.result"
+        unless noHelpers
 
-      unless noHelpers
+          method.$$key = "#{apiKey}.method.#{method.name}"
 
-        method.arguments.$$access = $$accessBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argAccess
-        method.arguments.$$validate = $$validateBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argValidE
-        method.arguments.$$editValidate = $$editValidateBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
+        linkFieldsWithHelpers method, 'arguments', "#{apiKey}.method.#{method.name}.arg"
 
-        method.result.$$access = $$accessBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultAccess
-        method.result.$$validate = $$validateBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultValidate
-        method.result.$$editValidate = $$editValidateBuilder method, 'result', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
+        linkFieldsWithHelpers method, 'result', "#{apiKey}.method.#{method.name}.result"
 
-      freeze method
+        unless noHelpers
+
+          method.arguments.$$access = $$accessBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argAccess
+          method.arguments.$$validate = $$validateBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argValidE
+          method.arguments.$$editValidate = $$editValidateBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
+
+          method.result.$$access = $$accessBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultAccess
+          method.result.$$validate = $$validateBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultValidate
+          method.result.$$editValidate = $$editValidateBuilder method, 'result', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
+
+        freeze method
 
     freeze api
 

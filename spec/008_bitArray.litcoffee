@@ -2,8 +2,9 @@ bit array
 ==============================
 
     {Result, BitArray, sortedMap, flatMap} = require '../src'
+    calc = require '../src/tags/_calc'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
 Для операций с группами элементов (fields, actions etc.) удобно представить выбранные поля, в виде битовой маски.  И тогда
@@ -14,7 +15,7 @@ bit array
 
     _sortedMapCollection = ->
 
-      @col = res = sortedMap (result = new Result), (@["item#{i}"] = {name: "item#{i}", $$index: i} for i in [0...50]), index: true
+      res = sortedMap (result = new Result), (@["item#{i}"] = {name: "item#{i}", $$index: i} for i in [0...50]), index: true
 
       sortedMap.finish result, res
 
@@ -41,7 +42,7 @@ bit array
           name: "item#{i + 1}"
           $$index: index++
 
-      @col = res = flatMap (result = new Result), srcCol, 'subitems', index: true
+      res = flatMap (result = new Result), srcCol, 'subitems', index: true
 
       flatMap.finish result, res, 'subitems'
 
@@ -103,17 +104,17 @@ set()
 
         expect(arr.list).sameStructure [@item1]
 
-Метод set можно использовать, только до первого запроса свойства list.  Потом - exception
+Метод set делает новую копию объекта если заблокирован методом lock()
 
-      check "set(): only before .list", ->
+      check "set() clone object after .lock()", ->
 
         arr = new BitArray _sortedMapCollection.call @
 
-        arr.set 1
+        expect(arr.set 1).toBe(arr)
 
-        arr.list
+        arr.lock()
 
-        expect(-> arr.set 2).toThrow new Error 'set() is not allowed in this state'
+        expect(arr.set 2).not.toBe(arr)
 
 and, or ...
 ------------------------------
@@ -259,22 +260,23 @@ and, or ...
 
         expect(arr2.isEmpty()).toBe true
 
-Все операции над группами immutable - то есть каждый раз возвращается новые объект.
+-- Все операции над группами immutable - то есть каждый раз возвращается новые объект.
+!!! TODO: переписать под lock()
 
       check "immutable", ->
 
         arr1 = new BitArray map = _sortedMapCollection.call @
 
-        expect(arr2 = arr1.invert()).not.toBe arr1
+        expect(arr2 = arr1.invert()).toBe arr1
 
-        expect(arr1.and arr2).not.toBe arr1
-        expect(arr1.and arr2).not.toBe arr2
+        expect(arr1.and arr2).toBe arr1
+        expect(arr1.and arr2).toBe arr2
 
-        expect(arr1.or arr2).not.toBe arr1
-        expect(arr1.or arr2).not.toBe arr2
+        expect(arr1.or arr2).toBe arr1
+        expect(arr1.or arr2).toBe arr2
 
-        expect(arr1.subtract arr2).not.toBe arr1
-        expect(arr1.subtract arr2).not.toBe arr2
+        expect(arr1.subtract arr2).toBe arr1
+        expect(arr1.subtract arr2).toBe arr2
 
 BitArray привязан к исходной коллекции.  Если по ошибке выполнить операции над bit array'ями для разных исходных
 коллекций - будет exception.
@@ -315,3 +317,42 @@ BitArray привязан к исходной коллекции.  Если по
         expect(arr1.and(arr2).valueOf()).toEqual []
         expect(arr1.subtract(arr2).valueOf()).toEqual []
         expect(-> arr1.get(0)).toThrow new Error 'index out of range: 0'
+
+      check "edit/lock", ->
+
+        collection = _sortedMapCollection.call @
+        collection.$$tags = {none: new BitArray collection}
+        collection.$$calc = ->
+          last = arguments[arguments.length - 1]
+          result = new Result
+          r =
+            if typeof last == 'object'
+              if arguments.length == 1
+                collection.$$tags.none
+              else if arguments.length == 2
+                calc result, collection, arguments[0], last
+              else
+                calc result, collection, (Array::slice.call arguments, 0, arguments.length - 1).join(','), last
+            else
+              if arguments.length == 0
+                collection.$$tags.none
+              else if arguments.length == 1
+                calc result, collection, arguments[0]
+              else
+                calc result, collection, (Array::slice.call arguments).join(',')
+          result.throwIfError()
+          r
+
+        arr1 = new BitArray collection
+        arr2 = new BitArray collection
+
+        expect(arr1.and(arr2)).toBe(arr1)
+
+        arr1.lock()
+
+        expect(arr1.and(arr2)).not.toBe(arr1)
+
+        arr1.and('item1,item2', 'item10', {fixVertical: true})
+
+        arr1.and('item1,item2', 'item10')
+

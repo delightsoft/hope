@@ -3,7 +3,7 @@ flat map masks
 
     {Result, flatMap, BitArray} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '009_flatMap_masks:', ->

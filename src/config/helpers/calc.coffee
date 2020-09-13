@@ -2,37 +2,66 @@ Result = require '../../result'
 
 calc = require '../../tags/_calc'
 
-$$calcBuilder = (fields) ->
+$$calcBuilder = (collection) ->
 
   cache = Object.create(null)
 
-  noCache = (result, expr, options) ->
+  buildCalc = (useCache) ->
 
-    unless typeof result == 'object' && result != null && result.hasOwnProperty('isError')
+    (result) ->
 
-      options = expr
+      unless typeof result == 'object' && result != null && result.hasOwnProperty('isError')
+        s = 0
+        options = expr
+        expr = result
+        localResult = true
+        result = new Result()
+      else
+        s = 1
 
-      expr = result
+      options = arguments[arguments.length - 1]
+      if typeof options == 'object'
+        if arguments.length == (1 + s)
+          return collection.$$tags.none
+        else if arguments.length == (2 + s)
+          expr = arguments[s]
+          invalidArg 'expr', exprArray unless typeof expr == 'string'
+        else
+          exprArray = Array::slice.call arguments, s, arguments.length - 1
+          invalidArg 'expr', exprArray unless exprArray.every v -> typeof v == 'string'
+          expr = exprArray.join(',')
+        invalidArg 'options', options unless options != null and not Array.isArray(options)
+      else
+        options = undefined
+        if arguments.length == s
+          return collection.$$tags.none
+        else if arguments.length == (1 + s)
+          expr = arguments[s]
+          invalidArg 'expr', exprArray unless typeof expr == 'string'
+        else
+          exprArray = Array::slice.call arguments, s
+          invalidArg 'expr', exprArray unless exprArray.every v -> typeof v == 'string'
+          expr = exprArray.join(',')
 
-      localResult = true
+      if useCache
 
-      result = new Result()
+        return cache[expr] if hasOwnProperty.call cache, expr
 
-    r = calc result, fields, expr, options
+        r = cache[expr] = calc result, collection, expr, options
 
-    result.throwIfError() if localResult
+        r.lock()
 
-    r # noCache =
+      else
 
-  $$calc = (result, expr, options) ->
+        r = calc result, collection, expr, options
 
-    cacheExpr = if typeof result == 'object' && result != null && result.hasOwnProperty('isError') then expr else result
+      result.throwIfError() if localResult
 
-    return cache[expr] if hasOwnProperty.call cache, cacheExpr
+      r # (useCache) ->
 
-    cache[expr] = noCache result, expr, options # res.$$calc =
+  $$calc = buildCalc true
 
-  $$calc.noCache = noCache
+  $$calc.noCache = buildCalc false
 
   $$calc # (fields) ->
 
