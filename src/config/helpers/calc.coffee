@@ -40,7 +40,7 @@ $$calcBuilder = (collection) ->
           invalidArg 'expr', exprArray unless typeof expr == 'string'
         else
           exprArray = Array::slice.call arguments, s
-          invalidArg 'expr', exprArray unless exprArray.every v -> typeof v == 'string'
+          invalidArg 'expr', exprArray unless exprArray.every (v) -> typeof v == 'string'
           expr = exprArray.join(',')
 
       if useCache
