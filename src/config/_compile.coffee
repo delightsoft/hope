@@ -23,6 +23,7 @@ compile = (result, sourceConfig, noSystemItems) ->
 
   processAPI result, config, noSystemItems
 
+
   unless result.isError
 
     delete config.$$src

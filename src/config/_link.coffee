@@ -93,8 +93,6 @@ link = (config, noHelpers, opts) ->
   freeze EMPTY_FLAT_MAP
 
 
-
-
   linkSortedMap = (collection, noIndex, noFreeze) ->
 
     if collection == undefined
