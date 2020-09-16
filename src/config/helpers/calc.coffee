@@ -49,7 +49,7 @@ $$calcBuilder = (collection) ->
 
         r = cache[expr] = calc result, collection, expr, options
 
-        r.lock()
+        r?.lock()
 
       else
 
