@@ -4,7 +4,7 @@ sortedMap = require './sortedMap'
 
 BitArray = require './bitArray'
 
-{deepClone, err: {invalidArg, invalidArgValue, isResult}} = require './utils'
+{deepClone, err: {invalidArg, isResult}} = require './utils'
 
 finish = (result, resValue, subitemsField, opts) ->
 
@@ -61,7 +61,7 @@ flatMap = (result, value, subitemsField, opts) ->
 
   else
 
-    invalidArgValue 'opts.index', opts.index unless typeof (optsIndex = opts.index) == 'boolean'
+    invalidArg 'opts.index', opts.index unless typeof (optsIndex = opts.index) == 'boolean'
 
     if optsIndex
 
@@ -75,7 +75,7 @@ flatMap = (result, value, subitemsField, opts) ->
 
   else
 
-    invalidArgValue 'opts.mask', opts.mask unless typeof (optsMask = opts.mask) == 'boolean'
+    invalidArg 'opts.mask', opts.mask unless typeof (optsMask = opts.mask) == 'boolean'
 
     throw new Error 'opts.mask requires opts.index to be true' unless optsIndex
 

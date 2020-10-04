@@ -210,19 +210,7 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <h1 id="tagscalc">Tags.Calc</h1>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>Метод для обработки выражений, содержаших теги.  Результатом является список элементов, которые были получени или
+<p>Метод для обработки выражений, содержаших теги.  Результатом является список элементов, которые были получени или
 напрямую или через теги.</p>
 <p>Операции которые можно использовать в строке</p>
 <ul>
@@ -249,19 +237,19 @@
             
             <div class="content"><div class='highlight'><pre>{Result, sortedMap, flatMap, tags: {calc: calcTags, compile: compileTags}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">''</span>
-<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'046_tags_calc'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-3">
+        <li id="section-2">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
               <p>Создаем документ для проверки разных выражений</p>
 
@@ -295,11 +283,11 @@ describe <span class="hljs-string">'046_tags_calc'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <pre><code> check <span class="hljs-string">'ok'</span>, <span class="hljs-function">-&gt;</span>
 
@@ -362,11 +350,11 @@ describe <span class="hljs-string">'046_tags_calc'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-5">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <pre><code>   res = calcTags (result = <span class="hljs-keyword">new</span> Result), @fields, [<span class="hljs-string">'fld1'</span>, <span class="hljs-string">'fld2'</span>], strict: <span class="hljs-literal">false</span>
 

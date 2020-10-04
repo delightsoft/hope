@@ -1,4 +1,4 @@
-{err: {invalidArg, invalidArgValue, tooManyArgs, reservedPropName, isResult}} = require '../utils'
+{err: {invalidArg, tooManyArgs, reservedPropName, isResult}} = require '../utils'
 
 # ----------------------------
 
@@ -8,7 +8,7 @@ _combineMsg = (type, path, code, args) ->
 
   invalidArg 'type', type unless (typeof type == 'undefined') || (typeof type == 'string' && type.length > 0)
   if type
-    invalidArgValue 'type', type unless type == 'error' || type == 'warn' || type == 'info'
+    invalidArg 'type', type unless type == 'error' || type == 'warn' || type == 'info'
   invalidArg 'path', path unless !path || typeof path == 'string'
   invalidArg 'code', code unless typeof code == 'string' && code.length > 0
   invalidArg 'args', args unless (typeof args == 'undefined') || (typeof args == 'object' && args != null)

@@ -12,7 +12,6 @@ module.exports =
   tooManyArgs: -> throw new Error "Too many arguments"; return
 
   invalidArg: invalidArg = (name, value) -> throw _argError 'Invalid argument', name, value; return
-  invalidArgValue: (name, value) -> throw _argError 'Invalid value of argument', name, value; return
 
   unknownOption: (name) -> throw new Error "Unknown option: '#{name}'"; return
   missingRequiredOption: (name) -> throw new Error "Missing required option: '#{name}'"; return

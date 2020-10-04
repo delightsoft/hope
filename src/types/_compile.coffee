@@ -1,4 +1,4 @@
-{checkUDTypeName, err: {tooManyArgs, invalidArg, invalidArgValue, isResult}} = require '../utils'
+{checkUDTypeName, err: {tooManyArgs, invalidArg, isResult}} = require '../utils'
 
 Result = require '../result'
 
@@ -38,7 +38,7 @@ compile = (result, fieldDesc, res, opts) ->
   unless opts?.hasOwnProperty('context') # list of prop that should not be reported in validation
     optsContext = null # any
   else
-    invalidArgValue 'opts.context', opts.context unless (optsContext = opts.context) == 'field' || optsContext == 'udtype'
+    invalidArg 'opts.context', opts.context unless (optsContext = opts.context) == 'field' || optsContext == 'udtype'
 
   throw new Error "fieldDesc was already process by tags/compile()" unless not fieldDesc.hasOwnProperty '$$tags'
 

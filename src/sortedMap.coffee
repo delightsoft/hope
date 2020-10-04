@@ -1,6 +1,6 @@
 Result = require './result'
 
-{checkItemName, err: {invalidArg, invalidArgValue, isResult}} = require './utils'
+{checkItemName, err: {invalidArg, isResult}} = require './utils'
 
 finish = (result, resValue, opts) ->
 
@@ -12,12 +12,12 @@ finish = (result, resValue, opts) ->
     optsSkipProps = undefined
   else
     unless (optsSkipProps = opts.skipProps) == undefined || optsSkipProps == null || Array.isArray(optsSkipProps)
-      invalidArgValue 'opts.skipProps', opts.skipProps
+      invalidArg 'opts.skipProps', opts.skipProps
 
   unless opts?.hasOwnProperty('validate') # false - exclude validation for extra props
     optsValidate = true
   else
-    invalidArgValue 'opts.validate', opts.validate unless typeof (optsValidate = opts.validate) == 'boolean'
+    invalidArg 'opts.validate', opts.validate unless typeof (optsValidate = opts.validate) == 'boolean'
 
   optsValidate = false if result.isError # just remove $$src in case of prev error
 
@@ -59,42 +59,42 @@ sortedMap = (result, value, opts) ->
   unless opts?.hasOwnProperty('checkName') # function that checks names of items. Default: 'checkItemName' is used
     optsCheckName = null
   else
-    invalidArgValue 'opts.checkName', opts.checkName unless typeof (optsCheckName = opts.checkName) == 'function'
+    invalidArg 'opts.checkName', opts.checkName unless typeof (optsCheckName = opts.checkName) == 'function'
 
   unless opts?.hasOwnProperty('getValue') # function that creates new item out of non-object value
     optsGetValue = null
   else
-    invalidArgValue 'opts.getValue', opts.getValue unless typeof (optsGetValue = opts.getValue) == 'function'
+    invalidArg 'opts.getValue', opts.getValue unless typeof (optsGetValue = opts.getValue) == 'function'
 
   unless opts?.hasOwnProperty('string') # true - val could be list of strings or a comma delimited string
     optsString = false
   else
-    invalidArgValue 'opts.string', opts.string unless typeof (optsString = opts.string) == 'boolean'
+    invalidArg 'opts.string', opts.string unless typeof (optsString = opts.string) == 'boolean'
 
   unless opts?.hasOwnProperty('boolean') # true - map, can express presents of an item, by using true as a value
     optsBoolean = false
   else
-    invalidArgValue 'opts.boolean', opts.boolean unless typeof (optsBoolean = opts.boolean) == 'boolean'
+    invalidArg 'opts.boolean', opts.boolean unless typeof (optsBoolean = opts.boolean) == 'boolean'
 
   unless opts?.hasOwnProperty('index') # true - add to every result item $$index, with the index of item within result $$list
     optsIndex = false
   else
-    invalidArgValue 'opts.index', opts.index unless typeof (optsIndex = opts.index) == 'boolean'
+    invalidArg 'opts.index', opts.index unless typeof (optsIndex = opts.index) == 'boolean'
 
   unless opts?.hasOwnProperty('before')
     optsBefore = []
   else
-    invalidArgValue 'opts.before', opts.before unless Array.isArray(optsBefore = opts.before)
+    invalidArg 'opts.before', opts.before unless Array.isArray(optsBefore = opts.before)
 
   unless opts?.hasOwnProperty('after')
     optsAfter = []
   else
-    invalidArgValue 'opts.after', opts.after unless Array.isArray(optsAfter = opts.after)
+    invalidArg 'opts.after', opts.after unless Array.isArray(optsAfter = opts.after)
 
   unless opts?.hasOwnProperty('reservedNames')
     optsReservedNames = undefined
   else
-    invalidArgValue 'opts.reservedNames', opts.reservedNames unless Array.isArray(optsReservedNames = opts.reservedNames)
+    invalidArg 'opts.reservedNames', opts.reservedNames unless Array.isArray(optsReservedNames = opts.reservedNames)
 
   res = {}
 
