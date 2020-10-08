@@ -175,13 +175,13 @@
                 </a>
               
                 
-                <a class="source" href="100_check_editValidate.html">
-                  spec/100_check_editValidate.litcoffee
+                <a class="source" href="090_vueDebugWatchBuilder.html">
+                  spec/090_vueDebugWatchBuilder.litcoffee
                 </a>
               
                 
-                <a class="source" href="90_vueDebugWatchBuilder.html">
-                  spec/90_vueDebugWatchBuilder.litcoffee
+                <a class="source" href="100_check_editValidate.html">
+                  spec/100_check_editValidate.litcoffee
                 </a>
               
                 
@@ -228,9 +228,9 @@ flatMap = <span class="hljs-built_in">require</span> <span class="hljs-string">'
 
 validateBuilder = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate'</span>
 
-focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span><span class="hljs-function">
-
+focusOnCheck = <span class="hljs-string">''</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+<span class="hljs-function">
 <span class="hljs-title">processLevel</span> = <span class="hljs-params">(result, map)</span> -&gt;</span>
 
   name = <span class="hljs-literal">undefined</span>
@@ -245,8 +245,8 @@ focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
 
       processLevel result, field.fields <span class="hljs-keyword">if</span> field.fields
 
-      <span class="hljs-keyword">return</span><span class="hljs-function">
-
+      <span class="hljs-keyword">return</span>
+<span class="hljs-function">
 <span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
 
   map = flatMap result, fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
@@ -476,7 +476,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
       string5: type: <span class="hljs-string">'string(10)'</span>, required: <span class="hljs-literal">true</span>
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'string4.max'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'string4.max'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-number">20</span>}
     ]
 
     compileFields (result = <span class="hljs-keyword">new</span> Result),
@@ -709,8 +709,8 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
       boolean2: type: <span class="hljs-string">'boolean'</span>, min: <span class="hljs-number">10</span>, max: <span class="hljs-number">20</span>
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'boolean2.min'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'boolean2.max'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'boolean2.min'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-number">10</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'boolean2.max'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-number">20</span>}
     ]
 
     compileFields (result = <span class="hljs-keyword">new</span> Result),
@@ -772,9 +772,9 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
       structure3: fields: {f1: {type: <span class="hljs-string">'string(20)'</span>}, f2: {type: <span class="hljs-string">'string(20)'</span>}}, init: <span class="hljs-literal">true</span>
 
     expect(result.messages).sameStructure [
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure1.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure2.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
-      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure3.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure1.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-string">'wrong'</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure2.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-number">123</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'structure3.init'</span>, code: <span class="hljs-string">'dsc.unexpectedProp'</span>, value: <span class="hljs-literal">true</span>}
     ]</pre></div></div>
             
         </li>

@@ -37,7 +37,7 @@ finish = (result, resValue, opts) ->
 
             for k of item.$$src when not (item.hasOwnProperty(k) || k.startsWith('$') || optsSkipProps?.indexOf(k) >= 0)
 
-              result.error 'dsc.unexpectedProp'
+              result.error 'dsc.unexpectedProp', value: item.$$src[k]
 
             return
 

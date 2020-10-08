@@ -202,7 +202,7 @@ string: min, regexp, init
           string5: type: 'string(10)', required: true
 
         expect(result.messages).sameStructure [
-          {type: 'error', path: 'string4.max', code: 'dsc.unexpectedProp'}
+          {type: 'error', path: 'string4.max', code: 'dsc.unexpectedProp', value: 20}
         ]
 
         compileFields (result = new Result),
@@ -369,8 +369,8 @@ boolean: init
           boolean2: type: 'boolean', min: 10, max: 20
 
         expect(result.messages).sameStructure [
-          {type: 'error', path: 'boolean2.min', code: 'dsc.unexpectedProp'}
-          {type: 'error', path: 'boolean2.max', code: 'dsc.unexpectedProp'}
+          {type: 'error', path: 'boolean2.min', code: 'dsc.unexpectedProp', value: 10}
+          {type: 'error', path: 'boolean2.max', code: 'dsc.unexpectedProp', value: 20}
         ]
 
         compileFields (result = new Result),
@@ -410,9 +410,9 @@ structure, subtable: not init
           structure3: fields: {f1: {type: 'string(20)'}, f2: {type: 'string(20)'}}, init: true
 
         expect(result.messages).sameStructure [
-          {type: 'error', path: 'structure1.init', code: 'dsc.unexpectedProp'}
-          {type: 'error', path: 'structure2.init', code: 'dsc.unexpectedProp'}
-          {type: 'error', path: 'structure3.init', code: 'dsc.unexpectedProp'}
+          {type: 'error', path: 'structure1.init', code: 'dsc.unexpectedProp', value: 'wrong'}
+          {type: 'error', path: 'structure2.init', code: 'dsc.unexpectedProp', value: 123}
+          {type: 'error', path: 'structure3.init', code: 'dsc.unexpectedProp', value: true}
         ]
 
 date, time, timestamp

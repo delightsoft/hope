@@ -66,6 +66,18 @@ processActions = (result, doc, config, noSystemItems) ->
 
               res.skipValidate = true if action.$$src.skipValidate
 
+          if action.$$src.hasOwnProperty('static')
+
+            unless typeof action.$$src.static == 'boolean'
+
+              result.context (Result.prop 'static'), ->
+
+                result.error 'validate.invalidValue', value: action.$$src.static
+
+            else
+
+              res.static = true if action.$$src.static
+
           if action.$$src.hasOwnProperty('arguments')
 
             result.context (Result.prop 'arguments'), ->
@@ -78,7 +90,7 @@ processActions = (result, doc, config, noSystemItems) ->
 
       compileTags result, res
 
-      sortedMap.finish result, res, skipProps: ['tags', 'skipValidate']
+      sortedMap.finish result, res, skipProps: ['tags', 'skipValidate', 'static']
 
       res unless result.isError # processActions =
 
