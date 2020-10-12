@@ -76,7 +76,7 @@ processActions = (result, doc, config, noSystemItems) ->
 
             else
 
-              res.static = true if action.$$src.static
+              action.static = true if action.$$src.static
 
           if action.$$src.hasOwnProperty('arguments')
 
