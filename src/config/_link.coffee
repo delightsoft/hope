@@ -305,7 +305,9 @@ link = (config, noHelpers, opts) ->
 
     doc.actions.$$list.forEach (action) ->
 
-      linkFieldsWithHelpers action, 'arguments' if action.arguments
+      linkFieldsWithHelpers action, 'arguments', "#{docKey}.action.#{action.name}.arg" if action.arguments
+
+      linkFieldsWithHelpers action, 'result', "#{docKey}.action.#{action.name}.result" if action.result
 
       return
 
@@ -326,6 +328,14 @@ link = (config, noHelpers, opts) ->
           action.arguments.$$validate = $$validateBuilder action, 'arguments', actions?["#{action.name}Validate"]
 
           action.arguments.$$editValidate = $$editValidateBuilder action, 'arguments', action.arguments.$$access, actions?["#{action.name}Validate"]
+
+        if action.result
+
+          action.result.$$access = $$accessBuilder action, 'result', actions?["#{action.name}Access"]
+
+          action.result.$$validate = $$validateBuilder action, 'result', actions?["#{action.name}Validate"]
+
+          action.result.$$editValidate = $$editValidateBuilder action, 'result', action.result.$$access, actions?["#{action.name}Validate"]
 
         action.$$code = actions[action.name] if actions and actions[action.name]
 

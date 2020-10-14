@@ -47,7 +47,8 @@ config
                   arguments:
                     z: type: 'int', tags: 'a'
                     x: type: 'string(20)', null: true
-
+                  result:
+                    r: type: 'boolean'
               states:
                 opened:
                   update: 'fldA'

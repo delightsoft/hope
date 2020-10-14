@@ -22,6 +22,7 @@ unlinkSortedMap = (collection, process) ->
 
 unlinkFlatMap = (collection, prop, process) ->
 
+
   unlinkLevel = (level) ->
 
     for item in level
@@ -66,9 +67,11 @@ unlinkField = (field) ->
 
   return
 
-unlinkAction = (field) ->
+unlinkAction = (action) ->
 
-  field.arguments = unlinkFlatMap field.arguments, 'fields', unlinkField if field.hasOwnProperty('arguments')
+  action.arguments = unlinkFlatMap action.arguments, 'fields', unlinkField if action.hasOwnProperty('arguments')
+
+  action.result = unlinkFlatMap action.result, 'fields', unlinkField if action.hasOwnProperty('result')
 
   return
 

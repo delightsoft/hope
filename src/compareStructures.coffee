@@ -1,10 +1,13 @@
 Result = require './result'
+prettyPrint = require './utils/_prettyPrint'
 
 _compactValue = (v) ->
 
   if typeof v == 'object'
 
-    if v == null then 'null' else if Array.isArray(v) then '[Array]' else if v.hasOwnProperty('name') then "[Item(#{v.name})]" else '[Object]'
+    # if v == null then 'null' else if Array.isArray(v) then '[Array]' else if v.hasOwnProperty('name') then "[Item(#{v.name})]" else '[Object]'
+
+    "#{prettyPrint v}"
 
   else
 

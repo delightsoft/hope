@@ -84,6 +84,12 @@ processActions = (result, doc, config, noSystemItems) ->
 
               action.arguments = processFields result, action, config, 'arguments', true
 
+          if action.$$src.hasOwnProperty('result')
+
+            result.context (Result.prop 'result'), ->
+
+              action.result = processFields result, action, config, 'result', true
+
         return # result.context
 
       copyExtra result, res
