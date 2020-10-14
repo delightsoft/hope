@@ -12,7 +12,7 @@ defaultInit =
   time: null
   date: null
   timestamp: null
-#  json:
+  json: null
 #  blob:
 #  uuid:
 #  enum:
@@ -222,11 +222,6 @@ $$fixBuilder = (fields, collection) ->
               res[name] = if fieldsLevel[name] == null then null else moment(fieldsLevel[name]).format('YYYY-MM-DD')
               return
 
-          when 'date'
-            (res, fieldsLevel) ->
-              res[name] = if fieldsLevel[name] == null then null else moment(fieldsLevel[name]).format('YYYY-MM-DD')
-              return
-
           when 'time'
             (res, fieldsLevel) ->
               res[name] = if fieldsLevel[name] == null then null else "#{moment(fieldsLevel[name]).utc().format('HH:mm:ss.SSS')}Z"
@@ -235,6 +230,29 @@ $$fixBuilder = (fields, collection) ->
           when 'timestamp'
             (res, fieldsLevel) ->
               res[name] = if fieldsLevel[name] == null then null else "#{moment(fieldsLevel[name]).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}Z"
+              return
+
+          when 'json'
+            (res, fieldsLevel) ->
+
+              res[name] =
+
+                if typeof fieldsLevel[name] == 'string'
+
+                  try
+
+                    jval = JSON.parse fieldsLevel[name]
+
+                    if typeof jval == 'string' then fieldsLevel[name] else jval
+
+                  catch
+
+                    null
+
+                else
+
+                  fieldsLevel[name]
+
               return
 
           else
