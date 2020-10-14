@@ -232,29 +232,6 @@ $$fixBuilder = (fields, collection) ->
               res[name] = if fieldsLevel[name] == null then null else "#{moment(fieldsLevel[name]).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}Z"
               return
 
-          when 'json'
-            (res, fieldsLevel) ->
-
-              res[name] =
-
-                if typeof fieldsLevel[name] == 'string'
-
-                  try
-
-                    jval = JSON.parse fieldsLevel[name]
-
-                    if typeof jval == 'string' then fieldsLevel[name] else jval
-
-                  catch
-
-                    null
-
-                else
-
-                  fieldsLevel[name]
-
-              return
-
           else
             (res, fieldsLevel) ->
               res[name] = fieldsLevel[name]

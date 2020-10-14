@@ -220,15 +220,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
       (value) -> @result.error 'validate.invalidValue', value: value unless typeof value == 'string' and value.length == 21
 
     when 'json'
-      (value) ->
-        if typeof value == 'string'
-          try
-            JSON.parse value
-          catch
-            return @result.error 'validate.invalidValue', value: value
-        unless typeof value == 'object' and value != null and not Array.isArray(value)
-          return @result.error 'validate.invalidValue', value: value
-        return
+      (value) -> return
 
     when 'refers'
 
