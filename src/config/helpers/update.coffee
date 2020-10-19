@@ -2,11 +2,19 @@ $$updateBuilder = (docDesc) ->
 
   (fieldsLevel, updateMask, options) -> # (fields) ->
 
+    if options?.hasOwnProperty('noRev')
+
+      noRev = !! options.noRev
+
+      options = Object.assign({}, options);
+
+      delete options.noRev
+
     unless updateMask
 
       access = docDesc.$$access(fieldsLevel)
 
-      mask = docDesc.fields.$$calc('id,rev,deleted', {strict: false}).or(access.update)
+      mask = docDesc.fields.$$calc((if noRev then 'id,deleted' else 'id,rev,deleted'), {strict: false}).or(access.update)
 
     else
 

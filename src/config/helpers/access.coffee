@@ -2,9 +2,28 @@ freezeBitArray = (ba) ->
 
   ba._buildList().lock() # (ba) ->
 
+modify = (body) ->
+
+  view = r.view.clone()
+  update = r.update.clone()
+  required = r.required.clone()
+  access = r.access?.clone()
+
+  body view, update, required, access
+
+  r =
+    view: view.lock()
+    update: update.lock()
+    required: required.lock()
+    access: access?.lock()
+
+  r.modidy = modify
+
+  r
+
 $$accessBuilder = (type, fieldsProp, access, addActions) ->
 
-  if typeof access == 'function'
+  res = if typeof access == 'function'
 
     # TODO: Wrap and check result
     (fields) ->
@@ -17,8 +36,11 @@ $$accessBuilder = (type, fieldsProp, access, addActions) ->
         r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
         r.actions = type.actions.$$tags.all unless r.actions
       else
-        r.view = type[fieldsProp].$$tags.all unless r.view
-        r.update = type[fieldsProp].$$tags.all unless r.update
+        r.view = freezeBitArray type[fieldsProp].$$tags.all unless r.view
+        r.update = freezeBitArray type[fieldsProp].$$tags.all unless r.update
+        r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
+
+      r.modify = modify
 
       r # (fields) ->
 
@@ -34,8 +56,11 @@ $$accessBuilder = (type, fieldsProp, access, addActions) ->
         allAccess.required = type[fieldsProp].$$tags.required
         allAccess.actions = type.actions.$$tags.all
 
+      allAccess.modify = modify
+
       (doc) -> allAccess # (type, fieldsProp, access) ->
 
+  res
 # ----------------------------
 
 module.exports = $$accessBuilder

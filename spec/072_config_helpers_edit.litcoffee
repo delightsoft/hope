@@ -73,6 +73,7 @@ config
 
         access = linkedConfig.docs['doc.Doc1'].$$access f1: 12, f2: 'test', f3: true
 
+        delete access.modify
         expect(access).toEqual
           view: linkedConfig.docs['doc.Doc1'].fields.$$tags.t1
           update: linkedConfig.docs['doc.Doc1'].fields.$$tags.t1
