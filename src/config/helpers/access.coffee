@@ -31,8 +31,8 @@ $$accessBuilder = (type, fieldsProp, access, addActions) ->
       r = access.apply @, arguments # (type, fieldsProp, access) ->
 
       if addActions
-        r.view = freezeBitArray if r.view then r.view.or(type[fieldsProp].$$calc('#system-options', strict: false)) else type[fieldsProp].$$tags.all
-        r.update = freezeBitArray if r.update then r.update.or(type[fieldsProp].$$calc('id,rev,state,deleted', strict: false)) else type[fieldsProp].$$tags.all
+        r.view = freezeBitArray if r.view then r.view.add(type[fieldsProp].$$calc('#system-options', strict: false)) else type[fieldsProp].$$tags.all
+        r.update = freezeBitArray if r.update then r.update.add(type[fieldsProp].$$calc('id,rev,state,deleted', strict: false)) else type[fieldsProp].$$tags.all
         r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
         r.actions = type.actions.$$tags.all unless r.actions
       else
