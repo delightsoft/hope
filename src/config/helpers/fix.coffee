@@ -151,7 +151,11 @@ $$fixBuilder = (fields, collection) ->
 
           when 'boolean'
             (res, fieldsLevel) ->
-              res[name] = !!fieldsLevel[name]
+              res[name] =
+                if fieldsLevel[name] == null
+                  null
+                else
+                  !!fieldsLevel[name]
               return
 
           when 'integer'
