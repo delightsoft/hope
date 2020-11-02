@@ -337,7 +337,7 @@ link = (config, noHelpers, opts) ->
 
           action.result.$$editValidate = $$editValidateBuilder action, 'result', action.result.$$access, actions?["#{action.name}Validate"]
 
-        action.$$code = actions[action.name] if actions and actions[action.name]
+        action.$$code = code if actions and code = (actions.default?[action.name] or actions[action.name])
 
         freeze action
 
