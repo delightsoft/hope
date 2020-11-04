@@ -338,9 +338,9 @@ Object.defineProperty BitArray::, 'list',
 
     @_listProp # get: ->
 
-BitArray::add = BitArray::or
+Object.defineProperty BitArray::, 'add', value: BitArray::or, enumerable: false, configurable: true
 
-BitArray::remove = BitArray::subtract
+Object.defineProperty BitArray::, 'remove', value: BitArray::subtract, enumerable: false, configurable: true
 
 # ----------------------------
 

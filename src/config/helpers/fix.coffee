@@ -37,8 +37,10 @@ $$fixBuilder = (fields, collection) ->
 
       if field.type == 'structure'
 
-        init = $$fixBuilder(field.fields)
+        do (subBuilder = $$fixBuilder field.fields, collection) ->
 
+          init = (options) -> subBuilder {}, options
+            
       else if field.type == 'subtable'
 
         if field.required
