@@ -30,7 +30,7 @@ validateStructureBuilder = (type, fieldsProp = 'fields') ->
           else if not onlyFields or onlyFields[field.name] or alwaysValidate
             err = (field._validate.call @, fieldValue, value, doc, (if onlyFields then if typeof fieldValue == 'object' and fieldValue != null and not Array.isArray(fieldValue) then fieldValue.$$touched else emptyOnlyFields)) or err
 
-    if (@beforeAction)
+    if @beforeAction
       field = undefined
       @result.context ((path) -> (Result.prop field.name) path), =>
         for field in type[fieldsProp].$$list when (

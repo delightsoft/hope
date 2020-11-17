@@ -20,6 +20,16 @@ config
                 f1: type: 'int', tags: 't1'
                 f2: type: 'string(20)', tags: 't1', required: true
                 f3: type: 'boolean', required: true
+              actions:
+                action1:
+                  arguments:
+                    a1: type: 'int', required: true
+                    a2: type: 'string(20)', required: true
+                    a3: type: 'text'
+                  result:
+                    r1: type: 'int', required: true
+                    r2: type: 'string(20)', required: true
+                    r3: type: 'text'
 
           api:
             api1:
@@ -60,6 +70,25 @@ config
                   update: @$$tags.t1
                   required: @$$tags.required
                 resultValidate: (result, fields) -> result.error 'err3' if fields.r2 == 2.4; return
+
+      check 'required in action arguments', ->
+
+        res = compileConfig (result = new Result), @config, true
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = deepClone unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig, @code
+
+        linkedConfig.docs['doc.Doc1'].actions['action1'].arguments.$$validate (result = new Result),
+
+          {a1: 12, a3: false}, {beforeAction: true}
+
+        expect(result.messages).toEqual [
+          {type: 'error', path: 'a3', code: 'validate.invalidValue', value: false}
+          {type: 'error', path: 'a2', code: 'validate.requiredField'}
+        ]
 
       check 'general', ->
 

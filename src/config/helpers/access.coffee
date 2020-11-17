@@ -17,7 +17,7 @@ modify = (body) ->
     required: required.lock()
     access: access?.lock()
 
-  r.modidy = modify
+  r.modify = modify
 
   r
 
@@ -51,9 +51,9 @@ $$accessBuilder = (type, fieldsProp, access, addActions) ->
       allAccess =
         view: (type[fieldsProp].$$calc '#all-options', strict: false)._buildList()
         update: (type[fieldsProp].$$calc '(#all-#system),id,rev,deleted', strict: false)._buildList()
+        required: type[fieldsProp].$$tags.required
 
       if addActions
-        allAccess.required = type[fieldsProp].$$tags.required
         allAccess.actions = type.actions.$$tags.all
 
       allAccess.modify = modify
