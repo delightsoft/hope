@@ -95,7 +95,7 @@ flatMap = (result, value, subitemsField, opts) ->
 
       name.push item.name
 
-      resMap[name.join '.'] = item
+      resMap[if name.length > 1 then item.fullname = name.join '.' else item.name] = item
 
       if item.$$src?.hasOwnProperty(subitemsField)
 

@@ -30,8 +30,8 @@ flat map
           item2: @item2 =
             name: 'item2'
             subitems:
-              item2a: @item2a = {name: 'item2a'}
-              item2b: @item2b = {name: 'item2b'}
+              item2a: @item2a = {name: 'item2a', fullname: 'item2.item2a'}
+              item2b: @item2b = {name: 'item2b', fullname: 'item2.item2b'}
               $$list: [@item2a, @item2b]
           item3: @item3 = {name: 'item3'}
           $$list: [@item1, @item2, @item3]

@@ -61,6 +61,30 @@
 
         expect(conf.udtypes).not.toBeDefined()
 
+    #      check 'subtable udtype', ->
+    #
+    #        conf = $$src:
+    #
+    #          udtypes:
+    #
+    #            a:
+    #
+    #              fields:
+    #
+    #                f1: type: 'int'
+    #
+    #                f2: type: 'string(20)'
+    #
+    #        processUdtypes (result = new Result), conf
+    #
+    #        expect(result.messages).toEqual []
+
+        #        expect(conf.udtypes).sameStructure {}
+
+      check 'structure udtype', ->
+
+        # TODO:
+
       check 'dsvalue', ->
 
         conf = $$src:

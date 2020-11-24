@@ -36,7 +36,7 @@ bit array
         srcCol.push # element with subitems
           name: "item#{i}"
           $$index: index++
-          subitems: (@["item#{i}x#{j}"] = {name: "item#{i}x#{j}", $$index: index++} for j in [0...3]) # always three subitems
+          subitems: (@["item#{i}x#{j}"] = {name: "item#{i}x#{j}", fullname: "item#{i}.item#{i}x#{j}", $$index: index++} for j in [0...3]) # always three subitems
 
         srcCol.push # no subitems element
           name: "item#{i + 1}"
@@ -355,4 +355,3 @@ BitArray привязан к исходной коллекции.  Если по
         arr1.and('item1,item2', 'item10', {fixVertical: true})
 
         arr1.and('item1,item2', 'item10')
-
