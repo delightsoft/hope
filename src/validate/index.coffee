@@ -186,13 +186,52 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
 #      f # when 'double'
 
     when 'date'
-      (value) -> @result.error 'validate.invalidValue', value: value unless typeof value == 'string' and moment(value, 'YYYY-MM-DD').isValid()
+
+      (value) ->
+
+        unless typeof value == 'string'
+
+          @result.error 'validate.invalidValue', value: value
+
+        else
+
+          m = moment value, 'YYYY-MM-DD'
+
+          unless m.isValid() and m._pf.unusedInput.length == 0
+
+            @result.error 'validate.invalidValue', value: value
 
     when 'time'
-      (value) -> @result.error 'validate.invalidValue', value: value unless typeof value == 'string' and moment(value, ['HH:mm', 'HH:mm:ss', 'HH:mm:ss.SSS'], true).isValid()
+
+      (value) ->
+
+        unless typeof value == 'string'
+
+          @result.error 'validate.invalidValue', value: value
+
+        else
+
+          m = moment value, ['HH:mmZ', 'HH:mm:ssZ', 'HH:mm:ss.SSSZ'], true
+
+          unless m.isValid() and m._pf.unusedInput.length == 0
+
+            @result.error 'validate.invalidValue', value: value
 
     when 'timestamp'
-      (value) -> @result.error 'validate.invalidValue', value: value unless typeof value == 'string' and moment(value, ['YYYY-MM-DDTHH:mm', 'YYYY-MM-DDTHH:mm:ss', 'YYYY-MM-DDTHH:mm:ss.SSS']).isValid()
+
+      (value) ->
+
+        unless typeof value == 'string'
+
+          @result.error 'validate.invalidValue', value: value
+
+        else
+
+          m = moment value, ['YYYY-MM-DDTHH:mmZ', 'YYYY-MM-DDTHH:mm:ssZ', 'YYYY-MM-DDTHH:mm:ss.SSSZ']
+
+          unless m.isValid() and m._pf.unusedInput.length == 0
+
+            @result.error 'validate.invalidValue', value: value
 
     # TODO: Add timetz, timestamptz
 

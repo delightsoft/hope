@@ -71,7 +71,7 @@
 
   #       decimal: {right: ['123.456'], wrong: wrongVal = [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
-         time: {right: ['12:15:00.000'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
+         time: {right: ['12:15:00.000Z'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
          date: {right: ['2020-11-15'], wrong: [undefined, null, true, false, 0, 1, -10.2, '', 'test', [], {}]},
 
@@ -436,7 +436,7 @@ date, time, timestamp
       check "time", ->
 
         compileFields (result = new Result),
-          time1: type: 'time', init: '10:12'
+          time1: type: 'time', init: '10:12Z'
           time2: type: 'time', init: 123
           time3: type: 'time', init: 'wrong'
           time4: type: 'time', init: false
@@ -452,7 +452,7 @@ date, time, timestamp
       check "timestamp", ->
 
         compileFields (result = new Result),
-          timestamp1: type: 'timestamp', init: '2020-07-23 10:12'
+          timestamp1: type: 'timestamp', init: '2020-07-23T10:12Z'
           timestamp2: type: 'timestamp', init: 123
           timestamp3: type: 'timestamp', init: 'wrong'
           timestamp4: type: 'timestamp', init: false

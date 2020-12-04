@@ -228,9 +228,9 @@ flatMap = <span class="hljs-built_in">require</span> <span class="hljs-string">'
 
 validateBuilder = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate'</span>
 
-focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span><span class="hljs-function">
-
+focusOnCheck = <span class="hljs-string">''</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+<span class="hljs-function">
 <span class="hljs-title">processLevel</span> = <span class="hljs-params">(result, map)</span> -&gt;</span>
 
   name = <span class="hljs-literal">undefined</span>
@@ -245,8 +245,8 @@ focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
 
       processLevel result, field.fields <span class="hljs-keyword">if</span> field.fields
 
-      <span class="hljs-keyword">return</span><span class="hljs-function">
-
+      <span class="hljs-keyword">return</span>
+<span class="hljs-function">
 <span class="hljs-title">compileFields</span> = <span class="hljs-params">(result, fields)</span> -&gt;</span>
 
   map = flatMap result, fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>
@@ -312,7 +312,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>     time: {right: [<span class="hljs-string">'12:15:00.000'</span>], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, [], {}]},
+            <div class="content"><div class='highlight'><pre>     time: {right: [<span class="hljs-string">'12:15:00.000Z'</span>], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, [], {}]},
 
      date: {right: [<span class="hljs-string">'2020-11-15'</span>], wrong: [<span class="hljs-literal">undefined</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-10.2</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'test'</span>, [], {}]},
 
@@ -809,7 +809,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
   check <span class="hljs-string">"time"</span>, <span class="hljs-function">-&gt;</span>
 
     compileFields (result = <span class="hljs-keyword">new</span> Result),
-      time1: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-string">'10:12'</span>
+      time1: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-string">'10:12Z'</span>
       time2: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-number">123</span>
       time3: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-string">'wrong'</span>
       time4: type: <span class="hljs-string">'time'</span>, init: <span class="hljs-literal">false</span>
@@ -825,7 +825,7 @@ describe <span class="hljs-string">'041_validate:'</span>, <span class="hljs-fun
   check <span class="hljs-string">"timestamp"</span>, <span class="hljs-function">-&gt;</span>
 
     compileFields (result = <span class="hljs-keyword">new</span> Result),
-      timestamp1: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-string">'2020-07-23 10:12'</span>
+      timestamp1: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-string">'2020-07-23T10:12Z'</span>
       timestamp2: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-number">123</span>
       timestamp3: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-string">'wrong'</span>
       timestamp4: type: <span class="hljs-string">'timestamp'</span>, init: <span class="hljs-literal">false</span>
