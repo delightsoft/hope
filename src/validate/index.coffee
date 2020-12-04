@@ -103,7 +103,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
           max = fieldDesc.max
           f = (value) ->
             return r if r = pf.apply @, arguments
-            return @result.error 'validate.tooLong', value: value, max: max if @beforeAction and not (value.length <= max)
+            return @result.error 'validate.tooLong', value: value, max: max if not (value.length <= max)
             return
           return
       if fieldDesc.hasOwnProperty('regexp')
