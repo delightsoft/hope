@@ -213,13 +213,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, flatMap, utils: {checkItemName, deepClone, combineMsg, err: {isResult, invalidArg, tooManyArgs}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'007_flatMap:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
         </li>
         
         
@@ -228,6 +221,25 @@ describe <span class="hljs-string">'007_flatMap:'</span>, <span class="hljs-func
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, flatMap, utils: {checkItemName, deepClone, combineMsg, err: {isResult, invalidArg, tooManyArgs}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'007_flatMap:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Флетмап (flatMap) - это соглашению по работе с иерархическими коллекциями.  Флетмап это расширение
 соглашения - сортедмап (sortedMap).</p>
@@ -247,11 +259,11 @@ describe <span class="hljs-string">'007_flatMap:'</span>, <span class="hljs-func
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Флетмап добавляет в коллекцию sortedMap, коллекцию $$flat, которая содержит элементы всех уровней.  В качестве ключей
 в $$flat используются полные имена элементов, и есть полный список элементов, в порядке как они приходтся при
@@ -280,11 +292,11 @@ describe <span class="hljs-string">'007_flatMap:'</span>, <span class="hljs-func
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Методу flatMap передается метод, который возвращает вложенную коллекцию элемента.  Так как в разных случаях
 это свойство может называтьcz по разному - fields, как пример.</p>
