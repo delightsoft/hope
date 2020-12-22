@@ -64,7 +64,7 @@ processActions = (result, doc, config, noSystemItems) ->
 
             else
 
-              res.skipValidate = true if action.$$src.skipValidate
+              action.skipValidate = true if action.$$src.skipValidate
 
           if action.$$src.hasOwnProperty('static')
 
@@ -80,15 +80,11 @@ processActions = (result, doc, config, noSystemItems) ->
 
           if action.$$src.hasOwnProperty('arguments')
 
-            result.context (Result.prop 'arguments'), ->
-
-              action.arguments = processFields result, action, config, 'arguments', true
+            action.arguments = processFields result, action, config, 'arguments', true
 
           if action.$$src.hasOwnProperty('result')
 
-            result.context (Result.prop 'result'), ->
-
-              action.result = processFields result, action, config, 'result', true
+            action.result = processFields result, action, config, 'result', true
 
         return # result.context
 
