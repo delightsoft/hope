@@ -228,7 +228,15 @@ class BitArray
 
   fixVertical: ->
 
-    mask = if @_edit then @_mask else new Array @_mask.length
+    if @_edit
+
+      mask = @_mask
+
+    else
+
+      mask = new Array @_mask.length
+
+      mask[i] = @_mask[i] for i in [0...@_mask.length]
 
     for item in @_list when item.hasOwnProperty('$$mask')
 
@@ -250,7 +258,7 @@ class BitArray
 
       else if not noSubfields
 
-        @set item.$$index
+        mask[Math.trunc item.$$index / 32] |= 1 << item.$$index % 32
 
     if @_edit # fixVertical:
       delete @_listProp
@@ -260,9 +268,17 @@ class BitArray
 
   clearVertical: ->
 
-    mask = if @_edit then @_mask else new Array @_mask.length
+    if @_edit
 
-    for item in @_list by -1 when item.hasOwnProperty('$$mask')
+      mask = @_mask
+
+    else
+
+      mask = new Array @_mask.length
+
+      mask[i] = @_mask[i] for i in [0...@_mask.length]
+
+    for item in @_list by -1 when item.hasOwnProperty('$$mask') and (mask[Math.trunc item.$$index / 32] | 1 << item.$$index % 32)
 
       itemMask = item.$$mask._mask
 
@@ -274,7 +290,9 @@ class BitArray
 
         break
 
-      @set item.$$index, !noSubfields
+      if noSubfields
+
+        mask[Math.trunc item.$$index / 32] &= ~(1 << item.$$index % 32)
 
     if @_edit # clearVertical:
       delete @_listProp

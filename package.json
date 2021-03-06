@@ -4,10 +4,7 @@
   "description": "",
   "main": "./lib/dscommon.js",
   "scripts": {
-    "build": "node scripts/build.js",
-    "build:dev": "node scripts/build.js --dev",
-    "build:help": "node scripts/build.js --help",
-    "cover": "node scripts/build.js --coverage"
+    "build": "node scripts/build.js"
   },
   "author": "Alexey Zorkaltsev (alexey@zorkaltsev.com)",
   "license": "ISC",
