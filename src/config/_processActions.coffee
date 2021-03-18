@@ -33,7 +33,6 @@ processActions = (result, doc, config, noSystemItems) ->
     unless noSystemItems
 
       sortedMapOpts.before = [
-        # TODO: Think of replacement of 'value'
         {name: 'create', tags: 'system'}
         {name: 'retrieve', tags: 'system'}
         {name: 'update', tags: 'system'}

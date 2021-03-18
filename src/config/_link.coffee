@@ -199,6 +199,14 @@ link = (config, noHelpers, opts) ->
 
     unless noHelpers
 
+      if isDoc and computed = methods?.docs?[obj.name]?.computed
+
+        obj.fields.$$flat.$$list.forEach (field) ->
+
+          if computedMethod = computed[field.fullname or field.name]
+
+            field.$$computed = computedMethod
+
       assignKey = (fields, levelPrefix) ->
 
         for field in fields.$$list

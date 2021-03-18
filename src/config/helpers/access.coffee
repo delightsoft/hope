@@ -1,5 +1,7 @@
 freezeBitArray = (ba) ->
 
+  # _buildList() чтобы тесты срабатывали когда маски сравниваются с тегами
+
   ba._buildList().lock() # (ba) ->
 
 modify = (body) ->
@@ -21,7 +23,7 @@ modify = (body) ->
 
   r
 
-$$accessBuilder = (type, fieldsProp, access, addActions) ->
+$$accessBuilder = (type, fieldsProp, access, isDoc) ->
 
   res = if typeof access == 'function'
 
@@ -30,15 +32,34 @@ $$accessBuilder = (type, fieldsProp, access, addActions) ->
 
       r = access.apply @, arguments # (type, fieldsProp, access) ->
 
-      if addActions
-        r.view = freezeBitArray if r.view then r.view.add(type[fieldsProp].$$calc('#system-options', strict: false)) else type[fieldsProp].$$tags.all
-        r.update = freezeBitArray if r.update then r.update.add(type[fieldsProp].$$calc('id,rev,state,deleted', strict: false)) else type[fieldsProp].$$tags.all
-        r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
+      if isDoc
+
         r.actions = type.actions.$$tags.all unless r.actions
-      else
-        r.view = freezeBitArray type[fieldsProp].$$tags.all unless r.view
-        r.update = freezeBitArray type[fieldsProp].$$tags.all unless r.update
+
+        r.view = if r.view
+          freezeBitArray r.view.add '#system-options', strict: false
+        else
+          type[fieldsProp].$$tags.all
+
+        r.update = if r.update
+
+            r.update = r.update.remove('#system+#computed', strict: false)
+
+            r.update = r.update.add('deleted') if type.actions.delete and r.actions.get type.actions.delete.$$index # в тестах может не быть системных действий
+
+            freezeBitArray r.update
+
+        else
+
+            type[fieldsProp].$$calc '(#all-#system-#computed),deleted', strict: false
+
         r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
+
+      else
+
+        r.view = type[fieldsProp].$$tags.all unless r.view
+        r.update = type[fieldsProp].$$tags.all unless r.update
+        r.required = type[fieldsProp].$$tags.required unless r.required
 
       r.modify = modify
 
@@ -49,11 +70,11 @@ $$accessBuilder = (type, fieldsProp, access, addActions) ->
     do ->
 
       allAccess =
-        view: (type[fieldsProp].$$calc '#all-options', strict: false)._buildList()
-        update: (type[fieldsProp].$$calc '(#all-#system),id,rev,deleted', strict: false)._buildList()
+        view: type[fieldsProp].$$calc '#all-options', strict: false
+        update: type[fieldsProp].$$calc '(#all-#system-#computed),deleted', strict: false
         required: type[fieldsProp].$$tags.required
 
-      if addActions
+      if isDoc
         allAccess.actions = type.actions.$$tags.all
 
       allAccess.modify = modify
