@@ -4,6 +4,18 @@ messages =
 
   dsc:
 
+    unexpectedComputedJS: (args) -> "Unexpected file #{args.file}. There are no computed fields in '#{args.doc}'"
+
+    missingComputedJS: (args) -> "Missing file #{args.file}. There are computed fields in '#{args.doc}'"
+
+    computedFieldWithinComputedField: (args) -> "Field '#{args.field}': There are computed field(s) inside the computed field"
+
+    unknownFieldInComputedCode: (args) -> "#{args.file}: Unknown field '#{args.field}'"
+
+    fieldInComputedCodeIsNotTaggedAsComputed: (args) -> "#{args.file}: Field '#{args.field}' is not tagged as computed"
+
+    missingCodeForComputeField: (args) -> "#{args.file}: Missing '#{args.field}' computed field implementation"
+
     ambiguousProp: (args) -> "Ambiguous property #{args.name} values: #{args.value1} and #{args.value2}"
 
     ambiguousNamespaces: (args) -> "Ambiguous namespaces: #{args.value1} and #{args.value2}"
