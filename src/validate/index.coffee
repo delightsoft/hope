@@ -238,6 +238,11 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
     when 'enum'
       (value) -> @result.error 'validate.invalidValue', value: value unless typeof value == 'string' && fieldDesc.enum.hasOwnProperty(value)
 
+    when 'refers'
+      f = (value) ->
+        return @result.error 'validate.invalidValue', value: value unless typeof value == 'string' or (typeof value == 'object' and value != null and typeof value.id == 'string')
+        return
+
     when 'structure'
       validateStructureBuilder fieldDesc
 
