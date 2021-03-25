@@ -13,6 +13,7 @@ defaultInit =
   date: null
   timestamp: null
   json: null
+  refers: null
 #  blob:
 #  uuid:
 #  enum:
@@ -40,7 +41,7 @@ $$fixBuilder = (fields, collection) ->
         do (subBuilder = $$fixBuilder field.fields, collection) ->
 
           init = (options) -> subBuilder {}, options
-            
+
       else if field.type == 'subtable'
 
         if field.required
@@ -238,6 +239,25 @@ $$fixBuilder = (fields, collection) ->
               res[name] = if fieldsLevel[name] == null then null else "#{moment(fieldsLevel[name]).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}Z"
               return
 
+          when 'refers'
+            (res, fieldsLevel, options) ->
+              res[name] =
+                if fieldsLevel[name] == null
+                  null
+                else if typeof fieldsLevel[name] == 'object'
+                  if typeof fieldsLevel[name].id == 'string'
+                    if options?.keepRefers
+                      fieldsLevel[name]
+                    else
+                      fieldsLevel[name].id
+                  else
+                    initVal res
+                else if typeof fieldsLevel[name] == 'string'
+                    fieldsLevel[name]
+                  else
+                    initVal res
+              return
+
           else
             (res, fieldsLevel) ->
               res[name] = fieldsLevel[name]
@@ -291,7 +311,7 @@ $$fixBuilder = (fields, collection) ->
 
             mask = optValue
 
-          when 'update' # обновление накладываемле поверх данных (по умолчанию undefined)
+          when 'update' # обновление накладываемое поверх данных (по умолчанию undefined)
 
             invalidOption 'update', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and not Array.isArray(optValue))
 
@@ -312,6 +332,10 @@ $$fixBuilder = (fields, collection) ->
           when 'noIndex' # true, не копировать свойство _i в строках subtable (по умолчанию false)
 
             invalidOption 'noIndex', optValue unless optValue == undefined or typeof optValue == 'boolean'
+
+          when 'keepRefers' # true, не заменять на id значение полей типа refers. оставлять объект
+
+            invalidOption 'keepRefers', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
           else unknownOption optName
 
