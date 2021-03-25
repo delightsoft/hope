@@ -262,7 +262,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
       (value) -> return
 
     when 'refers'
-      // TODO: impl
+      # TODO: impl
       (value) -> return
 
     else throw new Error("Unexpected type: #{JSON.stringify(fieldDesc)}")

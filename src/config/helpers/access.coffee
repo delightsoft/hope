@@ -1,9 +1,3 @@
-freezeBitArray = (ba) ->
-
-  # _buildList() чтобы тесты срабатывали когда маски сравниваются с тегами
-
-  ba._buildList().lock() # (ba) ->
-
 modify = (body) ->
 
   view = r.view.clone()
@@ -37,7 +31,7 @@ $$accessBuilder = (type, fieldsProp, access, isDoc) ->
         r.actions = type.actions.$$tags.all unless r.actions
 
         r.view = if r.view
-          freezeBitArray r.view.add '#system-options', strict: false
+          r.view.add('#system', strict: false).remove('options', strict: false).lock()
         else
           type[fieldsProp].$$tags.all
 
@@ -47,13 +41,13 @@ $$accessBuilder = (type, fieldsProp, access, isDoc) ->
 
             r.update = r.update.add('deleted') if type.actions.delete and r.actions.get type.actions.delete.$$index # в тестах может не быть системных действий
 
-            freezeBitArray r.update
+            r.update.lock()
 
         else
 
             type[fieldsProp].$$calc '(#all-#system-#computed),deleted', strict: false
 
-        r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
+        r.required = r.required.lock() or type[fieldsProp].$$tags.required unless r.required
 
       else
 

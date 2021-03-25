@@ -327,6 +327,10 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
     access = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$access f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>
 
     <span class="hljs-keyword">delete</span> access.modify
+    access.view.list
+    access.update.list
+    access.required.list
+    access.actions.list
     expect(access).toEqual
       view: linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$tags.t1
       update: linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$tags.t1
