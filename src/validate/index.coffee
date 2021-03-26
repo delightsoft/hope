@@ -238,11 +238,6 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
     when 'enum'
       (value) -> @result.error 'validate.invalidValue', value: value unless typeof value == 'string' && fieldDesc.enum.hasOwnProperty(value)
 
-    when 'refers'
-      f = (value) ->
-        return @result.error 'validate.invalidValue', value: value unless typeof value == 'string' or (typeof value == 'object' and value != null and typeof value.id == 'string')
-        return
-
     when 'structure'
       validateStructureBuilder fieldDesc
 
@@ -267,8 +262,15 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
       (value) -> return
 
     when 'refers'
-      # TODO: impl
-      (value) -> return
+      do (refers = fieldDesc.refers.map((v) -> v.name)) ->
+        (value) ->
+          if typeof value == 'string'
+            return
+          else if typeof value == 'object' and typeof value.id == 'string'
+            unless not typeof value._type == 'string' or (refers.length == 0 or ~refers.indexOf(value._type))
+              @result.error 'validate.invalidDocType', value: value, refers: refers
+            return
+          @result.error 'validate.invalidValue', value: value
 
     else throw new Error("Unexpected type: #{JSON.stringify(fieldDesc)}")
 
