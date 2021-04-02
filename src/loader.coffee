@@ -70,8 +70,7 @@ loader = (result, sourceDir) ->
 
     res.udtypes = types if (types = loadFile 'types', false)
 
-#    res.rights = rights if (rights = loadFile 'rights', false)
-
+    res.rights = rights if (rights = loadFile 'rights', false)
     res.api = api if (api = loadFile 'api', false)
 
     res.validators = validators if (validators = loadFile 'validators', false)

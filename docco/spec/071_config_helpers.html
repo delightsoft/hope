@@ -213,6 +213,15 @@
 
             </div>
             
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
+utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
         </li>
         
         
@@ -221,27 +230,6 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>{Result,
-config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
-utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">''</span>
-<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Модель документов, состоит из следующих элементов:</p>
 <ul>
@@ -305,11 +293,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>TODO: Validate</p>
 
@@ -329,11 +317,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-5">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>После линкиовки доступен метод $$calc на всех sortedMap у которых есть теги</p>
 
@@ -350,11 +338,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-6">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Ответы кешируются</p>
 <p>expect(linkedConfig.docs[‘doc.DocA’].fields.$$calc ‘#a - #b’).toEqual mask1</p>
@@ -385,11 +373,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>subtale с признаком required создаются с одной новой пустой записью</p>
 
@@ -420,11 +408,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>записи для subtable можно создавать через $$new в поле типа subtable</p>
 
@@ -538,11 +526,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-9">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>missing - f2: ‘321’</p>
 
@@ -555,11 +543,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-10">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>missing - f4: ‘b’</p>
 
@@ -892,11 +880,11 @@ describe <span class="hljs-string">'071_config_helpers'</span>, <span class="hlj
         </li>
         
         
-        <li id="section-11">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>TODO: check for unexpected fields</p>
 
