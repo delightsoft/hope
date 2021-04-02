@@ -266,7 +266,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
         (value) ->
           if typeof value == 'string'
             return
-          else if typeof value == 'object' and typeof value.id == 'string'
+          else if typeof value == 'object' and value != null and typeof value.id == 'string'
             unless not typeof value._type == 'string' or (refers.length == 0 or ~refers.indexOf(value._type))
               @result.error 'validate.invalidDocType', value: value, refers: refers
             return
