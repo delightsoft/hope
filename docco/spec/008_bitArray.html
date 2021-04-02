@@ -213,12 +213,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, BitArray, sortedMap, flatMap} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-calc = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/tags/_calc'</span>
-
-focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span></pre></div></div>
-            
         </li>
         
         
@@ -227,6 +221,24 @@ focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, BitArray, sortedMap, flatMap} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+calc = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/tags/_calc'</span>
+
+focusOnCheck = <span class="hljs-string">''</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Для операций с группами элементов (fields, actions etc.) удобно представить выбранные поля, в виде битовой маски.  И тогда
 можно быстро и уверенно выполнять операции по объединению групп, вычитанию или нахождению общих элементов.  При этом
@@ -248,11 +260,11 @@ focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Так и многоуровневая - flatMap</p>
 
@@ -318,14 +330,26 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <h2 id="set">set()</h2>
-<p>При вызове метода set проверяется, что index попадает в размер данной коллекции</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>При вызове метода set проверяется, что index попадает в размер данной коллекции</p>
 
             </div>
             
@@ -339,11 +363,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-5">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Второй параметр в методе set не обязательный.  Если не указан, то он считается true</p>
 
@@ -360,13 +384,21 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-6">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Метод set делает новую копию объекта если заблокирован методом lock()</p>
+              <p>Можно указывать маску</p>
+<h1 id="check-set-mask--">check “set(): mask”, -&gt;</h1>
+<p>#</p>
+<h1 id="arr--new-bitarray-_sortedmapcollectioncall-">arr = new BitArray _sortedMapCollection.call @</h1>
+<p>#</p>
+<h1 id="arrset-item1item2">arr.set ‘item1,item2’</h1>
+<p>#</p>
+<h1 id="expectarrlistsamestructure-item1-item2">expect(arr.list).sameStructure [@item1, @item2]</h1>
+<p>Метод set делает новую копию объекта если заблокирован методом lock()</p>
 
             </div>
             
@@ -383,14 +415,26 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-7">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <h2 id="and-or-">and, or …</h2>
-<p>Есть несколько логических операций, которые можно выполнить над bitArray:</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Есть несколько логических операций, которые можно выполнить над bitArray:</p>
 <ul>
 <li>and - пересечение</li>
 </ul>
@@ -428,11 +472,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-8">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <ul>
 <li>or - объединение</li>
@@ -471,11 +515,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-9">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <ul>
 <li>invert - получение обратной коллекции</li>
@@ -506,11 +550,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-10">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <ul>
 <li>subtract - получение коллекции элменетов, которые есть в левом bitArray, но нет в правом</li>
@@ -549,11 +593,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-11">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>Можно проверить что маска не содержит ни одного элемента</p>
 
@@ -572,11 +616,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-12">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Важно, чтобы после invert в маскве не появлялись лишние биты, которые будут влиять на результат операции isEmpty()</p>
 
@@ -599,11 +643,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-13">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>– Все операции над группами immutable - то есть каждый раз возвращается новые объект.
 !!! TODO: переписать под lock()</p>
@@ -628,11 +672,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-14">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>BitArray привязан к исходной коллекции.  Если по ошибке выполнить операции над bit array’ями для разных исходных
 коллекций - будет exception.</p>
@@ -652,11 +696,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-15">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Если запрашивается список элементов, то он формируется при первом вызове.  При повторных вызовах возвращает ранее
 созданный список, так как он не мог поменяться у immutable объекта.</p>
@@ -676,11 +720,11 @@ describe <span class="hljs-string">'008_bitArray:'</span>, <span class="hljs-fun
         </li>
         
         
-        <li id="section-16">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>На вход можно подавать пустые коллекции, это создает работоспособные маски, который для любого get возвращают exception</p>
 

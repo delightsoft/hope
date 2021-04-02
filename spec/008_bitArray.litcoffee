@@ -104,6 +104,16 @@ set()
 
         expect(arr.list).sameStructure [@item1]
 
+Можно указывать маску
+
+#      check "set(): mask", ->
+#
+#        arr = new BitArray _sortedMapCollection.call @
+#
+#        arr.set 'item1,item2'
+#
+#        expect(arr.list).sameStructure [@item1, @item2]
+
 Метод set делает новую копию объекта если заблокирован методом lock()
 
       check "set() clone object after .lock()", ->
