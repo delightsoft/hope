@@ -1,11 +1,11 @@
 modify = (body) ->
 
-  view = r.view.clone()
-  update = r.update.clone()
-  required = r.required.clone()
-  access = r.access?.clone()
+  view = @view.clone()
+  update = @update.clone()
+  required = @required.clone()
+  access = @access?.clone()
 
-  body view, update, required, access
+  body {view, update, required, access}
 
   r =
     view: view.lock()

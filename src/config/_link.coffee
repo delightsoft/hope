@@ -26,6 +26,8 @@ $$vueDebugWatchBuilderBuilder = require './helpers/vueDebugWatchBuilder'
 
 $$accessBuilder = require('./helpers/access')
 
+$$rightsBuilder = require('./helpers/rights')
+
 $$validateBuilder = require('./helpers/validate')
 
 $$editValidateBuilder = require('./helpers/editValidate')
@@ -352,6 +354,8 @@ link = (config, noHelpers, opts) ->
         return
 
       doc.$$access = $$accessBuilder doc, 'fields', methods?.docs?[doc.name]?.access, true
+
+      doc.$$rights = $$rightsBuilder doc, methods?.rights, methods?.docs?[doc.name]?.rights
 
       doc.$$validate = doc.fields.$$validate = $$validateBuilder doc, 'fields', methods?.docs?[doc.name]?.validate
 
