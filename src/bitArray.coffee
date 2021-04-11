@@ -374,6 +374,8 @@ Object.defineProperty BitArray::, 'add', value: BitArray::or, enumerable: false,
 
 Object.defineProperty BitArray::, 'remove', value: BitArray::subtract, enumerable: false, configurable: true
 
+Object.defineProperty BitArray::, 'only', value: BitArray::and, enumerable: false, configurable: true
+
 # ----------------------------
 
 module.exports = BitArray

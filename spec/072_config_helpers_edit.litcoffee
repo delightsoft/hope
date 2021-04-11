@@ -5,7 +5,7 @@ config
     config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
     utils: {deepClone, prettyPrint}} = require '../src'
 
-    focusOnCheck = ''
+    focusOnCheck = 'subtable in edit validator with required mask'
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '072_config_helpers_edit', ->
@@ -46,10 +46,10 @@ config
 
           docs:
             'doc.Doc1':
-              access: (fields) ->
-                view: @fields.$$tags.t1
-                update: @fields.$$tags.t1
-                required: @fields.$$tags.required
+              access: ({view, update, actions, required}) ->
+                view.set '#t1'
+                update.set '#t1'
+                return
               validate: (result, fields) ->
                 result.error 'err1' if fields.f1 == 20
                 result.error (-> 'f2.f3[0]'), 'err2' if fields.f1 == 30
@@ -60,15 +60,15 @@ config
           api:
             api1:
               method1:
-                argAccess: (fields) ->
-                  view: @$$tags.t1
-                  update: @$$tags.t1
-                  required: @$$tags.required
+                argAccess: ({view, update, required}) ->
+                  view.set '#t1'
+                  update.set '#t1'
+                  return
                 argValidate: (result  , fields) -> result.error 'err2' if fields.a == 12; return
-                resultAccess: (fields) ->
-                  view: @$$tags.t1
-                  update: @$$tags.t1
-                  required: @$$tags.required
+                resultAccess: ({view, update, required}) ->
+                  view.set '#t1'
+                  update.set '#t1'
+                  return
                 resultValidate: (result, fields) -> result.error 'err3' if fields.r2 == 2.4; return
 
       check 'required in action arguments', ->

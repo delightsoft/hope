@@ -355,7 +355,11 @@ link = (config, noHelpers, opts) ->
 
       doc.$$access = $$accessBuilder doc, 'fields', methods?.docs?[doc.name]?.access, true
 
-      doc.$$rights = $$rightsBuilder doc, methods?.rights, methods?.docs?[doc.name]?.rights
+      if rights = $$rightsBuilder doc, methods?.rights, methods?.docs?[doc.name]?.rights
+
+        doc.$$rights = rights
+
+#        doc.$$access = $$docAccessBuilder doc, doc.$$access, rights
 
       doc.$$validate = doc.fields.$$validate = $$validateBuilder doc, 'fields', methods?.docs?[doc.name]?.validate
 
@@ -420,12 +424,12 @@ link = (config, noHelpers, opts) ->
         unless noHelpers
 
           method.arguments.$$access = $$accessBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argAccess
-          method.arguments.$$validate = $$validateBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argValidE
+          method.arguments.$$validate = $$validateBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argValidate
           method.arguments.$$editValidate = $$editValidateBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
 
           method.result.$$access = $$accessBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultAccess
           method.result.$$validate = $$validateBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultValidate
-          method.result.$$editValidate = $$editValidateBuilder method, 'result', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
+          method.result.$$editValidate = $$editValidateBuilder method, 'result', method.result.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
 
         freeze method
 
