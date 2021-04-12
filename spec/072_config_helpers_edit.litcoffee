@@ -5,7 +5,7 @@ config
     config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
     utils: {deepClone, prettyPrint}} = require '../src'
 
-    focusOnCheck = 'subtable in edit validator with required mask'
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '072_config_helpers_edit', ->
@@ -423,11 +423,10 @@ config
 
         unlinkedConfig = deepClone unlinkConfig res
 
-        linkedConfig = linkConfig unlinkedConfig, docs: 'doc.Doc1': access: ->
-          view: @fields.$$tags.all
-          update: @fields.$$tags.all
-          actions: @actions.$$tags.all
-          required: @fields.$$calc('st.f2, st.f3')
+        linkedConfig = linkConfig unlinkedConfig,
+          docs: 'doc.Doc1': access: ({doc, view, update, required, actions})->
+            required.set 'st.f2, st.f3'
+            return
 
         expect(result.messages).toEqual []
 

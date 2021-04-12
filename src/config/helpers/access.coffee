@@ -38,6 +38,7 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
           res.update.lock()
           res.required.lock()
 
+          delete res.doc
           res.modify = modify
 
           res # (doc) ->
@@ -73,6 +74,8 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
           res.update.lock()
           res.required.lock()
           res.actions.lock()
+
+          delete res.doc
           res.modify = modify
 
           res # (doc) ->
