@@ -25,7 +25,7 @@ Tags.Calc
 - Стоит ли добавить операцию умножение ('*'), чтобы можно было получить пересечение двух наборов.  Это, правда,
 по хорошему потребует добавление приоритезации операций
 
-    {Result, sortedMap, flatMap, tags: {calc: calcTags, compile: compileTags}} = require '../src'
+    {Result, flatMap, tags: {calc: calcTags, compile: compileTags}} = require '../src'
 
     focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
@@ -51,33 +51,43 @@ Tags.Calc
                   fld3a2: {tags: ''} # 7
           fld4: {tags: 'a, test.b, c'}    # 8
 
-        @fields = flatMap (result = new Result), @fields, 'fields', index: true, mask: true
+        @fields = flatMap (result = new Result), @fields, 'fields'
+
+        expect(result.messages).toEqual []
+
+        flatMap.index result, @fields, 'fields', mask: true
+
+        expect(result.messages).toEqual []
 
         compileTags result, @fields
+
+        expect(result.messages).toEqual []
 
         flatMap.finish result, @fields, 'fields', validate: false
 
         expect(result.messages).toEqual []
 
-    #      check 'ok', ->
-    #
-    #        expect((calcTags (result = new Result), @fields, 'fld1, fld2, fld4').valueOf()).toEqual [0, 1, 8]
-    #
-    #        expect((calcTags (result = new Result), @fields, 'fld3').valueOf()).toEqual [2, 3, 4, 5, 6, 7]
-    #
-    #        expect((calcTags (result = new Result), @fields, 'fld3.fld3c, fld4').valueOf()).toEqual [2, 5, 6, 7, 8]
-    #
-    #        expect((calcTags (result = new Result), @fields, '#a, #test.b').valueOf()).toEqual [0, 2, 3, 8]
-    #
-    #        expect((calcTags (result = new Result), @fields, '#all').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    #
-    #        expect((calcTags (result = new Result), @fields, '!fld2').valueOf()).toEqual [0, 2, 3, 4, 5, 6, 7, 8]
-    #
-    #        expect((calcTags (result = new Result), @fields, 'fld1,fld2,fld4 & fld2,fld4').valueOf()).toEqual [1, 8]
-    #
-    #        expect((calcTags (result = new Result), @fields, '(fld1,(fld2,fld4) & (fld2,fld4))').valueOf()).toEqual [1, 8]
-    #
-    #        expect((calcTags (result = new Result), @fields, '#all - #a + fld1').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7]
+      check 'ok', ->
+
+        expect((calcTags (result = new Result), @fields, 'fld1, fld2, fld4').valueOf()).toEqual [0, 1, 8]
+
+        expect((calcTags (result = new Result), @fields, 'fld3').valueOf()).toEqual [2]
+
+        expect((calcTags (result = new Result), @fields, 'fld3').fixVertical().valueOf()).toEqual [2, 3, 4, 5, 6, 7]
+
+        expect((calcTags (result = new Result), @fields, 'fld3.fld3c, fld4').valueOf()).toEqual [5, 8]
+
+        expect((calcTags (result = new Result), @fields, '#a, #test.b').valueOf()).toEqual [0, 3, 8]
+
+        expect((calcTags (result = new Result), @fields, '#all').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+        expect((calcTags (result = new Result), @fields, '!fld2').valueOf()).toEqual [0, 2, 3, 4, 5, 6, 7, 8]
+
+        expect((calcTags (result = new Result), @fields, 'fld1,fld2,fld4 & fld2,fld4').valueOf()).toEqual [1, 8]
+
+        expect((calcTags (result = new Result), @fields, '(fld1,(fld2,fld4) & (fld2,fld4))').valueOf()).toEqual [1, 8]
+
+        expect((calcTags (result = new Result), @fields, '#all - #a + fld1').valueOf()).toEqual [0, 1, 2, 3, 4, 5, 6, 7]
 
       check 'error: unbalanced parenthesises', ->
 
@@ -114,17 +124,17 @@ Tags.Calc
 
       check 'list expr', ->
 
-    #        res = calcTags (result = new Result), @fields, ['fld1', 'fld2'], strict: false
-    #
-    #        expect(result.messages).sameStructure []
-    #
-    #        expect(res.valueOf()).sameStructure [0, 1]
-    #
-    #        res = calcTags (result = new Result), @fields, ['fld2,fld3'], strict: false
-    #
-    #        expect(result.messages).sameStructure []
-    #
-    #        expect(res.valueOf()).sameStructure [1, 2]
+        res = calcTags (result = new Result), @fields, ['fld1', 'fld2'], strict: false
+
+        expect(result.messages).sameStructure []
+
+        expect(res.valueOf()).sameStructure [0, 1]
+
+        res = calcTags (result = new Result), @fields, ['fld2,fld3'], strict: false
+
+        expect(result.messages).sameStructure []
+
+        expect(res.valueOf()).sameStructure [1, 2]
 
         res = calcTags (result = new Result), @fields, [], strict: false
 
