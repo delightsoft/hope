@@ -293,7 +293,7 @@ link = (config, noHelpers, opts) ->
 
     return # linkFields =
 
-  config.docs = linkSortedMap config.docs, true, true
+  config.docs = linkSortedMap config.docs, false, true
 
   freeze config.docs
 
@@ -387,7 +387,7 @@ link = (config, noHelpers, opts) ->
 
     freeze doc
 
-  config.api = linkSortedMap config.api, true, true
+  config.api = linkSortedMap config.api, false, true
 
   freeze config.api
 
