@@ -2,6 +2,14 @@ Result = require './result'
 
 {checkItemName, err: {invalidArg, isResult}} = require './utils'
 
+index = (result, resValue) ->
+
+  invalidArg 'result', result unless isResult result
+  invalidArg 'resValue', resValue unless typeof resValue == 'object' && resValue != null && resValue.hasOwnProperty('$$list')
+  item.$$index = i for item, i in resValue.$$list
+
+  return # index =
+
 finish = (result, resValue, opts) ->
 
   invalidArg 'result', result unless isResult result
@@ -27,7 +35,7 @@ finish = (result, resValue, opts) ->
 
     result.context ((path) -> (Result.prop item.name) path), ->
 
-      for item in resValue.$$list
+      for item, i in resValue.$$list
 
         if optsValidate && item.hasOwnProperty('$$src')
 
@@ -76,11 +84,6 @@ sortedMap = (result, value, opts) ->
   else
     invalidArg 'opts.boolean', opts.boolean unless typeof (optsBoolean = opts.boolean) == 'boolean'
 
-  unless opts?.hasOwnProperty('index') # true - add to every result item $$index, with the index of item within result $$list
-    optsIndex = false
-  else
-    invalidArg 'opts.index', opts.index unless typeof (optsIndex = opts.index) == 'boolean'
-
   unless opts?.hasOwnProperty('before')
     optsBefore = []
   else
@@ -103,8 +106,6 @@ sortedMap = (result, value, opts) ->
   for item in optsBefore
 
     newItem = {name: item.name, $$src: item}
-
-    newItem.$$index = list.length if optsIndex
 
     res[item.name] = newItem
 
@@ -141,8 +142,6 @@ sortedMap = (result, value, opts) ->
           result.error (Result.index i), 'dsc.duplicatedName', value: v
 
           continue
-
-        clone.$$index = list.length if optsIndex
 
         list.push (res[v] = {name: v})
 
@@ -208,8 +207,6 @@ sortedMap = (result, value, opts) ->
 
             res[v.name] = clone = {name: v.name, $$src: v}
 
-          clone.$$index = list.length if optsIndex
-
           list.push clone
 
         return # result.context
@@ -268,8 +265,6 @@ sortedMap = (result, value, opts) ->
 
             continue
 
-          clone.$$index = list.length if optsIndex
-
           list.push clone
 
         return # result.context
@@ -284,8 +279,6 @@ sortedMap = (result, value, opts) ->
 
       newItem = {name: item.name, $$src: item}
 
-      newItem.$$index = list.length if optsIndex
-
       res[item.name] = newItem
 
       list.push newItem
@@ -297,6 +290,8 @@ sortedMap = (result, value, opts) ->
 # ----------------------------
 
 module.exports = sortedMap
+
+sortedMap.index = index
 
 sortedMap.finish = finish
 

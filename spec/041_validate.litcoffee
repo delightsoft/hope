@@ -1,4 +1,4 @@
-    {Result, sortedMap, utils: {prettyPrint}, tags: {compile: compileTags}, config: {link, unlink}} = require '../src'
+    {Result, utils: {prettyPrint}, tags: {compile: compileTags}, config: {link, unlink}} = require '../src'
 
     flatMap = require '../src/flatMap'
 
@@ -29,15 +29,17 @@
 
     compileFields = (result, fields) ->
 
-      map = flatMap result, fields, 'fields', index: true, mask: true
+      map = flatMap result, fields, 'fields'
 
       name = undefined
 
       processLevel result, map
 
-      compileTags result, map
+      flatMap.index result, map, 'fields', mask: true
 
       flatMap.finish result, map, 'fields'
+
+      compileTags result, map
 
       unless result.isError
 

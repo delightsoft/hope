@@ -379,8 +379,7 @@ sortedMap из списка или массива делает map (object):
 
       check "add items before and after", ->
 
-        res = sortedMap (result = new Result), {field1: {}, field2: {}},
-          index: true
+        resValue = sortedMap (result = new Result), {field1: {}, field2: {}},
           before: [
             {
               name: 'id',
@@ -401,7 +400,11 @@ sortedMap из списка или массива делает map (object):
 
         expect(result.messages).toEqual []
 
-        expect(res).toEqual
+        sortedMap.index result, resValue
+
+        expect(result.messages).toEqual []
+
+        expect(resValue).toEqual
           id: id = {name: 'id', $$src: {
             name: 'id',
             type: 'string',
@@ -417,4 +420,16 @@ sortedMap из списка или массива делает map (object):
             name: 'modified',
             type: 'timestamp',
           }, $$index: 4}
+          $$list: [id, field1, field2, created, modified]
+
+        sortedMap.finish result, resValue, validate: false
+
+        expect(result.messages).toEqual []
+
+        expect(resValue).toEqual
+          id: id = {name: 'id', $$index: 0}
+          field1: field1 = {name: 'field1', $$index: 1}
+          field2: field2 = {name: 'field2', $$index: 2}
+          created: created = {name: 'created', $$index: 3}
+          modified: modified = {name: 'modified', $$index: 4}
           $$list: [id, field1, field2, created, modified]
