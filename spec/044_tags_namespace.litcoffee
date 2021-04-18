@@ -1,7 +1,7 @@
 Tags.Namespace
 ==============================
 
-  {Result, tags: {compile: compileTags}, sortedMap, flatMap} = require '../src'
+  {Result, tags: {compile: compileTags}, flatMap} = require '../src'
 
   focusOnCheck = ''
   check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
@@ -18,6 +18,10 @@ Tags.Namespace
         fld3: {type: 'uuid'}
 
       fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+
+      expect(result.messages).toEqual []
+
+      flatMap.index result, fields, 'fields', mask: true
 
       expect(result.messages).toEqual []
 
@@ -43,7 +47,11 @@ Tags.Namespace
         }
         fld3: {type: 'uuid'}
 
-      fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+      fields = flatMap (result = new Result), fields, 'fields'
+
+      expect(result.messages).toEqual []
+
+      flatMap.index result, fields, 'fields', mask: true
 
       expect(result.messages).toEqual []
 
@@ -71,7 +79,11 @@ Tags.Namespace
         }
         fld3: {type: 'uuid'}
 
-      fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+      fields = flatMap (result = new Result), fields, 'fields'
+
+      expect(result.messages).toEqual []
+
+      flatMap.index result, fields, 'fields', mask: true
 
       expect(result.messages).toEqual []
 
