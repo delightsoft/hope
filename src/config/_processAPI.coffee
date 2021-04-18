@@ -67,7 +67,7 @@ processAPI = (result, config, noSystemItems) ->
                 # rule: api.methods.$$list is sorted in alphabetical order of their names
                 api.methods.$$list.sort (left, right) -> left.name.localeCompare right.name
 
-                sortedMap.index result, res, mask: true
+                sortedMap.index result, api.methods, mask: true
 
                 compileTags result, api.methods
 
@@ -82,11 +82,19 @@ processAPI = (result, config, noSystemItems) ->
       # rule: api.$$list is sorted in alphabetical order of their names
       res.$$list.sort (left, right) -> left.name.localeCompare right.name
 
+      sortedMap.index result, res
+
+      return if result.isError
+
+      compileTags result, res
+
+      return if result.isError
+
       sortedMap.finish result, res
 
-      unless result.isError
+      return if result.isError
 
-        config.api = res unless result.isError
+      config.api = res unless result.isError
 
       return # processDocs = (result, config) ->
 
