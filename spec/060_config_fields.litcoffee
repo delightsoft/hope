@@ -1,4 +1,4 @@
-config.docs.Doc.fields
+.docs.Doc.fields
 ==============================
 
     {Result, utils: {deepClone}, config: {compile: {_processFields: processFields}}} = require '../src'

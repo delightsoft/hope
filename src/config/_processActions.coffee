@@ -28,7 +28,7 @@ processActions = (result, doc, config, noSystemItems) ->
 
   result.context (Result.prop 'actions'), -> # processActions =
 
-    sortedMapOpts = index: true
+    sortedMapOpts = {}
 
     unless noSystemItems
 
@@ -89,7 +89,15 @@ processActions = (result, doc, config, noSystemItems) ->
 
       copyExtra result, res
 
+      return if result.isError
+
+      sortedMap.index result, res, mask: true
+
+      return if result.isError
+
       compileTags result, res
+
+      return if result.isError
 
       sortedMap.finish result, res, skipProps: ['tags', 'skipValidate', 'static']
 

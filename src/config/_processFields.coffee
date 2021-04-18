@@ -40,7 +40,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
       flatMapOpts.reservedNames = ['id', 'rev', 'state', 'options', 'created', 'modified', 'deleted']
 
-    res = flatMap result, doc.$$src[fieldsProp], 'fields', flatMapOpts
+    resValue = flatMap result, doc.$$src[fieldsProp], 'fields', flatMapOpts
 
     unless result.isError
 
@@ -120,13 +120,21 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
         return # _processLevel =
 
-      _processLevel res
+      _processLevel resValue
 
-      compileTags result, res
+      return if result.isError # result.context
 
-      flatMap.finish result, res, 'fields', skipProps: ['tags', 'required', 'null']
+      flatMap.index result, resValue, 'fields', mask: true
 
-      res unless result.isError # result.context
+      return if result.isError # result.context
+
+      compileTags result, resValue
+
+      return if result.isError # result.context
+
+      flatMap.finish result, resValue, 'fields', skipProps: ['tags', 'required', 'null']
+
+      resValue unless result.isError # result.context
 
 # ----------------------------
 

@@ -40,7 +40,7 @@ processAPI = (result, config, noSystemItems) ->
 
             result.context ((path) -> (Result.prop 'methods') path), ->
 
-              api.methods = sortedMap result, api.$$src.methods, index: true
+              api.methods = sortedMap result, api.$$src.methods
 
               unless result.isError
 
@@ -66,6 +66,8 @@ processAPI = (result, config, noSystemItems) ->
 
                 # rule: api.methods.$$list is sorted in alphabetical order of their names
                 api.methods.$$list.sort (left, right) -> left.name.localeCompare right.name
+
+                sortedMap.index result, res, mask: true
 
                 compileTags result, api.methods
 
