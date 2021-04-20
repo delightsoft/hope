@@ -219,13 +219,25 @@
 
             </div>
             
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
             <div class="content"><div class='highlight'><pre>{Result,
 config: {compile: {_processUdtypes: processUdtypes}}
 types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span><span class="hljs-function">
-<span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
+focusOnCheck = <span class="hljs-string">""</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+<span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hljs-function">-&gt;</span>
 
@@ -244,6 +256,8 @@ describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hl
     processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
 
     expect(result.messages).toEqual []
+
+    <span class="hljs-keyword">delete</span> conf.udtypes.$$flat <span class="hljs-comment"># эта структура следствие использования flatMap для корретной обработки fields</span>
 
     expect(conf.udtypes).sameStructure
 
@@ -282,11 +296,11 @@ describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hl
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <pre><code> check <span class="hljs-string">'subtable udtype'</span>, <span class="hljs-function">-&gt;</span>
 
@@ -311,11 +325,11 @@ describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hl
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <pre><code>   expect(conf.udtypes).sameStructure {}</code></pre>
 
@@ -327,11 +341,11 @@ describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hl
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>TODO:</p>
 
@@ -351,6 +365,8 @@ describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hl
     processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
 
     expect(result.messages).toEqual []
+
+    <span class="hljs-keyword">delete</span> conf.udtypes.$$flat <span class="hljs-comment"># эта структура следствие использования flatMap для корретной обработки fields</span>
 
     expect(conf.udtypes).sameStructure
 

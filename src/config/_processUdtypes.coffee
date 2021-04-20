@@ -2,14 +2,12 @@ Result = require '../result'
 
 {checkUDTypeName} = require '../utils'
 
-sortedMap = require '../sortedMap'
+flatMap = require '../flatMap'
 
 copyExtra = require './_copyExtra'
 
 {compile: compileType,
 compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps, _extraProps: extraProps}} = require '../types'
-
-copyExtra = require './_copyExtra'
 
 processUdtypes = (result, config) ->
 
@@ -21,7 +19,7 @@ processUdtypes = (result, config) ->
 
   result.context (Result.prop 'udtypes'), -> # processUdtypes =
 
-    res = sortedMap result, config.$$src.udtypes, checkName: checkUDTypeName
+    res = flatMap result, config.$$src.udtypes, 'fields', checkName: checkUDTypeName
 
     return if result.isError
 
@@ -109,7 +107,7 @@ processUdtypes = (result, config) ->
 
       copyExtra result, res
 
-      sortedMap.finish result, res
+      flatMap.finish result, res, 'fields'
 
       config.udtypes = if result.isError then 'failed' else res
 

@@ -27,6 +27,8 @@
 
         expect(result.messages).toEqual []
 
+        delete conf.udtypes.$$flat # эта структура следствие использования flatMap для корретной обработки fields
+
         expect(conf.udtypes).sameStructure
 
           strBased: strBased = name: 'strBased', type: 'string', length: 20
@@ -98,6 +100,8 @@
         processUdtypes (result = new Result), conf
 
         expect(result.messages).toEqual []
+
+        delete conf.udtypes.$$flat # эта структура следствие использования flatMap для корретной обработки fields
 
         expect(conf.udtypes).sameStructure
 
