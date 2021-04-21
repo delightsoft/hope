@@ -20,7 +20,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
   result.context (Result.prop fieldsProp), -> # processFields
 
-    flatMapOpts = index: true, mask: true
+    flatMapOpts = {}
 
     unless noSystemItems
 

@@ -105,8 +105,6 @@ C decimal тоже пока повременим
         {name: 'subtable', fields: true}
 
         {name: 'refers', short: 'ref', autotypeBy: 'refers', refers: true, null: true}
-
-        #{name: 'dsvalue', short: 'value', null: true}
       ]
 
 Для начала проверяем, что если описание поля, не содержит type, то будет ошибка
@@ -528,23 +526,9 @@ Cчитаем все типы, которые не являются встрое
 
         expect(result.messages).sameStructure [{type: 'error', code: 'dsc.reservedAttr', value: 'udType'}]
 
-      check "error: type 'dsvalue' is not allowed in a field def", ->
-
-        res = compileType (result = new Result), {type: 'dsvalue'}, {}
-
-        expect(result.messages).sameStructure [{type: 'error', code: 'dsc.notAllowedInFieldDef', value: 'dsvalue'}]
-
-        res = compileType (result = new Result), {type: 'dsvalue'}, {}, context: 'field'
-
-        expect(result.messages).sameStructure [{type: 'error', code: 'dsc.notAllowedInFieldDef', value: 'dsvalue'}]
-
-        res = compileType (result = new Result), {type: 'dsvalue'}, {}, context: 'udtype'
-
-        expect(result.messages).sameStructure []
-
       check "error: attr 'null' is not allowed in udt", ->
 
-        res = compileType (result = new Result), {type: 'dsvalue', null: true}, {}, context: 'udtype'
+        res = compileType (result = new Result), {type: 'int', null: true}, {}, context: 'udtype'
 
         expect(result.messages).sameStructure [{type: 'error', path: 'null', code: 'dsc.notApplicableInUdtype'}]
 

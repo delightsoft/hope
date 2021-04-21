@@ -2,7 +2,7 @@ Result = require '../result'
 
 {checkUDTypeName} = require '../utils'
 
-flatMap = require '../flatMap'
+sortedMap = require '../sortedMap'
 
 copyExtra = require './_copyExtra'
 
@@ -19,9 +19,11 @@ processUdtypes = (result, config) ->
 
   result.context (Result.prop 'udtypes'), -> # processUdtypes =
 
-    res = flatMap result, config.$$src.udtypes, 'fields', checkName: checkUDTypeName
+    res = sortedMap result, config.$$src.udtypes, checkName: checkUDTypeName
 
     return if result.isError
+
+    item.fields = config.$$src.fields for item in res.$$list when item.$$src.fields
 
     copyExtra result, res
 
@@ -107,7 +109,7 @@ processUdtypes = (result, config) ->
 
       copyExtra result, res
 
-      flatMap.finish result, res, 'fields'
+      sortedMap.finish result, res
 
       config.udtypes = if result.isError then 'failed' else res
 

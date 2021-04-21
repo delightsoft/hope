@@ -23,7 +23,6 @@ builtInTypes = [
   'json', 'blob', 'uuid', 'enum'
   'structure', 'subtable'
   'refers'
-  'dsvalue'
 ]
 
 reservedTypes = ['long', 'float', 'timetz', 'timestamptz']
@@ -102,8 +101,6 @@ compile = (result, fieldDesc, res, opts) ->
 
     when 'ref' then type = 'refers'
 
-    when 'value' then type = 'dsvalue'
-
   # Проверяем, что тип входит в список типов
 
   unless builtInTypes.indexOf(type) >= 0
@@ -133,12 +130,6 @@ compile = (result, fieldDesc, res, opts) ->
       res.null = true if typeof nullProp == 'boolean' and nullProp
 
       return res unless result.isError
-
-    return
-
-  if (optsContext == null || optsContext == 'field') && type == 'dsvalue'
-
-    result.error 'dsc.notAllowedInFieldDef', value: type
 
     return
 

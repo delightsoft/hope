@@ -27,8 +27,6 @@
 
         expect(result.messages).toEqual []
 
-        delete conf.udtypes.$$flat # эта структура следствие использования flatMap для корретной обработки fields
-
         expect(conf.udtypes).sameStructure
 
           strBased: strBased = name: 'strBased', type: 'string', length: 20
@@ -62,54 +60,6 @@
           {type: 'error', path: 'udtypes', code: 'dsc.cycledUdtypes', value: ['a', 'c', 'b']}]
 
         expect(conf.udtypes).not.toBeDefined()
-
-    #      check 'subtable udtype', ->
-    #
-    #        conf = $$src:
-    #
-    #          udtypes:
-    #
-    #            a:
-    #
-    #              fields:
-    #
-    #                f1: type: 'int'
-    #
-    #                f2: type: 'string(20)'
-    #
-    #        processUdtypes (result = new Result), conf
-    #
-    #        expect(result.messages).toEqual []
-
-        #        expect(conf.udtypes).sameStructure {}
-
-      check 'structure udtype', ->
-
-        # TODO:
-
-      check 'dsvalue', ->
-
-        conf = $$src:
-
-          udtypes:
-
-            one: type: 'value'
-
-            two: type: 'dsvalue'
-
-        processUdtypes (result = new Result), conf
-
-        expect(result.messages).toEqual []
-
-        delete conf.udtypes.$$flat # эта структура следствие использования flatMap для корретной обработки fields
-
-        expect(conf.udtypes).sameStructure
-
-          one: one = name: 'one', type: 'dsvalue'
-
-          two: two = name: 'two', type: 'dsvalue'
-
-          $$list: [one, two]
 
       for type in builtInTypes
 
