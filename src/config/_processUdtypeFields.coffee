@@ -1,10 +1,10 @@
 Result = require '../result'
 
+sortedMap = require '../sortedMap'
+
 processFields = require './_processFields'
 
 processUdtypeFields = (result, config) ->
-
-  console.info 5, config.udtypes == 'failed'
 
   return if config.udtypes == 'failed'
 
@@ -24,9 +24,11 @@ processUdtypeFields = (result, config) ->
 
     result.context (Result.prop if level == 0 then 'udtypes' else 'fields'), ->
 
-      result.context ((path) -> (Result.prop udType.name) path), ->
+      item = undefined
 
-        _processLevel item, level + 1 for item in udType.fields when item.hasOwnProperty('fields')
+      result.context ((path) -> (Result.prop item.name) path), ->
+
+        _buildOrder item, level + 1 for item in udType.fields when item.hasOwnProperty('fields')
 
     order.push udType # udtype с fields используемые в этом типе должны идти раньше
 
@@ -36,8 +38,6 @@ processUdtypeFields = (result, config) ->
 
     _buildOrder udType if not ~order.indexOf(udType.name)
 
-  console.info 35, order
-
   udType = undefined
 
   result.context (Result.prop 'udtypes'), ->
@@ -46,11 +46,25 @@ processUdtypeFields = (result, config) ->
 
       for udType in order
 
-        processFields result, udType, config, 'fields', true
+        udType.fields = processFields result, udType, config, 'fields', true
 
-        delete fields.$$flat # это не самостатоятельная структура.  она будет вставляться в иерархию полей
+        delete udType.fields.$$flat # это не самостатоятельная структура.  она будет вставляться в иерархию полей
 
-        delete fields.$$tags
+        delete udType.fields.$$tags
+
+        _clearIndex = (list) =>
+
+          for item in list
+
+            delete item.$$index
+
+            _clearIndex item.fields.$$list if item.fields
+
+        _clearIndex udType.fields.$$list
+
+  unless result.isError
+
+    sortedMap.finish result, config.udtypes
 
   return
 

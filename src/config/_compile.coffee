@@ -19,8 +19,6 @@ compile = (result, sourceConfig, noSystemItems) ->
 
   processUdtypes result, config
 
-  console.info 24, result, config
-
   processUdtypeFields result, config
 
   processDocs result, config, noSystemItems

@@ -23,7 +23,7 @@ processUdtypes = (result, config) ->
 
     return if result.isError
 
-    item.fields = config.$$src.fields for item in res.$$list when item.$$src.fields
+    item.fields = item.$$src.fields for item in res.$$list when item.$$src.fields
 
     copyExtra result, res
 
@@ -108,8 +108,6 @@ processUdtypes = (result, config) ->
     unless result.isError
 
       copyExtra result, res
-
-      sortedMap.finish result, res
 
       config.udtypes = if result.isError then 'failed' else res
 
