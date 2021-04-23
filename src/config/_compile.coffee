@@ -44,3 +44,5 @@ module.exports._processActions = require './_processActions'
 module.exports._processStates = require './_processStates'
 
 module.exports._processUdtypes = require './_processUdtypes'
+
+module.exports._processUdtypeFields = require './_processUdtypeFields'

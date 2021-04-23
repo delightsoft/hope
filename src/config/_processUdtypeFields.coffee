@@ -6,7 +6,7 @@ processFields = require './_processFields'
 
 processUdtypeFields = (result, config) ->
 
-  return if config.udtypes == 'failed'
+  return if result.isError
 
   stack = []
 

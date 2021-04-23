@@ -237,10 +237,10 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>{Result,
-config: {compile: {_processUdtypes: processUdtypes}}
+config: {compile: {_processUdtypes: processUdtypes, _processUdtypeFields: processUdtypeFields}}
 types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-focusOnCheck = <span class="hljs-string">""</span>
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
 
@@ -259,6 +259,8 @@ describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hl
         currency: type: <span class="hljs-string">'intBased'</span>
 
     processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
+
+    processUdtypeFields result, conf
 
     expect(result.messages).toEqual []
 
@@ -304,6 +306,8 @@ describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hl
 
       processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
 
+      processUdtypeFields result, conf
+
       expect(result.messages).toEqual [{type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">"udtypes.<span class="hljs-subst">#{type}</span>"</span>, code: <span class="hljs-string">'dsc.builtInTypeName'</span>}]
 
       expect(conf.udtypes).<span class="hljs-keyword">not</span>.toBeDefined()
@@ -315,6 +319,8 @@ describe <span class="hljs-string">'050_config_udtypes:'</span>, <span class="hl
       (((conf = {}).$$src = {}).udtypes = {})[type] = type: <span class="hljs-string">'int'</span>
 
       processUdtypes (result = <span class="hljs-keyword">new</span> Result), conf
+
+      processUdtypeFields result, conf
 
       expect(result.messages).toEqual [{type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">"udtypes.<span class="hljs-subst">#{type}</span>"</span>, code: <span class="hljs-string">'dsc.reservedTypeName'</span>}]
 

@@ -2,10 +2,10 @@
 ------------------------------
 
     {Result,
-    config: {compile: {_processUdtypes: processUdtypes}}
+    config: {compile: {_processUdtypes: processUdtypes, _processUdtypeFields: processUdtypeFields}}
     types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
     xcheck = (itName, itBody) -> return
 
@@ -24,6 +24,8 @@
             currency: type: 'intBased'
 
         processUdtypes (result = new Result), conf
+
+        processUdtypeFields result, conf
 
         expect(result.messages).toEqual []
 
@@ -69,6 +71,8 @@
 
           processUdtypes (result = new Result), conf
 
+          processUdtypeFields result, conf
+
           expect(result.messages).toEqual [{type: 'error', path: "udtypes.#{type}", code: 'dsc.builtInTypeName'}]
 
           expect(conf.udtypes).not.toBeDefined()
@@ -80,6 +84,8 @@
           (((conf = {}).$$src = {}).udtypes = {})[type] = type: 'int'
 
           processUdtypes (result = new Result), conf
+
+          processUdtypeFields result, conf
 
           expect(result.messages).toEqual [{type: 'error', path: "udtypes.#{type}", code: 'dsc.reservedTypeName'}]
 

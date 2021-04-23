@@ -2,7 +2,7 @@
 ------------------------------
 
     {Result,
-    config: {compile: {_processUdtypes: processUdtypes}}
+    config: {compile: {_processUdtypes: processUdtypes, _processUdtypeFields: processUdtypeFields}}
     types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = require '../src'
 
     processDocs = require '../src/config/_processDocs'
@@ -22,6 +22,8 @@
             type1: type: 'string(20)', min: 10
 
             type2: type: 'type1', length: 15, min: 8
+
+        processUdtypeFields result, res
 
         expect(result.messages).toEqual []
 

@@ -237,7 +237,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>{Result,
-config: {compile: {_processUdtypes: processUdtypes}}
+config: {compile: {_processUdtypes: processUdtypes, _processUdtypeFields: processUdtypeFields}}
 types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
 processDocs = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/config/_processDocs'</span>
@@ -257,6 +257,8 @@ describe <span class="hljs-string">'051_config_udtypes_extraProps:'</span>, <spa
         type1: type: <span class="hljs-string">'string(20)'</span>, min: <span class="hljs-number">10</span>
 
         type2: type: <span class="hljs-string">'type1'</span>, length: <span class="hljs-number">15</span>, min: <span class="hljs-number">8</span>
+
+    processUdtypeFields result, res
 
     expect(result.messages).toEqual []
 
