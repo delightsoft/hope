@@ -89,6 +89,8 @@ processUdtypes = (result, config) ->
 
           delete udt[prop] for prop of udt when not ~['name', 'extra'].indexOf(prop)
 
+          udt.fields = src.fields if src.fields
+
           compileType result, src, udt, context: 'udtype' # перекомпилируем, на случай если переопределены свойства базового типа
 
           udt.udType = parent.name

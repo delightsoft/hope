@@ -242,13 +242,13 @@ processUdtypes = <span class="hljs-built_in">require</span>(<span class="hljs-st
 
 processUdtypeFields = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/config/_processUdtypeFields'</span>)
 
-focusOnCheck = <span class="hljs-string">''</span>
+focusOnCheck = <span class="hljs-string">'general'</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span class="hljs-function">-&gt;</span>
 
-  check <span class="hljs-string">"general"</span>, <span class="hljs-function">-&gt;</span>
+  check <span class="hljs-string">""</span>, <span class="hljs-function">-&gt;</span>
 
     config = $$src:
 
@@ -256,26 +256,15 @@ describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span cl
 
         type1: fields:
           a: type: <span class="hljs-string">'int'</span>
-          b: type: <span class="hljs-string">'string(20)'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <h1 id="type2-type-type1-fields">type2: type: ‘type1’, fields:</h1>
-<h1 id="c-type-int">c: type: ‘int’</h1>
-<h1 id="d-type-string20">d: type: ‘string(20)’</h1>
-<p>#</p>
-<h1 id="type3-type-type1">type3: type: ‘type1’</h1>
+          b: type: <span class="hljs-string">'string(20)'</span>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      docs: {}
+        type2: type: <span class="hljs-string">'type1'</span>, fields:
+          c: type: <span class="hljs-string">'int'</span>
+          d: type: <span class="hljs-string">'string(20)'</span>
+
+        type3: type: <span class="hljs-string">'type1'</span>
+
+      docs: {}
 
     processUdtypes (result = <span class="hljs-keyword">new</span> Result), config
 
@@ -289,16 +278,34 @@ describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span cl
       fields:
         a: a = name: <span class="hljs-string">'a'</span>, type: <span class="hljs-string">'integer'</span>
         b: b = name: <span class="hljs-string">'b'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>
+        $$list: [a, b]
+
+    expect(config.udtypes.type2).toEqual
+      name: <span class="hljs-string">'type2'</span>
+      type: <span class="hljs-string">'structure'</span>
+      udType: <span class="hljs-string">'type1'</span>,
+      fields:
+        c: c = name: <span class="hljs-string">'c'</span>, type: <span class="hljs-string">'integer'</span>
+        d: d = name: <span class="hljs-string">'d'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>
+        $$list: [c, d]
+
+    expect(config.udtypes.type3).toEqual
+      name: <span class="hljs-string">'type3'</span>
+      type: <span class="hljs-string">'structure'</span>
+      udType: <span class="hljs-string">'type1'</span>,
+      fields:
+        a: a = name: <span class="hljs-string">'a'</span>, type: <span class="hljs-string">'integer'</span>
+        b: b = name: <span class="hljs-string">'b'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>
         $$list: [a, b]</pre></div></div>
             
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <h1 id="todo-make-fields-in-udtype">TODO: make fields in udtype</h1>
 <h1 id="todo-check-inheritance">TODO: check inheritance</h1>

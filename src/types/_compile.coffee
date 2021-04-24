@@ -115,14 +115,6 @@ compile = (result, fieldDesc, res, opts) ->
 
     else # user defined type
 
-      prop = undefined
-
-      result.context ((path) -> (Result.prop prop) path), ->
-
-        for prop in typeProps when fieldDesc.hasOwnProperty(prop) and not prop in ['null', 'required'] # udType can have null and required in a field definition
-
-          result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
-
       res.udType = type
 
       res.required = true if typeof requiredProp == 'boolean' and requiredProp
