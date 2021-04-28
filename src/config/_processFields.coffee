@@ -1,5 +1,7 @@
 Result = require '../result'
 
+deepClone = require '../utils/_deepClone'
+
 flatMap = require '../flatMap'
 
 copyExtra = require './_copyExtra'
@@ -56,9 +58,11 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
             result.isError = false
 
+            skipProcessSublevel = false
+
             compileType result, field.$$src, field, context: 'field'
 
-            if field.hasOwnProperty('udType') && config.udtypes != 'failed'
+            if field.hasOwnProperty('udType') and config.udtypes != 'failed'
 
               unless config.udtypes && config.udtypes.hasOwnProperty(field.udType)
 
@@ -82,7 +86,19 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
                 delete field[prop] for prop of field when not ~['name', 'extra'].indexOf(prop) and not prop.startsWith('$$')
 
-                compileType result, src, field, context: 'field' # перекомпилируем, на случай если переопределены свойства базового типа
+                console.info 76, src
+
+                compileType result, src, field, context: 'field', udType: true # перекомпилируем, на случай если переопределены свойства базового типа
+
+                if src.fields
+
+                  skipProcessSublevel = true
+
+                  field.fields = deepClone src.fields, all: true
+
+                console.info 77, src.fields
+
+                console.info 78, field
 
                 udtList = [udt.name]
 
@@ -112,7 +128,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
                 result.context (Result.prop 'fields'), ->
 
-                  _processLevel field.fields
+                  _processLevel field.fields unless skipProcessSublevel
 
             field.validate = field.$$src.validate if processCustomValidate result, field.$$src, level, undefined, config.$$src?.validators
 
@@ -122,7 +138,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
       _processLevel resValue
 
-      return if result.isError # result.context
+      return if result.isError # resul  t.context
 
       flatMap.index result, resValue, 'fields', mask: true
 

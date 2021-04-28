@@ -242,17 +242,23 @@ processUdtypes = <span class="hljs-built_in">require</span>(<span class="hljs-st
 
 processUdtypeFields = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/config/_processUdtypeFields'</span>)
 
-focusOnCheck = <span class="hljs-string">'general'</span>
+compile = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/config/_compile'</span>)
+
+deepClone = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/utils/_deepClone'</span>)
+
+focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span class="hljs-function">-&gt;</span>
 
-  check <span class="hljs-string">""</span>, <span class="hljs-function">-&gt;</span>
+  check <span class="hljs-string">'general'</span>, <span class="hljs-function">-&gt;</span>
 
-    config = $$src:
+    _config =
 
       udtypes:
+
+        email: type: <span class="hljs-string">'string(20)'</span>
 
         type1: fields:
           a: type: <span class="hljs-string">'int'</span>
@@ -264,7 +270,23 @@ describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span cl
 
         type3: type: <span class="hljs-string">'type1'</span>
 
-      docs: {}
+        type4:
+          type: <span class="hljs-string">'subtable'</span>
+          fields:
+            x: type: <span class="hljs-string">'email'</span>
+            y: type: <span class="hljs-string">'type3'</span>
+
+      docs:
+
+        Doc1:
+
+          fields:
+            f: type: <span class="hljs-string">'type2'</span>, null: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">true</span>
+            h: type: <span class="hljs-string">'type2'</span>, null: <span class="hljs-literal">false</span>, required: <span class="hljs-literal">false</span>
+            i: type: <span class="hljs-string">'type2'</span>, null: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">false</span>
+            p: type: <span class="hljs-string">'type4'</span>, null: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">true</span>
+
+    config = $$src: deepClone _config
 
     processUdtypes (result = <span class="hljs-keyword">new</span> Result), config
 
@@ -296,7 +318,11 @@ describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span cl
       fields:
         a: a = name: <span class="hljs-string">'a'</span>, type: <span class="hljs-string">'integer'</span>
         b: b = name: <span class="hljs-string">'b'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>
-        $$list: [a, b]</pre></div></div>
+        $$list: [a, b]
+
+    config = deepClone _config
+
+    res = compile result, config, <span class="hljs-literal">true</span></pre></div></div>
             
         </li>
         
@@ -307,12 +333,69 @@ describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span cl
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
+              <pre><code>   <span class="hljs-built_in">console</span>.info <span class="hljs-number">81</span>, res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    expect(result.messages).toEqual []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <pre><code>   expect(config.docs[<span class="hljs-string">'doc.Doc1'</span>]).<span class="hljs-keyword">not</span>.toEqual
+
+     name: <span class="hljs-string">'doc.Doc1'</span>,
+     fields:
+       f: f =
+         name: <span class="hljs-string">'f'</span>,
+         type: <span class="hljs-string">'structure'</span>
+         required: <span class="hljs-literal">true</span>
+         null: <span class="hljs-literal">true</span>
+         udType: [<span class="hljs-string">'type2'</span>]
+         <span class="hljs-string">'$$index'</span>: <span class="hljs-number">0</span>
+         fields:
+           c: f_c = name: <span class="hljs-string">'c'</span>, type: <span class="hljs-string">'integer'</span>, <span class="hljs-string">'$$index'</span>: <span class="hljs-number">1</span>
+           d: f_d = name: <span class="hljs-string">'d'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>, <span class="hljs-string">'$$index'</span>: <span class="hljs-number">2</span>
+           $$list: [f_c, f_d]
+       h: h = name: <span class="hljs-string">'h'</span>, type: <span class="hljs-string">'structure'</span>, udType: [<span class="hljs-string">'type2'</span>], <span class="hljs-string">'$$index'</span>: <span class="hljs-number">1</span>
+       i: i =
+         name: <span class="hljs-string">'i'</span>
+         type: <span class="hljs-string">'structure'</span>
+         null: <span class="hljs-literal">true</span>
+         udType: [<span class="hljs-string">'type2'</span>]
+         <span class="hljs-string">'$$index'</span>: <span class="hljs-number">2</span>
+       <span class="hljs-string">'$$list'</span>: [f],
+       <span class="hljs-string">'$$flat'</span>: f: f, <span class="hljs-string">'f.c'</span>: f_c, <span class="hljs-string">'f.d'</span>: f_d, <span class="hljs-string">'$$list'</span>: [f, f_c, f_d]
+       <span class="hljs-string">'$$tags'</span>: all: [f, f_c, f_d], none: [], required: []
+     actions: <span class="hljs-string">'$$list'</span>: [], <span class="hljs-string">'$$tags'</span>: {none: [], all: []}
+     states: <span class="hljs-string">'$$list'</span>: []
+     <span class="hljs-string">'$$index'</span>: <span class="hljs-number">0</span></code></pre>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
               <h1 id="todo-make-fields-in-udtype">TODO: make fields in udtype</h1>
 <h1 id="todo-check-inheritance">TODO: check inheritance</h1>
 <h1 id="todo-make-ud-struct-type-of-doc-fields">TODO: make ud struct type of doc fields</h1>
 <h1 id="todo-make-ud-struct-nullable">TODO: make ud struct nullable</h1>
 <h1 id="todo-make-ud-struct-required">TODO: make ud struct required</h1>
 <h1 id="todo-inner-dt-types-in-fields">TODO: inner dt types in fields</h1>
+<h1 id="todo-validate-is-ok-with-null-true-required-true-struct-structsubtable">TODO: validate is Ok with null: true, required: true struct struct/subtable</h1>
 
             </div>
             

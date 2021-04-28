@@ -9,7 +9,7 @@ BitArray = require './bitArray'
 index = (result, resValue, subitemsField, opts) ->
 
   invalidArg 'result', result unless isResult result
-  invalidArg 'resValue', resValue unless typeof resValue == 'object' && resValue != null && resValue.hasOwnProperty('$$flat')
+  invalidArg 'resValue', resValue unless typeof resValue == 'object' && resValue != null
   invalidArg 'subitemsField', subitemsField unless typeof subitemsField == 'string' && subitemsField.length > 0
   invalidArg 'opts', opts unless opts == undefined || (typeof opts == 'object' && opts != null && !Array.isArray(opts))
 
@@ -27,7 +27,33 @@ index = (result, resValue, subitemsField, opts) ->
 
     invalidArg 'opts.mask', opts.mask unless typeof (optsMask = opts.mask) == 'boolean'
 
-  item.$$index = i for item, i in resValue.$$flat.$$list
+  index = 0
+
+  name = []
+
+  resList = []
+
+  resMap = {}
+
+  _indexLevel = (level) ->
+
+    for item in level.$$list
+
+      name.push item.name
+
+      resMap[if name.length > 1 then item.fullname = name.join '.' else item.name] = item
+
+      item.$$index = index++
+
+      resList.push item
+
+      _indexLevel item.fields if item.fields
+
+      name.pop()
+
+  _indexLevel resValue
+
+  (resValue.$$flat = resMap).$$list = resList
 
   if optsMask
 
@@ -102,21 +128,9 @@ flatMap = (result, value, subitemsField, opts) ->
   invalidArg 'subitemsField', subitemsField unless typeof subitemsField == 'string' && subitemsField.length > 0
   invalidArg 'opts', opts unless opts == undefined || (typeof opts == 'object' && opts != null && !Array.isArray(opts))
 
-  name = []
-
-  resList = []
-
-  resMap = {}
-
   _processLevel = (parentItem) ->
 
     for item in parentItem.$$list
-
-      resList.push item
-
-      name.push item.name
-
-      resMap[if name.length > 1 then item.fullname = name.join '.' else item.name] = item
 
       if item.$$src?.hasOwnProperty(subitemsField)
 
@@ -127,8 +141,6 @@ flatMap = (result, value, subitemsField, opts) ->
           _processLevel resLevel unless result.isError # result.context
 
           return # result.context
-
-      name.pop()
 
     return # _processLevel =
 
@@ -149,8 +161,6 @@ flatMap = (result, value, subitemsField, opts) ->
       _processLevel res
 
       unless result.isError
-
-        (res.$$flat = resMap).$$list = resList
 
         res # result.context
 

@@ -39,6 +39,8 @@ compile = (result, fieldDesc, res, opts) ->
   else
     invalidArg 'opts.context', opts.context unless (optsContext = opts.context) == 'field' || optsContext == 'udtype'
 
+  optsUdtype = opts?.udType
+
   throw new Error "fieldDesc was already process by tags/compile()" unless not fieldDesc.hasOwnProperty '$$tags'
 
   result.isError = false
@@ -115,6 +117,8 @@ compile = (result, fieldDesc, res, opts) ->
 
     else # user defined type
 
+
+
       res.udType = type
 
       res.required = true if typeof requiredProp == 'boolean' and requiredProp
@@ -153,13 +157,13 @@ compile = (result, fieldDesc, res, opts) ->
 
         when 'null'
 
+          ok = true
+
           if optsContext == null || optsContext == 'field'
 
-            if (ok = not (type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
+            nullProp = takeBoolean result, fieldDesc.null
 
           else
-
-            ok = true
 
             result.error 'dsc.notApplicableInUdtype'
 
@@ -286,7 +290,7 @@ compile = (result, fieldDesc, res, opts) ->
 
         result.error 'dsc.missingProp', value: 'fields'
 
-      unless res.hasOwnProperty('fields')
+      unless optsUdtype or res.hasOwnProperty('fields')
 
         result.error (Result.prop 'fields'), 'dsc.invalidValue', value: fieldDesc.fields
 
@@ -296,7 +300,7 @@ compile = (result, fieldDesc, res, opts) ->
 
         result.error 'dsc.missingProp', value: 'fields'
 
-      unless res.hasOwnProperty('fields')
+      unless optsUdtype or res.hasOwnProperty('fields')
 
         result.error (Result.prop 'fields'), 'dsc.invalidValue', value: fieldDesc.fields
 

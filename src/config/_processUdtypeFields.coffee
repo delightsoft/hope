@@ -48,7 +48,7 @@ processUdtypeFields = (result, config) ->
 
         udType.fields = processFields result, {$$src: udType}, config, 'fields', true
 
-        delete udType.fields.$$flat # это не самостатоятельная структура.  она будет вставляться в иерархию полей
+        delete udType.fields.$$flat # это не самостоятельная структура.  она будет вставляться в иерархию полей
 
         delete udType.fields.$$tags
 
