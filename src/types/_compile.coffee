@@ -117,8 +117,6 @@ compile = (result, fieldDesc, res, opts) ->
 
     else # user defined type
 
-
-
       res.udType = type
 
       res.required = true if typeof requiredProp == 'boolean' and requiredProp

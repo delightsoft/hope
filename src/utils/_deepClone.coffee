@@ -1,44 +1,40 @@
-_clone = (obj, path, opts) ->
+nindex = 0
+
+_clone = (obj, map, opts) ->
 
   all = opts?.all
 
   customClone = opts?.customClone
 
-  for v, i in path by 2 when v == obj
-
-    return path[i + 1]
-
-  path.push obj
+  return v if (v = map.get obj)
 
   if Array.isArray obj
 
-    path.push clone = []
+    map.set obj, clone = []
 
     for v, i in obj
 
-      clone[i] = if typeof v == 'object' && v != null then _clone(v, path, opts) else v
+      clone[i] = if typeof v == 'object' && v != null then _clone(v, map, opts) else v
 
   else
 
-    path.push clone = {}
+    map.set obj, clone = Object.create obj.__proto__ || Object.__proto__
 
     for k, v of obj when all or not k.startsWith '$$'
 
-      if cc = customClone?(k, v, path)
+      if cc = customClone?(k, v, map)
 
         [clone[k]] = cc unless !cc || cc[0] == undefined
 
       else
 
-        clone[k] = if typeof v == 'object' && v != null then _clone(v, path, opts) else v
-
-  path.length = path.length - 2
+        clone[k] = if typeof v == 'object' && v != null then _clone(v, map, opts) else v
 
   clone # _clone =
 
-deepClone = (obj, opts) ->
+deepClone = (value, opts) ->
 
-  if typeof obj == 'object' && obj != null then _clone(obj, [], opts) else obj # deepClone =
+  if typeof value == 'object' && value != null then _clone(value, new WeakMap, opts) else value # deepClone =
 
 # ----------------------------
 

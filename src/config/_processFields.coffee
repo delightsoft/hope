@@ -4,6 +4,8 @@ deepClone = require '../utils/_deepClone'
 
 flatMap = require '../flatMap'
 
+bitArray = require '../bitArray'
+
 copyExtra = require './_copyExtra'
 
 {compile: compileType, compile: {_typeProps: typeProps, _extraProps: extraProps}} = require '../types'
@@ -86,8 +88,6 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
                 delete field[prop] for prop of field when not ~['name', 'extra'].indexOf(prop) and not prop.startsWith('$$')
 
-                console.info 76, src
-
                 compileType result, src, field, context: 'field', udType: true # перекомпилируем, на случай если переопределены свойства базового типа
 
                 if src.fields
@@ -95,10 +95,6 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
                   skipProcessSublevel = true
 
                   field.fields = deepClone src.fields, all: true
-
-                console.info 77, src.fields
-
-                console.info 78, field
 
                 udtList = [udt.name]
 
@@ -126,9 +122,11 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
               if field.hasOwnProperty('fields')
 
-                result.context (Result.prop 'fields'), ->
+                unless skipProcessSublevel
 
-                  _processLevel field.fields unless skipProcessSublevel
+                  result.context (Result.prop 'fields'), ->
+
+                    _processLevel field.fields
 
             field.validate = field.$$src.validate if processCustomValidate result, field.$$src, level, undefined, config.$$src?.validators
 

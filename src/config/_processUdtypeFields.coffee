@@ -46,21 +46,27 @@ processUdtypeFields = (result, config) ->
 
       for udType in order
 
+        result.isError = false
+
         udType.fields = processFields result, {$$src: udType}, config, 'fields', true
 
-        delete udType.fields.$$flat # это не самостоятельная структура.  она будет вставляться в иерархию полей
+        unless result.isError
 
-        delete udType.fields.$$tags
+          delete udType.fields.$$flat # это не самостоятельная структура.  она будет вставляться в иерархию полей
 
-        _clearIndex = (list) =>
+          delete udType.fields.$$tags
 
-          for item in list
+          _clearIndex = (list) =>
 
-            delete item.$$index
+            for item in list
 
-            _clearIndex item.fields.$$list if item.fields
+              delete item.$$index
 
-        _clearIndex udType.fields.$$list
+              delete item.$$mask
+
+              _clearIndex item.fields.$$list if item.fields
+
+          _clearIndex udType.fields.$$list
 
   unless result.isError
 

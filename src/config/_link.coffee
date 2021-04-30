@@ -163,7 +163,7 @@ link = (config, noHelpers, opts) ->
 
             buildMask item[prop].$$list
 
-            masks.pop()
+            freezeBitArray masks.pop()
 
         return # buildMask =
 

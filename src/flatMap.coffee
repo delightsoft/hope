@@ -41,13 +41,13 @@ index = (result, resValue, subitemsField, opts) ->
 
       name.push item.name
 
-      resMap[if name.length > 1 then item.fullname = name.join '.' else item.name] = item
+      resMap[if name.length > 1 then (item.fullname = name.join '.') else item.name] = item
 
       item.$$index = index++
 
       resList.push item
 
-      _indexLevel item.fields if item.fields
+      _indexLevel item[subitemsField] if item[subitemsField]
 
       name.pop()
 
@@ -67,11 +67,11 @@ index = (result, resValue, subitemsField, opts) ->
 
         if item.hasOwnProperty(subitemsField)
 
-          masks.push item.$$mask = mask = new BitArray resValue
+          masks.push (item.$$mask = new BitArray resValue)
 
           buildMask item[subitemsField].$$list
 
-          masks.pop()
+          (masks.pop()).lock()
 
       return # buildMask =
 

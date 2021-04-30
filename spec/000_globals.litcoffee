@@ -5,12 +5,7 @@
 
     beforeEach ->
 
-Весь код DSCommon3 ориентируется на то, что система будет работать с библиотекой bluebird.  При этом будет
-переопределен голобальный Promise.  Это сделано, по аналогии, с тем как с Promise работает sequelize.js
-
-      global.Pormise = require 'bluebird'
-
-      global.moment  = require 'moment'
+      Error.stackTraceLimit = 30;
 
 Для проверки что объект Result содержит определенные сообщения, делаем custom matcher
 

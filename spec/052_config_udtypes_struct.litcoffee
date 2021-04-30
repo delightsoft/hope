@@ -38,7 +38,7 @@
             type4:
               type: 'subtable'
               fields:
-                x: type: 'email'
+                x: type: 'email', required: true
                 y: type: 'type3'
 
           docs:
@@ -87,40 +87,24 @@
 
         config = deepClone _config
 
+        res = compile (result = new Result), config, true
         res = compile result, config, true
-
-    #        console.info 81, res.docs['doc.Doc1'].fields
 
         expect(result.messages).toEqual []
 
-    #        expect(config.docs['doc.Doc1']).not.toEqual
-    #
-    #          name: 'doc.Doc1',
-    #          fields:
-    #            f: f =
-    #              name: 'f',
-    #              type: 'structure'
-    #              required: true
-    #              null: true
-    #              udType: ['type2']
-    #              '$$index': 0
-    #              fields:
-    #                c: f_c = name: 'c', type: 'integer', '$$index': 1
-    #                d: f_d = name: 'd', type: 'string', length: 20, '$$index': 2
-    #                $$list: [f_c, f_d]
-    #            h: h = name: 'h', type: 'structure', udType: ['type2'], '$$index': 1
-    #            i: i =
-    #              name: 'i'
-    #              type: 'structure'
-    #              null: true
-    #              udType: ['type2']
-    #              '$$index': 2
-    #            '$$list': [f],
-    #            '$$flat': f: f, 'f.c': f_c, 'f.d': f_d, '$$list': [f, f_c, f_d]
-    #            '$$tags': all: [f, f_c, f_d], none: [], required: []
-    #          actions: '$$list': [], '$$tags': {none: [], all: []}
-    #          states: '$$list': []
-    #          '$$index': 0
+        expect(res.docs['doc.Doc1'].fields.p.required).toBe true
+
+        expect(res.docs['doc.Doc1'].fields.p.null).toBe true
+
+        expect(res.docs['doc.Doc1'].fields.p.$$mask.valueOf()).toEqual [10, 11, 12, 13]
+
+        expect(res.docs['doc.Doc1'].fields.p.fields.y.$$mask.valueOf()).toEqual [12, 13]
+
+        expect(res.docs['doc.Doc1'].fields.p.fields.x.required).toBe true
+
+        expect(res.docs['doc.Doc1'].fields.p.fields.x.null).toBe undefined
+
+        expect(res.docs['doc.Doc1'].fields.$$flat['p.y.b']).toBe res.docs['doc.Doc1'].fields.p.fields.y.fields.b
 
 # TODO: make fields in udtype
 # TODO: check inheritance
