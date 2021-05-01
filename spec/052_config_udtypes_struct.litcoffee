@@ -11,7 +11,7 @@
 
     deepClone = require('../src/utils/_deepClone')
 
-    focusOnCheck = ''
+    focusOnCheck = 'general'
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
     xcheck = (itName, itBody) -> return
 
@@ -105,6 +105,37 @@
         expect(res.docs['doc.Doc1'].fields.p.fields.x.null).toBe undefined
 
         expect(res.docs['doc.Doc1'].fields.$$flat['p.y.b']).toBe res.docs['doc.Doc1'].fields.p.fields.y.fields.b
+
+    check 'cycled', ->
+
+      _config =
+
+        udtypes:
+
+          type3: fields:
+            e: type: 'type1'
+            f: fields:
+              g: type: 'type2'
+
+          type2: fields: [
+            name: 'c', type: 'int'
+            name: 'd', type: 'type3'
+          ]
+
+          type1: fields:
+            a: type: 'type2'
+            b: type: 'string(20)'
+
+      config = $$src: deepClone _config
+
+      processUdtypes (result = new Result), config
+
+      processUdtypeFields result, config
+
+      expect(result.messages).toEqual [
+        {type: 'error', path: 'udtypes.e.fields.a.fields.d', code: 'dsc.cycledUdtypes', value: ['type3', 'type1', 'type2']}
+        {type: 'error', path: 'udtypes.g.fields.d', code: 'dsc.cycledUdtypes', value: ['type3', 'type2']}
+      ]
 
 # TODO: make fields in udtype
 # TODO: check inheritance

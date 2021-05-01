@@ -18,7 +18,7 @@ _clone = (obj, map, opts) ->
 
   else
 
-    map.set obj, clone = Object.create obj.__proto__ || Object.__proto__
+    map.set obj, clone = Object.create obj.__proto__ || null
 
     for k, v of obj when all or not k.startsWith '$$'
 

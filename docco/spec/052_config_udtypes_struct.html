@@ -246,7 +246,7 @@ compile = <span class="hljs-built_in">require</span>(<span class="hljs-string">'
 
 deepClone = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/utils/_deepClone'</span>)
 
-focusOnCheck = <span class="hljs-string">''</span>
+focusOnCheck = <span class="hljs-string">'general'</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 <span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
 
@@ -339,7 +339,38 @@ describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span cl
 
     expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.fields.x.<span class="hljs-literal">null</span>).toBe <span class="hljs-literal">undefined</span>
 
-    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$flat[<span class="hljs-string">'p.y.b'</span>]).toBe res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.fields.y.fields.b</pre></div></div>
+    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$flat[<span class="hljs-string">'p.y.b'</span>]).toBe res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.fields.y.fields.b
+
+check <span class="hljs-string">'cycled'</span>, <span class="hljs-function">-&gt;</span>
+
+  _config =
+
+    udtypes:
+
+      type3: fields:
+        e: type: <span class="hljs-string">'type1'</span>
+        f: fields:
+          g: type: <span class="hljs-string">'type2'</span>
+
+      type2: fields: [
+        name: <span class="hljs-string">'c'</span>, type: <span class="hljs-string">'int'</span>
+        name: <span class="hljs-string">'d'</span>, type: <span class="hljs-string">'type3'</span>
+      ]
+
+      type1: fields:
+        a: type: <span class="hljs-string">'type2'</span>
+        b: type: <span class="hljs-string">'string(20)'</span>
+
+  config = $$src: deepClone _config
+
+  processUdtypes (result = <span class="hljs-keyword">new</span> Result), config
+
+  processUdtypeFields result, config
+
+  expect(result.messages).toEqual [
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes.e.fields.a.fields.d'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'type3'</span>, <span class="hljs-string">'type1'</span>, <span class="hljs-string">'type2'</span>]}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes.g.fields.d'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'type3'</span>, <span class="hljs-string">'type2'</span>]}
+  ]</pre></div></div>
             
         </li>
         

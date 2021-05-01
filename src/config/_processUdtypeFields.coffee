@@ -14,9 +14,11 @@ processUdtypeFields = (result, config) ->
 
   _buildOrder = (udType, level = 0) =>
 
-    if ~stack.indexOf(udType)
+    return unless typeof (fields = udType.fields) == 'object' and fields != null
 
-      result.error 'dsc.cycledUdtypeDefinition', type: udType
+    if ~stack.indexOf(udType.name)
+
+      result.error 'dsc.cycledUdtypes', value: Object.assign [], stack
 
       return
 
@@ -24,49 +26,87 @@ processUdtypeFields = (result, config) ->
 
     result.context (Result.prop if level == 0 then 'udtypes' else 'fields'), ->
 
-      item = undefined
+      itemName = undefined
 
-      result.context ((path) -> (Result.prop item.name) path), ->
+      result.context ((path) -> (Result.prop itemName) path), ->
 
-        _buildOrder item, level + 1 for item in udType.fields when item.hasOwnProperty('fields')
+        _processFields = (fields) ->
 
-    order.push udType # udtype с fields используемые в этом типе должны идти раньше
+          return unless typeof fields == 'object' and fields != null
+
+          if Array.isArray(fields)
+
+            for item in fields when typeof (itemName = item.name) == 'string'
+
+              if typeof item.type == 'string' and (udt = config.udtypes[item.type])
+
+                _buildOrder udt, level + 1
+
+              else if item.fields
+
+                _processFields item.fields
+
+          else
+
+            for itemName, item of fields
+
+              if typeof item.type == 'string' and (udt = config.udtypes[item.type])
+
+                _buildOrder udt, level + 1
+
+              else if item.fields
+
+                _processFields item.fields
+
+          return
+
+        _processFields fields
+
+      return
+
+    order.push udType # udType с fields используемые в этом типе должны идти раньше
 
     stack.pop()
 
-  for udType in config.udtypes.$$list when udType.hasOwnProperty('fields')
+  for udType in config.udtypes.$$list when udType.fields
 
-    _buildOrder udType if not ~order.indexOf(udType.name)
+    _buildOrder udType unless ~order.indexOf(udType)
 
-  udType = undefined
+  unless result.isError
 
-  result.context (Result.prop 'udtypes'), ->
+    udType = undefined
 
-    result.context ((path) -> (Result.prop udType.name) path), ->
+    result.context (Result.prop 'udtypes'), ->
 
-      for udType in order
+      result.context ((path) -> (Result.prop udType.name) path), ->
 
-        result.isError = false
+        console.info 83, order
 
-        udType.fields = processFields result, {$$src: udType}, config, 'fields', true
+        for udType in order
 
-        unless result.isError
+          result.isError = false
 
-          delete udType.fields.$$flat # это не самостоятельная структура.  она будет вставляться в иерархию полей
+          console.info 87, udType
 
-          delete udType.fields.$$tags
+          udType.fields = processFields result, {$$src: udType}, config, 'fields', true
 
-          _clearIndex = (list) =>
+          unless result.isError
 
-            for item in list
+            delete udType.fields.$$flat # это не самостоятельная структура.  она будет вставляться в иерархию полей
 
-              delete item.$$index
+            delete udType.fields.$$tags
 
-              delete item.$$mask
+            _clearIndex = (list) =>
 
-              _clearIndex item.fields.$$list if item.fields
+              for item in list
 
-          _clearIndex udType.fields.$$list
+                delete item.$$index
+
+                delete item.$$mask
+
+                _clearIndex item.fields.$$list if item.fields
+
+            _clearIndex udType.fields.$$list
 
   unless result.isError
 
