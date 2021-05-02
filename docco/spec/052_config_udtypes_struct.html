@@ -368,8 +368,8 @@ check <span class="hljs-string">'cycled'</span>, <span class="hljs-function">-&g
   processUdtypeFields result, config
 
   expect(result.messages).toEqual [
-    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes.e.fields.a.fields.d'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'type3'</span>, <span class="hljs-string">'type1'</span>, <span class="hljs-string">'type2'</span>]}
-    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes.g.fields.d'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'type3'</span>, <span class="hljs-string">'type2'</span>]}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes.type3.fields.e.fields.a.fields.d'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'type3'</span>, <span class="hljs-string">'type1'</span>, <span class="hljs-string">'type2'</span>]}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes.type3.fields.f.fields.g.fields.d'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'type3'</span>, <span class="hljs-string">'type2'</span>]}
   ]</pre></div></div>
             
         </li>
@@ -381,12 +381,8 @@ check <span class="hljs-string">'cycled'</span>, <span class="hljs-function">-&g
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h1 id="todo-make-fields-in-udtype">TODO: make fields in udtype</h1>
-<h1 id="todo-check-inheritance">TODO: check inheritance</h1>
-<h1 id="todo-make-ud-struct-type-of-doc-fields">TODO: make ud struct type of doc fields</h1>
-<h1 id="todo-make-ud-struct-nullable">TODO: make ud struct nullable</h1>
+              <h1 id="todo-make-ud-struct-nullable">TODO: make ud struct nullable</h1>
 <h1 id="todo-make-ud-struct-required">TODO: make ud struct required</h1>
-<h1 id="todo-inner-dt-types-in-fields">TODO: inner dt types in fields</h1>
 <h1 id="todo-validate-is-ok-with-null-true-required-true-struct-structsubtable">TODO: validate is Ok with null: true, required: true struct struct/subtable</h1>
 
             </div>

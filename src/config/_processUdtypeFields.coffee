@@ -24,45 +24,43 @@ processUdtypeFields = (result, config) ->
 
     stack.push udType.name
 
-    result.context (Result.prop if level == 0 then 'udtypes' else 'fields'), ->
+    _processFields = (fields) ->
+
+      return unless typeof fields == 'object' and fields != null
 
       itemName = undefined
 
-      result.context ((path) -> (Result.prop itemName) path), ->
+      result.context ((path) -> (Result.prop itemName) ((Result.prop 'fields') path)), ->
 
-        _processFields = (fields) ->
+        if Array.isArray(fields)
 
-          return unless typeof fields == 'object' and fields != null
+          for item in fields when typeof (itemName = item.name) == 'string'
 
-          if Array.isArray(fields)
+            if typeof item.type == 'string' and (udt = config.udtypes[item.type])
 
-            for item in fields when typeof (itemName = item.name) == 'string'
+              _buildOrder udt, level + 1
 
-              if typeof item.type == 'string' and (udt = config.udtypes[item.type])
+            else if item.fields
 
-                _buildOrder udt, level + 1
+              _processFields item.fields
 
-              else if item.fields
+        else
 
-                _processFields item.fields
+          for itemName, item of fields
 
-          else
+            if typeof item.type == 'string' and (udt = config.udtypes[item.type])
 
-            for itemName, item of fields
+              _buildOrder udt, level + 1
 
-              if typeof item.type == 'string' and (udt = config.udtypes[item.type])
+            else if item.fields
 
-                _buildOrder udt, level + 1
+              _processFields item.fields
 
-              else if item.fields
-
-                _processFields item.fields
-
-          return
-
-        _processFields fields
+        return
 
       return
+
+    _processFields fields
 
     unless ~order.indexOf(udType) # чтоб не пропустить зацикленность обрабаываем повторно udType даже когда он уже в order
 
@@ -70,9 +68,13 @@ processUdtypeFields = (result, config) ->
 
     stack.pop()
 
-  for udType in config.udtypes.$$list when udType.fields
+  udType = undefined
 
-    _buildOrder udType unless ~order.indexOf(udType)
+  result.context ((path) -> (Result.prop udType.name) ((Result.prop 'udtypes') path)), ->
+
+    for udType in config.udtypes.$$list when udType.fields
+
+      _buildOrder udType unless ~order.indexOf(udType)
 
   unless result.isError
 

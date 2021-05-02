@@ -136,17 +136,17 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
       _processLevel resValue
 
-      return if result.isError # resul  t.context
+      unless result.isError
 
-      flatMap.index result, resValue, 'fields', mask: true
+        flatMap.index result, resValue, 'fields', mask: true
 
-      return if result.isError # result.context
+      unless result.isError
 
-      compileTags result, resValue
+        compileTags result, resValue
 
-      return if result.isError # result.context
+      unless result.isError
 
-      flatMap.finish result, resValue, 'fields', skipProps: ['tags', 'required', 'null']
+        flatMap.finish result, resValue, 'fields', skipProps: ['tags', 'required', 'null']
 
       resValue unless result.isError # result.context
 

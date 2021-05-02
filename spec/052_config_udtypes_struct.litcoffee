@@ -133,14 +133,9 @@
       processUdtypeFields result, config
 
       expect(result.messages).toEqual [
-        {type: 'error', path: 'udtypes.e.fields.a.fields.d', code: 'dsc.cycledUdtypes', value: ['type3', 'type1', 'type2']}
-        {type: 'error', path: 'udtypes.g.fields.d', code: 'dsc.cycledUdtypes', value: ['type3', 'type2']}
+        {type: 'error', path: 'udtypes.type3.fields.e.fields.a.fields.d', code: 'dsc.cycledUdtypes', value: ['type3', 'type1', 'type2']}
+        {type: 'error', path: 'udtypes.type3.fields.f.fields.g.fields.d', code: 'dsc.cycledUdtypes', value: ['type3', 'type2']}
       ]
-
-# TODO: make fields in udtype
-# TODO: check inheritance
-# TODO: make ud struct type of doc fields
 # TODO: make ud struct nullable
 # TODO: make ud struct required
-# TODO: inner dt types in fields
 # TODO: validate is Ok with null: true, required: true struct struct/subtable
