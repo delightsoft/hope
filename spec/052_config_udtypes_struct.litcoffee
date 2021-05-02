@@ -11,7 +11,7 @@
 
     deepClone = require('../src/utils/_deepClone')
 
-    focusOnCheck = 'general'
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
     xcheck = (itName, itBody) -> return
 

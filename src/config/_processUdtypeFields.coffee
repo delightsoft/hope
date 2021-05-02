@@ -64,7 +64,9 @@ processUdtypeFields = (result, config) ->
 
       return
 
-    order.push udType # udType с fields используемые в этом типе должны идти раньше
+    unless ~order.indexOf(udType) # чтоб не пропустить зацикленность обрабаываем повторно udType даже когда он уже в order
+
+        order.push udType # udType с fields используемые в этом типе должны идти раньше
 
     stack.pop()
 
@@ -80,13 +82,9 @@ processUdtypeFields = (result, config) ->
 
       result.context ((path) -> (Result.prop udType.name) path), ->
 
-        console.info 83, order
-
         for udType in order
 
           result.isError = false
-
-          console.info 87, udType
 
           udType.fields = processFields result, {$$src: udType}, config, 'fields', true
 
