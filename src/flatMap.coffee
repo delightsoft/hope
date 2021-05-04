@@ -39,13 +39,13 @@ index = (result, resValue, subitemsField, opts) ->
 
     for item in level.$$list
 
+      resList.push item
+
       name.push item.name
 
       resMap[if name.length > 1 then (item.fullname = name.join '.') else item.name] = item
 
       item.$$index = index++
-
-      resList.push item
 
       _indexLevel item[subitemsField] if item[subitemsField]
 

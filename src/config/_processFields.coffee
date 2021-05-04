@@ -14,7 +14,7 @@ copyExtra = require './_copyExtra'
 
 processCustomValidate = require '../validate/processCustomValidate'
 
-processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
+processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems, udtContext) ->
 
   unless doc.$$src.hasOwnProperty(fieldsProp)
 
@@ -64,9 +64,9 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
             compileType result, field.$$src, field, context: 'field'
 
-            if field.hasOwnProperty('udType') and config.udtypes != 'failed'
+            if field.hasOwnProperty('udType') and typeof config.udtypes == 'object'
 
-              unless config.udtypes && config.udtypes.hasOwnProperty(field.udType)
+              unless config.udtypes.hasOwnProperty(field.udType)
 
                 result.error 'dsc.unknownType', value: field.udType
 
@@ -138,15 +138,29 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
       unless result.isError
 
-        flatMap.index result, resValue, 'fields', mask: true
+        if udtContext
 
-      unless result.isError
+#          _clearIndex = (list) =>
+#
+#            for item in list
+#
+#              delete item.$$src
+#
+#              _clearIndex item.fields.$$list if item.fields
+#
+#          _clearIndex resValue.$$list
 
-        compileTags result, resValue
+        else
 
-      unless result.isError
+          flatMap.index result, resValue, 'fields', mask: true
 
-        flatMap.finish result, resValue, 'fields', skipProps: ['tags', 'required', 'null']
+          unless result.isError
+
+            compileTags result, resValue
+
+          unless result.isError
+
+            flatMap.finish result, resValue, 'fields', skipProps: ['type', 'tags', 'required', 'null']
 
       resValue unless result.isError # result.context
 

@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>.docs.Doc.fields</title>
+  <title>config</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="..\docco.css" />
@@ -219,7 +219,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="docsdocfields">.docs.Doc.fields</h1>
+              <h1 id="config">config</h1>
 
             </div>
             
@@ -235,12 +235,109 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, utils: {deepClone}, config: {compile: {_processFields: processFields}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+            <div class="content"><div class='highlight'><pre>{Result,
+config: {compile: compileConfig, link: linkConfig, unlink: unlinkConfig},
+utils: {deepClone, prettyPrint}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+processCustomValidate = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src/validate/processCustomValidate'</span>
 
 focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
 
-describe <span class="hljs-string">"060_config_fields"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+describe <span class="hljs-string">'102_check_udt_struct_null_required_tags'</span>, <span class="hljs-function">-&gt;</span>
+
+  check <span class="hljs-string">'tags'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result),
+
+      udtypes:
+
+        str1: fields:
+
+          a: type: <span class="hljs-string">'int'</span>, tags: <span class="hljs-string">'tagA'</span>
+
+          b: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'tagB'</span>
+
+      docs:
+
+        Doc1:
+
+          fields:
+
+            s1: type: <span class="hljs-string">'str1'</span>
+
+            s2: type: <span class="hljs-string">'str1'</span>, null: <span class="hljs-literal">true</span>
+
+            s3: type: <span class="hljs-string">'str1'</span>, required: <span class="hljs-literal">true</span>, tags: <span class="hljs-string">'tagB'</span>
+
+    expect(result.messages).toEqual []
+
+    unlinkedConfig = unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig, <span class="hljs-literal">true</span>
+
+    expect(linkedConfig).sameStructure res
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$tags[<span class="hljs-string">'tagA'</span>].valueOf()).toEqual [<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>]
+
+    expect(linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$tags[<span class="hljs-string">'tagB'</span>].valueOf()).toEqual [<span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>]
+
+  check <span class="hljs-string">'null, required'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result),
+
+      udtypes:
+
+        str1: type: <span class="hljs-string">'struct'</span>, fields:
+
+          a: type: <span class="hljs-string">'int'</span>
+
+        st1: type: <span class="hljs-string">'subtable'</span>, fields:
+
+          b: type: <span class="hljs-string">'int'</span>
+
+      docs:
+
+        Doc1:
+
+          fields:
+
+            s1: type: <span class="hljs-string">'str1'</span>
+
+            s2: type: <span class="hljs-string">'str1'</span>, null: <span class="hljs-literal">true</span>
+
+            s3: type: <span class="hljs-string">'str1'</span>, null: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">true</span>
+
+            t1: type: <span class="hljs-string">'st1'</span>
+
+            t2: type: <span class="hljs-string">'st1'</span>, null: <span class="hljs-literal">true</span>
+
+            t3: type: <span class="hljs-string">'st1'</span>, null: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">true</span>
+
+    expect(result.messages).toEqual []
+
+    unlinkedConfig = unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig
+
+    doc =
+      s1: a: <span class="hljs-number">12</span>
+      s2: <span class="hljs-literal">null</span>
+      s3: <span class="hljs-literal">null</span>
+      t1: [{b: <span class="hljs-number">12</span>}]
+      t2: <span class="hljs-literal">null</span>
+      t3: <span class="hljs-literal">null</span>
+
+    linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), doc, beforeSave: <span class="hljs-literal">true</span>
+
+    expect(result.messages).toEqual []
+
+    linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$validate (result = <span class="hljs-keyword">new</span> Result), doc, beforeAction: <span class="hljs-literal">true</span>
+
+    expect(result.messages).toEqual [
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'s3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-literal">null</span>}
+      {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'t3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-literal">null</span>}
+    ]</pre></div></div>
             
         </li>
         
@@ -251,105 +348,8 @@ describe <span class="hljs-string">"060_config_fields"</span>, <span class="hljs
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2 id="general">general</h2>
+              <p>#TODO: init</p>
 
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"general"</span>, <span class="hljs-function">-&gt;</span>
-
-    doc =
-      name: <span class="hljs-string">'Doc1'</span>
-      $$src:
-        fields:
-          fld1: type: <span class="hljs-string">'int'</span>, tags: <span class="hljs-string">'tag1'</span>
-          fld2: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'tag1, tag2'</span>
-          fld3:
-            fields:
-              a: type: <span class="hljs-string">'json'</span>, tags: <span class="hljs-string">'tag2'</span>
-              b: type: <span class="hljs-string">'timestamp'</span>
-
-    $$src = deepClone doc.$$src
-
-    (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>, <span class="hljs-literal">true</span>
-
-    expect(result.messages).toEqual []</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>Исходный документ не изменяется</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    expect(doc.$$src).sameStructure $$src</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <h2 id="missing-props">missing props</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <h2 id="wrong-values">wrong values</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <h2 id="unexpected-props">unexpected props</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              
             </div>
             
         </li>

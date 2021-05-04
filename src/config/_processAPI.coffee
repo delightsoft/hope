@@ -16,8 +16,6 @@ processAPI = (result, config, noSystemItems) ->
 
   unless config.$$src.api
 
-    config.api = $$list: []
-
     return
 
   result.context (Result.prop 'api'), -> # processDocs =

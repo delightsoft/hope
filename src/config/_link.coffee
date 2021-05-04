@@ -387,53 +387,55 @@ link = (config, noHelpers, opts) ->
 
     freeze doc
 
-  config.api = linkSortedMap config.api, false, true
+  if config.api
 
-  freeze config.api
+    config.api = linkSortedMap config.api, false, true
 
-  freeze config.api.$$list
+    freeze config.api
 
-  for api in config.api.$$list
+    freeze config.api.$$list
 
-    unless noHelpers
+    for api in config.api.$$list
 
-      api.$$key = apiKey = "api.#{api.name}"
+      unless noHelpers
 
-    unless api.methods
+        api.$$key = apiKey = "api.#{api.name}"
 
-      api.methods = EMPTY_MAP_WITH_TAGS
+      unless api.methods
 
-    else
+        api.methods = EMPTY_MAP_WITH_TAGS
 
-      api.methods = linkSortedMap api.methods, false, true
+      else
 
-      freeze api.methods
+        api.methods = linkSortedMap api.methods, false, true
 
-      freeze api.methods.$$list
+        freeze api.methods
 
-      for method in api.methods.$$list
+        freeze api.methods.$$list
 
-        unless noHelpers
+        for method in api.methods.$$list
 
-          method.$$key = "#{apiKey}.method.#{method.name}"
+          unless noHelpers
 
-        linkFieldsWithHelpers method, 'arguments', "#{apiKey}.method.#{method.name}.arg"
+            method.$$key = "#{apiKey}.method.#{method.name}"
 
-        linkFieldsWithHelpers method, 'result', "#{apiKey}.method.#{method.name}.result"
+          linkFieldsWithHelpers method, 'arguments', "#{apiKey}.method.#{method.name}.arg"
 
-        unless noHelpers
+          linkFieldsWithHelpers method, 'result', "#{apiKey}.method.#{method.name}.result"
 
-          method.arguments.$$access = $$accessBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argAccess
-          method.arguments.$$validate = $$validateBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argValidate
-          method.arguments.$$editValidate = $$editValidateBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
+          unless noHelpers
 
-          method.result.$$access = $$accessBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultAccess
-          method.result.$$validate = $$validateBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultValidate
-          method.result.$$editValidate = $$editValidateBuilder method, 'result', method.result.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
+            method.arguments.$$access = $$accessBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argAccess
+            method.arguments.$$validate = $$validateBuilder method, 'arguments', methods?.api?[api.name]?[method.name]?.argValidate
+            method.arguments.$$editValidate = $$editValidateBuilder method, 'arguments', method.arguments.$$access, methods?.api?[api.name]?[method.name]?.argValidate
 
-        freeze method
+            method.result.$$access = $$accessBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultAccess
+            method.result.$$validate = $$validateBuilder method, 'result', methods?.api?[api.name]?[method.name]?.resultValidate
+            method.result.$$editValidate = $$editValidateBuilder method, 'result', method.result.$$access, methods?.api?[api.name]?[method.name]?.resultValidate
 
-    freeze api
+          freeze method
+
+      freeze api
 
   freeze config # link =
 

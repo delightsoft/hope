@@ -63,8 +63,8 @@
           name: 'type1'
           type: 'structure'
           fields:
-            a: a = name: 'a', type: 'integer'
-            b: b = name: 'b', type: 'string', length: 20
+            a: a = name: 'a', type: 'integer', $$src: {type: 'int'}
+            b: b = name: 'b', type: 'string', length: 20, $$src: {type: 'string(20)'}
             $$list: [a, b]
 
         expect(config.udtypes.type2).toEqual
@@ -72,8 +72,8 @@
           type: 'structure'
           udType: 'type1',
           fields:
-            c: c = name: 'c', type: 'integer'
-            d: d = name: 'd', type: 'string', length: 20
+            c: c = name: 'c', type: 'integer', $$src: {type: 'int'}
+            d: d = name: 'd', type: 'string', length: 20, $$src: {type: 'string(20)'}
             $$list: [c, d]
 
         expect(config.udtypes.type3).toEqual
@@ -81,8 +81,8 @@
           type: 'structure'
           udType: 'type1',
           fields:
-            a: a = name: 'a', type: 'integer'
-            b: b = name: 'b', type: 'string', length: 20
+            a: a = name: 'a', type: 'integer', $$src: {type: 'int'}
+            b: b = name: 'b', type: 'string', length: 20, $$src: {type: 'string(20)'}
             $$list: [a, b]
 
         config = deepClone _config
@@ -136,6 +136,3 @@
         {type: 'error', path: 'udtypes.type3.fields.e.fields.a.fields.d', code: 'dsc.cycledUdtypes', value: ['type3', 'type1', 'type2']}
         {type: 'error', path: 'udtypes.type3.fields.f.fields.g.fields.d', code: 'dsc.cycledUdtypes', value: ['type3', 'type2']}
       ]
-# TODO: make ud struct nullable
-# TODO: make ud struct required
-# TODO: validate is Ok with null: true, required: true struct struct/subtable

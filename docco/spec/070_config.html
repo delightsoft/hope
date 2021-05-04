@@ -190,6 +190,11 @@
                 </a>
               
                 
+                <a class="source" href="102_check_udt_struct_null_required_tags.html">
+                  spec/102_check_udt_struct_null_required_tags.litcoffee
+                </a>
+              
+                
                 <a class="source" href="_helpers\DSScopeStub.html">
                   spec/_helpers/DSScopeStub.litcoffee
                 </a>
@@ -411,7 +416,7 @@ describe <span class="hljs-string">'070_config'</span>, <span class="hljs-functi
 
     expect(result.messages).toEqual []
 
-    unlinkedConfig = unlinkConfig(res)
+    unlinkedConfig = unlinkConfig res
 
     linkedConfig = linkConfig unlinkedConfig, <span class="hljs-literal">true</span>
 
