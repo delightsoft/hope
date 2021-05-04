@@ -2,10 +2,10 @@
 ------------------------------
 
     {Result,
-    config: {compile: {_processUdtypes: processUdtypes}}
+    config: {compile: {_processUdtypes: processUdtypes, _processUdtypeFields: processUdtypeFields}}
     types: {compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps}}} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
     xcheck = (itName, itBody) -> return
 
@@ -24,6 +24,8 @@
             currency: type: 'intBased'
 
         processUdtypes (result = new Result), conf
+
+        processUdtypeFields result, conf
 
         expect(result.messages).toEqual []
 
@@ -61,52 +63,6 @@
 
         expect(conf.udtypes).not.toBeDefined()
 
-    #      check 'subtable udtype', ->
-    #
-    #        conf = $$src:
-    #
-    #          udtypes:
-    #
-    #            a:
-    #
-    #              fields:
-    #
-    #                f1: type: 'int'
-    #
-    #                f2: type: 'string(20)'
-    #
-    #        processUdtypes (result = new Result), conf
-    #
-    #        expect(result.messages).toEqual []
-
-        #        expect(conf.udtypes).sameStructure {}
-
-      check 'structure udtype', ->
-
-        # TODO:
-
-      check 'dsvalue', ->
-
-        conf = $$src:
-
-          udtypes:
-
-            one: type: 'value'
-
-            two: type: 'dsvalue'
-
-        processUdtypes (result = new Result), conf
-
-        expect(result.messages).toEqual []
-
-        expect(conf.udtypes).sameStructure
-
-          one: one = name: 'one', type: 'dsvalue'
-
-          two: two = name: 'two', type: 'dsvalue'
-
-          $$list: [one, two]
-
       for type in builtInTypes
 
         do (type) -> check "error: built-in type name: '#{type}'", ->
@@ -114,6 +70,8 @@
           (((conf = {}).$$src = {}).udtypes = {})[type] = type: 'int'
 
           processUdtypes (result = new Result), conf
+
+          processUdtypeFields result, conf
 
           expect(result.messages).toEqual [{type: 'error', path: "udtypes.#{type}", code: 'dsc.builtInTypeName'}]
 
@@ -126,6 +84,8 @@
           (((conf = {}).$$src = {}).udtypes = {})[type] = type: 'int'
 
           processUdtypes (result = new Result), conf
+
+          processUdtypeFields result, conf
 
           expect(result.messages).toEqual [{type: 'error', path: "udtypes.#{type}", code: 'dsc.reservedTypeName'}]
 

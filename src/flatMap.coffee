@@ -6,6 +6,79 @@ BitArray = require './bitArray'
 
 {deepClone, err: {invalidArg, isResult}} = require './utils'
 
+index = (result, resValue, subitemsField, opts) ->
+
+  invalidArg 'result', result unless isResult result
+  invalidArg 'resValue', resValue unless typeof resValue == 'object' && resValue != null
+  invalidArg 'subitemsField', subitemsField unless typeof subitemsField == 'string' && subitemsField.length > 0
+  invalidArg 'opts', opts unless opts == undefined || (typeof opts == 'object' && opts != null && !Array.isArray(opts))
+
+  if opts
+
+    opts = deepClone opts
+
+    opts.index = false # turn indexing off for sortedMap()
+
+  unless opts?.hasOwnProperty('mask') # true - val could be list of masks or a comma delimited mask
+
+    optsMask = false
+
+  else
+
+    invalidArg 'opts.mask', opts.mask unless typeof (optsMask = opts.mask) == 'boolean'
+
+  index = 0
+
+  name = []
+
+  resList = []
+
+  resMap = {}
+
+  _indexLevel = (level) ->
+
+    for item in level.$$list
+
+      resList.push item
+
+      name.push item.name
+
+      resMap[if name.length > 1 then (item.fullname = name.join '.') else item.name] = item
+
+      item.$$index = index++
+
+      _indexLevel item[subitemsField] if item[subitemsField]
+
+      name.pop()
+
+  _indexLevel resValue
+
+  (resValue.$$flat = resMap).$$list = resList
+
+  if optsMask
+
+    masks = []
+
+    buildMask = (list) ->
+
+      for item in list
+
+        v.set item.$$index for v in masks
+
+        if item.hasOwnProperty(subitemsField)
+
+          masks.push (item.$$mask = new BitArray resValue)
+
+          buildMask item[subitemsField].$$list
+
+          (masks.pop()).lock()
+
+      return # buildMask =
+
+    buildMask resValue.$$list
+
+  return # index =
+
 finish = (result, resValue, subitemsField, opts) ->
 
   invalidArg 'result', result unless isResult result
@@ -55,47 +128,9 @@ flatMap = (result, value, subitemsField, opts) ->
   invalidArg 'subitemsField', subitemsField unless typeof subitemsField == 'string' && subitemsField.length > 0
   invalidArg 'opts', opts unless opts == undefined || (typeof opts == 'object' && opts != null && !Array.isArray(opts))
 
-  unless opts?.hasOwnProperty('index') # true - add to every result item $$index, with the index of item within result $$list
-
-    optsIndex = false
-
-  else
-
-    invalidArg 'opts.index', opts.index unless typeof (optsIndex = opts.index) == 'boolean'
-
-    if optsIndex
-
-      opts = deepClone opts
-
-      opts.index = false # turn indexing off for sortedMap()
-
-  unless opts?.hasOwnProperty('mask') # true - val could be list of masks or a comma delimited mask
-
-    optsMask = false
-
-  else
-
-    invalidArg 'opts.mask', opts.mask unless typeof (optsMask = opts.mask) == 'boolean'
-
-    throw new Error 'opts.mask requires opts.index to be true' unless optsIndex
-
-  name = []
-
-  resList = []
-
-  resMap = {}
-
   _processLevel = (parentItem) ->
 
     for item in parentItem.$$list
-
-      item.$$index = resList.length if optsIndex
-
-      resList.push item
-
-      name.push item.name
-
-      resMap[if name.length > 1 then item.fullname = name.join '.' else item.name] = item
 
       if item.$$src?.hasOwnProperty(subitemsField)
 
@@ -107,15 +142,13 @@ flatMap = (result, value, subitemsField, opts) ->
 
           return # result.context
 
-      name.pop()
-
     return # _processLevel =
 
   result.context -> # flatMask
 
     res = sortedMap result, value, opts
 
-    if opts.hasOwnProperty('before') or opts.hasOwnProperty('after')
+    if opts and (opts.hasOwnProperty('before') or opts.hasOwnProperty('after'))
 
       opts = deepClone opts
 
@@ -129,35 +162,13 @@ flatMap = (result, value, subitemsField, opts) ->
 
       unless result.isError
 
-        (res.$$flat = resMap).$$list = resList
-
-        if optsMask
-
-          masks = []
-
-          buildMask = (list) ->
-
-            for item in list
-
-              v.set item.$$index for v in masks
-
-              if item.hasOwnProperty(subitemsField)
-
-                masks.push item.$$mask = mask = new BitArray res
-
-                buildMask item[subitemsField].$$list
-
-                masks.pop()
-
-            return # buildMask =
-
-          buildMask res.$$list
-
         res # result.context
 
 # ----------------------------
 
 module.exports = flatMap
+
+flatMap.index = index
 
 flatMap.finish = finish
 

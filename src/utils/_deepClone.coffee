@@ -1,44 +1,40 @@
-_clone = (obj, customClone, path) ->
+nindex = 0
 
-  for v, i in path by 2 when v == obj
+_clone = (obj, map, opts) ->
 
-    return path[i + 1]
+  all = opts?.all
 
-  path.push obj
+  customClone = opts?.customClone
+
+  return v if (v = map.get obj)
 
   if Array.isArray obj
 
-    path.push clone = []
+    map.set obj, clone = []
 
     for v, i in obj
 
-      clone[i] = if typeof v == 'object' && v != null then _clone(v, customClone, path) else v
+      clone[i] = if typeof v == 'object' && v != null then _clone(v, map, opts) else v
 
   else
 
-    path.push clone = {}
+    map.set obj, clone = Object.create obj.__proto__ || null
 
-    for k, v of obj when not k.startsWith '$$'
+    for k, v of obj when all or not k.startsWith '$$'
 
-      if cc = customClone?(k, v, path)
+      if cc = customClone?(k, v, map)
 
         [clone[k]] = cc unless !cc || cc[0] == undefined
 
       else
 
-        clone[k] = if typeof v == 'object' && v != null then _clone(v, customClone, path) else v
-
-  path.length = path.length - 2
+        clone[k] = if typeof v == 'object' && v != null then _clone(v, map, opts) else v
 
   clone # _clone =
 
-deepClone = (obj, customClone, path) ->
+deepClone = (value, opts) ->
 
-  # Fastest way found in http://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-clone-an-object/5344074#5344074
-
-  # JSON.parse JSON.stringify obj
-
-  if typeof obj == 'object' && obj != null then _clone(obj, customClone, (path || [])) else obj # deepClone =
+  if typeof value == 'object' && value != null then _clone(value, new WeakMap, opts) else value # deepClone =
 
 # ----------------------------
 

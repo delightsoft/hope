@@ -130,6 +130,11 @@
                 </a>
               
                 
+                <a class="source" href="052_config_udtypes_struct.html">
+                  spec/052_config_udtypes_struct.litcoffee
+                </a>
+              
+                
                 <a class="source" href="060_config_fields.html">
                   spec/060_config_fields.litcoffee
                 </a>
@@ -185,6 +190,11 @@
                 </a>
               
                 
+                <a class="source" href="102_check_udt_struct_null_required_tags.html">
+                  spec/102_check_udt_struct_null_required_tags.litcoffee
+                </a>
+              
+                
                 <a class="source" href="_helpers\DSScopeStub.html">
                   spec/_helpers/DSScopeStub.litcoffee
                 </a>
@@ -224,7 +234,9 @@
             
             <div class="content"><div class='highlight'><pre>{Result, compareStructures, utils: {err: {isResult}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
 
-beforeEach -&gt;</pre></div></div>
+beforeEach -&gt;
+
+  Error.stackTraceLimit = <span class="hljs-number">30</span>;</pre></div></div>
             
         </li>
         
@@ -234,24 +246,6 @@ beforeEach -&gt;</pre></div></div>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>Весь код DSCommon3 ориентируется на то, что система будет работать с библиотекой bluebird.  При этом будет
-переопределен голобальный Promise.  Это сделано, по аналогии, с тем как с Promise работает sequelize.js</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-built_in">global</span>.Pormise = <span class="hljs-built_in">require</span> <span class="hljs-string">'bluebird'</span>
-
-  <span class="hljs-built_in">global</span>.moment  = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Для проверки что объект Result содержит определенные сообщения, делаем custom matcher</p>
 
@@ -266,11 +260,11 @@ beforeEach -&gt;</pre></div></div>
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>проверяем что actual правильного типа</p>
 
@@ -288,11 +282,11 @@ beforeEach -&gt;</pre></div></div>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>проверяем, что array</p>
 
@@ -314,11 +308,11 @@ beforeEach -&gt;</pre></div></div>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>ишем среди полученных сообщений, чтоб было каждое ожидаемое сообщение</p>
 
@@ -340,11 +334,11 @@ beforeEach -&gt;</pre></div></div>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>message: “Expected #{nodeJSUtil.inspect actual.messages} to has following messages #{nodeJSUtil.inspect missingMessages}”</p>
 
@@ -370,11 +364,11 @@ beforeEach -&gt;</pre></div></div>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>message: “Diff: #{jasmine.pp result.messages}”</p>
 

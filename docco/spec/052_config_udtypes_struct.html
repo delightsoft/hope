@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>.docs.Doc.fields</title>
+  <title>052_config_udtypes_struct.litcoffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="..\docco.css" />
@@ -211,6 +211,12 @@
     
     <ul class="sections">
         
+          <li id="title">
+              <div class="annotation">
+                  <h1>052_config_udtypes_struct.litcoffee</h1>
+              </div>
+          </li>
+        
         
         
         <li id="section-1">
@@ -219,7 +225,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="docsdocfields">.docs.Doc.fields</h1>
+              <h2 id="типы-полей-документов-объявляемые-пользователем">Типы полей документов объявляемые пользователем</h2>
 
             </div>
             
@@ -235,122 +241,141 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, utils: {deepClone}, config: {compile: {_processFields: processFields}}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+            <div class="content"><div class='highlight'><pre>Result = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/result'</span>)
+
+processUdtypes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/config/_processUdtypes'</span>)
+
+processUdtypeFields = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/config/_processUdtypeFields'</span>)
+
+compile = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/config/_compile'</span>)
+
+deepClone = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/utils/_deepClone'</span>)
 
 focusOnCheck = <span class="hljs-string">''</span>
 <span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+<span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
 
-describe <span class="hljs-string">"060_config_fields"</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <h2 id="general">general</h2>
+describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span class="hljs-function">-&gt;</span>
 
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  check <span class="hljs-string">"general"</span>, <span class="hljs-function">-&gt;</span>
+  check <span class="hljs-string">'general'</span>, <span class="hljs-function">-&gt;</span>
 
-    doc =
-      name: <span class="hljs-string">'Doc1'</span>
-      $$src:
-        fields:
-          fld1: type: <span class="hljs-string">'int'</span>, tags: <span class="hljs-string">'tag1'</span>
-          fld2: type: <span class="hljs-string">'string(20)'</span>, tags: <span class="hljs-string">'tag1, tag2'</span>
-          fld3:
-            fields:
-              a: type: <span class="hljs-string">'json'</span>, tags: <span class="hljs-string">'tag2'</span>
-              b: type: <span class="hljs-string">'timestamp'</span>
+    _config =
 
-    $$src = deepClone doc.$$src
+      udtypes:
 
-    (res = {}).fields = processFields (result = <span class="hljs-keyword">new</span> Result), doc, {}, <span class="hljs-string">'fields'</span>, <span class="hljs-literal">true</span>
+        email: type: <span class="hljs-string">'string(20)'</span>
 
-    expect(result.messages).toEqual []</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>Исходный документ не изменяется</p>
+        type1: fields:
+          a: type: <span class="hljs-string">'int'</span>
+          b: type: <span class="hljs-string">'string(20)'</span>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    expect(doc.$$src).sameStructure $$src</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <h2 id="missing-props">missing props</h2>
+        type2: type: <span class="hljs-string">'type1'</span>, fields:
+          c: type: <span class="hljs-string">'int'</span>
+          d: type: <span class="hljs-string">'string(20)'</span>
 
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <h2 id="wrong-values">wrong values</h2>
+        type3: type: <span class="hljs-string">'type1'</span>
 
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <h2 id="unexpected-props">unexpected props</h2>
+        type4:
+          type: <span class="hljs-string">'subtable'</span>
+          fields:
+            x: type: <span class="hljs-string">'email'</span>, required: <span class="hljs-literal">true</span>
+            y: type: <span class="hljs-string">'type3'</span>
 
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              
-            </div>
+      docs:
+
+        Doc1:
+
+          fields:
+            f: type: <span class="hljs-string">'type2'</span>, null: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">true</span>
+            h: type: <span class="hljs-string">'type2'</span>, null: <span class="hljs-literal">false</span>, required: <span class="hljs-literal">false</span>
+            i: type: <span class="hljs-string">'type2'</span>, null: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">false</span>
+            p: type: <span class="hljs-string">'type4'</span>, null: <span class="hljs-literal">true</span>, required: <span class="hljs-literal">true</span>
+
+    config = $$src: deepClone _config
+
+    processUdtypes (result = <span class="hljs-keyword">new</span> Result), config
+
+    processUdtypeFields result, config
+
+    expect(result.messages).toEqual []
+
+    expect(config.udtypes.type1).toEqual
+      name: <span class="hljs-string">'type1'</span>
+      type: <span class="hljs-string">'structure'</span>
+      fields:
+        a: a = name: <span class="hljs-string">'a'</span>, type: <span class="hljs-string">'integer'</span>, $$src: {type: <span class="hljs-string">'int'</span>}
+        b: b = name: <span class="hljs-string">'b'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>, $$src: {type: <span class="hljs-string">'string(20)'</span>}
+        $$list: [a, b]
+
+    expect(config.udtypes.type2).toEqual
+      name: <span class="hljs-string">'type2'</span>
+      type: <span class="hljs-string">'structure'</span>
+      udType: <span class="hljs-string">'type1'</span>,
+      fields:
+        c: c = name: <span class="hljs-string">'c'</span>, type: <span class="hljs-string">'integer'</span>, $$src: {type: <span class="hljs-string">'int'</span>}
+        d: d = name: <span class="hljs-string">'d'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>, $$src: {type: <span class="hljs-string">'string(20)'</span>}
+        $$list: [c, d]
+
+    expect(config.udtypes.type3).toEqual
+      name: <span class="hljs-string">'type3'</span>
+      type: <span class="hljs-string">'structure'</span>
+      udType: <span class="hljs-string">'type1'</span>,
+      fields:
+        a: a = name: <span class="hljs-string">'a'</span>, type: <span class="hljs-string">'integer'</span>, $$src: {type: <span class="hljs-string">'int'</span>}
+        b: b = name: <span class="hljs-string">'b'</span>, type: <span class="hljs-string">'string'</span>, length: <span class="hljs-number">20</span>, $$src: {type: <span class="hljs-string">'string(20)'</span>}
+        $$list: [a, b]
+
+    config = deepClone _config
+
+    res = compile (result = <span class="hljs-keyword">new</span> Result), config, <span class="hljs-literal">true</span>
+    res = compile result, config, <span class="hljs-literal">true</span>
+
+    expect(result.messages).toEqual []
+
+    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.required).toBe <span class="hljs-literal">true</span>
+
+    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.<span class="hljs-literal">null</span>).toBe <span class="hljs-literal">true</span>
+
+    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.$$mask.valueOf()).toEqual [<span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>]
+
+    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.fields.y.$$mask.valueOf()).toEqual [<span class="hljs-number">12</span>, <span class="hljs-number">13</span>]
+
+    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.fields.x.required).toBe <span class="hljs-literal">true</span>
+
+    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.fields.x.<span class="hljs-literal">null</span>).toBe <span class="hljs-literal">undefined</span>
+
+    expect(res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$flat[<span class="hljs-string">'p.y.b'</span>]).toBe res.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.p.fields.y.fields.b
+
+check <span class="hljs-string">'cycled'</span>, <span class="hljs-function">-&gt;</span>
+
+  _config =
+
+    udtypes:
+
+      type3: fields:
+        e: type: <span class="hljs-string">'type1'</span>
+        f: fields:
+          g: type: <span class="hljs-string">'type2'</span>
+
+      type2: fields: [
+        name: <span class="hljs-string">'c'</span>, type: <span class="hljs-string">'int'</span>
+        name: <span class="hljs-string">'d'</span>, type: <span class="hljs-string">'type3'</span>
+      ]
+
+      type1: fields:
+        a: type: <span class="hljs-string">'type2'</span>
+        b: type: <span class="hljs-string">'string(20)'</span>
+
+  config = $$src: deepClone _config
+
+  processUdtypes (result = <span class="hljs-keyword">new</span> Result), config
+
+  processUdtypeFields result, config
+
+  expect(result.messages).toEqual [
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes.type3.fields.e.fields.a.fields.d'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'type3'</span>, <span class="hljs-string">'type1'</span>, <span class="hljs-string">'type2'</span>]}
+    {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'udtypes.type3.fields.f.fields.g.fields.d'</span>, code: <span class="hljs-string">'dsc.cycledUdtypes'</span>, value: [<span class="hljs-string">'type3'</span>, <span class="hljs-string">'type2'</span>]}
+  ]</pre></div></div>
             
         </li>
         

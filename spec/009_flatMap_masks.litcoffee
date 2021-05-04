@@ -26,7 +26,13 @@ bitArray, который в свою очередь специфицирован
                   fld2b1: {}
           fld3: {}
 
-        @map = flatMap (result = new Result), doc, 'fields', index: true, mask: true
+        @map = flatMap (result = new Result), doc, 'fields'
+
+        expect(result.messages).sameStructure []
+
+        flatMap.index result, @map, 'fields', mask: true
+
+        expect(result.messages).sameStructure []
 
         flatMap.finish result, @map, 'fields'
 
@@ -40,10 +46,6 @@ bitArray, который в свою очередь специфицирован
         expect(@map.fld2.fields.fld2b.$$mask.valueOf()).toEqual [4]
         expect(@map.fld2.fields.fld2b.fields.fld2b1.$$mask).not.toBeDefined()
         expect(@map.fld3.$$mask).not.toBeDefined()
-
-      check "mask requires index", ->
-
-        expect(-> flatMap (result = new Result), {}, 'fields', mask: true).toThrow new Error 'opts.mask requires opts.index to be true'
 
 Для работы с вложенными полями, мы придерживаемся следующих правил:
 - если отмеченно хотя бы одно вложенное поле, то надо отместить в маске и поле в которое оно входит

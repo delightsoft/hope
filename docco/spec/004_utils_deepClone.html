@@ -130,6 +130,11 @@
                 </a>
               
                 
+                <a class="source" href="052_config_udtypes_struct.html">
+                  spec/052_config_udtypes_struct.litcoffee
+                </a>
+              
+                
                 <a class="source" href="060_config_fields.html">
                   spec/060_config_fields.litcoffee
                 </a>
@@ -185,6 +190,11 @@
                 </a>
               
                 
+                <a class="source" href="102_check_udt_struct_null_required_tags.html">
+                  spec/102_check_udt_struct_null_required_tags.litcoffee
+                </a>
+              
+                
                 <a class="source" href="_helpers\DSScopeStub.html">
                   spec/_helpers/DSScopeStub.litcoffee
                 </a>
@@ -213,13 +223,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>{Result, utils: {checkItemName, deepClone, combineMsg, sortedMap}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
-
-focusOnCheck = <span class="hljs-string">""</span><span class="hljs-function">
-<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-
-describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
-            
         </li>
         
         
@@ -229,8 +232,39 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{Result, utils: {checkItemName, deepClone, combineMsg, sortedMap}} = <span class="hljs-built_in">require</span> <span class="hljs-string">'../src'</span>
+
+focusOnCheck = <span class="hljs-string">''</span>
+<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
+
+describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
               <h2 id="deepclone">deepClone</h2>
-<p>Глубокое клонирование может применяться для любых типов</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Глубокое клонирование может применяться для любых типов</p>
 
             </div>
             
@@ -259,11 +293,11 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
         </li>
         
         
-        <li id="section-3">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>expect(dest).jsonDiff src # TODO: Report to jsondiffpatch as error example. diff fails on b:121 and [false, 20]</p>
 
@@ -274,11 +308,11 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
         </li>
         
         
-        <li id="section-4">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Клонируются объекты</p>
 
@@ -289,11 +323,11 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
         </li>
         
         
-        <li id="section-5">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Клонируются массивы</p>
 
@@ -304,11 +338,11 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
         </li>
         
         
-        <li id="section-6">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>А вот функцию сохраняются</p>
 
@@ -319,11 +353,11 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
         </li>
         
         
-        <li id="section-7">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Свойтсва начинающиеся в $$ не клонируются и не копируются в результат клонирования.  Это нужно, чтобы при клонировании
 не дублировались свойства типа $$list, $$tags, $$doc, хранящие кольцевые ссылки на объекты</p>
@@ -351,11 +385,11 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
         </li>
         
         
-        <li id="section-8">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Можно добавлять сперциальную обработку для определенных полей.  Если метод customClone (второй параметр) перехватил клонирование для поля,
 то он возвращает массив из одного элемента с результирующим значением.</p>
@@ -372,7 +406,7 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
 
       skipThis: <span class="hljs-literal">true</span>
 
-    dest = deepClone src, <span class="hljs-function"><span class="hljs-params">(k, v)</span> -&gt;</span>
+    dest = deepClone src, customClone: <span class="hljs-function"><span class="hljs-params">(k, v)</span> -&gt;</span>
 
       <span class="hljs-keyword">switch</span> k
 
@@ -381,11 +415,11 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
         </li>
         
         
-        <li id="section-9">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Если значение undefined, то свойство не клонируется</p>
 
@@ -419,7 +453,17 @@ describe <span class="hljs-string">'004_utils_deepClone:'</span>, <span class="h
 
     expect(res.c).toEqual [res]
 
-    expect(res.d).toEqual [{a: res}, [res]]</pre></div></div>
+    expect(res.d).toEqual [{a: res}, [res]]
+
+  check <span class="hljs-string">"$$list"</span>, <span class="hljs-function">-&gt;</span>
+
+    src = fld1: fld1 = {name: <span class="hljs-string">'fld1'</span>, type: <span class="hljs-string">'integer'</span>}, $$list: [fld1]
+
+    res = deepClone src, {all: <span class="hljs-literal">true</span>}
+
+    expect(src.fld1).<span class="hljs-keyword">not</span>.toBe res.$$list[<span class="hljs-number">0</span>]
+
+    expect(res.fld1).toBe res.$$list[<span class="hljs-number">0</span>]</pre></div></div>
             
         </li>
         

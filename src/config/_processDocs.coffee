@@ -4,6 +4,8 @@ Result = require '../result'
 
 sortedMap = require '../sortedMap'
 
+compileTags = require '../tags/_compile'
+
 processFields = require './_processFields'
 
 processActions = require './_processActions'
@@ -58,13 +60,19 @@ processDocs = (result, config, noSystemItems) ->
 
       copyExtra result, res
 
+      sortedMap.index result, res, mask: true
+
+      compileTags result, res
+
+      return if result.isError
+
       sortedMap.finish result, res
 
-      unless result.isError
+      return if result.isError
 
-        processRefers result, res
+      processRefers result, res
 
-        config.docs = res unless result.isError
+      config.docs = res unless result.isError
 
       return # processDocs = (result, config) ->
 

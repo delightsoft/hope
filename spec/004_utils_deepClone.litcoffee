@@ -3,7 +3,7 @@ utils
 
     {Result, utils: {checkItemName, deepClone, combineMsg, sortedMap}} = require '../src'
 
-    focusOnCheck = ""
+    focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
     describe '004_utils_deepClone:', ->
@@ -85,7 +85,7 @@ deepClone
 
           skipThis: true
 
-        dest = deepClone src, (k, v) ->
+        dest = deepClone src, customClone: (k, v) ->
 
           switch k
 
@@ -123,6 +123,12 @@ deepClone
 
         expect(res.d).toEqual [{a: res}, [res]]
 
+      check "$$list", ->
 
+        src = fld1: fld1 = {name: 'fld1', type: 'integer'}, $$list: [fld1]
 
+        res = deepClone src, {all: true}
 
+        expect(src.fld1).not.toBe res.$$list[0]
+
+        expect(res.fld1).toBe res.$$list[0]

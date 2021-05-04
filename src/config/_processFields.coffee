@@ -1,6 +1,10 @@
 Result = require '../result'
 
+deepClone = require '../utils/_deepClone'
+
 flatMap = require '../flatMap'
+
+bitArray = require '../bitArray'
 
 copyExtra = require './_copyExtra'
 
@@ -10,7 +14,7 @@ copyExtra = require './_copyExtra'
 
 processCustomValidate = require '../validate/processCustomValidate'
 
-processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
+processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems, udtContext) ->
 
   unless doc.$$src.hasOwnProperty(fieldsProp)
 
@@ -20,7 +24,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
   result.context (Result.prop fieldsProp), -> # processFields
 
-    flatMapOpts = index: true, mask: true
+    flatMapOpts = {}
 
     unless noSystemItems
 
@@ -40,7 +44,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
       flatMapOpts.reservedNames = ['id', 'rev', 'state', 'options', 'created', 'modified', 'deleted']
 
-    res = flatMap result, doc.$$src[fieldsProp], 'fields', flatMapOpts
+    resValue = flatMap result, doc.$$src[fieldsProp], 'fields', flatMapOpts
 
     unless result.isError
 
@@ -56,11 +60,13 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
             result.isError = false
 
+            skipProcessSublevel = false
+
             compileType result, field.$$src, field, context: 'field'
 
-            if field.hasOwnProperty('udType') && config.udtypes != 'failed'
+            if field.hasOwnProperty('udType') and typeof config.udtypes == 'object'
 
-              unless config.udtypes && config.udtypes.hasOwnProperty(field.udType)
+              unless config.udtypes.hasOwnProperty(field.udType)
 
                 result.error 'dsc.unknownType', value: field.udType
 
@@ -82,7 +88,13 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
                 delete field[prop] for prop of field when not ~['name', 'extra'].indexOf(prop) and not prop.startsWith('$$')
 
-                compileType result, src, field, context: 'field' # перекомпилируем, на случай если переопределены свойства базового типа
+                compileType result, src, field, context: 'field', udType: true # перекомпилируем, на случай если переопределены свойства базового типа
+
+                if src.fields
+
+                  skipProcessSublevel = true
+
+                  field.fields = deepClone src.fields, all: true
 
                 udtList = [udt.name]
 
@@ -110,9 +122,11 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
               if field.hasOwnProperty('fields')
 
-                result.context (Result.prop 'fields'), ->
+                unless skipProcessSublevel
 
-                  _processLevel field.fields
+                  result.context (Result.prop 'fields'), ->
+
+                    _processLevel field.fields
 
             field.validate = field.$$src.validate if processCustomValidate result, field.$$src, level, undefined, config.$$src?.validators
 
@@ -120,13 +134,35 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems) ->
 
         return # _processLevel =
 
-      _processLevel res
+      _processLevel resValue
 
-      compileTags result, res
+      unless result.isError
 
-      flatMap.finish result, res, 'fields', skipProps: ['tags', 'required', 'null']
+        if udtContext
 
-      res unless result.isError # result.context
+#          _clearIndex = (list) =>
+#
+#            for item in list
+#
+#              delete item.$$src
+#
+#              _clearIndex item.fields.$$list if item.fields
+#
+#          _clearIndex resValue.$$list
+
+        else
+
+          flatMap.index result, resValue, 'fields', mask: true
+
+          unless result.isError
+
+            compileTags result, resValue
+
+          unless result.isError
+
+            flatMap.finish result, resValue, 'fields', skipProps: ['type', 'tags', 'required', 'null']
+
+      resValue unless result.isError # result.context
 
 # ----------------------------
 

@@ -4,11 +4,11 @@ Result = require '../result'
 
 processUdtypes = require './_processUdtypes'
 
+processUdtypeFields = require './_processUdtypeFields'
+
 processDocs = require './_processDocs'
 
 processAPI = require './_processAPI'
-
-# TODO: Add opts - to add DSValue implementations
 
 compile = (result, sourceConfig, noSystemItems) ->
 
@@ -19,10 +19,11 @@ compile = (result, sourceConfig, noSystemItems) ->
 
   processUdtypes result, config
 
+  processUdtypeFields result, config
+
   processDocs result, config, noSystemItems
 
   processAPI result, config, noSystemItems
-
 
   unless result.isError
 
@@ -43,3 +44,5 @@ module.exports._processActions = require './_processActions'
 module.exports._processStates = require './_processStates'
 
 module.exports._processUdtypes = require './_processUdtypes'
+
+module.exports._processUdtypeFields = require './_processUdtypeFields'

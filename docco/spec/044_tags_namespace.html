@@ -130,6 +130,11 @@
                 </a>
               
                 
+                <a class="source" href="052_config_udtypes_struct.html">
+                  spec/052_config_udtypes_struct.litcoffee
+                </a>
+              
+                
                 <a class="source" href="060_config_fields.html">
                   spec/060_config_fields.litcoffee
                 </a>
@@ -185,6 +190,11 @@
                 </a>
               
                 
+                <a class="source" href="102_check_udt_struct_null_required_tags.html">
+                  spec/102_check_udt_struct_null_required_tags.litcoffee
+                </a>
+              
+                
                 <a class="source" href="_helpers\DSScopeStub.html">
                   spec/_helpers/DSScopeStub.litcoffee
                 </a>
@@ -210,7 +220,19 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <h1 id="tagsnamespace">Tags.Namespace</h1>
-<p>  {Result, tags: {compile: compileTags}, sortedMap, flatMap} = require ‘../src’</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>  {Result, tags: {compile: compileTags}, flatMap} = require ‘../src’</p>
 <p>  focusOnCheck = ‘’
   check = (itName, itBody) -&gt; (if focusOnCheck == itName then fit else it) itName, itBody; return</p>
 <p>  describe ‘044_tags_namespace’, -&gt;</p>
@@ -226,6 +248,10 @@
     fld3: {type: <span class="hljs-string">'uuid'</span>}
 
   fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+
+  expect(result.messages).toEqual []
+
+  flatMap.index result, fields, <span class="hljs-string">'fields'</span>, mask: <span class="hljs-literal">true</span>
 
   expect(result.messages).toEqual []
 
@@ -251,7 +277,11 @@ check <span class="hljs-string">"tags with namespace in tags attr"</span>, <span
     }
     fld3: {type: <span class="hljs-string">'uuid'</span>}
 
-  fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+  fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>
+
+  expect(result.messages).toEqual []
+
+  flatMap.index result, fields, <span class="hljs-string">'fields'</span>, mask: <span class="hljs-literal">true</span>
 
   expect(result.messages).toEqual []
 
@@ -265,11 +295,11 @@ check <span class="hljs-string">"tags with namespace in tags attr"</span>, <span
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Нельзя в аттрибутах tags с namespace указывать теги с namespace</p>
 
@@ -290,7 +320,11 @@ check <span class="hljs-string">"tags with namespace in tags attr"</span>, <span
     }
     fld3: {type: <span class="hljs-string">'uuid'</span>}
 
-  fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>, index: <span class="hljs-literal">true</span>, mask: <span class="hljs-literal">true</span>, validate: <span class="hljs-literal">false</span>
+  fields = flatMap (result = <span class="hljs-keyword">new</span> Result), fields, <span class="hljs-string">'fields'</span>
+
+  expect(result.messages).toEqual []
+
+  flatMap.index result, fields, <span class="hljs-string">'fields'</span>, mask: <span class="hljs-literal">true</span>
 
   expect(result.messages).toEqual []
 

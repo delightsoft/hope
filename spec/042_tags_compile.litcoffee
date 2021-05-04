@@ -29,11 +29,19 @@ Tags.Compile
           fld2: {type: 'text', tags: 'user'}
           fld3: {type: 'uuid'}
 
-        fields = sortedMap (result = new Result), fields, index: true, mask: true, validate: false
+        fields = sortedMap (result = new Result), fields, validate: false
 
         expect(result.messages).toEqual []
 
-        compileTags (result = new Result), fields
+        sortedMap.index result, fields, mask: true
+
+        expect(result.messages).toEqual []
+
+        compileTags result, fields
+
+        expect(result.messages).toEqual []
+
+        sortedMap.finish result, fields, validate: false
 
         expect(result.messages).toEqual []
 
@@ -48,11 +56,19 @@ Tags.Compile
           fld2: {type: 'text', tags: ['user']}
           fld3: {type: 'uuid'}
 
-        fields = sortedMap (result = new Result), fields, index: true, mask: true, validate: false
+        fields = sortedMap (result = new Result), fields, validate: false
 
         expect(result.messages).toEqual []
 
-        compileTags (result = new Result), fields
+        sortedMap.index result, fields, mask: true
+
+        expect(result.messages).toEqual []
+
+        compileTags result, fields
+
+        expect(result.messages).toEqual []
+
+        sortedMap.finish result, fields, validate: false
 
         expect(result.messages).toEqual []
 
@@ -75,15 +91,21 @@ Tags.Compile
                   fld2a2: {}
           fld3: {type: 'uuid'}
 
-        fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true
+        fields = flatMap (result = new Result), fields, 'fields'
 
         expect(result.messages).toEqual []
 
-        compileTags (result = new Result), fields
+        flatMap.index result, fields, 'fields', skipProps: ['tags'], mask: true
+
+        expect(result.messages).toEqual []
+
+        compileTags result, fields
 
         expect(result.messages).toEqual []
 
         flatMap.finish result, fields, 'fields', skipProps: ['tags'], validate: false
+
+        expect(result.messages).toEqual []
 
 -- При этом теги нормализуются методом BitArray.fixVertical() --
 
@@ -102,9 +124,15 @@ Tags.Compile
             fld2: {type: 'text', tags: errValue}
             fld3: {type: 'uuid'}
 
-          fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+          fields = flatMap (result = new Result), fields, 'fields'
 
-          compileTags (result = new Result), fields
+          expect(result.messages).toEqual []
+
+          flatMap.index result, fields, 'fields', skipProps: ['tags'], mask: true
+
+          expect(result.messages).toEqual []
+
+          compileTags result, fields
 
           expect(result.messages).sameStructure [
             {type: 'error', path: 'fld2.tags', code: 'dsc.invalidValue', value: errValue}
@@ -122,9 +150,15 @@ Tags.Compile
             fld2: {type: 'text', tags: ['user', errValue, 'go']}
             fld3: {type: 'uuid'}
 
-          fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+          fields = flatMap (result = new Result), fields, 'fields'
 
-          compileTags (result = new Result), fields
+          expect(result.messages).toEqual []
+
+          flatMap.index result, fields, 'fields', mask: true
+
+          expect(result.messages).toEqual []
+
+          compileTags result, fields
 
           expect(result.messages).sameStructure [
             {type: 'error', path: 'fld2.tags', code: 'dsc.invalidTagValue', value: errValue, index: 1}
@@ -139,11 +173,15 @@ Tags.Compile
           fld2: {type: 'text', tags: ['user', 'a', 'user']}
           fld3: {type: 'uuid'}
 
-        fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+        fields = flatMap (result = new Result), fields, 'fields'
 
         expect(result.messages).toEqual []
 
-        compileTags (result = new Result), fields
+        flatMap.index result, fields, 'fields', mask: true
+
+        expect(result.messages).toEqual []
+
+        compileTags result, fields
 
         expect(result.isError).toBe false
 
@@ -160,9 +198,15 @@ Tags.Compile
           fld2: {type: 'text', tags: ['user', 'A', 'A']}
           fld3: {type: 'uuid'}
 
-        fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+        fields = flatMap (result = new Result), fields, 'fields'
 
-        compileTags (result = new Result), fields
+        expect(result.messages).toEqual []
+
+        flatMap.index result, fields, 'fields', mask: true
+
+        expect(result.messages).toEqual []
+
+        compileTags result, fields
 
         expect(result.messages).sameStructure [
           {type: 'error', path: 'fld1.tags', code: 'dsc.invalidName', value: 'Admin'}
@@ -179,9 +223,15 @@ Tags.Compile
           fld2: {type: 'text', tags: ['user', 'all']}
           fld3: {type: 'uuid'}
 
-        fields = flatMap (result = new Result), fields, 'fields', index: true, mask: true, validate: false
+        fields = flatMap (result = new Result), fields, 'fields'
 
-        compileTags (result = new Result), fields
+        expect(result.messages).toEqual []
+
+        flatMap.index result, fields, 'fields', mask: true
+
+        expect(result.messages).toEqual []
+
+        compileTags result, fields
 
         expect(result.isError).toBe true
 

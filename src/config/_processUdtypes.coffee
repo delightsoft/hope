@@ -9,8 +9,6 @@ copyExtra = require './_copyExtra'
 {compile: compileType,
 compile: {_builtInTypes: builtInTypes, _reservedTypes: reservedTypes, _typeProps: typeProps, _extraProps: extraProps}} = require '../types'
 
-copyExtra = require './_copyExtra'
-
 processUdtypes = (result, config) ->
 
   unless config.$$src.udtypes
@@ -24,6 +22,8 @@ processUdtypes = (result, config) ->
     res = sortedMap result, config.$$src.udtypes, checkName: checkUDTypeName
 
     return if result.isError
+
+    item.fields = item.$$src.fields for item in res.$$list when item.$$src.fields
 
     copyExtra result, res
 
@@ -64,7 +64,7 @@ processUdtypes = (result, config) ->
       unless udt.hasOwnProperty 'type'
 
         unless res.hasOwnProperty(udt.udType)
-          result.error code: 'dsc.unknownType', value: udt.udType
+          result.error 'dsc.unknownType', value: udt.udType
           return
 
         parent = res[udt.udType]
@@ -89,6 +89,8 @@ processUdtypes = (result, config) ->
 
           delete udt[prop] for prop of udt when not ~['name', 'extra'].indexOf(prop)
 
+          udt.fields = src.fields if src.fields
+
           compileType result, src, udt, context: 'udtype' # перекомпилируем, на случай если переопределены свойства базового типа
 
           udt.udType = parent.name
@@ -108,8 +110,6 @@ processUdtypes = (result, config) ->
     unless result.isError
 
       copyExtra result, res
-
-      sortedMap.finish result, res
 
       config.udtypes = if result.isError then 'failed' else res
 

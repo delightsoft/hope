@@ -15,11 +15,35 @@ bit array
 
     _sortedMapCollection = ->
 
-      res = sortedMap (result = new Result), (@["item#{i}"] = {name: "item#{i}", $$index: i} for i in [0...50]), index: true
+      res = sortedMap (result = new Result), (@["item#{i}"] = {name: "item#{i}", $$index: i} for i in [0...50])
+
+      sortedMap.index result, res
 
       sortedMap.finish result, res
 
       expect(result.messages).sameStructure []
+
+      res.$$tags = {none: new BitArray res}
+      res.$$calc = ->
+        last = arguments[arguments.length - 1]
+        result = new Result
+        r =
+          if typeof last == 'object'
+            if arguments.length == 1
+              res.$$tags.none
+            else if arguments.length == 2
+              calc result, res, arguments[0], last
+            else
+              calc result, res, (Array::slice.call arguments, 0, arguments.length - 1).join(','), last
+          else
+            if arguments.length == 0
+              res.$$tags.none
+            else if arguments.length == 1
+              calc result, res, arguments[0]
+            else
+              calc result, res, (Array::slice.call arguments).join(',')
+        result.throwIfError()
+        r
 
       res # _sortedMapCollection =
 
@@ -42,7 +66,9 @@ bit array
           name: "item#{i + 1}"
           $$index: index++
 
-      res = flatMap (result = new Result), srcCol, 'subitems', index: true
+      res = flatMap (result = new Result), srcCol, 'subitems'
+
+      flatMap.index result, res, 'subitems'
 
       flatMap.finish result, res, 'subitems'
 
@@ -106,13 +132,13 @@ set()
 
 Можно указывать маску
 
-#      check "set(): mask", ->
-#
-#        arr = new BitArray _sortedMapCollection.call @
-#
-#        arr.set 'item1,item2'
-#
-#        expect(arr.list).sameStructure [@item1, @item2]
+      check "set(): mask", ->
+
+        arr = new BitArray _sortedMapCollection.call @
+
+        arr.set 'item1,item2'
+
+        expect(arr.list).sameStructure [@item1, @item2]
 
 Метод set делает новую копию объекта если заблокирован методом lock()
 
@@ -258,7 +284,11 @@ and, or ...
 
       check "empty after invert", ->
 
-        map = sortedMap (result = new Result), ({name: "item#{i}"} for i in [0...50]), index: true
+        map = sortedMap (result = new Result), ({name: "item#{i}"} for i in [0...50])
+
+        sortedMap.index result, map
+
+        sortedMap.finish result, map
 
         expect(result.messages).toEqual []
 
@@ -331,27 +361,6 @@ BitArray привязан к исходной коллекции.  Если по
       check "edit/lock", ->
 
         collection = _sortedMapCollection.call @
-        collection.$$tags = {none: new BitArray collection}
-        collection.$$calc = ->
-          last = arguments[arguments.length - 1]
-          result = new Result
-          r =
-            if typeof last == 'object'
-              if arguments.length == 1
-                collection.$$tags.none
-              else if arguments.length == 2
-                calc result, collection, arguments[0], last
-              else
-                calc result, collection, (Array::slice.call arguments, 0, arguments.length - 1).join(','), last
-            else
-              if arguments.length == 0
-                collection.$$tags.none
-              else if arguments.length == 1
-                calc result, collection, arguments[0]
-              else
-                calc result, collection, (Array::slice.call arguments).join(',')
-          result.throwIfError()
-          r
 
         arr1 = new BitArray collection
         arr2 = new BitArray collection

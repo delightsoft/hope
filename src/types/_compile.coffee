@@ -23,7 +23,6 @@ builtInTypes = [
   'json', 'blob', 'uuid', 'enum'
   'structure', 'subtable'
   'refers'
-  'dsvalue'
 ]
 
 reservedTypes = ['long', 'float', 'timetz', 'timestamptz']
@@ -39,6 +38,8 @@ compile = (result, fieldDesc, res, opts) ->
     optsContext = null # any
   else
     invalidArg 'opts.context', opts.context unless (optsContext = opts.context) == 'field' || optsContext == 'udtype'
+
+  optsUdtype = opts?.udType
 
   throw new Error "fieldDesc was already process by tags/compile()" unless not fieldDesc.hasOwnProperty '$$tags'
 
@@ -102,8 +103,6 @@ compile = (result, fieldDesc, res, opts) ->
 
     when 'ref' then type = 'refers'
 
-    when 'value' then type = 'dsvalue'
-
   # Проверяем, что тип входит в список типов
 
   unless builtInTypes.indexOf(type) >= 0
@@ -118,14 +117,6 @@ compile = (result, fieldDesc, res, opts) ->
 
     else # user defined type
 
-      prop = undefined
-
-      result.context ((path) -> (Result.prop prop) path), ->
-
-        for prop in typeProps when fieldDesc.hasOwnProperty(prop) and not prop in ['null', 'required'] # udType can have null and required in a field definition
-
-          result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
-
       res.udType = type
 
       res.required = true if typeof requiredProp == 'boolean' and requiredProp
@@ -133,12 +124,6 @@ compile = (result, fieldDesc, res, opts) ->
       res.null = true if typeof nullProp == 'boolean' and nullProp
 
       return res unless result.isError
-
-    return
-
-  if (optsContext == null || optsContext == 'field') && type == 'dsvalue'
-
-    result.error 'dsc.notAllowedInFieldDef', value: type
 
     return
 
@@ -170,13 +155,13 @@ compile = (result, fieldDesc, res, opts) ->
 
         when 'null'
 
+          ok = true
+
           if optsContext == null || optsContext == 'field'
 
-            if (ok = not (type == 'structure' || type == 'subtable')) then nullProp = takeBoolean result, fieldDesc.null
+            nullProp = takeBoolean result, fieldDesc.null
 
           else
-
-            ok = true
 
             result.error 'dsc.notApplicableInUdtype'
 
@@ -303,7 +288,7 @@ compile = (result, fieldDesc, res, opts) ->
 
         result.error 'dsc.missingProp', value: 'fields'
 
-      unless res.hasOwnProperty('fields')
+      unless optsUdtype or res.hasOwnProperty('fields')
 
         result.error (Result.prop 'fields'), 'dsc.invalidValue', value: fieldDesc.fields
 
@@ -313,7 +298,7 @@ compile = (result, fieldDesc, res, opts) ->
 
         result.error 'dsc.missingProp', value: 'fields'
 
-      unless res.hasOwnProperty('fields')
+      unless optsUdtype or res.hasOwnProperty('fields')
 
         result.error (Result.prop 'fields'), 'dsc.invalidValue', value: fieldDesc.fields
 

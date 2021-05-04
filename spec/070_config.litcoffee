@@ -110,7 +110,7 @@ config
 
         expect(result.messages).toEqual []
 
-        unlinkedConfig = unlinkConfig(res)
+        unlinkedConfig = unlinkConfig res
 
         linkedConfig = linkConfig unlinkedConfig, true
 

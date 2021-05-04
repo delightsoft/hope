@@ -16,8 +16,6 @@ processAPI = (result, config, noSystemItems) ->
 
   unless config.$$src.api
 
-    config.api = $$list: []
-
     return
 
   result.context (Result.prop 'api'), -> # processDocs =
@@ -40,7 +38,7 @@ processAPI = (result, config, noSystemItems) ->
 
             result.context ((path) -> (Result.prop 'methods') path), ->
 
-              api.methods = sortedMap result, api.$$src.methods, index: true
+              api.methods = sortedMap result, api.$$src.methods
 
               unless result.isError
 
@@ -67,6 +65,8 @@ processAPI = (result, config, noSystemItems) ->
                 # rule: api.methods.$$list is sorted in alphabetical order of their names
                 api.methods.$$list.sort (left, right) -> left.name.localeCompare right.name
 
+                sortedMap.index result, api.methods, mask: true
+
                 compileTags result, api.methods
 
                 sortedMap.finish result, api.methods, skipProps: ['tags']
@@ -80,11 +80,19 @@ processAPI = (result, config, noSystemItems) ->
       # rule: api.$$list is sorted in alphabetical order of their names
       res.$$list.sort (left, right) -> left.name.localeCompare right.name
 
+      sortedMap.index result, res
+
+      return if result.isError
+
+      compileTags result, res
+
+      return if result.isError
+
       sortedMap.finish result, res
 
-      unless result.isError
+      return if result.isError
 
-        config.api = res unless result.isError
+      config.api = res unless result.isError
 
       return # processDocs = (result, config) ->
 

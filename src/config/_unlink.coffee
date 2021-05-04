@@ -107,7 +107,7 @@ unlink = (config) ->
 
           newTran.next = newTran.next.name
 
-  unless newConfig.api.$$list.length > 0
+  unless newConfig.api?.$$list.length > 0
 
     delete newConfig.api
 
