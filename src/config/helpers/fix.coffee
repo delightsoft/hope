@@ -36,7 +36,21 @@ $$fixBuilder = (fields, collection) ->
 
       index = field.$$index
 
-      if field.type == 'structure'
+      if field.hasOwnProperty('init')
+
+        init = field.init
+
+        if typeof field.init == 'object'
+
+          val = field.init
+
+          init = (-> Object.assign {}, val)
+
+      else if field.null
+
+        init = null
+
+      else if field.type == 'structure'
 
         do (subBuilder = $$fixBuilder field.fields, collection) ->
 
@@ -55,14 +69,6 @@ $$fixBuilder = (fields, collection) ->
         else
 
           init = []
-
-      else if field.hasOwnProperty('init')
-
-        init = field.init
-
-      else if field.null
-
-        init = null
 
       else if defaultInit.hasOwnProperty(field.type)
 

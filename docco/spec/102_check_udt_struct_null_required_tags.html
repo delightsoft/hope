@@ -337,20 +337,57 @@ describe <span class="hljs-string">'102_check_udt_struct_null_required_tags'</sp
     expect(result.messages).toEqual [
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'s3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-literal">null</span>}
       {type: <span class="hljs-string">'error'</span>, path: <span class="hljs-string">'t3'</span>, code: <span class="hljs-string">'validate.requiredField'</span>, value: <span class="hljs-literal">null</span>}
-    ]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>#TODO: init</p>
+    ]
 
-            </div>
+  check <span class="hljs-string">'init'</span>, <span class="hljs-function">-&gt;</span>
+
+    res = compileConfig (result = <span class="hljs-keyword">new</span> Result),
+
+      udtypes:
+
+        str1: type: <span class="hljs-string">'struct'</span>, fields:
+
+          a: type: <span class="hljs-string">'int'</span>
+
+        st1: type: <span class="hljs-string">'subtable'</span>, fields:
+
+          b: type: <span class="hljs-string">'int'</span>
+
+      docs:
+
+        Doc1:
+
+          fields:
+
+            s1: type: <span class="hljs-string">'str1'</span>
+
+            s2: type: <span class="hljs-string">'str1'</span>, null: <span class="hljs-literal">true</span>
+
+            t1: type: <span class="hljs-string">'st1'</span>
+
+            t2: type: <span class="hljs-string">'st1'</span>, required: <span class="hljs-literal">true</span>
+
+            t3: type: <span class="hljs-string">'st1'</span>, null: <span class="hljs-literal">true</span>
+
+    expect(result.messages).toEqual []
+
+    unlinkedConfig = unlinkConfig res
+
+    linkedConfig = linkConfig unlinkedConfig
+
+    doc = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$<span class="hljs-keyword">new</span>()
+
+    expect(doc).toEqual
+
+      s1: {a: <span class="hljs-number">0</span>}
+
+      s2: <span class="hljs-literal">null</span>
+
+      t1: []
+
+      t2: [{b: <span class="hljs-number">0</span>}]
+
+      t3: <span class="hljs-literal">null</span></pre></div></div>
             
         </li>
         

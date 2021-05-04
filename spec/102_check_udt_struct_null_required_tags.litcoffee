@@ -105,5 +105,52 @@ config
           {type: 'error', path: 't3', code: 'validate.requiredField', value: null}
         ]
 
+      check 'init', ->
 
-#TODO: init
+        res = compileConfig (result = new Result),
+
+          udtypes:
+
+            str1: type: 'struct', fields:
+
+              a: type: 'int'
+
+            st1: type: 'subtable', fields:
+
+              b: type: 'int'
+
+          docs:
+
+            Doc1:
+
+              fields:
+
+                s1: type: 'str1'
+
+                s2: type: 'str1', null: true
+
+                t1: type: 'st1'
+
+                t2: type: 'st1', required: true
+
+                t3: type: 'st1', null: true
+
+        expect(result.messages).toEqual []
+
+        unlinkedConfig = unlinkConfig res
+
+        linkedConfig = linkConfig unlinkedConfig
+
+        doc = linkedConfig.docs['doc.Doc1'].fields.$$new()
+
+        expect(doc).toEqual
+
+          s1: {a: 0}
+
+          s2: null
+
+          t1: []
+
+          t2: [{b: 0}]
+
+          t3: null
