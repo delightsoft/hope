@@ -1,66 +1,100 @@
-freezeBitArray = (ba) ->
-
-  ba._buildList().lock() # (ba) ->
-
 modify = (body) ->
 
-  view = r.view.clone()
-  update = r.update.clone()
-  required = r.required.clone()
-  access = r.access?.clone()
+  res =
+    view: @view.clone()
+    update: @update.clone()
+    required: @required.clone()
 
-  body view, update, required, access
+  res.access = @access.clone() if @access
 
-  r =
-    view: view.lock()
-    update: update.lock()
-    required: required.lock()
-    access: access?.lock()
+  body res
 
-  r.modify = modify
+  res.view.lock()
+  res.update.lock()
+  res.required.lock()
+  res.access.lock() if @access
 
-  r
-
-$$accessBuilder = (type, fieldsProp, access, addActions) ->
-
-  res = if typeof access == 'function'
-
-    # TODO: Wrap and check result
-    (fields) ->
-
-      r = access.apply @, arguments # (type, fieldsProp, access) ->
-
-      if addActions
-        r.view = freezeBitArray if r.view then r.view.add(type[fieldsProp].$$calc('#system-options', strict: false)) else type[fieldsProp].$$tags.all
-        r.update = freezeBitArray if r.update then r.update.add(type[fieldsProp].$$calc('id,rev,state,deleted', strict: false)) else type[fieldsProp].$$tags.all
-        r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
-        r.actions = type.actions.$$tags.all unless r.actions
-      else
-        r.view = freezeBitArray type[fieldsProp].$$tags.all unless r.view
-        r.update = freezeBitArray type[fieldsProp].$$tags.all unless r.update
-        r.required = freezeBitArray r.required or type[fieldsProp].$$tags.required unless r.required
-
-      r.modify = modify
-
-      r # (fields) ->
-
-  else
-
-    do ->
-
-      allAccess =
-        view: (type[fieldsProp].$$calc '#all-options', strict: false)._buildList()
-        update: (type[fieldsProp].$$calc '(#all-#system),id,rev,deleted', strict: false)._buildList()
-        required: type[fieldsProp].$$tags.required
-
-      if addActions
-        allAccess.actions = type.actions.$$tags.all
-
-      allAccess.modify = modify
-
-      (doc) -> allAccess # (type, fieldsProp, access) ->
+  res.modify = modify
 
   res
+
+$$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
+
+    if typeof access == 'function'
+
+      unless isDoc
+
+        (doc) ->
+
+          res =
+            doc: doc
+            view: docDesc[fieldsProp].$$tags.all.clone()
+            update: docDesc[fieldsProp].$$tags.all.clone()
+            required: docDesc[fieldsProp].$$tags.required.clone()
+
+          access.call @, res
+
+          res.view.lock()
+          res.update.lock()
+          res.required.lock()
+
+          delete res.doc
+          res.modify = modify
+
+          res # (doc) ->
+
+      else
+
+        (doc) ->
+
+          res =
+            doc: doc
+            view: docDesc[fieldsProp].$$tags.all.clone()
+            update: docDesc[fieldsProp].$$tags.all.clone()
+            required: docDesc[fieldsProp].$$tags.required.clone()
+            actions: docDesc.actions.$$tags.all.clone()
+
+          access.call @, res
+
+          res.view.add('#system', strict: false).remove('options', strict: false).lock()
+
+          res.update = if res.update
+
+              res.update = res.update.remove('#system+#computed', strict: false)
+
+              res.update = res.update.add('deleted') if docDesc.actions.delete and res.actions.get docDesc.actions.delete.$$index # в тестах может не быть системных действий
+
+              res.update.lock()
+
+          else
+
+              docDesc[fieldsProp].$$calc '(#all-#system-#computed),deleted', strict: false
+
+          res.view.lock()
+          res.update.lock()
+          res.required.lock()
+          res.actions.lock()
+
+          delete res.doc
+          res.modify = modify
+
+          res # (doc) ->
+
+    else
+
+      do ->
+
+        allAccess =
+          view: docDesc[fieldsProp].$$calc '#all-options', strict: false
+          update: docDesc[fieldsProp].$$calc '(#all-#system-#computed),deleted', strict: false
+          required: docDesc[fieldsProp].$$tags.required
+
+        if isDoc
+          allAccess.actions = docDesc.actions.$$tags.all
+
+        allAccess.modify = modify
+
+        (doc) -> allAccess
 # ----------------------------
 
 module.exports = $$accessBuilder

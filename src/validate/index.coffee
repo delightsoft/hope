@@ -262,8 +262,15 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
       (value) -> return
 
     when 'refers'
-
-      # nothing TODO:
+      do (refers = fieldDesc.refers.map((v) -> v.name)) ->
+        (value) ->
+          if typeof value == 'string'
+            return
+          else if typeof value == 'object' and value != null and typeof value.id == 'string'
+            unless not typeof value._type == 'string' or (refers.length == 0 or ~refers.indexOf(value._type))
+              @result.error 'validate.invalidDocType', value: value, refers: refers
+            return
+          @result.error 'validate.invalidValue', value: value
 
     else throw new Error("Unexpected type: #{JSON.stringify(fieldDesc)}")
 

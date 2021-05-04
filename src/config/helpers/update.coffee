@@ -6,7 +6,7 @@ $$updateBuilder = (docDesc) ->
 
       noRev = !!options.noRev
 
-      options = Object.assign({}, options);
+      options = Object.assign {}, options
 
       delete options.noRev
 
@@ -14,7 +14,7 @@ $$updateBuilder = (docDesc) ->
 
       access = docDesc.$$access(fieldsLevel)
 
-      mask = access.update.add 'id, delete', {strict: false}
+      mask = access.update.add 'id, rev, delete', strict: false
 
       if (noRev) then mask.remove 'rev', strict: false
 

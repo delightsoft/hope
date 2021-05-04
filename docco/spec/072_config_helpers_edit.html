@@ -258,10 +258,10 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
       docs:
         <span class="hljs-string">'doc.Doc1'</span>:
-          access: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span>
-            view: @fields.$$tags.t1
-            update: @fields.$$tags.t1
-            required: @fields.$$tags.required
+          access: <span class="hljs-function"><span class="hljs-params">({view, update, actions, required})</span> -&gt;</span>
+            view.set <span class="hljs-string">'#t1'</span>
+            update.set <span class="hljs-string">'#t1'</span>
+            <span class="hljs-keyword">return</span>
           validate: <span class="hljs-function"><span class="hljs-params">(result, fields)</span> -&gt;</span>
             result.error <span class="hljs-string">'err1'</span> <span class="hljs-keyword">if</span> fields.f1 == <span class="hljs-number">20</span>
             result.error (<span class="hljs-function">-&gt;</span> <span class="hljs-string">'f2.f3[0]'</span>), <span class="hljs-string">'err2'</span> <span class="hljs-keyword">if</span> fields.f1 == <span class="hljs-number">30</span>
@@ -272,15 +272,15 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
       api:
         api1:
           method1:
-            argAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span>
-              view: @$$tags.t1
-              update: @$$tags.t1
-              required: @$$tags.required
+            argAccess: <span class="hljs-function"><span class="hljs-params">({view, update, required})</span> -&gt;</span>
+              view.set <span class="hljs-string">'#t1'</span>
+              update.set <span class="hljs-string">'#t1'</span>
+              <span class="hljs-keyword">return</span>
             argValidate: <span class="hljs-function"><span class="hljs-params">(result  , fields)</span> -&gt;</span> result.error <span class="hljs-string">'err2'</span> <span class="hljs-keyword">if</span> fields.a == <span class="hljs-number">12</span>; <span class="hljs-keyword">return</span>
-            resultAccess: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span>
-              view: @$$tags.t1
-              update: @$$tags.t1
-              required: @$$tags.required
+            resultAccess: <span class="hljs-function"><span class="hljs-params">({view, update, required})</span> -&gt;</span>
+              view.set <span class="hljs-string">'#t1'</span>
+              update.set <span class="hljs-string">'#t1'</span>
+              <span class="hljs-keyword">return</span>
             resultValidate: <span class="hljs-function"><span class="hljs-params">(result, fields)</span> -&gt;</span> result.error <span class="hljs-string">'err3'</span> <span class="hljs-keyword">if</span> fields.r2 == <span class="hljs-number">2.4</span>; <span class="hljs-keyword">return</span>
 
   check <span class="hljs-string">'required in action arguments'</span>, <span class="hljs-function">-&gt;</span>
@@ -315,6 +315,10 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
     access = linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].$$access f1: <span class="hljs-number">12</span>, f2: <span class="hljs-string">'test'</span>, f3: <span class="hljs-literal">true</span>
 
     <span class="hljs-keyword">delete</span> access.modify
+    access.view.list
+    access.update.list
+    access.required.list
+    access.actions.list
     expect(access).toEqual
       view: linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$tags.t1
       update: linkedConfig.docs[<span class="hljs-string">'doc.Doc1'</span>].fields.$$tags.t1
@@ -631,11 +635,10 @@ describe <span class="hljs-string">'072_config_helpers_edit'</span>, <span class
 
     unlinkedConfig = deepClone unlinkConfig res
 
-    linkedConfig = linkConfig unlinkedConfig, docs: <span class="hljs-string">'doc.Doc1'</span>: access: <span class="hljs-function">-&gt;</span>
-      view: @fields.$$tags.all
-      update: @fields.$$tags.all
-      actions: @actions.$$tags.all
-      required: @fields.$$calc(<span class="hljs-string">'st.f2, st.f3'</span>)
+    linkedConfig = linkConfig unlinkedConfig,
+      docs: <span class="hljs-string">'doc.Doc1'</span>: access: <span class="hljs-function"><span class="hljs-params">({doc, view, update, required, actions})</span>-&gt;</span>
+        required.set <span class="hljs-string">'st.f2, st.f3'</span>
+        <span class="hljs-keyword">return</span>
 
     expect(result.messages).toEqual []
 

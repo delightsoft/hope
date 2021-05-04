@@ -35,30 +35,44 @@ class BitArray
 
   set: (index, value) ->
 
-    invalidArg 'index' unless typeof index == 'number' && index % 1 == 0
-    if value == undefined then value = true
-    else invalidArg 'value', value unless typeof value == 'boolean'
-    tooManyArgs() unless arguments.length <= 2
+    if typeof index == 'string'
 
-    throw new Error "index out of range: #{index}" unless 0 <= index < @_list.length
+      bitArray = @_collection.$$calc.apply undefined, arguments
 
-    mask =
-      if @_edit
-        @_mask
-      else
-        r = new Array @_mask.length
-        r[i] = v for v, i in @_mask
-        r
+      mask =
+        if @_edit
+          @_mask
+        else
+          new Array @_mask.length
 
-    m = 1 << index % 32
-
-    if value
-
-      mask[Math.trunc index / 32] |= m
+      mask[i] = v for v, i in bitArray._mask
 
     else
 
-      mask[Math.trunc index / 32] &= ~m
+      invalidArg 'index' unless typeof index == 'number' && index % 1 == 0
+      if value == undefined then value = true
+      else invalidArg 'value', value unless typeof value == 'boolean'
+      tooManyArgs() unless arguments.length <= 2
+
+      throw new Error "index out of range: #{index}" unless 0 <= index < @_list.length
+
+      mask =
+        if @_edit
+          @_mask
+        else
+          r = new Array @_mask.length
+          r[i] = v for v, i in @_mask
+          r
+
+      m = 1 << index % 32
+
+      if value
+
+        mask[Math.trunc index / 32] |= m
+
+      else
+
+        mask[Math.trunc index / 32] &= ~m
 
     if @_edit
       delete @_listProp
@@ -359,6 +373,8 @@ Object.defineProperty BitArray::, 'list',
 Object.defineProperty BitArray::, 'add', value: BitArray::or, enumerable: false, configurable: true
 
 Object.defineProperty BitArray::, 'remove', value: BitArray::subtract, enumerable: false, configurable: true
+
+Object.defineProperty BitArray::, 'only', value: BitArray::and, enumerable: false, configurable: true
 
 # ----------------------------
 
