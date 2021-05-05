@@ -40,12 +40,6 @@ $$fixBuilder = (fields, collection) ->
 
         init = field.init
 
-        if typeof field.init == 'object'
-
-          val = field.init
-
-          init = (-> Object.assign {}, val)
-
       else if field.null
 
         init = null

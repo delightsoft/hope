@@ -154,3 +154,32 @@ config
           t2: [{b: 0}]
 
           t3: null
+
+      check 'init not applicable for struct and subtable', ->
+
+        res = compileConfig (result = new Result),
+
+          udtypes:
+
+            str1: type: 'struct', fields:
+
+              a: type: 'int'
+
+            st1: type: 'subtable', fields:
+
+              b: type: 'int'
+
+          docs:
+
+            Doc1:
+
+              fields:
+
+                s1: type: 'str1', init: {a: 12}
+
+                t1: type: 'st1', init: [{a: 12}]
+
+        expect(result.messages).toEqual [
+          {type: 'error', path: "docs['doc.Doc1'].fields.s1.init", code: 'dsc.unexpectedProp', value: {a: 12}}
+          {type: 'error', path: "docs['doc.Doc1'].fields.t1.init", code: 'dsc.unexpectedProp', value: [{a: 12}]}
+        ]
