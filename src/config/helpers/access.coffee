@@ -7,14 +7,14 @@ modify = (body) ->
     update: @update.clone()
     required: @required.clone()
 
-  res.access = @access.clone() if @access
+  res.actions = @actions.clone() if @actions
 
   body res
 
   res.view.lock()
   res.update.lock()
   res.required.lock()
-  res.access.lock() if @access
+  res.actions.lock() if @actions
 
   res.modify = modify
 
@@ -26,9 +26,10 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
       unless isDoc
 
-        (doc) ->
+        (doc, user) ->
 
           invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'user', user unless user == null or (typeof user == 'object' and not Array.isArray(user))
 
           res =
             doc: doc
@@ -49,9 +50,10 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
       else
 
-        (doc) ->
+        (doc, user) ->
 
           invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'user', user unless user == null or (typeof user == 'object' and not Array.isArray(user))
 
           res =
             doc: doc
@@ -100,9 +102,10 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
         allAccess.modify = modify
 
-        (doc) ->
+        (doc, user) ->
 
           invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'user', user unless user == null or (typeof user == 'object' and not Array.isArray(user))
 
           allAccess
 

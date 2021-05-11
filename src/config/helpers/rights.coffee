@@ -18,9 +18,7 @@ $$rightsBuilder = (docDesc, rootRights, docRights) ->
 
     (args) ->
 
-      args.docDesc = docDesc
-
-      funcs.forEach (f) -> f(args)
+      funcs.forEach (f) => f.call @, args
 
       return # (args) ->
 
