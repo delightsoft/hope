@@ -4,69 +4,80 @@ BitArray = require '../../bitArray'
 
 $$docAccessBuilder = (docDesc, access, rights) ->
 
-  (doc, user) ->
+  unless rights
 
-    invalidArg 'doc', doc if doc == null or (typeof doc == 'object' and not Array.isArray(doc))
-    invalidArg 'user', user if user == null or (typeof user == 'object' and not Array.isArray(user))
+    (doc, user) ->
 
-    docAccess = access(doc);
+      invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+      invalidArg 'user', user unless user == null or (typeof user == 'object' and not Array.isArray(user))
 
-    docRights =
+      access.call docDesc, doc, user # (doc, user) ->
 
-      doc: doc,
-      user: user
+  else
 
-      docDesc: docDesc
+    (doc, user) ->
 
-      view: (new BitArray docDesc.fields).set('#system-options', {strict: false})
-      update: new BitArray docDesc.fields
-      fullFields: new BitArray docDesc.fields
-      relations: new BitArray docDesc.fields
+      invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+      invalidArg 'user', user unless user == null or (typeof user == 'object' and not Array.isArray(user))
 
-      actions: new BitArray docDesc.actions
-      fullActions: new BitArray docDesc.actions
+      docAccess = access.call docDesc, doc, user
 
-    rights(docRights)
+      docRights =
 
-    (docRights.view).only('#all-options', {strict: false}).add('id').lock()
-    (docRights.update).subtract('#system', {strict: false}).lock()
-    (docRights.fullFields).add('id').lock()
-    docRights.relations.lock()
+        doc: doc,
+        user: user
 
-    docRights.actions.lock()
-    docRights.fullActions.lock()
+        docDesc: docDesc
 
-    viewExceedFullRights = docRights.fullFields.and(docRights.view)
-    unless viewExceedFullRights.isEmpty()
-      (error or (error = []))
-        .push "Doc '#{docDesc.name}': view rights exceeds full rights: #{viewExceedFullRights.list.map(v -> v.fullname or v.name).join(', ')}"
+        view: (new BitArray docDesc.fields).set('#system-options', {strict: false})
+        update: new BitArray docDesc.fields
+        fullFields: new BitArray docDesc.fields
+        relations: new BitArray docDesc.fields
 
-    updateExceedFullRights = docRights.fullFields.and(docRights.update)
-    unless updateExceedFullRights.isEmpty()
-      (error or (error = []))
-        .push "Doc '#{docDesc.name}': update rights exceeds full rights: #{updateExceedFullRights.list.map(v -> v.fullname or v.name).join(', ')}"
+        actions: new BitArray docDesc.actions
+        fullActions: new BitArray docDesc.actions
 
-    actionsExceedFullRights = docRights.fullActions.and(docRights.actions)
-    unless actionsExceedFullRights.isEmpty()
-      (error or (error = []))
-        .push "Doc '#{docDesc.name}': actions rights exceeds full rights: #{actionsExceedFullRights.list.map(v -> v.name).join(', ')}"
+      rights docRights
 
-    relationsMissingInViewAndUpdate = docRights.relations.subtract(docRights.view).subtract(docRights.update)
-    unless relationsMissingInViewAndUpdate.isEmpty()
-      (error or (error = []))
-        .push "Doc '#{docDesc.name}': relations missing in view and update: #{relationsMissingInViewAndUpdate.list.map(v -> v.fullname or v.name).join(', ')}"
+      docRights.view.only('#all-options', {strict: false}).add('id').lock()
+      docRights.update.subtract('#system', {strict: false}).lock()
+      docRights.fullFields.add('id').lock()
+      docRights.relations.lock()
 
-    throw new Error error.join('/n') if error
+      docRights.actions.lock()
+      docRights.fullActions.lock()
 
-    docAccess.modify ({view, update, actions}) -> # (doc, user) ->
+      viewExceedFullRights = docRights.fullFields.and(docRights.view)
+      unless viewExceedFullRights.isEmpty()
+        (error or (error = []))
+          .push "Doc '#{docDesc.name}': view rights exceeds full rights: #{viewExceedFullRights.list.map(v -> v.fullname or v.name).join(', ')}"
 
-      view.and(docRights.view.or(docRights.update))
+      updateExceedFullRights = docRights.fullFields.and(docRights.update)
+      unless updateExceedFullRights.isEmpty()
+        (error or (error = []))
+          .push "Doc '#{docDesc.name}': update rights exceeds full rights: #{updateExceedFullRights.list.map(v -> v.fullname or v.name).join(', ')}"
 
-      update.and docRights.update
+      actionsExceedFullRights = docRights.fullActions.and(docRights.actions)
+      unless actionsExceedFullRights.isEmpty()
+        (error or (error = []))
+          .push "Doc '#{docDesc.name}': actions rights exceeds full rights: #{actionsExceedFullRights.list.map(v -> v.name).join(', ')}"
 
-      actions.and docRights.actions
+      relationsMissingInViewAndUpdate = docRights.relations.subtract(docRights.view).subtract(docRights.update)
+      unless relationsMissingInViewAndUpdate.isEmpty()
+        (error or (error = []))
+          .push "Doc '#{docDesc.name}': relations missing in view and update: #{relationsMissingInViewAndUpdate.list.map(v -> v.fullname or v.name).join(', ')}"
 
-      return # (view, update, actions) ->
+      throw new Error error.join('/n') if error
+
+      docAccess.modify ({view, update, actions}) -> # (doc, user) ->
+
+        view.and(docRights.view.or(docRights.update))
+
+        update.and docRights.update
+
+        actions.and docRights.actions
+
+        return # (view, update, actions) ->
 
 # ----------------------------
 

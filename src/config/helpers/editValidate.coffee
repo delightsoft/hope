@@ -46,7 +46,7 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
     goodForAction = opts.beforeAction
 
-    r = access.call typeDesc, fields
+    r = access.call typeDesc, fields, null
 
     opts.mask = if opts.beforeAction then r.view.or(r.update) else r.update
 

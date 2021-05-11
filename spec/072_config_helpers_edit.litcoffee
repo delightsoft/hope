@@ -100,7 +100,7 @@ config
 
         linkedConfig = linkConfig unlinkedConfig, @code
 
-        access = linkedConfig.docs['doc.Doc1'].$$access f1: 12, f2: 'test', f3: true
+        access = linkedConfig.docs['doc.Doc1'].$$access {f1: 12, f2: 'test', f3: true}, null
 
         delete access.modify
         access.view.list

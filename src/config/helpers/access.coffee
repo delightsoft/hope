@@ -28,7 +28,7 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
         (doc) ->
 
-          invalidArg 'doc', doc if doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
 
           res =
             doc: doc
@@ -51,7 +51,7 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
         (doc) ->
 
-          invalidArg 'doc', doc if doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
 
           res =
             doc: doc
@@ -102,7 +102,7 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
         (doc) ->
 
-          invalidArg 'doc', doc if doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
 
           allAccess
 
