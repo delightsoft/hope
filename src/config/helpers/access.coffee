@@ -1,3 +1,5 @@
+{err: {invalidArg}} = require '../../utils'
+
 modify = (body) ->
 
   res =
@@ -26,6 +28,8 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
         (doc) ->
 
+          invalidArg 'doc', doc if doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+
           res =
             doc: doc
             view: docDesc[fieldsProp].$$tags.all.clone()
@@ -46,6 +50,8 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
       else
 
         (doc) ->
+
+          invalidArg 'doc', doc if doc == null or (typeof doc == 'object' and not Array.isArray(doc))
 
           res =
             doc: doc
@@ -94,7 +100,12 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
         allAccess.modify = modify
 
-        (doc) -> allAccess
+        (doc) ->
+
+          invalidArg 'doc', doc if doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+
+          allAccess
+
 # ----------------------------
 
 module.exports = $$accessBuilder
