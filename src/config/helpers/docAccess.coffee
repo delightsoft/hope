@@ -37,7 +37,7 @@ $$docAccessBuilder = (docDesc, access, rights) ->
 
       rights.call docDesc, docRights
 
-      docRights.view.subtract('options', {strict: false}).add('id').lock()
+      docRights.view.add('id').lock()
       docRights.update.subtract('#system', {strict: false}).lock()
       docRights.fullFields.add('id').lock()
       docRights.relations.lock()
@@ -73,9 +73,9 @@ $$docAccessBuilder = (docDesc, access, rights) ->
 
         view.and(docRights.view.or(docRights.update))
 
-        update.and docRights.update
+        update.and(docRights.update)
 
-        actions.and docRights.actions
+        actions.and(docRights.actions)
 
         return # (view, update, actions) ->
 
