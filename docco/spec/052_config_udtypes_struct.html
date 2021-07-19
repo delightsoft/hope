@@ -229,18 +229,6 @@
 
             </div>
             
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              
-            </div>
-            
             <div class="content"><div class='highlight'><pre>Result = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/result'</span>)
 
 processUdtypes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/config/_processUdtypes'</span>)
@@ -251,9 +239,9 @@ compile = <span class="hljs-built_in">require</span>(<span class="hljs-string">'
 
 deepClone = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../src/utils/_deepClone'</span>)
 
-focusOnCheck = <span class="hljs-string">''</span>
-<span class="hljs-function"><span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span>
-<span class="hljs-function"><span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
+focusOnCheck = <span class="hljs-string">''</span><span class="hljs-function">
+<span class="hljs-title">check</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> (<span class="hljs-keyword">if</span> focusOnCheck == itName <span class="hljs-keyword">then</span> fit <span class="hljs-keyword">else</span> it) itName, itBody; <span class="hljs-keyword">return</span><span class="hljs-function">
+<span class="hljs-title">xcheck</span> = <span class="hljs-params">(itName, itBody)</span> -&gt;</span> <span class="hljs-keyword">return</span>
 
 describe <span class="hljs-string">'052_config_udtypes_struct:'</span>, <span class="hljs-function">-&gt;</span>
 

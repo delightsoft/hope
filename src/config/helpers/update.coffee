@@ -12,7 +12,7 @@ $$updateBuilder = (docDesc) ->
 
     unless updateMask
 
-      access = docDesc.$$access(fieldsLevel)
+      access = docDesc.$$access fieldsLevel, options?.user or null
 
       mask = access.update.add 'id, rev, delete', strict: false
 

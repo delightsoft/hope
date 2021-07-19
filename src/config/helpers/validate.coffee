@@ -49,7 +49,7 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
     goodForAction = opts.beforeAction
 
-    access = (if fieldsProp == 'fields' then type else type[fieldsProp]).$$access fields unless access
+    access = (if fieldsProp == 'fields' then type else type[fieldsProp]).$$access fields, null unless access
 
     opts.mask = (if opts.beforeAction then access.view.or(access.update) else access.update) unless opts.mask
 

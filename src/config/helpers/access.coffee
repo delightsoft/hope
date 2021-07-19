@@ -1,3 +1,5 @@
+{err: {invalidArg}} = require '../../utils'
+
 modify = (body) ->
 
   res =
@@ -5,14 +7,14 @@ modify = (body) ->
     update: @update.clone()
     required: @required.clone()
 
-  res.access = @access.clone() if @access
+  res.actions = @actions.clone() if @actions
 
   body res
 
   res.view.lock()
   res.update.lock()
   res.required.lock()
-  res.access.lock() if @access
+  res.actions.lock() if @actions
 
   res.modify = modify
 
@@ -24,7 +26,10 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
       unless isDoc
 
-        (doc) ->
+        (doc, user) ->
+
+          invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'user', user unless user == null or (typeof user == 'object' and not Array.isArray(user))
 
           res =
             doc: doc
@@ -33,6 +38,22 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
             required: docDesc[fieldsProp].$$tags.required.clone()
 
           access.call @, res
+
+          # root access.js ???
+          # default ???
+          #  - empty
+          #  - all system actions ?
+
+          # TODO: doc == null -> system only list, all fields except options, static actions
+
+          # TODO: doc != null && states -> view, update according to the stete, actions mentioned in the state, non static actions with proper mask without state transition
+
+          # TODO: doc != null && no retrieve -> no fields, no action
+          # TODO: doc != null && no update -> update fields is empty
+          # TODO: doc != null -> system all except list, non static actions
+          # TODO: doc != null && doc.id != null -> no create, update
+          # TODO: doc != null && doc.id == null -> create, no update, no delete, no restore
+          # TODO: doc != null -> all fields except options
 
           res.view.lock()
           res.update.lock()
@@ -45,7 +66,10 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
       else
 
-        (doc) ->
+        (doc, user) ->
+
+          invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'user', user unless user == null or (typeof user == 'object' and not Array.isArray(user))
 
           res =
             doc: doc
@@ -94,7 +118,13 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
         allAccess.modify = modify
 
-        (doc) -> allAccess
+        (doc, user) ->
+
+          invalidArg 'doc', doc unless doc == null or (typeof doc == 'object' and not Array.isArray(doc))
+          invalidArg 'user', user unless user == null or (typeof user == 'object' and not Array.isArray(user))
+
+          allAccess
+
 # ----------------------------
 
 module.exports = $$accessBuilder

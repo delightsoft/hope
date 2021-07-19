@@ -14,13 +14,13 @@ $$rightsBuilder = (docDesc, rootRights, docRights) ->
 
   funcs.push docRights.rights if docRights?.fullRights
 
-  (args) -> # args: {doc, user, view, update, actions, relations, fullFields, fullActions}
+  if funcs.length > 0 # args: {doc, user, view, update, actions, relations, fullFields, fullActions}
 
-    args.docDesc = docDesc
+    (args) ->
 
-    funcs.forEach (f) -> f(args)
+      funcs.forEach (f) => f.call @, args
 
-    return
+      return # (args) ->
 
 # ----------------------------
 

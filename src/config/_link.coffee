@@ -32,6 +32,8 @@ $$validateBuilder = require('./helpers/validate')
 
 $$editValidateBuilder = require('./helpers/editValidate')
 
+$$docAccessBuilder = require('./helpers/docAccess')
+
 snakeCase = require('lodash/snakeCase')
 
 link = (config, noHelpers, opts) ->
@@ -353,13 +355,11 @@ link = (config, noHelpers, opts) ->
 
         return
 
-      doc.$$access = $$accessBuilder doc, 'fields', methods?.docs?[doc.name]?.access, true
+      access = $$accessBuilder doc, 'fields', methods?.docs?[doc.name]?.access, true
 
-      if rights = $$rightsBuilder doc, methods?.rights, methods?.docs?[doc.name]?.rights
+      doc.$$rights = rights if rights = $$rightsBuilder doc, methods?.rights, methods?.docs?[doc.name]?.rights
 
-        doc.$$rights = rights
-
-#        doc.$$access = $$docAccessBuilder doc, doc.$$access, rights
+      doc.$$access = $$docAccessBuilder doc, access, rights
 
       doc.$$validate = doc.fields.$$validate = $$validateBuilder doc, 'fields', methods?.docs?[doc.name]?.validate
 
