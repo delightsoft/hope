@@ -22,7 +22,7 @@
     "glob": "^7.1.6",
     "istanbul": "^0.4.5",
     "jasmine": "^3.5.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
