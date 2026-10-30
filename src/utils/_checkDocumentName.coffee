@@ -1,6 +1,6 @@
-# имя документа - это несколько namespace'ов разделенных точками:
-# - namespace'ы начинаются с маленьких букв и содержит буквы и цифры
-# - имя документа начинается с большой буквы и содержит буквы и цифры
+# a document name is several namespaces separated by dots:
+# - namespaces start with a lowercase letter and contain letters and digits
+# - a document name starts with an uppercase letter and contains letters and digits
 
 checkDocumentName = (value) -> typeof value == 'string' && /^([a-z][a-zA-Z0-9]*\.)*[A-Z][a-zA-Z0-9]*$/.test value
 

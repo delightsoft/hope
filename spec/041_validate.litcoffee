@@ -55,9 +55,9 @@
 
     describe '041_validate:', ->
 
-На основаннит описания типа, могут быть созданны валидаторы отдельных полей.  Так и валидатор документа.
+Based on a type description, validators for individual fields can be created.  And also a document validator.
 
-Простые типы
+Simple types
 
       typesDesc =
 
@@ -199,7 +199,7 @@ string: min, regexp, init
           {type: 'error', path: 'string3.init', code: 'validate.tooLong', value: '123456789012', max: 10}
         ]
 
-        compileFields (result = new Result), # unexpected тестируем отдельно.  при наличии других ошибок эта ошибка не возвращается
+        compileFields (result = new Result), # unexpected is tested separately.  When other errors are present, this error is not returned
           string4: type: 'string(10)', min: 5, max: 20
           string5: type: 'string(10)', required: true
 
@@ -472,10 +472,10 @@ refers
 
     # TODO:
 
-Кастомный валидатор
+Custom validator
 
-    # TODO: С проверкой других полей
+    # TODO: With checking of other fields
 
-Валидатор документ
+Document validator
 
 init

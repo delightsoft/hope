@@ -24,10 +24,10 @@ module.exports =
 
   _argError: _argError
 
-  # Прим.: С instanceof Result возникают проблемы в спецификациях, так как они регулярно сбрасывают require.cache.
-  # Так что надо определять result по другим признакам
+  # Note: With instanceof Result there are problems in the specs, because they regularly reset require.cache.
+  # So the result has to be identified by other means
 
-  # Как result, считаются объекты не только типа Result, но Report
+  # Objects of not only the Result type but also Report are counted as result
 
   isResult: isResult = (result) ->
 

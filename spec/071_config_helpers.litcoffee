@@ -10,11 +10,11 @@ config
 
     describe '071_config_helpers', ->
 
-Модель документов, состоит из следующих элементов:
-* Пользовательские типы (udtype)
-* Описание документов
-* Система прав, внутри документов
-* Описание меню
+A model of documents consists of the following elements:
+* User-defined types (udtype)
+* Document descriptions
+* Permission system, inside documents
+* Menu description
 
       beforeEach ->
 
@@ -77,7 +77,7 @@ config
 
         linkedConfig = linkConfig unlinkedConfig, false
 
-После линкиовки доступен метод $$calc на всех sortedMap у которых есть теги
+After linking, the $$calc method becomes available on all sortedMaps that have tags
 
         mask1 = linkedConfig.docs['doc.DocA'].fields.$$calc '#a - #b'
 
@@ -87,7 +87,7 @@ config
 
         expect(mask2.list).toEqual [linkedConfig.docs['doc.DocA'].fields.fldA]
 
-Ответы кешируются
+Answers are cached
 
         # expect(linkedConfig.docs['doc.DocA'].fields.$$calc '#a - #b').toEqual mask1
 
@@ -111,7 +111,7 @@ config
 
           fldQ: sa: null, sb: null, sc: 'a', sd: 'x'
 
-subtale с признаком required создаются с одной новой пустой записью
+A subtable with the required flag is created with a single new empty record
 
         newDoc = linkedConfig.docs['anamespace.DocB'].fields.$$new()
 
@@ -135,7 +135,7 @@ subtale с признаком required создаются с одной ново
 
           $$touched: {}
 
-записи для subtable можно создавать через $$new в поле типа subtable
+Records for a subtable can be created via $$new inside a field of type subtable
 
         newRow = linkedConfig.docs['anamespace.DocB'].fields.fldA.fields.$$new()
 
@@ -610,18 +610,18 @@ subtale с признаком required создаются с одной ново
           modified: '2020-08-18 07:55'
           deleted: true
 
-        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe(true) # так как нет $$touched структур
+        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe(true) # because there are no $touched structures
 
-        expect(linkedConfig.docs['doc.DocA'].fields.str.fields.$$wasTouched doc.str).toBe(true) # так как нет $$touched структур
+        expect(linkedConfig.docs['doc.DocA'].fields.str.fields.$$wasTouched doc.str).toBe(true) # because there are no $touched structures
 
         doc.sf.push linkedConfig.docs['doc.DocA'].fields.sf.fields.$$new()
 
-        expect(linkedConfig.docs['doc.DocA'].fields.sf.fields.$$wasTouched doc.sf).toBe(true) # так как нет $$touched структур
+        expect(linkedConfig.docs['doc.DocA'].fields.sf.fields.$$wasTouched doc.sf).toBe(true) # because there are no $touched structures
 
 
         doc = linkedConfig.docs['doc.DocA'].fields.$$fix doc, edit: true
 
-        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe(false) # так как нет измененых полей в $$touched
+        expect(linkedConfig.docs['doc.DocA'].fields.$$wasTouched doc).toBe(false) # because there are no changed fields in $$touched
 
 
         doc.$$touched.f1 = true

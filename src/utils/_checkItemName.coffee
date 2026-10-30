@@ -1,5 +1,5 @@
-# имя поля документа может состояить только из английских букв и цифр. и начинаться может только
-# c маленькой буквы.
+# a document field name can consist only of English letters and digits. and it can only start
+# with a lowercase letter.
 
 checkItemName = (value) -> typeof value == 'string' && /^[a-z][a-zA-Z0-9]*$/.test value
 

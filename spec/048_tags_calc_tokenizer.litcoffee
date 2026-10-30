@@ -1,7 +1,7 @@
 Tags.Calc._Tokenzier
 ==============================
 
-Это внутрений метод tags.calc, для разобра выражения.  Однако его тоже полезно специфицировать - так правильнее и надежнее
+This is an internal method of tags.calc for parsing an expression.  However, it is also useful to specify it - this is more correct and reliable
 
     {Result, tags: {calc: {_tokenizer: tokenizer}}} = require '../src'
 
@@ -28,17 +28,17 @@ Tags.Calc._Tokenzier
         expect(nextToken()).toBe '#test.b2'
         expect(nextToken()).toBe null
 
-Выражение не может начинаться с операции
+The expression cannot start with an operation
 
       check "error: operation before element/tag name", ->
 
         nextToken = tokenizer (result = new Result), expr =  ' - a'
 
-Возврат undefined означает, что найдена ошибка
+Returning undefined means that an error has been found
 
         expect(nextToken()).toBe undefined
 
-После завершения обработки все остальные вызовы дают null
+After processing completes, all subsequent calls return null
 
         expect(nextToken()).toBe null
         expect(nextToken()).toBe null
@@ -47,7 +47,7 @@ Tags.Calc._Tokenzier
           {type: 'error',  code: 'dsc.invalidExpression', value: expr, position: 1}
         ]
 
-Операции не могут идти не разделенными элементами
+Operations cannot go in a row, not separated by elements
 
       check "error: sequantially few operations", ->
 
@@ -62,7 +62,7 @@ Tags.Calc._Tokenzier
           {type: 'error',  code: 'dsc.invalidExpression', value: expr, position: 5}
         ]
 
-Закрывающая скобка может быть только после имени элемента/тега, и не может идти сразу за операцией
+A closing parenthesis can come only after an element/tag name, and cannot follow an operation immediately
 
       check "ok: close paranthesis may come after element name", ->
 
@@ -101,7 +101,7 @@ Tags.Calc._Tokenzier
           {type: 'error',  code: 'dsc.invalidExpression', value: expr, position: 3}
         ]
 
-Если, выражение заканчивается на операции - ошибка
+If an expression ends with an operation - it is an error
 
       check "error: operation at the end of expression", ->
 
@@ -115,7 +115,7 @@ Tags.Calc._Tokenzier
           {type: 'error',  code: 'dsc.invalidExpression', value: expr, position: 3}
         ]
 
-Отрицание может идти в начале выражения, перед скобками и перед именами элементов и тегов.
+Negation can come at the beginning of an expression, before parentheses, and before element and tag names.
 
       check "ok: exclamation mark at the begging", ->
 

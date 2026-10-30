@@ -8,15 +8,15 @@ _tokenizer = (result, expression) ->
 
   p = -1
 
-  s = 0 # - начало строки,
-    # 1 - пробел после имени элемента, тега или закрывающей скобки
-    # 10 - имя элемента,
-    # 20 - начало имени тега,
-    # 21 - имя тега,
-    # 22 - начало имени тега после namespace,
-    # 23 - имя тега после namespace,
-    # 30 - запятая, плюс или минус
-    # 31 - после восклицательного знака
+  s = 0 # - start of the string,
+    # 1 - whitespace after an item name, a tag name, or a closing parenthesis
+    # 10 - item name,
+    # 20 - start of a tag name,
+    # 21 - tag name,
+    # 22 - start of a tag name after the namespace,
+    # 23 - tag name after the namespace,
+    # 30 - comma, plus or minus
+    # 31 - after an exclamation mark
     # 100 - end
 
   m = null

@@ -1,4 +1,4 @@
-Типы полей документов
+Document field types
 ------------------------------
 
     {Result, types: {compile: compileType}, sortedMap} = require '../src'
@@ -10,19 +10,19 @@
 
     describe '040_types:', ->
 
-Тип поля задается несколькими аттрибутами:
-- type - системный тип
-- udtype - пользовательский тип (user defined), если есть
-- length - длина для строк
-- enum - набор значений для enum
-- fields - набор полей для struct[ure] или subtable
-- null - поле может иметь значение null
+A field type is defined by several attributes:
+- type - system type
+- udtype - user-defined type, if there is one
+- length - length for strings
+- enum - set of values for enum
+- fields - set of fields for struct[ure] or subtable
+- null - the field may have a null value
 
-Тех. прием: Для отработки отдельных пунктов спецификации делаем свой метод check, который может подставлять вызов
-fit, для задачи указанной в focusOnCheck
+Technical trick: To cover individual points of the specification we define our own check method, which can substitute a call
+to fit for the test specified in focusOnCheck
 
-Это возможные тестовые значения, чтобы можно было их перебирать при проверке, что комплиятор пропускает только
-допустимый тип
+These are the possible test values, so that they can be enumerated when checking that the compiler accepts only
+a valid type
 
       testValues = [
         valUndefined = undefined
@@ -38,7 +38,7 @@ fit, для задачи указанной в focusOnCheck
         valStr = 'str'
       ]
 
-Список свойст описания полей, для перебора, с указанием примера допустимого типа
+A list of field-description properties to enumerate, each with an example of an allowed type value
 
       propDescs = [
         {name: 'length', correctVal: valNum}
@@ -46,7 +46,7 @@ fit, для задачи указанной в focusOnCheck
 
         {name: 'precision', correctVal: valNum, required: true}
 
-scale это не самостоятельное свойство, оно идет в паре с precision
+scale is not a standalone property, it goes in pair with precision
 
         {name: 'scale', correctVal: valNum, optional: true, required: false}
         {name: 'fields', correctVal: valArrayOfFieldsDesc, skipVal: [valStr, valEmptyArray, valEmptyMap, valArrayOfDocTypes, valArrayOfEnumObjects], required: true}
@@ -55,17 +55,17 @@ scale это не самостоятельное свойство, оно иде
         {name: 'refers', correctVal: valStr, required: true, skipVal: [valEmptyArray, valEmptyStr, valArrayOfDocTypes]}
       ]
 
-Это список встроенных в DSCommon типов.  Атрибуты говорят какие дополнительные поля нужно (можно) указывать для
-данного типа.  А так же есть у ли у типа короткое название.
-* short - короткое название
-* notNull - для данного типа нельзя указать null: true
-* autotypeBy - если указанный в значении атрибут присутствует в описании поля и при этом не указано свойство type,
-то type проставляется автоматически
-* length - длина для типа string
-* precision - длина для типа decimal
-* scale - количество знаков после запятой для типа decimal.  Не обязательное свойство
-* enum - список значения для типа enum
-* fields - список полей для типов structure и subtable
+This is the list of types built into DSCommon.  The attributes indicate which additional properties need (or may) be
+specified for the given type.  They also say whether the type has a short name.
+* short - short name
+* notNull - for this type you cannot specify null: true
+* autotypeBy - if the attribute named by the value is present in the field description and no type property is specified,
+then type is set automatically
+* length - length for the string type
+* precision - length for the decimal type
+* scale - number of digits after the decimal point for the decimal type.  An optional property
+* enum - list of values for the enum type
+* fields - list of fields for the structure and subtable types
 
       builtInTypes = [
 
@@ -75,18 +75,18 @@ scale это не самостоятельное свойство, оно иде
 
         {name: 'integer', short: 'int', null: true}
 
-На этом этапе поддержки long не будет. так как есть вопрос, как исползоваться long в JavaScript.  long не входит
-в JavaScript-number - так как это double
+At this stage there will be no support for long, since there is a question of how to use long in JavaScript.  long is not
+part of JavaScript-number - as it is a double
 
         # {name: 'long', null: true}
 
-И не будет поддержки float - пока не станет понятно зачем на это
+And there will be no support for float - until it becomes clear why it is needed
 
         # {name: 'float', null: true}
 
         {name: 'double', null: true}
 
-C decimal тоже пока повременим
+We will also hold off on decimal for now
 
         # {name: 'decimal', precision: true, scale: true, null: true}
 
@@ -107,7 +107,7 @@ C decimal тоже пока повременим
         {name: 'refers', short: 'ref', autotypeBy: 'refers', refers: true, null: true}
       ]
 
-Для начала проверяем, что если описание поля, не содержит type, то будет ошибка
+First we check that if the field description does not contain type, there will be an error
 
       check "type is missing", ->
 
@@ -125,13 +125,13 @@ C decimal тоже пока повременим
           {type: 'error', code: 'dsc.invalidTypeValue', value: '[WrongType]'}
         ]
 
-Формируем список тестов для каждого типа, добавляя отдельные тесты для коротких имен типов
+We build the list of tests for each type, adding separate tests for short type names
 
       tests = []
 
       for type in builtInTypes
 
-Для коротких имен типов, сохраняем полное имя типа, чтоб знать что ожидать в результате compileType
+For short type names, we keep the full type name, so that we know what to expect from compileType
 
         type.fullname = type.name
 
@@ -141,16 +141,16 @@ C decimal тоже пока повременим
 
           tests.push {name: type.short, type: type}
 
-Создаем тесты для типов и их сокращенных написаний
+We create tests for the types and their abbreviated spellings
 
       for test in tests
 
-Далее, в зависимости от того, какие свойства могут быть у данного типа проверяем варианты обработки этих свойств
+Next, depending on which properties the given type may have, we check the variants of handling these properties
 
 Required props
 ------------------------------
 
-Проверяем, что свойства обязательные для типа присутствуют
+We check that the properties required for the type are present
 
         for prop in propDescs when prop.required && test.type[prop.name]
 
@@ -167,7 +167,7 @@ Required props
 Right value
 ------------------------------
 
-Проверяем, что если в свойстве ds-типа, указано не верный тип значения, то возвращается ошибка
+We check that if the ds-type property is given a value of the wrong type, an error is returned
 
         for prop in propDescs when test.type[prop.name]
 
@@ -189,11 +189,11 @@ Right value
 
               expect(result).resultContains (
 
-Для остальных случаев, правильное значение только то, которая указано в prop.correctVal
+For the remaining cases, the only correct value is the one specified in prop.correctVal
 
                 [{type: 'error', path: prop.name, code: 'dsc.invalidValue', value: value}])
 
-К свойство precision, в паре может идти свойство scale - проверяем как они работают в паре
+The scale property can go in pair with precision - we check how they work together
 
             if prop.name == 'precision'
 
@@ -216,7 +216,7 @@ string
 
         do (lengthValue) -> check "string: parse length from type: #{lengthValue}", ->
 
-Длина может быть указана в строки типа, в скобках
+The length may be specified in the type string, in parentheses
 
           typeDesc = {type: "string(#{lengthValue})"}
 
@@ -226,7 +226,7 @@ string
 
             length: lengthValue
 
-Если длина указана в скобках в типе, то не должно быть свойства length
+If the length is specified in parentheses in the type, there must be no length property
 
           typeDesc = {type: "string(#{lengthValue})", length: 10}
 
@@ -236,13 +236,13 @@ string
             {type: 'error', path: "(#{lengthValue})", code: 'dsc.ambiguousProp', name: 'length', value1: lengthValue, value2: 10}
           ]
 
-Отрицательная длина - это не правильно
+A negative length is incorrect
 
       for lengthValue in [-1000, -1, 0]
 
         do (lengthValue) -> check "string: invalid length: #{lengthValue}", ->
 
-Как в скобках
+Both in parentheses
 
           typeDesc = {type: "string(#{lengthValue})"}
 
@@ -252,7 +252,7 @@ string
             {type: 'error', path: "(#{lengthValue})", code: 'dsc.invalidValue', value: lengthValue}
           ]
 
-Так и в свойстве length
+And in the length property
 
           typeDesc = {type: "string", length: lengthValue}
 
@@ -262,7 +262,7 @@ string
             {type: 'error', path: 'length', code: 'dsc.invalidValue', value: lengthValue}
           ]
 
-Если длина в имени типа написана не верно, то возвращается ошибка
+If the length in the type name is written incorrectly, an error is returned
 
       check 'string: invalid parenthesis', ->
 
@@ -281,11 +281,11 @@ string
 enum
 --------------------
 
-enum может быть задан несколькими способами:
-* массив строк
-* строка, с где значения разделены запятыми
-* как массив объектов, где имя элементов задано в свойтсве name
-* как map, в котором ключи - названия элементов.  при этом значение может быть как объект, так и true
+enum can be specified in several ways:
+* an array of strings
+* a string, where the values are separated by commas
+* as an array of objects, where the names of the elements are given in the name property
+* as a map, in which the keys are the names of the elements.  In this case the value can be either an object or true
 
       check 'enum: as array of strings', ->
 
@@ -358,9 +358,9 @@ enum может быть задан несколькими способами:
 fields
 --------------------
 
-fields может быть задан несколькими способами:
-* как массив объектов, где имя поля задано в свойтсве name и элементы содержат свойства полей
-* как map, в котором ключи - названия полей, и элементы содержат свойства полей
+fields can be specified in several ways:
+* as an array of objects, where the field name is given in the name property and the elements contain the field properties
+* as a map, in which the keys are the field names, and the elements contain the field properties
 
       check 'fields: list of objects', ->
 
@@ -405,9 +405,9 @@ fields может быть задан несколькими способами:
 refers
 --------------------
 
-ссылка на документ задается:
-* или через свойство refers
-* или в скобках в свойстве type
+A reference to a document is specified:
+* either through the refers property
+* or in parentheses in the type property
 
       check 'refers: type string options',  ->
 
@@ -417,7 +417,7 @@ refers
 
         expect(result.messages).sameStructure []
 
-если refers задан как тег #any - тогда он может принимать документы любого типа
+if refers is specified as the #any tag - then it can accept documents of any type
 
       check 'refers: type string options',  ->
 
@@ -432,7 +432,7 @@ refers
           refers: '#any'
         expect(result.messages).sameStructure []
 
-есди refers задан, списком типов документов - в виде массива или как строка с разделителем
+if refers is given as a list of document types - as an array or as a delimiter-separated string
 
       check 'refers: type string options',  ->
 
@@ -451,19 +451,19 @@ refers
           refers: ['Doc1', 'Doc2']
         expect(result.messages).sameStructure []
 
-документ может быть задан, как названием типа документа, так и тегом
+a document can be specified both by the name of the document type and by a tag
 
       # TODO: Implement in other spec
 
 implicit types
 --------------------
 
-Если не указан type, но есть другие свойства, из которых можно опеределить тип, то свойство type указывать не обязательно.
+If type is not specified, but there are other properties from which the type can be determined, then the type property does not have to be specified.
 
-Свойства по которым можно определить тип:
-- enum -> тип enum
-- fields -> тип structure
-- refers -> тип refers
+Properties from which the type can be determined:
+- enum -> the enum type
+- fields -> the structure type
+- refers -> the refers type
 
       check 'enum: implicit type by property', ->
 
@@ -508,9 +508,9 @@ reserved types
 udtype
 --------------------
 
-udtypes (именованные типы) задаются в config.udtypes
+udtypes (named types) are specified in config.udtypes
 
-Cчитаем все типы, которые не являются встроенными и зарезервированными, что это udType
+We consider all types that are neither built-in nor reserved to be an udType
 
       check "unknown type, expect to be an udType", ->
 
@@ -518,7 +518,7 @@ Cчитаем все типы, которые не являются встрое
 
         expect(res).toEqual udType: 'wrongType'
 
-Свойство udType не задается на прямую.  Это имя берется из ключа config.udtypes
+The udType property is not set directly.  The name is taken from the config.udtypes key
 
       check "error: attr udType is not expected", ->
 
@@ -532,4 +532,4 @@ Cчитаем все типы, которые не являются встрое
 
         expect(result.messages).sameStructure [{type: 'error', path: 'null', code: 'dsc.notApplicableInUdtype'}]
 
-Дальнейшая обработка на наличие udt - это отдельный шаг в спецификации ...config_udtypes
+Further processing for the presence of udt is a separate step in the ...config_udtypes specification

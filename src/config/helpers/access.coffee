@@ -86,7 +86,7 @@ $$accessBuilder = (docDesc, fieldsProp, access, isDoc) ->
 
               res.update = res.update.remove('#system+#computed', strict: false)
 
-              res.update = res.update.add('deleted') if docDesc.actions.delete and res.actions.get docDesc.actions.delete.$$index # в тестах может не быть системных действий
+              res.update = res.update.add('deleted') if docDesc.actions.delete and res.actions.get docDesc.actions.delete.$$index # system actions may be absent in tests
 
               res.update.lock()
 

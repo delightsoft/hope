@@ -1,11 +1,11 @@
 reporter
 ==============================
 
-Reporter и Result решают очень похожую задачу - вывод сообщений.  Разница в том, что Result накапливает сообщения,
-но сам их никуда не выводит.  А Reporter выводит сообщения по мере поступления.  В том числе, он может вывести
-сообщения из Result
+Reporter and Result solve a very similar task - outputting messages.  The difference is that Result accumulates messages,
+but does not output them anywhere itself.  And Reporter outputs messages as they arrive.  In particular, it can output
+messages from a Result
 
-Все сообщения о найденных ошибках и предупреждения о возможных ошибках, выдаются через метод reporter.
+All messages about found errors and warnings about possible errors are issued through the reporter method.
 
     {Result, Reporter, i18n} = require '../src'
 
@@ -14,7 +14,7 @@ Reporter и Result решают очень похожую задачу - выв�
 
     describe '020_reporter:', ->
 
-Объект Reporter может работать без локализации, что полезно для процесса разработки
+A Reporter object can work without localization, which is useful in the development process
 
       check "A", ->
 
@@ -22,10 +22,10 @@ Reporter и Result решают очень похожую задачу - выв�
 
         reporter._print = jasmine.createSpy 'reporter.print'
 
-Сообщения могут быть трех типов:
-* error - ошибка
-* warn - предупреждения
-* info - информация
+Messages can be of three types:
+* error - an error
+* warn - a warning
+* info - information
 
         reporter.error 'test.sampleMessage'
         reporter.warn 'test.sampleMessage2', a: 12
@@ -39,11 +39,11 @@ Reporter и Result решают очень похожую задачу - выв�
 
         reporter._print.calls.reset()
 
-Но штатный режим, это работа с локализацией
+But the standard mode is working with localization
 
       check "B", ->
 
-Задаем тестовую локализацию
+Set up a test localization
 
         messages =
 
@@ -53,21 +53,21 @@ Reporter и Result решают очень похожую задачу - выв�
 
             messageB: 'simple message'
 
-Переводим конфигурацию в рабочую верси, через операцию link
+Translate the configuration into its working version via the link operation
 
         messages = i18n.link (result = new Result), messages
 
         expect(result.isError).toBeFalsy()
 
-Создаем объект отчёт с локализацией из config
+Create a report object with the localization from config
 
         reporter = new Reporter messages
 
-Добавляем метод, через который происходит вывод
+Add the method through which the output happens
 
         reporter._print = jasmine.createSpy 'reporter.print'
 
-Делаем вывод нескольких сообщений
+Output several messages
 
         reporter.info 'dsc.messageA', value: null
 
@@ -75,7 +75,7 @@ Reporter и Result решают очень похожую задачу - выв�
 
         reporter.warn 'dsc.messageC', a: 12, s: 'test'
 
-Проверяем что в reporter._print пришли все сообщения в ожидаемом виде
+Check that all messages arrived at reporter._print in the expected form
 
         expect(reporter._print.calls.allArgs()).sameStructure [
           ['info', 'Message A: Val: null']
@@ -83,11 +83,11 @@ Reporter и Result решают очень похожую задачу - выв�
           ['warn', 'dsc.messageC{"a":12,"s":"test"}']
         ]
 
-Сбрасываем _print для следующего теста
+Reset _print for the next test
 
         reporter._print.calls.reset()
 
-Вывод result
+Output of a result
 ------------------------------
 
         result = new Result
@@ -104,7 +104,7 @@ Reporter и Result решают очень похожую задачу - выв�
 
         reporter._print.calls.reset()
 
-Вывод result с контекстом
+Output of a result with context
 ------------------------------
 
         field = 'Field1'
@@ -126,7 +126,7 @@ Reporter и Result решают очень похожую задачу - выв�
 
         reporter._print.calls.reset()
 
-А теперь ещё и с название действия
+And now also with the name of the action
 
         reporter.logResult result, 'dsc.messageA', value: 111
 
@@ -138,7 +138,7 @@ Reporter и Result решают очень похожую задачу - выв�
 
         reporter._print.calls.reset()
 
-Reporter должен быть не отличим от Result при работе с контекстом и выводе сообщений
+Reporter must be indistinguishable from Result when working with context and outputting messages
 ------------------------------
 
       check 'Resport has same interface as Result (1)', ->
@@ -191,13 +191,13 @@ Reporter должен быть не отличим от Result при работ
 
           expect(result.isError).toBe true # ###
 
-При входе в context isError сбрасывается в false
+          # When entering the context, isError is reset to false
 
           result.context (->), ->
 
             expect(result.isError).toBe false
 
-При выходе наличие ошибки восстанавливается
+          # When exiting, the presence of the error is restored
 
           expect(result.isError).toBe true
 

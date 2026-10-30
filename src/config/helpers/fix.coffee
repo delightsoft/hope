@@ -299,41 +299,41 @@ $$fixBuilder = (fields, collection) ->
 
         switch optName
 
-          when 'edit' # true, добавить в результат $$touched и _i в строках subtable
+          when 'edit' # true, add $$touched to the result and _i to the subtable rows
 
             invalidOption 'edit', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
             edit = optValue if optValue != undefined
 
-          when 'mask' # маска полей, которые надо оставить в результате (по умолчанию undefined - все поля)
+          when 'mask' # mask of fields that should be kept in the result (default undefined - all fields)
 
             invalidOption 'mask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection == collection)
 
             mask = optValue
 
-          when 'update' # обновление накладываемое поверх данных (по умолчанию undefined)
+          when 'update' # update applied on top of the data (default undefined)
 
             invalidOption 'update', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and not Array.isArray(optValue))
 
             update = optValue
 
-          when 'updateMask' # маска полей update
+          when 'updateMask' # mask of the update fields
 
             invalidOption 'updateMask', optValue unless optValue == undefined or (typeof optValue == 'object' and optValue != null and optValue._collection == collection)
 
             updateMask = optValue
 
-          when 'newVal' # true, создавать недостающие поля с начальными значениями (по умолчанию true)
+          when 'newVal' # true, create missing fields with initial values (default true)
 
             invalidOption 'newVal', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
             newVal = optValue if optValue != undefined
 
-          when 'noIndex' # true, не копировать свойство _i в строках subtable (по умолчанию false)
+          when 'noIndex' # true, do not copy the _i property in subtable rows (default false)
 
             invalidOption 'noIndex', optValue unless optValue == undefined or typeof optValue == 'boolean'
 
-          when 'keepRefers' # true, не заменять на id значение полей типа refers. оставлять объект
+          when 'keepRefers' # true, do not replace the values of refers-type fields with their id. keep the object
 
             invalidOption 'keepRefers', optValue unless optValue == undefined or typeof optValue == 'boolean'
 

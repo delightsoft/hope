@@ -7,7 +7,7 @@ Result = require './result'
 
 class Reporter
 
-  # i18n - не обязательный параметр.
+  # i18n is an optional parameter.
 
   # TODO: Implement context() with only one argument, without Result
 
@@ -69,8 +69,8 @@ class Reporter
 
   info: Result::info
 
-  # Выводит содержимое result.  Если указан msgCode - то в начале пишется общее название операции.  При этом type
-  # выбирается как наихудщий из типов сообщений в result
+  # Prints the contents of result.  If msgCode is specified, the common name of the operation is written at the beginning.  In this case
+  # type is chosen as the worst of the message types found in result
 
   logResult: (result, pathFunc, msgCode, args) ->
 

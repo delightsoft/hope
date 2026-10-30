@@ -1,44 +1,44 @@
-Описание типа документов
+Document type description
 ==============================
 
-Описание типа документа, это всего лишь json структура, которую загружают из файла через require()
+A document type description is just a json structure that is loaded from a file via require()
 
     module.exports =
 
-Имя типа документа
+Document type name
 ------------------------------
 
-Именем типа документа является имя файла.  После загрузки в память будет добавлено свойство name
+The document type name is the file name.  After loading into memory the name property will be added
 
-Поля
+Fields
 ------------------------------
 
-Список полей документов, в предпочтительном для отображении порядке
+List of document fields, in the preferred display order
 
       fields:
 
-Имя поля - ключ в fields.  После загрузки это имя будет продублированно в свойстве name
+The field name is the key in fields.  After loading this name will be duplicated in the name property
 
         field1:
 
-Тип поля, описывается аттрибутами для описания типа поля type, udttype, length, ...
+The field type is described by the attributes for describing the field type: type, udttype, length, ...
 
           type: 'string'
           lenght: '20'
 
-Поле может иметь теги, которые используются для работы с группами полей в state/view, state/update, а так же в системе прав
+A field can have tags, which are used for working with groups of fields in state/view, state/update, as well as in the permission system
 
           tags: ['user', 'admin', 'tag3']
 
-Ещё пара полей
+A couple more fields
 
         field2:
 
-Используем user defined type, который будет описан в отдельном файле
+Using a user defined type, which will be described in a separate file
 
           udtype: 'name'
 
-Можно теги писать и одной строкой
+Tags can also be written on a single line
 
           tags: 'user,admin'
 
@@ -46,7 +46,7 @@
 
           type: 'structure'
 
-Поля структуры, такие же поля как верхнеуровневые поля документа
+Structure fields, the same fields as the top-level fields of the document
 
           fields:
             a:
@@ -56,61 +56,61 @@
 
         field4:
 
-Для ссылки на документ, пишем тип в строке
+For a reference to a document, we write the type in a string
 
           ref: 'docSimple'
 
-Действия
+Actions
 ------------------------------
 
       actions:
 
-Имя action - ключ в actions.  После загрузки это имя будет продублированно в свойстве name
+The action name is the key in actions.  After loading this name will be duplicated in the name property
 
         action1:
 
-Внутри определяем код.  Код может быть для разных контекстов.  '' - контекст по умолчанию
+Inside we define the code.  The code can be for different contexts.  '' - the default context
 
           '': -> return
 
-Код в контектсте 'server' - будет работать только на сервере
+Code in the 'server' context - will run only on the server
 
           'server': -> return
 
-Action может быть без кода
+An action can be without code
 
         action2: true
 
-Если есть, только код который должен работать везде, то можно писать кратко
+If there is only code that must run everywhere, then it can be written briefly
 
         action3: -> return
 
-Состояния
+States
 ------------------------------
 
       states:
 
-Имя состония - ключ в states.  После загрузки это имя будет продублированно в свойстве name
+The state name is the key in states.  After loading this name will be duplicated in the name property
 
         opened:
 
-После view и update могут быть или массивом со списком полей/тегов или строкой, со списком разделенным запятыми
+After that, view and update can be either an array with a list of fields/tags or a string with a comma-separated list
 
           view: 'field1,field2'
 
-При записи имен полей можно использовать выражения из тегов.  Где могут участвовать:
-* <имя> - имя группы
-* ! - обратная группа
-* - - все поля слева, кроме полей справа
-* +/, - объединение полей слева и справа
-* (/) - скобки для группировки операций
+When writing field names, expressions over tags can be used.  What may participate:
+* <name> - group name
+* ! - negated group
+* - - all fields on the left, except the fields on the right
+* +/, - union of the fields on the left and on the right
+* (/) - parentheses for grouping operations
 
           update: ['#all-#user', 'field2']
 
           transitions:
 
-В отличии от DSCommon2, можно не объявлять действия, для которых нет необходимости писать код обработки.  Другими словами, то
-что close используется в transitions, автоматически добавляет close в actions.
+Unlike DSCommon2, there is no need to declare actions for which there is no need to write processing code.  In other words, the
+fact that close is used in transitions automatically adds close to actions.
 
             close: 'closed'
 
@@ -118,7 +118,7 @@ Action может быть без кода
 
           view: '#all'
 
-Если пропущем атрибут view или update, то считается что это пустой список
+If the view or update attribute is omitted, it is assumed to be an empty list
 
           transitions:
 
@@ -126,23 +126,23 @@ Action может быть без кода
 
               '': 'opened'
 
-Переход (transition) состояния может быть условным.  lock - это condition
+A state transition (transition) can be conditional.  lock is a condition
 
               'lock': true
 
-Условия (conditions)
+Conditions
 ------------------------------
 
       conditions:
 
         lock:
 
-Для условий, которые не могут быть проверенны на месте, можно указывать значение по умолчанию.  Если не default
-указано, то считается что default: false
+For conditions that cannot be verified on the spot, a default value can be specified.  If no default
+is specified, it is assumed that default: false
 
           default: true
 
-Метод возвращающий true/false
+Method returning true/false
 
           fn: -> @get 'lock'
 

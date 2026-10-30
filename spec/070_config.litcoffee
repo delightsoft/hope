@@ -10,11 +10,11 @@ config
 
     describe '070_config', ->
 
-Модель документов, состоит из следующих элементов:
-* Пользовательские типы (udtype)
-* Описание документов
-* Система прав, внутри документов
-* Описание меню
+The document model consists of the following elements:
+* User-defined types (udtype)
+* Document definitions
+* Rights system, inside documents
+* Menu definitions
 
       beforeEach ->
 
@@ -86,7 +86,7 @@ config
 
       check 'general', ->
 
-Документы задаются в виде sortedMap в элементе docs.  Namespace'ы документов, указываются в именах элементов.
+Documents are specified as a sortedMap in the docs element. Document namespaces are indicated in the element names.
 
         res = compileConfig (result = new Result), @config, true
 
@@ -94,11 +94,11 @@ config
 
         docA = res.docs['doc.DocA']
 
-Документы в docs.$$list должны быть в альфавитном порядке
+Documents in docs.$$list must be in alphabetical order
 
         expect(res.docs.$$list[0].name).toBe 'anamespace.DocB'
 
-Если документ был указан в корне без namespace'а - то он помещается в стандартный namespace 'doc'.
+If a document was specified at the root without a namespace, it is placed in the default 'doc' namespace.
 
         expect(res.docs.$$list[1].name).toBe 'doc.DocA'
 

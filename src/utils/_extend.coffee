@@ -1,5 +1,5 @@
 
-# TODO: заменить на Object.assign
+# TODO: replace with Object.assign
 
 extend = (dest) ->
 

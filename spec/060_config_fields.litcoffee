@@ -30,7 +30,7 @@ general
 
         expect(result.messages).toEqual []
 
-Исходный документ не изменяется
+The source document is not modified
 
         expect(doc.$$src).sameStructure $$src
 

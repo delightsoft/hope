@@ -1,5 +1,5 @@
-# имя API:
-# - начинаются с маленьких букв и содержит буквы и цифры
+# API name:
+# - starts with a lowercase letter and contains letters and digits
 
 _checkAPIName = (value) -> typeof value == 'string' && /^[a-z][a-zA-Z0-9_]*$/.test value
 

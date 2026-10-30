@@ -1,29 +1,29 @@
 Tags.Calc
 ==============================
 
-Метод для обработки выражений, содержаших теги.  Результатом является список элементов, которые были получени или
-напрямую или через теги.
+A method for processing expressions that contain tags.  The result is a list of elements that were obtained either
+directly or through tags.
 
-Операции которые можно использовать в строке
-* , (запятая) (или + (плюс)) - добавление элементов
-* \- (минус) - удаление элементов из группы справ, из группы элементов слева от операнда
-* ! (восклицательный знак) - получение обратной группы элементов
-* ( ) (скобки) - группирование операций
+Operations that can be used in the string:
+* , (comma) (or + (plus)) - adding elements
+* \- (minus) - removing the elements of the group on the right from the group of elements on the left of the operand
+* ! (exclamation mark) - obtaining the inverse group of elements
+* ( ) (parentheses) - grouping of operations
 
-В операции имена тегов начинаются с '#', а для простых элементов используются имена без изменений.
+In an operation, tag names begin with '#', while plain elements use their names unchanged.
 
-Пример операции: *(#topFields - username) + #!adminFields* , что читается как взять все поля с тегом topFields,
-кроме поля username, и добавить к ним все поля, кроме полей помеченных тегом adminFields.
+Example of an operation: *(#topFields - username) + #!adminFields* , which means take all the fields with the tag topFields,
+except the username field, and add to them all the fields, except the fields marked with the tag adminFields.
 
-Важно, чтоб элементы в полученном списке располагались имеено в той же последовательности, как и в исходном
-списке элементов.  Это пригодиться при формировании экранных форм, когда важно чтоб поля отображались в том же порядке,
-как они были определены в исходной модели.
+It is important that the elements in the resulting list appear in exactly the same order as in the original
+list of elements.  This will be needed when building screen forms, when it matters that the fields are displayed in the same order
+in which they were defined in the original model.
 
-**На будущее:**
-- Надо подумать, не стоит ли добавить самостоятельную операцию отрицание, чтобы можно было взять все
-поля кроме указанного, или взять обратный результат от операции в скобках.
-- Стоит ли добавить операцию умножение ('*'), чтобы можно было получить пересечение двух наборов.  Это, правда,
-по хорошему потребует добавление приоритезации операций
+**For the future:**
+- We should consider whether to add a standalone negation operation, so that one could take all
+the fields except the specified one, or take the inverse result of the operation in parentheses.
+- Whether to add a multiplication operation ('*'), so that one could obtain the intersection of two sets.  This, however,
+properly requires adding operation prioritization
 
     {Result, flatMap, tags: {calc: calcTags, compile: compileTags}} = require '../src'
 
@@ -32,7 +32,7 @@ Tags.Calc
 
     describe '046_tags_calc', ->
 
-Создаем документ для проверки разных выражений
+We create a document for checking different expressions
 
       beforeEach ->
 

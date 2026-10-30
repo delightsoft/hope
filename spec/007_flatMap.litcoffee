@@ -8,8 +8,8 @@ flat map
 
     describe '007_flatMap:', ->
 
-Флетмап (flatMap) - это соглашению по работе с иерархическими коллекциями.  Флетмап это расширение
-соглашения - сортедмап (sortedMap).
+FlatMap is an agreement on working with hierarchical collections.  FlatMap is an extension
+of the agreement - sortedMap.
 
       beforeEach ->
 
@@ -21,9 +21,9 @@ flat map
               item2b: true
           item3: true
 
-Флетмап добавляет в коллекцию sortedMap, коллекцию $$flat, которая содержит элементы всех уровней.  В качестве ключей
-в $$flat используются полные имена элементов, и есть полный список элементов, в порядке как они приходтся при
-обходе структуры, в $$flat.$$list.
+FlatMap adds to the sortedMap collection a collection $$flat, which contains the elements of all levels.  As keys
+in $$flat the full names of elements are used, and there is a full list of elements, in the order in which they are encountered
+while traversing the structure, in $$flat.$$list.
 
         @flatMap =
           item1: @item1 = {name: 'item1', $$index: 0}
@@ -44,8 +44,8 @@ flat map
             'item3': @item3
             $$list: [@item1, @item2, @item2a, @item2b, @item3]
 
-Методу flatMap передается метод, который возвращает вложенную коллекцию элемента.  Так как в разных случаях
-это свойство может называтьcz по разному - fields, как пример.
+The flatMap method is passed a method, which returns the nested collection of an element.  Since in different cases
+this property may be named differently - fields, as an example.
 
       check 'process subitems', ->
 

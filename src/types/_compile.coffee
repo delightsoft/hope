@@ -45,7 +45,7 @@ compile = (result, fieldDesc, res, opts) ->
 
   result.isError = false
 
-  # Определяем тип.  То что в скобках выделяем в options.
+  # Determine the type.  Whatever is in parentheses is parsed out into options.
 
   if fieldDesc.hasOwnProperty('type')
 
@@ -71,7 +71,7 @@ compile = (result, fieldDesc, res, opts) ->
       result.error 'dsc.invalidTypeValue', value: type;
       return
 
-# Если тип не указан, пробуем его определить по косвенному признаку
+# If the type is not specified, we try to infer it from an indirect sign
 
   else if fieldDesc.hasOwnProperty('enum')
 
@@ -89,7 +89,7 @@ compile = (result, fieldDesc, res, opts) ->
     result.error 'dsc.missingProp', value: 'type';
     return
 
-  # Заменяем короткие имена типов на полные
+  # Replace short type names with full ones
 
   switch type
 
@@ -103,7 +103,7 @@ compile = (result, fieldDesc, res, opts) ->
 
     when 'ref' then type = 'refers'
 
-  # Проверяем, что тип входит в список типов
+  # Check that the type is in the list of types
 
   unless builtInTypes.indexOf(type) >= 0
 
@@ -127,7 +127,7 @@ compile = (result, fieldDesc, res, opts) ->
 
     return
 
-  # Проверяем, наличие всех свойств относящихся к типу.  Если свойство не должно быть у данного типа, добавляем ошибку
+  # Check the presence of all properties related to the type.  If a property should not be present for the given type, we add an error
 
   prop = lengthProp = enumProp = precisionProp = scaleProp = fieldsProp = nullProp = requiredProp = refersProp = valueClass = undefined
 
@@ -183,7 +183,7 @@ compile = (result, fieldDesc, res, opts) ->
 
         result.error 'dsc.notApplicableForTheTypeProp', nameValue: prop, typeValue: type
 
-  # работаем с length для string
+  # handle length for string
 
   if result.isError
 
@@ -228,7 +228,7 @@ compile = (result, fieldDesc, res, opts) ->
 
           result.error 'dsc.unknownType', value: sourceType
 
-  # собираем результирующую структуру
+  # assemble the resulting structure
 
   if result.isError
 
@@ -308,7 +308,7 @@ compile = (result, fieldDesc, res, opts) ->
 
   res # compile =
 
-# пропускаем целое позитивное число
+# let a positive integer pass
 
 takePositiveInt = (result, value) ->
   unless typeof value == 'number' && !isNaN(value) && Number.isInteger(value) && value > 0
@@ -354,12 +354,12 @@ takeStringOrArrayOfStrings = (result, value) ->
   result.error 'dsc.invalidValue', value: value;
   return # takeStringOrArrayOfStrings =
 
-# enum может быть или массив строк или строка, со значениями разделеннымм запятыми.
-# массив должен быть не пустой. значения в нем уникальными. пустых строк быть не должно.
+# enum can be either an array of strings or a string with the values separated by commas.
+# The array must not be empty. The values in it must be unique. There must be no empty strings.
 
 takeEnum = (result, value) ->
 
-  return value if typeof value == 'object' and value != null and value.hasOwnProperty('$$list') # это случается при использовании enum в udTypes
+  return value if typeof value == 'object' and value != null and value.hasOwnProperty('$$list') # this happens when enum is used in udTypes
 
   res = sortedMap result, value, string: true, boolean: true
 
@@ -369,7 +369,7 @@ takeEnum = (result, value) ->
 
   res
 
-# присваиваем значение в res, если оно есть.  а если значения нет - добавляем ошибку
+# assign the value to res, if it is present.  And if the value is absent - add an error
 
 setRequiredProp = (result, res, propName, value) ->
   if typeof value == 'undefined'

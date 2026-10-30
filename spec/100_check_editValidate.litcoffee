@@ -24,32 +24,32 @@ config
             'traskoCrm.id1C':
               extra:
                 name1C: 'ID_1C'
-                label: '1С ID'
-                description: 'Обязательный. Идентификатор учетной записи сайта в 1С. Параметр,\nприсваиваемый автоматически внутри 1С вида:\nb0d4ce5d-2757-4699-948c-cfa72ba94f86'
+                label: '1C ID'
+                description: 'Required. Identifier of the site account in 1C. A parameter\nassigned automatically inside 1C, of the form:\nb0d4ce5d-2757-4699-948c-cfa72ba94f86'
               type: 'string'
               length: 36
             'trascoCrm.priorityCommunicationChannel':
               extra: {
                 name1C: 'PriorityCommunicationChannel',
-                label: 'Приоритетный канал связи',
+                label: 'Priority communication channel',
                 description: '
-                  Телефон
-                  АдресЭлектроннойПочты
+                  Phone
+                  EmailAddress
                 '
               },
               type: 'enum',
               enum: [{
                 name: 'email',
                 extra: {
-                  value1C: 'АдресЭлектроннойПочты',
+                  value1C: 'EmailAddress',
                   label: 'Email',
                   labelEn: 'Email'
                 }
               }, {
                 name: 'phone',
                 extra: {
-                  value1C: 'Телефон',
-                  label: 'Телефон',
+                  value1C: 'Phone',
+                  label: 'Phone',
                   labelEn: 'Phone'
                 }
               }]
@@ -63,23 +63,23 @@ config
               regexp: /^((?:[a-z0-9!#$%&'*+/=?^_'{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_'{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))?$/i
           docs: Contact:
             extra: {
-              label: 'Контакт',
+              label: 'Contact',
               labelEn: 'Contact'
             },
             fields: {
               contactPersonId: {
                 extra: {
                   name1C: 'ContactPersonId',
-                  label: 'Идентификатор контактного лица',
-                  description: 'Обязательный. Идентификатор контактного лица в 1С. Параметр, присваиваемый автоматически внутри 1С вида:\nb0d4ce5d-2757-4699-948c-cfa72ba94f86'
+                  label: 'Contact person identifier',
+                  description: 'Required. Identifier of the contact person in 1C. A parameter assigned automatically inside 1C of the form:\nb0d4ce5d-2757-4699-948c-cfa72ba94f86'
                 },
                 type: 'traskoCrm.id1C'
               },
               #              photo: {
               #                extra: {
               #                  name1C: 'Photo',
-              #                  label: 'Фото',
-              #                  description: 'Файл с фотографией, передаваемый в форме двоичных данных'
+              #              label: 'Photo',
+              #                description: 'Photo file, passed as binary data'
               #                },
               #                tags: 'ui.cardSection1, ui.newContactPerson',
               #                type: 'traskoCrm.photo',
@@ -89,8 +89,8 @@ config
               contactName: {
                 extra: {
                   name1C: 'ContactName',
-                  label: 'ФИО',
-                  description: 'Обязательный. Фамилия. Имя, Отчество пользователя, оформляющего обращение.\nДля обращений, создаваемых из личного кабинета заполняется автоматически на основании учетных данных (может быть скорректирован). В остальных случаях задается вручную'
+                  label: 'Full name',
+                  description: 'Required. Last name, First name, Patronymic of the user submitting the request.\nFor requests created from the personal account it is filled in automatically based on the account data (may be corrected). In other cases it is entered manually'
                 },
                 tags: 'ui.cardSection1',
                 type: 'string(4096)',
@@ -99,8 +99,8 @@ config
               email: {
                 extra: {
                   name1C: 'Email',
-                  label: 'Адрес электронной почты',
-                  description: 'Обязательный. Электронная почта на форме обращения.'
+                  label: 'Email address',
+                  description: 'Required. Email on the request form.'
                 },
                 tags: 'ui.cardSection1',
                 type: 'email',
@@ -109,8 +109,8 @@ config
               phone: {
                 extra: {
                   name1C: 'Phone',
-                  label: 'Телефон',
-                  description: 'Номер телефона в формате: 7 (968) 342-12-67'
+                  label: 'Phone',
+                  description: 'Phone number in the format: 7 (968) 342-12-67'
                 },
                 tags: 'ui.cardSection1',
                 type: 'phone'
@@ -118,8 +118,8 @@ config
               mobile: {
                 extra: {
                   name1C: 'Mobile',
-                  label: 'Мобильный телефон',
-                  description: 'Номер телефона в формате: 7 (968) 342-12-67'
+                  label: 'Mobile phone',
+                  description: 'Phone number in the format: 7 (968) 342-12-67'
                 },
                 tags: 'ui.cardSection1',
                 type: 'phone'
@@ -127,7 +127,7 @@ config
               position: {
                 extra: {
                   name1C: 'Position',
-                  label: 'Должность',
+                  label: 'Position',
                   description: ''
                 },
                 tags: 'ui.cardSection1',
@@ -136,8 +136,8 @@ config
               priorityCommunicationChannel: {
                 extra: {
                   name1C: 'PriorityCommunicationChannel',
-                  label: 'Приоритетный канал связи',
-                  description: 'Выпадающий список: Телефон, Email, Соцсеть'
+                  label: 'Priority communication channel',
+                  description: 'Dropdown list: Phone, Email, Social network'
                 },
                 tags: 'ui.cardSection1',
                 null: false,
@@ -147,8 +147,8 @@ config
               photoExtension: {
                 extra: {
                   name1C: 'PhotoExtension',
-                  label: 'Расширение файла c фотографией',
-                  description: 'Расширение файла с фотографией для подсказки браузеру. Например “jpg”, “png”'
+                  label: 'Photo file extension',
+                  description: 'File extension of the photo, as a hint for the browser. For example “jpg”, “png”'
                 },
                 type: 'string(4096)',
                 null: true
@@ -164,7 +164,7 @@ config
         res = linkedConfig.docs['doc.Contact'].$$editValidate {
           contactPersonId: "5a1a26a8-cb3d-11ea-8184-00155d0a5000"
           # photo: null,
-          contactName: "Анна Князева"
+          contactName: "Anna Knyazeva"
           email: "knyazeva"
           phone: "222"
           mobile: "333"
@@ -190,7 +190,7 @@ config
         res = linkedConfig.docs['doc.Contact'].$$editValidate {
           contactPersonId: "5a1a26a8-cb3d-11ea-8184-00155d0a5000"
           # photo: null,
-          contactName: "Анна Князева"
+          contactName: "Anna Knyazeva"
           email: "knyazeva2"
           phone: "222"
           mobile: "333"

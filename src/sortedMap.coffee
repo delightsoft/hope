@@ -111,7 +111,7 @@ sortedMap = (result, value, opts) ->
 
     list.push newItem
 
-  if optsString && typeof value == 'string' && value.length > 0 # на вход дали строку
+  if optsString && typeof value == 'string' && value.length > 0 # a string was passed as input
 
     items = (v.trim() for v in value.split(',') when v.trim())
 
@@ -145,7 +145,7 @@ sortedMap = (result, value, opts) ->
 
         list.push (res[v] = {name: v})
 
-  else if typeof value == 'object' && value != null # на вход дали map или массив
+  else if typeof value == 'object' && value != null # a map or an array was passed as input
 
     if Array.isArray value
 

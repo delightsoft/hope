@@ -57,7 +57,7 @@ $$validateBuilder = (type, fieldsProp, docLevelValidate) ->
 
     try
 
-      result.error = () -> # перехватываем сообщения об ошибках
+      result.error = () -> # intercept the error messages
 
         msg = Result::error.apply result, arguments
 

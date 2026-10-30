@@ -1,7 +1,7 @@
 result
 ==============================
 
-Для работы с ошибками (error) и предупреждениями (warnings) у нас есть специальный класс Result
+For working with errors (error) and warnings (warnings) we have a special class Result
 
     {Result, utils: {err: {_argError}}} = require '../src'
 
@@ -12,25 +12,25 @@ result
 
     describe '010_result:', ->
 
-Объекты Result позволяют накапливать методанные по сообщениям.  Методанные включают:
-* type - тип сообщения: error, warn или info
-* code - код сообщения.  Строка включающая код сообщения, с namespace'ом
-* args - аргументы сообщения.  Не обязательный параметр
+Result objects allow accumulating metadata about messages.  The metadata includes:
+* type - the type of the message: error, warn or info
+* code - the code of the message.  A string containing the message code, with the namespace
+* args - the arguments of the message.  An optional parameter
 
       check "simple result", ->
 
         result = new Result
 
-Сообщения могут быть трех типов:
-* error - ошибка
-* warn - предупреждения
-* info - информация
+Messages can be of three types:
+* error - an error
+* warn - a warning
+* info - information
 
         result.error 'test.sampleMessage'
         result.warn 'test.sampleMessage2', a: 12
         result.info 'test.sampleMessage3', b: 'test', c: false
 
-Все сообщения, складываются в массив messages
+All messages are accumulated into the messages array
 
         expect(result.messages).sameStructure [
           {type: 'error', code: 'test.sampleMessage'}
@@ -38,11 +38,11 @@ result
           {code: 'test.sampleMessage3', b: 'test', c: false}
         ]
 
-Несколько Result объектов, можно объединять в один
+Several Result objects can be combined into one
 
       check "combine results", ->
 
-Создаем головоной Result объект, и для теста добавляем туда сразу сообщение
+We create a root Result object, and for the test we immediately add a message to it
 
         result = new Result
         result.info 'test.rootMessage'
@@ -52,7 +52,7 @@ result
           {code: 'test.rootMessage'}
         ]
 
-Предположим, что метод вернул другой result объект, содержащий в себе в том числе ошибки
+Suppose that a method returned another result object, containing in particular errors
 
         resultA = new Result
         resultA.error 'test.sampleMessage'
@@ -64,7 +64,7 @@ result
           {type: 'warn', code: 'test.sampleMessage2'}
         ]
 
-При объединении, в головном Result добавятся все сообщения из result, который вернул метод
+When combining, all messages from the result returned by the method are added to the root Result
 
         result.add resultA
 
@@ -75,7 +75,7 @@ result
           {type: 'warn', code: 'test.sampleMessage2'}
         ]
 
-Для единообразия объект класса Result передается как первый параметр в методы, чтобы через него методы могли сообщить найденные ошибки
+For uniformity, an object of class Result is passed as the first parameter to methods, so that the methods can report the errors they find through it
 
       check "result as first argument", (done) ->
 
@@ -95,7 +95,7 @@ result
 
         c = 2
 
-Успешный вызов
+Successful call
 
         goodResult = new Result
 
@@ -109,7 +109,7 @@ result
 
           return
 
-Вызов с ошибкой в результате
+Call with an error in the result
 
         badResult = new Result
 
@@ -126,9 +126,9 @@ result
 pathFunc
 ------------------------------
 
-Чтобы можно было сообщение привязать к конкретному элементу дерева, можно вместе с сообщением сохранять pathFunc.
+To be able to bind a message to a specific element of the tree, one can save a pathFunc along with the message.
 
-Для этого создаем Result объект, в которой передаем функцию, которая при необходимости возвращает текущий context
+For this we create a Result object, into which we pass a function that returns the current context when needed
 
       check "pathFunc", ->
 
@@ -136,24 +136,24 @@ pathFunc
 
         result = new Result (path) -> (Result.prop field) path
 
-Добавляем ошибку когда функция pathFunc возвращает `{type: 'field', fld: 'field 1'}`
+We add an error while the pathFunc function returns `{type: 'field', fld: 'field 1'}`
 
         result.error 'test.fieldError'
 
         field = 'field2'
 
-Добавляем ошибку когда функция pathFunc возвращает `{type: 'field', fld: 'field 2'}`
+We add an error while the pathFunc function returns `{type: 'field', fld: 'field 2'}`
 
         result.error 'test.fieldError'
 
-И получаем список сообщений с сохраненными контекстами
+And we get the list of messages with the saved contexts
 
         expect(result.messages).sameStructure [
           {type: 'error', path: 'field1', code: 'test.fieldError'}
           {type: 'error', path: 'field2', code: 'test.fieldError'}
         ]
 
-Контекстов может быть несколько
+There can be several contexts
 
         prop = 'A'
 
@@ -169,7 +169,7 @@ pathFunc
 
         result.error 'test.fieldError'
 
-В результате пока есть второй контекст, в результате делается список контектов
+As a result, while the second context is present, a list of contexts is made in the result
 
         expect(result.messages).sameStructure [
           {type: 'error', path: 'field1', code: 'test.fieldError'}
@@ -179,9 +179,9 @@ pathFunc
           {type: 'error', path: 'field2', code: 'test.fieldError'}
         ]
 
-Для многошаговой обработки необходимо для каждого шага создавать собственный Result.  Но при этом важно чтобы в этот
-result переносился pathFunc исходного Result'а.  Если в качестве параметра для нового Result передать другой, то сообщения
-сохраняемые в новый result
+For multi-step processing it is necessary to create a separate Result for each step.  But at the same time it is important that the
+pathFunc of the original Result is carried over into this result.  If another Result is passed as the parameter for the new Result, then the messages
+are saved into the new result
 
       check "copy result.pathFunc to localResult",  ->
 
@@ -220,7 +220,7 @@ result переносился pathFunc исходного Result'а.  Если �
           {type: 'error', path: 'fieldA.propA', code: 'test.fieldError'}
         ]
 
-Проверяем, что возвращается exception, если параметр не верен
+We check that an exception is returned if the parameter is not correct
 
       for errValue in [true, false, 12, 'str', {}, []]
 
@@ -256,9 +256,9 @@ result переносился pathFunc исходного Result'а.  Если �
 context
 ------------------------------
 
-Для вложенной обработки элементов, нужно иметь возможность каждый уровень обрабатывать, зная какой элемент
-обрабатывается.  Если ошибка произошла на вложенном уровне, то она будет видна и при выходе из вложенного контекста на
-уровне выше, даже если внутри вложенного контекста был сброс isResult в false.
+For nested processing of elements, one must be able to process each level, knowing which element
+is being processed.  If an error occurred at the nested level, it will be visible also when exiting the nested context at
+the level above, even if inside the nested context isResult was reset to false.
 
       check "context: keep errors", ->
 
@@ -268,13 +268,13 @@ context
 
           expect(result.isError).toBe true
 
-При входе в context isError сбрасывается в false
+When entering context isError is reset to false
 
           result.context (->), ->
 
             expect(result.isError).toBe false
 
-При выходе наличие ошибки восстанавливается
+When exiting, the presence of the error is restored
 
           expect(result.isError).toBe true
 
@@ -285,7 +285,7 @@ context
 empty context
 ------------------------------
 
-Для вложенной обработки, когда нет реального контекста, метод result.context можно вызывать без первого параметра
+For nested processing, when there is no real context, the result.context method can be called without the first parameter
 
       check "empty context: keep errors", ->
 
@@ -295,13 +295,13 @@ empty context
 
           expect(result.isError).toBe true
 
-При входе в context isError сбрасывается в false
+When entering context isError is reset to false
 
           result.context ->
 
             expect(result.isError).toBe false
 
-При выходе наличие ошибки восстанавливается
+When exiting, the presence of the error is restored
 
           expect(result.isError).toBe true
 

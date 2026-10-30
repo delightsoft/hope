@@ -88,7 +88,7 @@ processFields = (result, doc, config, fieldsProp = 'fields', noSystemItems, udtC
 
                 delete field[prop] for prop of field when not ~['name', 'extra'].indexOf(prop) and not prop.startsWith('$$')
 
-                compileType result, src, field, context: 'field', udType: true # перекомпилируем, на случай если переопределены свойства базового типа
+                compileType result, src, field, context: 'field', udType: true # recompile, in case the base type's properties were overridden
 
                 if src.fields
 

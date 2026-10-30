@@ -9,13 +9,13 @@ globals jsondiff
 
     describe '001_global_jsonDiff:', ->
 
-При работе со спецификация для работы со структурами документов, сталкнулся с проблемой понятного для человека
-сравнения двух структур.  Структуры могут содержать кольцевые ссылки.
+While working on the spec for document structure handling, I ran into the problem of making a comparison of two structures
+human-readable. Structures may contain circular references.
 
-Использование готового модуля jsondiffpatch вопрос не решило.  На примере сравнение в простой спецификации deepClone,
-выяснилось что он сбоит на объектах или массивах внутри массива.  А на пример отладки метода link, стало понятно, что
-он не умеет сравнивать структуры с кольцевыми ссылками.  Поэтому пишем свое.  А коль, это уже случилась когда есть
-некоторые готовые наработки, то для формирования отчета будем использовать класс DSCommon - Result.
+Using the ready-made jsondiffpatch module did not solve the problem. In a simple deepClone spec experiment,
+it turned out that it fails on objects or arrays nested inside an array. And while debugging the link method as an example,
+it became clear that it cannot compare structures with circular references. So we write our own. And since some
+ready-made groundwork already existed, we will use the DSCommon - Result class to produce the report.
 
       check "ok: tree", ->
 
@@ -55,8 +55,8 @@ globals jsondiff
 
         expect(tree).sameStructure tree
 
-Полезный для сложных ситуаций момент - данные в объектах (map'ах) проверяются именно в той последовательности как они
-перечислены в expected
+A useful point for complicated situations - data in objects (maps) is checked exactly in the sequence in which it
+is listed in the expected
 
       check "error: right sequence of messages", ->
 

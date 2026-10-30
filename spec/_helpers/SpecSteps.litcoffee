@@ -1,24 +1,24 @@
-Тестирование сетевых соединений, требует чтобы сперва был написан код, который обрабатывает событие, и только
-потом можно выполнить проверяемую операцию.  Однако, для спецификаций нужно писать что делаем, и только потом что
-получаем.
+Testing network connections requires that the code handling the event be written first, and only then can the
+operation under test be performed.  However, for specifications we need to write what we do, and only afterwards
+what we get.
 
-Этот класс решает эту проблему, разделя шаги спецификации на часть - что хотим сделать (action), и часть - что
-ожидаем (expect).  И эти части выполняются в обратной последовательности - сперва expect, а потом action.
+This class solves this problem by splitting the specification steps into a part - what we want to do (action), and a
+part - what we expect (expect).  And these parts are executed in reverse order - expect first, then action.
 
-Так как expect часто предполагает ожидание поступления сигнала, мы можем передать несколько callback-методов, и
-метод expect будет считаться выполненым, если все callback-методы были вызваны.
+Since expect often involves waiting for a signal to arrive, we can pass several callback methods, and
+the expect method is considered complete only if all the callback methods have been called.
 
     process = require 'process'
 
     class SpecSteps
 
-Для отладки спецификации, полезно включать debug в true - тогда видно на каком шаге завис (не вызвал done) тест.
+For debugging a specification, it is useful to set debug to true - then you can see at which step a test got stuck (did not call done).
 
       constructor: (@context, @done, @debug) ->
 
         @steps = []
 
-Так как все шаги определяются за один вызов функции, то логично запустить процесс выполнения на следующем тике.
+Since all steps are defined within a single function call, it makes sense to start the execution process on the next tick.
 
         process.nextTick =>
           @_packStep() if @_action
@@ -26,7 +26,7 @@
         
         @_action = @_expects = null
         
-Добавляем шаги в тест, через цепочку вызовов метода step.
+Steps are added to the test through a chain of calls to the step method.
 
       _packStep: ->
         if @_expects == null
@@ -63,7 +63,7 @@
 
       _executeStep: (stepIndex) ->
 
-Если мы прошли последний шаг, то вызываем метод done, данный нам из вне - чтобы завершить jasmine-тест.
+If we have passed the last step, we call the done method given to us from the outside - in order to complete the jasmine test.
 
         if stepIndex > @steps.length
           @done()

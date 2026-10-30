@@ -1,5 +1,5 @@
-Код DSCommon везде расчитывает, что:
-- Глобальные Promise реализованны библиотекой bluebird
+DSCommon code everywhere relies on the following assumptions:
+- Global Promise is implemented by the bluebird library
 
     {Result, compareStructures, utils: {err: {isResult}}} = require '../src'
 
@@ -7,7 +7,7 @@
 
       Error.stackTraceLimit = 30;
 
-Для проверки что объект Result содержит определенные сообщения, делаем custom matcher
+To verify that a Result object contains specific messages, we define a custom matcher
 
       jasmine.addMatchers
 
@@ -15,7 +15,7 @@
 
           compare: (actual, expected) ->
 
-            # проверяем что actual правильного типа
+            # check that actual is of the correct type
 
             unless isResult actual
 
@@ -25,7 +25,7 @@
 
                 message: "Expected actual value to be a Result object, but it was '#{jasmine.pp actual}'."}
 
-            # проверяем, что array
+            # check that it is an array
 
             unless (failed = not Array.isArray expected)
 
@@ -39,7 +39,7 @@
 
                 message: "Expected actual value to be an array of Result messages, but it is '#{jasmine.pp expected}'."}
 
-            # ишем среди полученных сообщений, чтоб было каждое ожидаемое сообщение
+            # search among the received messages so that every expected message is present
 
             for expectedMessage in expected
 

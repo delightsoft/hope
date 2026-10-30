@@ -1,6 +1,6 @@
-# имя тега - это один namespace или ни одного разделенных точками:
-# - namespace'ы начинаются с маленьких букв и содержит буквы и цифры
-# - имя документа начинается с маленьких букв и содержит буквы и цифры
+# a tag name is one namespace or none, separated by dots:
+# - namespaces start with a lowercase letter and contain letters and digits
+# - a document name starts with a lowercase letter and contains letters and digits
 
 checkTagName = (value) -> typeof value == 'string' && /^([a-z][a-zA-Z0-9]*\.)?[a-z][a-zA-Z0-9]*$/.test value
 

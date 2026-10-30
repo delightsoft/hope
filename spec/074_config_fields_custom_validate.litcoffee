@@ -14,8 +14,9 @@ config
 
       beforeEach ->
 
-Билдер валидатора. В него передаются result, field, плюс все параметры единой строкой из func(param1, param2, ...) из аттрибута validate.
-this - модель fields. field - описание поля
+Validator builder. It receives result, field, plus all parameters as a single string from func(param1, param2, ...)
+from the validate attribute.
+this - the fields model. field - the field description
 
         @greaterThanNumber = (result, field, params, fieldLevelDesc, docDesc,  attrValue) ->
 
@@ -27,7 +28,7 @@ this - модель fields. field - описание поля
 
             return
 
-Возвращает валидатор, где fieldsLevel это уровень полей, в котором находится поле.
+Returns a validator, where fieldsLevel is the level of fields in which the field is located.
 
           (result, value, fieldsLevel) ->
 

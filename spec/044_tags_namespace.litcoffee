@@ -8,7 +8,7 @@ Tags.Namespace
 
   describe '044_tags_namespace', ->
 
-В название тегов можно добавлять namespace или указав его в поле tags в названии тега или указав его в названии поля
+A namespace can be added to tag names either by specifying it in the tags field in the tag name or by specifying it in the field name
 
     check "tags with namespace in tags name", ->
 
@@ -62,7 +62,7 @@ Tags.Namespace
       expect(fields.$$tags.hasOwnProperty('json')).toBe true
       expect(fields.$$tags.hasOwnProperty('test.abc')).toBe true
 
-Нельзя в аттрибутах tags с namespace указывать теги с namespace
+In the tags attributes with a namespace it is not allowed to specify tags with a namespace
 
     check "tags with ambiguous namespaces", ->
 

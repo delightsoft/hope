@@ -8,18 +8,18 @@ result path
 
     describe '012_result_path:', ->
 
-Стало понятно, что у ошибок не бывает сложного понятия context, для которого нужно иметь возможность сохранять
-разнообразную информацию.  Всё что реально нужно, это путь (path) к элементу, к которому относится ошибка.  И для этого
-достаточно буквально трех элементов:
-* ключ, если речь идет об объекте (map),
-* индекс, если речь идет о массиве
-* имя элемента, если речь идет о sortedMap, для которого одна и та же структура может быть представлена и как массив,
-как объект или просто как строка с элементами разделенными запятой
+It has become clear that errors do not have the complex concept of context, for which one would need the ability to store
+various information.  All that is really needed is the path to the element the error relates to.  And literally three
+elements are enough for that:
+* the key, if we are talking about an object (map),
+* the index, if we are talking about an array
+* the element name, if we are talking about a sortedMap, for which the same structure can be represented as an array,
+an object, or simply as a string with elements separated by a comma
 
       check "Result.prop", ->
 
-Для поддержания такой структуры оставляем ту же идею, что у объекта result, должен быть массив методов - context, которые
-в момент записи сообщения, используются для получения пути к элементу.
+To support such a structure we keep the same idea as with the result object: there should be an array of methods - context, which
+at the time of writing the message are used to obtain the path to the element.
 
         propContext = Result.prop 'propName'
 
@@ -29,13 +29,13 @@ result path
 
         expect(propContext 'rootContext').toBe 'rootContext.propName'
 
-Можно объединять несколько свойств в одну функцию
+Several properties can be combined into one function
 
         expect((Result.prop 'propName') '').toBe 'propName'
 
         expect((Result.prop 'a', Result.prop 'propName') '').toBe 'propName.a'
 
-Result.item добавляет индекс в квадратных скобках
+Result.item adds the index in square brackets
 
       check "Result.index", ->
 
@@ -51,7 +51,7 @@ Result.item добавляет индекс в квадратных скобка
 
         expect((Result.index 20, Result.prop 'config') '').sameStructure 'config[20]'
 
-Result.name добавляет имя (name) элемента в квадратных скобках
+Result.name adds the element name (name) in square brackets
 
 #      check "Result.item", ->
 #
@@ -79,7 +79,7 @@ Result.name добавляет имя (name) элемента в квадрат�
           Result.prop 'Doc1',
           Result.prop 'docs'
 
-Собираем path, как последовательные вызовы функций ctx
+The path is assembled as sequential calls of the ctx functions
 
         path = context ''
 

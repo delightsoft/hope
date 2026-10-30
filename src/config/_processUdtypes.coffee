@@ -91,7 +91,7 @@ processUdtypes = (result, config) ->
 
           udt.fields = src.fields if src.fields
 
-          compileType result, src, udt, context: 'udtype' # перекомпилируем, на случай если переопределены свойства базового типа
+          compileType result, src, udt, context: 'udtype' # recompile, in case the base type's properties were overridden
 
           udt.udType = parent.name
 

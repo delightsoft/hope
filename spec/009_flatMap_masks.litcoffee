@@ -8,11 +8,11 @@ flat map masks
 
     describe '009_flatMap_masks:', ->
 
-При работе с иерархической структурой, полезно для элементов содержащих вложенные элементы, помимо $$index, заранее
-посчитать маски, включающие поле, со всеми вложенными в него полями.
+When working with a hierarchical structure, it is useful, for elements containing nested elements, to pre-calculate in advance, in addition
+to $$index, masks that include the field together with all the fields nested in it.
 
-Эта функциональность - опция метода flatMap, но вынесена в отдельную спецификацию, так как для этого используется
-bitArray, который в свою очередь специфицирован через базовую функциональность flatMap.
+This functionality is an option of the flatMap method, but it is split out into a separate specification, because bitArray is used for this,
+which in turn is specified through the basic flatMap functionality.
 
       beforeEach ->
 
@@ -47,9 +47,9 @@ bitArray, который в свою очередь специфицирован
         expect(@map.fld2.fields.fld2b.fields.fld2b1.$$mask).not.toBeDefined()
         expect(@map.fld3.$$mask).not.toBeDefined()
 
-Для работы с вложенными полями, мы придерживаемся следующих правил:
-- если отмеченно хотя бы одно вложенное поле, то надо отместить в маске и поле в которое оно входит
-- и наоборот, если в отмеченном поле не ни одного отмеченного вложенного поля - то надо отметить все
+For working with nested fields, we adhere to the following rules:
+- if at least one nested field is marked, then the field that includes it must also be marked in the mask
+- and vice versa, if a marked field has no marked nested fields - then all of them must be marked
 
       check "fix items vertical", ->
 
@@ -61,10 +61,10 @@ bitArray, который в свою очередь специфицирован
 
         expect(mask.valueOf()).toEqual [1,3,4]
 
-Однако это правильно верно, когда мы собираем данные по доступности полей перед началом логических операций с масками
+However this rule is only correct when we collect data about field availability before starting logical operations with masks
 
-Есть обратная задача, если после логических операций с масками, у нас выбраны поля с вложенными полями, у которых
-не выбранно ни одного вложенного поля, то такое поле надо убрать из результата
+There is the reverse task: if, after logical operations with masks, we have selected fields with nested fields among which
+no nested field is selected, then such a field must be removed from the result
 
       check "clear items vertical", ->
 

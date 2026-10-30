@@ -1,6 +1,6 @@
-# имя ud типа - это несколько namespace'ов разделенных точками:
-# - namespace'ы начинаются с маленьких букв и содержит буквы и цифры
-# - имя документа начинается с маленьких букв и содержит буквы и цифры
+# a ud type name is several namespaces separated by dots:
+# - namespaces start with a lowercase letter and contain letters and digits
+# - a document name starts with a lowercase letter and contains letters and digits
 
 checkUDTypeName = (value) -> typeof value == 'string' && /^([a-z][a-zA-Z0-9]*\.)*[a-z][a-zA-Z0-9]*$/.test value
 

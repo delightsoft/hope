@@ -96,7 +96,7 @@ compile = (result, collection) ->
 
         srcTags = item.$$src[propName]
 
-        delete item.$$src[propName] if namespace # так как имена свойвст содержат namespace, то проще их удалить во время обработки, чем формировать список для sortedMap.finish
+        delete item.$$src[propName] if namespace # since the property names contain a namespace, it is easier to delete them during processing than to build a list for sortedMap.finish
 
         if typeof srcTags == 'string'
 

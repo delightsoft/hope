@@ -8,19 +8,19 @@ Tags.Compile
 
     describe '042_tags_compile', ->
 
-Тегирование нужно для работы с группами элементов.  Например, через теги можно указать в свойствах *doc.state.view* и
-*doc.state.update* группу полей.
+Tagging is needed for working with groups of elements.  For example, through tags one can specify in the properties *doc.state.view* and
+*doc.state.update* a group of fields.
 
-Теги назначаются на элементы (например, поля), через свойство *tags*.
+Tags are assigned to elements (for example, fields) via the *tags* property.
 
-Теги могут быть указаны как:
-* массив строчных значений
-* строка, с названиями тегов разделенными запятыми
+Tags can be specified as:
+* an array of string values
+* a string, with tag names separated by commas
 
-Теги не могут нести в себе дополнительную информацию
+Tags cannot carry any additional information
 
-В результатет обработки результата работы utils.sortedMap, в него добавляется объект *$$tags*, в котором каждому
-ключу-тегу, соотвествует список элементов sortedMap
+As a result of processing the result of utils.sortedMap, an object *$$tags* is added to it, in which each
+key-tag corresponds to a list of sortedMap elements
 
       check 'correct work: tags as string', ->
 
@@ -76,7 +76,7 @@ Tags.Compile
         expect(fields.$$tags.admin.valueOf()).toEqual [0]
         expect(fields.$$tags.user.valueOf()).toEqual [0, 1]
 
-Можно тегировать элементы в иерархической структуре, которую готовить flatMap.
+Elements can be tagged in a hierarchical structure, which is prepared by flatMap.
 
       check 'tags on subelements', ->
 
@@ -107,13 +107,13 @@ Tags.Compile
 
         expect(result.messages).toEqual []
 
--- При этом теги нормализуются методом BitArray.fixVertical() --
+-- At the same time the tags are normalized by the BitArray.fixVertical() method --
 
         expect(fields.$$tags.admin.valueOf()).toEqual [0, 3]
         expect(fields.$$tags.user.valueOf()).toEqual [0, 2]
 
-Если поле tag одного из элементов содержит недопустимое значение.  Возвращается ошибка с указанием неправильного
-значения.  К какому элементу односится значение и к какому свойству элемента - указано в контексте ошибки.
+If the tags field of one of the elements contains an invalid value.  An error is returned indicating the incorrect
+value.  Which element the value relates to and which property of the element is indicated in the error context.
 
       for errValue in [undefined, null, false, true, 12, {}]
 
@@ -138,8 +138,8 @@ Tags.Compile
             {type: 'error', path: 'fld2.tags', code: 'dsc.invalidValue', value: errValue}
           ]
 
-Если в списке tags содержится неверное значение - возвращается соотвествующее сообщение, с указанием индекса
-неправильного значения в списке
+If the tags list contains an incorrect value - a corresponding message is returned, indicating the index
+of the incorrect value in the list
 
       for errValue in [undefined, null, false, true, 12, {}]
 
@@ -164,7 +164,7 @@ Tags.Compile
             {type: 'error', path: 'fld2.tags', code: 'dsc.invalidTagValue', value: errValue, index: 1}
           ]
 
-Если список тего содержит повторяющиеся значени - возвращается предупреждение
+If the list of tags contains a duplicated value - a warning is returned
 
       check "invalid element of tags list", ->
 
@@ -189,7 +189,7 @@ Tags.Compile
           {type: 'warn', path: 'fld2.tags', code: 'dsc.duplicatedTag', value: 'user'}
         ]
 
-Все имена тегов должны соотвествовать соглашению об именование элементов.  Иначе ошибка.
+All tag names must conform to the element naming convention.  Otherwise, an error.
 
       check "invalid tag name", ->
 
@@ -214,7 +214,7 @@ Tags.Compile
           {type: 'warn', path: 'fld2.tags', code: 'dsc.duplicatedTag', value: 'A'}
         ]
 
-Имя тега 'all' зарезервировано, и не может явно использоваться
+The tag name 'all' is reserved, and cannot be used explicitly
 
       check "reserved tag 'all'", ->
 

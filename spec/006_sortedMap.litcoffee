@@ -8,20 +8,20 @@ sorted map
 
     describe '006_sortedMap:', ->
 
-Сортедмап (sortedMap) - это соглашение по работе с коллекциями элементов - списками документов, полей, значений enum и
-т.п. Полезно как иметь список значений, так и map для быстрого нахождения элемента по имени.
+SortedMap is an agreement on working with collections of elements - lists of documents, fields, enum values and
+so on. It is useful to have both a list of values and a map for quickly finding an element by name.
 
-sortedMap из списка или массива делает map (object):
-* ключ - название элемента, значение - значение элемента
-* специальный элемент - $$list, содержит список элементов
-* все элементы приобразованны в объекты
-* у каждого элемента есть свойство *name*, соотвествующие названию элемента
-* и свойство *index*, содержащие индекс элемента в списке
-* имена элементов должны быть из латинский символов и цифры, начинаться с цифры или маленькой буквы
+sortedMap turns a list or array into a map (object):
+* the key is the name of the element, the value is the value of the element
+* a special element - $$list, contains the list of elements
+* all elements are converted into objects
+* every element has a *name* property, corresponding to the name of the element
+* and an *index* property, containing the index of the element in the list
+* element names must consist of Latin characters and digits, and start with a digit or a lowercase letter
 
-Важно: sortedMap должен быть immutable, чтобы легче было отлаживать - не менять входящие данные
+Important: sortedMap must be immutable, to make debugging easier - do not mutate the incoming data
 
-Можно получить sortedMap из объекта
+sortedMap can be obtained from an object
 
       check "from map", ->
 
@@ -45,7 +45,7 @@ sortedMap из списка или массива делает map (object):
 
           $$list: [doc1, doc2, doc3]
 
-Можно получить sortedMap из массива
+sortedMap can be obtained from an array
 
       check "from array", ->
 
@@ -63,7 +63,7 @@ sortedMap из списка или массива делает map (object):
 
           $$list: [doc1, doc2, doc3]
 
-И из строки
+And from a string
 
       check "from string", ->
 
@@ -81,15 +81,15 @@ sortedMap из списка или массива делает map (object):
 
           $$list: [doc1, doc2, doc3]
 
-Есть два параметра:
-* result - объект типа Result
-* value - значение для обработки
+There are two parameters:
+* result - an object of type Result
+* value - the value to process
 
       check "invalid argument 'result'", ->
 
         expect(-> sortedMap()).toThrow new Error "Invalid argument 'result': undefined"
 
-Значение может быть только или объект или массив
+The value can only be either an object or an array
 
       for wrongValue in [undefined, null, false, 12, '']
 
@@ -103,7 +103,7 @@ sortedMap из списка или массива делает map (object):
             {type: 'error', code: 'dsc.invalidValue', value: wrongValue}
           ]
 
-Значение может быть обработано только один раз
+The value can be processed only once
 
       check "one time processing",  ->
 
@@ -113,7 +113,7 @@ sortedMap из списка или массива делает map (object):
 
         expect(-> sortedMap (result = new Result), res).toThrow new Error 'Value was already processed by sortedMap()'
 
-Если значения заданы в object, то значения могут содержать name
+If values are given as an object, then the values may contain name
 
       check "name in the element", ->
 
@@ -131,7 +131,7 @@ sortedMap из списка или массива делает map (object):
 
           $$list: [doc1, doc2]
 
-Но name в значении должно совпадать с ключом
+But name in the value must match the key
 
       check "wrong name in the element", ->
 
@@ -147,7 +147,7 @@ sortedMap из списка или массива делает map (object):
           {type: 'error', path: 'doc1', code: 'dsc.keyAndNameHasDifferenValues', value1: 'doc1', value2: 'otherName'}
         ]
 
-Значение в map может быть или объектом или true
+The value in a map can be either an object or true
 
       check "'true' translated to object element map", ->
 
@@ -183,7 +183,7 @@ sortedMap из списка или массива делает map (object):
             {type: 'error', path: 'doc1', code: 'dsc.invalidValue', value: wrongValue}
           ]
 
-Значения в массиве могут быть или объектом или строкой
+Values in an array can be either an object or a string
 
       check "'string' translated to an object in list", ->
 
@@ -211,7 +211,7 @@ sortedMap из списка или массива делает map (object):
             {type: 'error', path: '[0]', code: 'dsc.invalidValue', value: wrongValue}
           ]
 
-Объект в массиве обязательно должен иметь свойство name
+An object in an array must necessarily have the name property
 
       check "all list element must have 'name' prop", ->
 
@@ -224,7 +224,7 @@ sortedMap из списка или массива делает map (object):
           {type: 'error', path: '[2]', code: 'dsc.missingProp', value: 'name'}
         ]
 
-В массиве не должно быть элементов с одинаковыми имена
+There must be no elements with identical names in the array
 
       check "duplicated prop is not allowed in array", ->
 
@@ -246,7 +246,7 @@ sortedMap из списка или массива делает map (object):
           {type: 'error', path: '[1]', code: 'dsc.duplicatedName', value: 'doc1'}
         ]
 
-Имена элементов могут состоять только из латинских букв и цифр, и обяхательно начанаться с маленькой буквы
+Element names may consist only of Latin letters and digits, and must necessarily begin with a lowercase letter
 
       check "element 'name' prop must contain letters or digits, and start from lower char", ->
 
@@ -273,15 +273,15 @@ sortedMap из списка или массива делает map (object):
           {type: 'error', path: 'with space', code: 'dsc.invalidName', value: 'with space'}
         ]
 
-Модификация поведения sortedMap
+Modifying sortedMap behavior
 ------------------------------
 
-Третий параметр в sortedMap это options, который может содержать следующие свойства
-- checkName - метод проверки написания имени
-- getValue - позволяет обрабатывать произвольное значение в map и присваевает значение в резльутат.
-- boolean - true, если может быть true указано как значение.  Только map
-- string - true, если можно указать как значение строку или массив строк.  Только списки
-- index - true, добавляет в элементы свойство $$index, с порядковым номеро элемента в $$list
+The third parameter in sortedMap is options, which can contain the following properties
+- checkName - the method for checking the spelling of a name
+- getValue - allows processing an arbitrary value in a map and assigns the value into the result.
+- boolean - true, if true may be specified as a value.  For maps only
+- string - true, if a string or an array of strings may be specified as a value.  For lists only
+- index - true, adds a $$index property to the elements, with the ordinal number of the element in $$list
 
       check "'boolean = false' option", ->
 
@@ -325,8 +325,8 @@ sortedMap из списка или массива делает map (object):
 
           action2: {value: f2 = ->}
 
-Метод getValue возвращает true, если это поддерживаемый тип значения.  И это значение перенесено в dest - собираемый
-объект
+The getValue method returns true if this is a supported type of value.  And this value has been transferred to dest - the
+object being assembled
 
         res = sortedMap (result = new Result), actions, getValue: (result, value, res) ->
 
@@ -361,13 +361,13 @@ sortedMap из списка или массива делает map (object):
 
           action2: {value: f2 = ->}
 
-Метод copyProps копирует свойства исходного map в результат
+The copyProps method copies the properties of the source map into the result
 
         res = sortedMap (result = new Result), actions,
 
         getValue: (result, value, res) ->
 
-Не копируем свойство в этом методе
+We do not copy the property in this method
 
           if typeof f1 == 'function'
 
@@ -375,7 +375,7 @@ sortedMap из списка или массива делает map (object):
 
           false
 
-Можно добавлять при обработке элемены в начало и конец списка
+It is possible to add elements to the beginning and the end of the list during processing
 
       check "add items before and after", ->
 

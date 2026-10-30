@@ -282,7 +282,7 @@ validate = (fieldDesc, fieldsLevelDesc, docDesc, validators) ->
         else if @beforeAction and @required?.get(fieldDesc.$$index)
           @result.error 'validate.requiredField', value: value
 
-  # если нет docDesc, значит это вызов из _processExtraProp, когда customValidator не используется
+  # if there is no docDesc, it means this is a call from _processExtraProp, where customValidator is not used
   customValidator = docDesc and processCustomValidate cvResult, fieldDesc, fieldsLevelDesc, docDesc, validators
   cvResult.throwIfError()
 

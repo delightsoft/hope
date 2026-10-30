@@ -1,9 +1,9 @@
-# В процессе работы со спецификациями обнаружил проблему, что загружаемые файлы рассинхронизируются, из-за того
-# что jasmine на регулярной основе сбрасывает require.cache.  Как пример: возникла проблема с проверкой
-# `result instanceof Result` в loader, если Result объект создается в коде спецификаций.  Объединение загружаемых
-# частей в единый загрузочный файл - проблему решило.
+# While working with the specs we discovered a problem: the loaded files get out of sync, because
+# jasmine resets require.cache on a regular basis.  For example: a problem arose with the check
+# `result instanceof Result` in loader when a Result object is created in the specs code.  Merging the loaded
+# parts into a single loading file resolved the problem.
 #
-# UPD: Тем не менее даже этот подход не решил проблему - потому вместо instanceof, делаем методы типа err.isResult
+# UPD: Nevertheless, even this approach did not solve the problem - so instead of instanceof, we use methods like err.isResult
 
 require './polyfills'
 

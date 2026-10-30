@@ -7,11 +7,11 @@ bit array
     focusOnCheck = ''
     check = (itName, itBody) -> (if focusOnCheck == itName then fit else it) itName, itBody; return
 
-Для операций с группами элементов (fields, actions etc.) удобно представить выбранные поля, в виде битовой маски.  И тогда
-можно быстро и уверенно выполнять операции по объединению групп, вычитанию или нахождению общих элементов.  При этом
-в результате сохраняется исходная последовательность элементов.
+For operations with groups of elements (fields, actions etc.) it is convenient to represent the selected fields as a bit mask.  Then one
+can quickly and confidently perform operations of merging groups, subtracting them, or finding common elements.  At the same time
+the original sequence of elements is preserved in the result.
 
-Входящая для BitArray может быть как одноуровневая - просто sortedMap
+The input for BitArray can be single-level - just a sortedMap
 
     _sortedMapCollection = ->
 
@@ -47,7 +47,7 @@ bit array
 
       res # _sortedMapCollection =
 
-Так и многоуровневая - flatMap
+And also multi-level - flatMap
 
     _flatMapCollection = ->
 
@@ -111,7 +111,7 @@ bit array
 set()
 ------------------------------
 
-При вызове метода set проверяется, что index попадает в размер данной коллекции
+When the set method is called, it is checked that index falls within the size of the given collection
 
       check "set(): index range", ->
 
@@ -120,7 +120,7 @@ set()
         expect(-> arr.set -1, true).toThrow new Error 'index out of range: -1'
         expect(-> arr.set 100, true).toThrow new Error 'index out of range: 100'
 
-Второй параметр в методе set не обязательный.  Если не указан, то он считается true
+The second parameter of the set method is optional.  If it is not specified, then it is considered true
 
       check "set(): default - true", ->
 
@@ -130,7 +130,7 @@ set()
 
         expect(arr.list).sameStructure [@item1]
 
-Можно указывать маску
+A mask can be specified
 
       check "set(): mask", ->
 
@@ -140,7 +140,7 @@ set()
 
         expect(arr.list).sameStructure [@item1, @item2]
 
-Метод set делает новую копию объекта если заблокирован методом lock()
+The set method makes a new copy of the object if it is locked by the lock() method
 
       check "set() clone object after .lock()", ->
 
@@ -155,8 +155,8 @@ set()
 and, or ...
 ------------------------------
 
-Есть несколько логических операций, которые можно выполнить над bitArray:
-- and - пересечение
+There are several logical operations that can be performed on a bitArray:
+- and - intersection
 
       check "add(): sortedMap", ->
 
@@ -186,7 +186,7 @@ and, or ...
 
         expect(arr3.list).sameStructure (item for item in map.$$flat.$$list by 6)
 
-- or - объединение
+- or - union
 
       check "or(): sortedMap", ->
 
@@ -216,7 +216,7 @@ and, or ...
 
         expect(arr3.list).sameStructure (item for item, i in map.$$flat.$$list when i %% 2 == 0 || i %% 3 == 0)
 
-- invert - получение обратной коллекции
+- invert - obtaining the inverted collection
 
       check "subtract(): sortedMap", ->
 
@@ -238,7 +238,7 @@ and, or ...
 
         expect(arr2.list).sameStructure (item for item, i in map.$$flat.$$list when i %% 3 != 0)
 
-- subtract - получение коллекции элменетов, которые есть в левом bitArray, но нет в правом
+- subtract - obtaining the collection of elements that are present in the left bitArray but not in the right one
 
       check "subtract(): sortedMap", ->
 
@@ -268,7 +268,7 @@ and, or ...
 
         expect(arr3.list).sameStructure (item for item, i in map.$$flat.$$list when i %% 2 != 0 && i %% 3 == 0)
 
-Можно проверить что маска не содержит ни одного элемента
+One can check that the mask contains no elements
 
       check "empty", ->
 
@@ -280,7 +280,7 @@ and, or ...
 
         expect(arr1.isEmpty()).toBe false
 
-Важно, чтобы после invert в маскве не появлялись лишние биты, которые будут влиять на результат операции isEmpty()
+It is important that after invert no extra bits appear in the mask, which would affect the result of the isEmpty() operation
 
       check "empty after invert", ->
 
@@ -300,8 +300,8 @@ and, or ...
 
         expect(arr2.isEmpty()).toBe true
 
--- Все операции над группами immutable - то есть каждый раз возвращается новые объект.
-!!! TODO: переписать под lock()
+-- All operations on groups are immutable - that is, each time a new object is returned.
+!!! TODO: rewrite to use lock()
 
       check "immutable", ->
 
@@ -318,8 +318,8 @@ and, or ...
         expect(arr1.subtract arr2).toBe arr1
         expect(arr1.subtract arr2).toBe arr2
 
-BitArray привязан к исходной коллекции.  Если по ошибке выполнить операции над bit array'ями для разных исходных
-коллекций - будет exception.
+BitArray is bound to the original collection.  If operations on bit array's are erroneously performed for different original
+collections - there will be an exception.
 
       check "must have the same collection", ->
 
@@ -331,8 +331,8 @@ BitArray привязан к исходной коллекции.  Если по
         expect(-> arr1.or arr2).toThrow new Error 'given bitArray is different collection'
         expect(-> arr1.subtract arr2).toThrow new Error 'given bitArray is different collection'
 
-Если запрашивается список элементов, то он формируется при первом вызове.  При повторных вызовах возвращает ранее
-созданный список, так как он не мог поменяться у immutable объекта.
+If the list of elements is requested, it is formed on the first call.  On repeated calls the previously
+created list is returned, since it could not have changed in an immutable object.
 
       check "always same list", ->
 
@@ -344,7 +344,7 @@ BitArray привязан к исходной коллекции.  Если по
 
         expect(arr1.list).toBe list
 
-На вход можно подавать пустые коллекции, это создает работоспособные маски, который для любого get возвращают exception
+Empty collections can be supplied as input; this creates workable masks, which for any get return an exception
 
       check "empty map", ->
 

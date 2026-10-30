@@ -62,9 +62,9 @@ processUdtypeFields = (result, config) ->
 
     _processFields fields
 
-    unless ~order.indexOf(udType) # чтоб не пропустить зацикленность обрабаываем повторно udType даже когда он уже в order
+    unless ~order.indexOf(udType) # so as not to miss a cycle, we reprocess the udType even when it is already in order
 
-        order.push udType # udType с fields используемые в этом типе должны идти раньше
+        order.push udType # udTypes with fields used in this type must come earlier
 
     stack.pop()
 

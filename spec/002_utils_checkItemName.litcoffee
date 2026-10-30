@@ -11,9 +11,9 @@ utils
 checkItemName
 ------------------------------
 
-Чтобы избежать проблем с именование документов, полей, enum-значений в различных внених системах (sequelizejs,
-angularjs, postgres ...), в DSCommon3 вводим ограничение, что имя любого именованного элемента может состояить
-только из букв и цифр, и обязательно начаниться с маленькой буквы.  Имя, в том числе, не можем содеражить пробелы.
+To avoid problems with naming documents, fields, and enum values in various external systems (sequelizejs,
+angularjs, postgres ...), DSCommon3 introduces a restriction that the name of any named element may consist
+only of letters and digits, and must necessarily begin with a lowercase letter. Also, the name cannot contain spaces.
 
 
       check "correctName", ->

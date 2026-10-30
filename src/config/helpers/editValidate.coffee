@@ -54,7 +54,7 @@ $$editValidatorBuilder = (type, fieldsProp, access, docLevelValidate) ->
 
     opts.result = localResult = new Result
 
-    localResult.error = () -> # перехватываем сообщения об ошибках
+    localResult.error = () -> # intercept the error messages
 
       msg = Result::error.apply localResult, arguments
 

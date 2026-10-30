@@ -3,9 +3,9 @@ DSScopeStub
 
     module.exports =
 
-Интерфейс DSScope нужен для работы DSDocument.
+The DSScope interface is needed for DSDocument to work.
 
-Есть три реализации DSScope:
+There are three implementations of DSScope:
 * DSConnector
 * DSScope
 * DSTransaction
@@ -23,8 +23,8 @@ DSScopeStub
           @_cb (if error then error else null), doc
           return
 
-Метод find, производит асинхронную загрузку документа с указанным ID.  После загрузки вызывается callback с параметрами (error, doc),
-где error если не null, то объект класса Result, обязательно с isError == true.
+The find method asynchronously loads the document with the specified ID.  After loading, the callback is invoked with the parameters (error, doc),
+where error, if not null, is an object of class Result, necessarily with isError == true.
 
         find: (@_owner, @_docId, @_cb) ->
 
@@ -36,13 +36,13 @@ DSScopeStub
           throw new Error "Too many args" unless arguments.length <= 3
           @_wait = true
 
-Метод find возвращает функцию unwait, которая позволяет отказаться от получения результата
+The find method returns an unwait function that allows giving up on receiving the result
 
           => @_wait = false; return
 
-При присвоении документ в propDoc в редактируемой версии документа - документ
-- проверяется, что он принадлежит к правильному dsscope
-- возможно, подменяется на правильную версию (оригинальную или редактируемую) документа
+When a document is assigned to propDoc in the editable version of the document, the document
+- is checked to make sure it belongs to the correct dsscope
+- possibly replaced with the correct version (original or editable) of the document
 
         editableDoc: (_owner, _value, _propName) ->
 

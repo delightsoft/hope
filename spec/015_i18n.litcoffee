@@ -1,7 +1,7 @@
 I18n (Internationalization)
 ==============================
 
-Общий принцип локализации, это то что коду сообщения соответствует функция, в config.i18n, которая создает сообщение.
+The general principle of localization is that a message code corresponds to a function in config.i18n that creates the message.
 
     {Result, i18n, utils} = require '../src'
 
@@ -12,34 +12,34 @@ I18n (Internationalization)
 
       beforeEach ->
 
-Сообщения - это flatMap
+Messages are a flatMap
 
         messages =
 
           test:
 
-Сообщение test.messageA без аргументов
+The message test.messageA without arguments
 
             messageA: @f3 = -> "Message A"
 
-Сообщение test.messageB с аргументов
+The message test.messageB with an argument
 
             messageB: @f4 = (args) -> "Message B. Value: #{args.value}"
 
-Сообщение в виде просто строки
+A message in the form of a simple string
 
             messageC: @s1 = 'Simple Message'
 
-Или даже числа
+Or even numbers
 
             messageD: @n1 = 121
 
-Перед использование данных для интернационализации надо выполнить метод i18n.link
+Before using the internationalization data, the i18n.link method must be executed
 
         @messages = i18n.link (@result = new Result), messages
 
-Метод i18n.link пересобирает сообщения из иерархической структуры в плоский map.  При этом будут выданы предупреждения
-об отсуствующих частях
+The i18n.link method rebuilds the messages from a hierarchical structure into a flat map.  At the same time, warnings
+will be issued about missing parts
 
       check "A", ->
 
@@ -49,53 +49,53 @@ I18n (Internationalization)
           'test.messageC': @s1
           'test.messageD': @n1
 
-Метод i18n.format форматирует сообщения            
+The i18n.format method formats messages
             
       check "B", ->
 
-Если сообщение есть в локализации, получаем локализованное сообщение
+If the message exists in the localization, we get the localized message
 
         expect(i18n.format @messages, code: 'test.messageA').toBe 'Message A'
 
-Если сообщение есть в локализации и содержит параметры, то получаем локализованное сообщение с параметрами
+If the message exists in the localization and contains parameters, we get the localized message with parameters
 
         expect(i18n.format @messages, code: 'test.messageB', value: '123').toBe 'Message B. Value: 123'
 
-Если локализация сообщения - просто строка, то эту строку в результате и получаем
+If the message localization is just a string, we get that string as the result
 
         expect(i18n.format @messages, code: 'test.messageC').toBe 'Simple Message'
 
-Если локализация сообщения не функция и не строка, то получаем значение локализации в строчном виде
+If the message localization is neither a function nor a string, we get the localization value in string form
 
         expect(i18n.format @messages, code: 'test.messageD').toBe '121'
 
-Если сообщения НЕТ в локализации, то оставляем название сообщения
+If the message is NOT in the localization, then the message name is kept
 
         expect(i18n.format @messages, code: 'test.messageQ').toBe 'test.messageQ'
 
-Если сообщения НЕТ в локализации, и оно с параметрами, то оставляем название сообщения и добавляем параметр в конец
-сообщения в виде JSON.
+If the message is NOT in the localization, and it has parameters, then the message name is kept and the parameter is appended to the end
+of the message as JSON.
 
         expect(i18n.format @messages, code: 'test.messageF', value: '123').toBe 'test.messageF{"value":"123"}'
 
-Code сообщения должен соотвествовать структуре локализации
+The message code must match the structure of the localization
 
       check "C", ->
 
-Есди Test с большой буквы, уже не находим вариант где test с маленькой буквы
+If Test is with a capital letter, the variant where test is lowercase is no longer found
 
         expect(i18n.format @messages, code: 'Test.messageA').toBe 'Test.messageA'
 
-То же для MessageA с большой буквы
+The same for MessageA with a capital letter
 
         expect(i18n.format @messages, code: 'test.MessageA').toBe 'test.MessageA'
 
-Если путь к сообщению содержит дополнительные шаги, то тоже не находится промежуточный вариант
+If the path to the message contains additional steps, then no intermediate variant is found either
 
         expect(i18n.format @messages, code: 'test.messageA.extra').toBe 'test.messageA.extra'
 
-Сообщение может содержать контекст, который форматируется по тем же правилам что и основное сообщение, только
-метод выбирается из config.i18n.contexts
+A message can contain a context, which is formatted by the same rules as the main message, only
+the method is selected from config.i18n.contexts
 
       check "D", ->
 
@@ -105,17 +105,17 @@ Code сообщения должен соотвествовать структу
         expect(i18n.format @messages, path: 'config', code: 'test.messageB', value: '123')
         .toBe "config: Message B. Value: 123"
 
-Форматирование может вестись без i18n колекции.  Тогда форма работает так как если бы локализация всегда не была найдена
+Formatting can be done without an i18n collection.  Then the format works as if the localization were never found
 
       check "E", ->
 
         expect(i18n.format undefined, code: 'test.messageA').toBe 'test.messageA'
 
-Если сообщение есть в локализации и содержит параметры, то получаем локализованное сообщение с параметрами
+If the message exists in the localization and contains parameters, we get the localized message with parameters
 
         expect(i18n.format null, code: 'test.messageB', value: 123).toBe 'test.messageB{"value":123}'
 
-Если сообщение содержит path, то он добавляется к сообщение без локализации
+If the message contains a path, then it is added to the message without localization
 
       check "F", ->
 
